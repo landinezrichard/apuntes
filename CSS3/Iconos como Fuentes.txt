@@ -1,0 +1,16 @@
+	ICONOS COMO FUENTES:
+_______________________________________________________
+
+Para agregar iconos como fuentes, que no se deforman (se pueden agrandar y siempre se ven bien porque no son imágenes), y les podemos poner el color que queramos:
+
+	1) Vamos a: https://icomoon.io/
+
+	2) Luego vamos a “icoMoon App”, allí seleccionamos todos los iconos que vayamos a usar en nuestra página.
+
+	3)Una vez seleccionamos los iconos, hacemos click en la opcion “Font”, y descargamos los iconos.
+
+	4) Para añadirlos a nuestra página, primero copiamos la carpeta fonts, dentro de nuestro proyecto.
+
+	5) Y para aplicarlas, podemos guiarnos por el archivo de muestra que viene en el .zip llamado style.css, en donde copiamos su contenido en nuestra hoja de estilos.
+
+	6) Para finalizar, en nuestro HTML, añadimos las clases para que se inserten los iconos.

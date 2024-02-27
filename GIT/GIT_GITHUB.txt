@@ -1,0 +1,717 @@
+	GIT & GITHUB
+_______________________________________________________
+
+INDICE:
+
+[1]. Que es GIT & GITHUB
+[2]. Instalar Git
+	[2.1]. Configurar Git
+[3]. Como funciona Git
+[4]. Comandos de Git
+	[4.1]. Iniciar repo "init"
+	[4.2]. Ver estado "status"
+	[4.3]. Preparar archivo "add"
+	[4.4]. Incorporar nuevos cambios "pull"
+	[4.5]. Pasar al repositorio "commit"
+	[4.6]. Ver los commits "log"
+	[4.7]. Cambiar entre commits "checkout"
+	[4.8]. Eliminar commits "reset"
+[5]. Ramas
+	[5.1]. Crear nueva rama
+	[5.2]. Ver todas las ramas "branch"
+	[5.3]. Cambiar de rama "checkout"
+		[5.3.1]. Regresar a la rama "master"
+	[5.4]. Ver ramas de forma grafica
+	[5.5]. Borrar rama
+	[5.6]. Unir ramas (fusiones) "merge"
+		[5.6.1]. Solucionar Conflictos
+		[5.6.2]. Ver ramas fusionadas
+[6]. Archivo ".gitignore"
+[7]. Repositorios Remotos
+	[7.1]. Clonar Repositorio Remoto
+		[7.1.1]. Clonar repo. remoto cambiando nombre carpeta
+	[7.2]. Ver dirección Repositorio Remoto
+	[7.3]. Subir Ramas(branchs) Repositorio Remoto
+	[7.4]. Etiquetas "Tags"
+		[7.4.1]. Listar "Tags"
+		[7.4.2]. Enviar "Tags" al remoto
+		[7.4.3]. Eliminar "Tags"
+	[7.5]. Añadir documentación
+
+_______________________________________________________
+
+	[1]. Que es GIT & GITHUB:
+_______________________________________________________
+
+Git es un sistema de control de versiones, que nos permite controlar los cambios que hacemos en uno o mas archivos, y guarda un historial con los cambios entre versiones.
+
+Github es un servicio web, que nos permite alojar nuestros archivos y el control de versiones de estos en internet.
+_______________________________________________________
+
+	[2]. Instalar Git:
+_______________________________________________________
+
+1) Descargamos Git desde:
+
+	https://git-scm.com
+
+2) Usamos la terminal que nos instala Git, podemos hacer click derecho en el mouse en el escritorio y seleccionamos "git bash here".
+
+3) En consola verificamos la version instalada con:
+
+	git --version
+_______________________________________________________
+
+	[2.1]. Configurar Git:
+_______________________________________________________
+
+Antes de hacer nuestro primer commit(guardar el estado(versión) de un archivo), es necesario configurar el usuario y correo.
+
+1) En consola ejecutamos el comando:
+
+	git config --global user.name "Ricardo Landinez"
+
+2) Tambien ejecutamos:
+
+	git config --global user.email "landinezrichard@gmail.com"
+_______________________________________________________
+
+	[3]. Como funciona Git:
+_______________________________________________________
+
+En una carpeta de algun proyecto, tenemos un archivo o archivos a los cuales se les quiere hacer seguimiento con git.
+
+Para que git empiece a hacer seguimiento de los archivos, en consola ejecutamos el comando:
+
+	git init
+
+En ese momento git crea dos espacios, uno en memoria ram llamado "staging" y otro en disco, que es invisible y se encuentra dentro de la misma carpeta del proyecto llamado ".git", el cual es el mismo "Repositorio" local. Tambien se inicializa una rama llamada "master".
+
+En este momento los archivos estan "untracked" (sin seguimiento), para que pasen a "staging", es necesario añadir los archivos con:
+
+	git add
+
+Para pasar los archivos al repositorio ejecutamos:
+
+	git commit -m "mensaje"
+
+Git trabaja con ramas, la rama principal se llama "master".
+
+En el siguiente ejemplo tenemos dos ramas, la principal (master) y una de desarrollo (develop):
+
+
+	Master	☺-------☺-------☺-------☺ (Head)
+		v.inicial	v1		v2  	v.actual
+			|						^
+			v						|
+	Develop ☺-------☺-------☺-------☺
+					v1		v2		v3
+
+En la master se tienen varias versiones (v1, v2) y la version actual se llamara "head". La rama "develop" tambien tiene diferentes versiones, hasta que se fusiona con la rama principal.
+
+"HEAD" se refiere al "commit" en el que está tu repositorio posicionado en cada momento. Por regla general "HEAD" suele coincidir con el último "commit" de la rama en la que estés, ya que habitualmente estás trabajando en lo último. Pero si te mueves hacia cualquier otro "commit" anterior entonces el "HEAD" estará más atrás.
+
+Las ramas son independientes la una de la otra, pero la rama "master" es la definitiva del proyecto.
+_______________________________________________________
+
+	[4]. Comandos de Git:
+_______________________________________________________
+
+Ver todos los comandos con:
+
+	git --help
+
+Ver un comando en especifico:
+
+	git --help add
+_______________________________________________________
+
+	[4.1]. Iniciar repo "init":
+_______________________________________________________
+
+Crear la carpeta del proyecto, y en consola estando dentro de la carpeta iniciar el repositorio en git con:
+
+	git init
+_______________________________________________________
+
+	[4.2]. Ver estado "status":
+_______________________________________________________	
+
+Enumera todos los archivos nuevos o modificados, asi como el estado en el que se encuentran:
+
+	git status
+_______________________________________________________
+
+	[4.3]. Preparar archivo "add":
+_______________________________________________________
+
+Añadir un archivo al historial de cambios(prepararlo para agregarlo al repo) toma instantáneas(como fotografias):
+
+	git add <NombreArchivo>
+
+Añadir todos los archivos al historial:
+
+	git add -A
+
+	git add .
+_______________________________________________________
+
+	[4.4]. Incorporar nuevos cambios "pull":
+_______________________________________________________
+
+Antes de subir cualquier commit, y si se trabaja con más personas, descargamos los nuevos cambios del repo con:
+
+	git pull
+_______________________________________________________
+
+	[4.5]. Pasar al repositorio "commit":
+_______________________________________________________
+
+Registra instantáneas de archivos de forma permanente en el historial de versiones.
+Registrando y Guardando los Cambios en el Repo:
+
+	git commit -m "Descripción de lo que se hizo"
+
+Un "commit" es un conjunto de cambios en los archivos que hemos dado por buenos y que queremos almacenar como una instantánea de cara al futuro. Los "commits" se relacionan unos con otros en una o varias secuencias para poder ir viendo la historia de un determinado archivo a lo largo del tiempo.
+_______________________________________________________
+
+	[4.6]. Ver los commits "log":
+_______________________________________________________
+
+Ver los commits hechos:
+
+	git log
+
+	git log --oneline
+
+Para ver los cambios o diferencias hechas en el ultimo commit usamos:
+
+	git show
+_______________________________________________________
+
+	[4.7]. Cambiar entre commits "checkout":
+_______________________________________________________
+
+Cambiar entre commits(volver a una versión anterior o posterior del proyecto):
+
+	git checkout numeroHashDelCommit
+_______________________________________________________
+
+	[4.8]. Eliminar commits "reset":
+_______________________________________________________
+
+Para eliminar un commit que no nos sirve en el proyecto, porque tiene algun bug grave, o definitivamente fue un error, usamos "reset".
+
+Nota 1: Antes de usarlo es recomendable usar un "git log --oneline".
+
+"reset", descarta todo el historial y cambia de nuevo al commit especificado:
+
+	git reset numeroHashDelCommit --hard
+
+La opción "--hard", hace un reseteado duro, eliminando tambien los cambios de "staging".
+
+Con "--soft", este elimina los commits, pero los cambios agregados con "add" se conservan.
+
+Nota 2: "reset" elimina los commits para siempre, no hay forma de recuperarlos.
+
+_______________________________________________________
+
+	[5]. Ramas:
+_______________________________________________________
+
+Las ramas, nos sirven para crear una especie de línea(s) alterna(s) a nuestro proyecto, puede servir para por ejemplo hacer experimentos de como se veria mi proyecto con otros estilos, etc.
+
+Ejemplo:
+
+	Master	☺-------☺-------☺-------☺ (Head)
+		v.inicial	v1		v2  	v.actual
+									|			^				^
+									v			|				|
+	Desarrollo 						☺-------☺----				|
+									v1		v2					|
+											|			^		|
+											v			|		|
+	Pruebas 								☺-------☺------------
+											v1		v2
+
+En este ejemplo tenemo nuestra rama principal "master", ya se han hecho 3 "commits", y luego decidimos crear una rama llamada "Desarrollo", en el momento en que creamos la rama nueva, se crea una copia exacta de nuestro proyecto, en donde estemos ubicados en ese momento, en este caso en el "Head" o "commit" actual.
+
+Luego en la rama de "Desarrollo", podemos crear nuevos archivos, y nuevos cambios y hacer nuevos "commits".
+
+En el "commit" #2 o v2. de la rama de "Desarrollo", se decidio crear otra rama llamada "Pruebas", esa rama crea una copia exacta de el "Head" donde nos encontramos, en este caso la v2. de la rama "Desarrollo".
+
+Cada Rama es totalmente independiente de las otras, y se pueden fusionar en cualquier momento con cualquier version de otra rama, e incluso tambien podemos cambiarnos en cualquier momento hacia otra version de otra rama.
+
+Una rama no es más que un nombre que se da a un "commit", a partir del cual se empieza a trabajar de manera independiente y con el que se van a enlazar nuevos "commits" de esa misma rama.
+
+Existe una rama predeterminada que se crea automáticamente cuando se crea un repositorio que se llama rama "main". Hasta mediados del año 2020 esta rama se llamaba "master".
+
+Por regla general a "main" se la considera la rama principal y la raíz de la mayoría de las demás ramas. Lo más habitual es que en "main" se encuentre el "código definitivo", que luego va a producción, y es la rama en la que se mezclan todas las demás tarde o temprano para dar por finalizada una tarea e incorporarla al producto final.
+_______________________________________________________
+
+	[5.1]. Crear nueva rama:
+_______________________________________________________
+
+Para crear una Nueva Rama:
+
+	git branch nombreRama
+_______________________________________________________
+
+	[5.2]. Ver todas las ramas "branch":
+_______________________________________________________
+
+Para listar todas las ramas:
+
+	git branch
+
+Nota: la rama que nos muestra con un asterisco (*) antes de su nombre, es en la que estamos ubicados.
+_______________________________________________________
+
+	[5.3]. Cambiar de rama "checkout":
+_______________________________________________________
+
+Cambiarnos de rama:
+
+	git checkout nombreRama
+
+Nota: Una vez que estamos ubicados en la nueva rama, podemos hacer los cambios experimentales a nuestro codigo, sin afectar el  codigo de la rama "master". Para registrar los cambios en esta rama, es necesario hacer "git status", "git add -A", "git commit -m".
+_______________________________________________________
+
+	[5.3.1]. Regresar a la rama "master":
+_______________________________________________________
+
+Si queremos volver a la rama principal:
+
+	git checkout master
+
+Nota: los cambios que hicimos en la rama experimental no se borran, ya que hicimos el commit, y tampoco afectamos los cambios de la rama principal "master".
+
+Cada Rama es Independiente, es decir, que podemos hacer cambios en la rama principal "master", y luego hacer commits, y hacer cambios en la rama experimental, y hacer diferentes commits, y no se van a ver afectados los unos con los otros.
+_______________________________________________________
+
+	[5.4]. Ver ramas de forma grafica:
+_______________________________________________________
+
+Ver las diferentes ramas de forma grafica:
+
+	git log --oneline --graph --all
+
+Nota: para no tener que escribir este comando tan largo, podemos grabarlo con un alias así:
+
+	git config --global alias.nicelog 'log --oneline --graph --all'
+
+Y ahora con solo escribir:
+
+	git nicelog
+
+Nos mostrara las ramas de forma grafica, sin tener que escribir todo el comando.
+_______________________________________________________
+
+	[5.5]. Borrar rama:
+_______________________________________________________
+
+Para borrar una rama usamos:
+
+	git branch -d nombreRama
+_______________________________________________________
+
+	[5.6]. Unir ramas (fusiones) "merge":
+_______________________________________________________
+
+Podemos fusionar o absorber los cambios de una rama experimental, en nuestra rama principal "master". Un "merge" o fusion, lo que hace es crear un nuevo commit.
+
+1) Para hecer esto, primero nos ubicamos en la rama que va a absorber los cambios de la otra rama:
+
+	git checkout master
+
+2) Luego hacemos la fusión de la rama que vamos a absorver con:
+
+	git merge nombreRama
+_______________________________________________________
+
+	[5.6.1]. Solucionar Conflictos:
+_______________________________________________________
+
+Cuando se hacen fusiones, pueden existir conflictos:
+
+	a) Fast Forward --> se trabajaron diferentes archivos y no hay problema.
+
+	b) Manual Merge --> se trabajo el mismo archivo y se deben escoger las líneas del codigo que se van a salvar.
+
+En los dos casos se abrira un archivo en "vim" para editar por consola, en el cual podemos indicar porque fusionamos los commits.
+
+En el caso (b), al poner el comando "git merge", nos dara un error, ya que se modifico el mismo archivo, entonces debemos abrir el archivo con nuestro editor de texto, y ubicar las líneas que tienen el conflicto y escoger la adecuada.
+
+Ejemplo: se modifico el archivo "index.html" en la misma línea (la fuente de una imagen) y se hizo merge, al abrir el archivo vemos:
+
+	<<<<<< HEAD
+
+		<img src="img/pato.jpg" />
+
+	======
+
+		<img src="img/cerdo.jpg" />
+
+	>>>>>> nombreRama
+
+En este caso, nos indica con "<<<<< HEAD" (Rama Master), el contenido que hay en esa rama, y separados con "======" el contenido que existe en la otra rama ">>>>>> nombreRama".
+
+Aquí, lo que hacemos es escoger cual de las dos líneas de codigo es la correcta, y borramos la otra línea y tambien borramos:
+
+	"<<<<< HEAD"
+	"======"
+	">>>>>> nombreRama"
+
+Grabamos los cambios, y de nuevo en la consola de git, con "git status", nos va a indicar que debemos resolver los conflictos de la fusión (ya lo hicimos) y registrar los cambios con:
+
+	git commit -am "Se hizo la fusión, con la imagen ...."
+
+Nota 1: usamos el atajo con "-am", ya que debemos añadir el archivo de la fusión, y luego hacer el commit.
+
+El Atajo "-am" es la union de los siguientes comandos:
+
+	(git add -A) + (git commit -m "Descripción de lo que se hizo")
+
+Es iagua a:
+
+	git commit -am "Descripción de lo que se hizo"
+
+Nota 2: este atajo solo funciona con archivos a los cuales previamente se han añadido con "add", si es un archivo nuevo no sirve el atajo.
+
+_______________________________________________________
+
+	[5.6.2]. Ver ramas fusionadas:
+_______________________________________________________
+
+Para ver cual(es) rama(s) hemos fusionado usamos:
+
+	git branch --merged
+_______________________________________________________
+
+	[6]. Archivo ".gitignore":
+_______________________________________________________
+
+El archivo ".gitignore", nos sirve para ignorar archivos o carpetas para que no sean vigilados ni incluidos en nuestro repositorio.
+
+Ejemplo de archivo ".gitignore":
+
+	node_modules
+	*.log
+
+Aca ignoramos la carpeta "node_modules" y todos los archivos de extensión ".log".
+
+Este archivo lo creamos en la raíz de nuestro proyecto.
+
+Nota: Con la consola "Git Bash", podemos crear el archivo usando el comando de linux:
+
+	touch .gitignore
+_______________________________________________________
+
+	[7]. Repositorios Remotos:
+_______________________________________________________
+
+Github, es un servicio web que nos permite tener un repositorio alojado en internet.
+
+Para subir los archivos y nuestro repositorio local hacemos:
+
+1) Creamos un nuevo repositorio en Github.
+
+2) En local creamos nuestro repositorio con:
+
+	git init
+
+3) Preparamos los archivos locales con:
+
+	git add .
+
+4) Creamos nuestro primer versionamiento:
+
+	git commit -m "mensaje"
+
+5) Añadimos el repositorio remoto con la url que nos indica Github:
+
+	git remote add origin https://github.com/landinezrichard/url
+
+6) Subimos el repositorio local al remoto con:
+
+	git push -u origin master
+
+Ese comando significa:
+
+	git push -u [alias] [rama]
+
+"origin" es el nombre predeterminado que recibe el repositorio remoto principal(el de Github) contra el que trabajamos. Cuando clonamos un repositorio por primera vez desde GitHub o cualquier otro sistema remoto, el nombre que se le da a ese repositorio "maestro" es precisamente "origin".
+
+De todos modos ese nombre se puede cambiar, y se pueden crear más remotos contra los que hacer "push".
+_______________________________________________________
+
+	[7.1]. Clonar Repositorio Remoto:
+_______________________________________________________
+
+Para clonar un repositorio remoto en local, ejecutamos el comando:
+
+	git clone [url]
+_______________________________________________________
+
+	[7.1.1]. Clonar repo. remoto cambiando nombre carpeta:
+_______________________________________________________
+
+Para clonar un repositorio remoto, pero queremos cambiar en local, el nombre de la carpeta donde se va a clonar:
+
+	git clone [url] NombreCarpetaNueva
+_______________________________________________________
+
+	[7.2]. Ver dirección Repositorio Remoto:
+_______________________________________________________
+
+Para ver la dirección(remoto), a donde esta apuntando nuestro repositorio local, usamos el comando:
+
+	git remote -v
+_______________________________________________________
+
+	[7.3]. Subir Ramas(branchs) Repositorio Remoto:
+_______________________________________________________
+
+En local podemos tener ramas creadas, que no necesariamente cuando hacemos un "push" se suben al repositorio remoto de Github.
+
+Para subir las ramas al repositorio remoto de Github:
+
+1) Vemos las ramas creadas en local:
+
+	git branch
+
+2) Nos cambiamos a la rama que queremos subir a Github:
+
+	git checkout desarrollo
+
+En este caso la rama se llama "desarrollo".
+
+3) Subimos la rama a Github:
+
+	git push origin desarrollo
+_______________________________________________________
+
+	[7.4]. Etiquetas "Tags":
+_______________________________________________________
+
+Las etiquetas o "tags", nos permiten etiquetar puntos específicos del historial como importantes. Esta funcionalidad se usa típicamente para marcar versiones de lanzamiento (v1.0, por ejemplo).
+
+1) Vemos los commits creados con:
+
+	git log --oneline
+
+2) Creamos el "tag" con el "hash" del "commit" que vimos del comando anterior:
+
+	git tag -a nombreTag -m "Mensaje descriptivo del tag" numeroHashDelCommit
+
+Ejemplo:
+
+	git tag -a v1.0 -m "Primera versión estable del proyecto" 1e4a701
+
+La opcián "-a" es para crear una etiqueta anotada. Estas etiquetas guardan el nombre del etiquetador, correo electrónico y fecha; tienen un mensaje asociado.
+
+Tambien se pueden crear etiquetas ligeras:
+
+	git tag v1.4
+
+Nota 1: Para mas info. de las etiquetas:
+
+	https://git-scm.com/book/es/v2/Fundamentos-de-Git-Etiquetado
+
+Nota 2: Los "tags" nos pueden ser muy utiles para etiquetar "commits" importantes, y podemos cambiarnos entre "commits" usando los nombres de los "tags", por ejemplo:
+
+	git checkout 01
+
+En este caso el "tag" se llama "01".
+
+_______________________________________________________
+
+	[7.4.1]. Listar "Tags":
+_______________________________________________________
+
+Para listar las etiquetas creadas:
+
+	git tag
+
+Para ver la información de la etiqueta junto con el "commit" que está etiquetado:
+
+	git show v1.0
+
+El comando muestra la información del etiquetador, la fecha en la que el "commit" fue etiquetado y el mensaje de la etiqueta, antes de mostrar la información del "commit".
+
+_______________________________________________________
+
+	[7.4.2]. Enviar "Tags" al remoto:
+_______________________________________________________
+
+Para enviar los "tags" al repositorio remoto(Github):
+
+	git push origin --tags
+
+_______________________________________________________
+
+	[7.4.3]. Eliminar "Tags":
+_______________________________________________________
+
+Para borrar un tag en local usamos:
+
+	git tag -d nombre-del-tag
+
+Borrar un tag del repositorio remoto: 
+
+	git tag -d nombre-del-tag
+	
+	git push origin :refs/tags/nombre-del-tag
+_______________________________________________________
+
+	[7.5]. Añadir documentación:
+_______________________________________________________
+
+Podemos crear un archivo "README.md" en linea:
+
+	https://pandao.github.io/editor.md/en.html
+
+Y luego añadirlo en la carpeta raiz del proyecto.
+
+Este archivo en Github es muy importantem, ya que es lo que primero se muestra al visitar la url del repositorio.
+
+_______________________________________________________
+
+
+_______________________________________________________
+
+	 		
+_______________________________________________________
+
+WORKFLOW 1 --> SOLO YO:
+
+Vincular Repo Local con Repo Github:
+
+	Creamos el repo en Github.
+
+	Hacemos los commits en local.
+
+	Vinculamos el repo remoto con el local con:
+
+		git remote add origin direccionVincularGithub
+
+	Origin --> se refiere al nombre del remoto. El repo principal. Se usa para vincular con repositorios Propios.
+
+	Subir el commit a Github:
+
+		git push origin master
+_______________________________________________________
+
+WORKFLOW 2 --> REPOS PROPIOS (YO+ MI EQUIPO):
+
+En este flujo de trabajo, se suben los commits, y el equipo tambien sube commits a github, sin preguntar nada, por eso debe haber mucha comunicacion, y debemos estar atentos a actualizarnos con lo que suben.
+
+Primero, antes de añadir (add -A) y hacer commit de nuestros cambios en local, descargamos las actualizaciones (commits de mi equipo) desde github, a la rama fantasma local (origin master):
+
+	git fetch origin
+
+Nota: la rama local "origin master" es una rama fantasma ya que a simple vista no la podemos ver, y que espejea los cambios de github, en nuestro pc local.
+
+Si usamos el comando: "git branch", solo nos muestra la rama master o las otras ramas que hemos creado.
+
+Con el comando "git branch -a", podemos ver la rama fantasma "origen master"
+
+Ahora Fusionamos esta rama fantasma con nuestros cambios locales:
+
+	git merge origin/master
+
+Así, en local, tendremos los ultimos cambios realizados por nuestro equipo, y los cambios propios, los cuales son necesarios añadirlos y hacerles commit, antes de subirlos a github.
+
+	(git add -A) + (git commit -m "mensaje")
+
+Ó
+
+	(git commit -am "mensaje")
+
+Luego podemos subir a github con:
+
+	git push origin master
+_______________________________________________________
+
+WORKFLOW 3 --> REPOS FORKED (de otras personas):
+
+Cuando hacemos un "Fork" de un proyecto de otra persona, cremos un clon personal de ese proyecto en github.
+
+Para trabajar en ese proyecto, es necesario actualizar con los ultimos cambios del repo original (el de la persona que lo creó) y con los cambios del proyecto clon de github.
+
+Para esto, conectamos nuestro proyecto local, con la rama fanstasma "origin/master" del repo clon en github, y usamos una nueva rama fanstasma "upstream/master" la cual se actualiza con el repo original de la 3ra persona.
+
+Para este flujo de trabajo hacemos lo siguiente:
+
+	1) Hacemos "Fork" en Github del proyecto de la 3ra persona.
+
+	2) En local hacemos el clon del proyecto con:
+
+		git clone urlCopiadaGithub
+
+	3) En nuestro repo local, hacemos los cambios al proyecto, y luego añadimos los cambios:
+
+		git add -A
+	
+	Y hacemos commit
+
+		git commit -m "mensaje"
+
+	4) Añadimos los remotos (enlaces hacia el clon personal y el repo original en github):
+
+		git remote add origin urlCopiadaGithubClonPersonal
+
+	Nota: este paso nos puede dar error fatal y no es necesario hacerlo, ya que en el paso (2), cuando hicimos clon, viene incluido este remoto.
+
+	Añadimos el remoto del proyecto original:
+
+		git remote add upstream urlCopiadaGithubProyectoOriginal
+
+	Con el siguiente comando, podemos ver estos remotos ya añadidos:
+
+		git remote -v
+
+	5) Hacemos "fetch" para espejear los remotos y tener las ramas fantasmas:
+
+		git fetch origin
+
+		git fetch upstream
+
+	6) Hacemos la fusión de "upstream/master" (que es la rama fantasma, espejo de los ultimos cambios del repositorio original) con nuestra rama master local (que contiene los cambios hechos por nosotros):
+
+		git merge upstream/master
+
+	7) Podemos nuevamente hacer cambios propios (repetir paso 3).
+
+	8) Subimos los cambios hechos a nuestro repo clon en github:
+
+		git push origin master
+
+	9) Para finalizar, podemos proponerle a la persona creadora del proyecto, los cambios que nosotros hicimos, esto se hace en github haciendo un "pull request"
+
+Nota: Para más info de este workflow ir a:
+
+	http://git.miguelnieva.com/#/105
+_______________________________________________________
+
+GITHUB PAGES:
+
+Nos permite hacer deploy para paginas estaticas. Lo que hacemos es crear desde github un nuevo branch llamado:
+
+	gh-pages
+
+Para ver el proyecto, vamos a la siguiente dirección:
+
+	http(s)://<username>.github.io/<projectname>
+
+Para hacer cambios en local, clonas el proyecto y descargamos la rama "gh-pages":
+
+	git pull origin gh-pages
+
+Luego nos cambiamos a la rama con:
+
+	git checkout gh-pages
+
+Subimos cambia a github con:
+
+	git push origin gh-pages

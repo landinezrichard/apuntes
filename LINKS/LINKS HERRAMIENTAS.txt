@@ -1,0 +1,41 @@
+	LINKS HERRAMIENTAS
+_______________________________________________________
+
+Para Crear el slider de desbloqueo como el del iphone:
+
+	- Este es el iphone completo(con la hora real-time), pero no funciona en mobiles(funciona con jQuery UI, y el texto es un gif):
+
+		http://www.marcofolio.net/webdesign/the_iphone_unlock_screen_in_xhtml_css_and_jquery.html
+
+	- Este es solo el slider, funciona con jQuery UI, pero el estilo del texto es en CSS3!!!:
+
+		https://css-tricks.com/slide-to-unlock/
+
+	- Este es el mas increible, ya que funciona con un input type range!!! Los estilos estan impecables (efecto texto con CSS3):
+
+		http://davidbcalhoun.com/2011/implementing-iphone-slider-unlock-with-input-type-range/
+
+	- Me guie con los estilos del ultimo, para crerar el mio, y con la ayuda de esta libreria:
+	
+		http://skidding.github.io/dragdealer/
+_______________________________________________________
+
+Compresor de CSS Online:
+
+http://csscompressor.com/
+_______________________________________________________
+
+Convertidor de CSS a Sass:
+
+http://css2sass.herokuapp.com/
+_______________________________________________________
+
+Iconos como fuentes, muy similar a icomoon:
+
+http://fontawesome.io/
+_______________________________________________________
+
+CDN de java script y hojas de estilos:
+
+https://cdnjs.com/
+_______________________________________________________

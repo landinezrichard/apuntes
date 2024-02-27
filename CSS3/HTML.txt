@@ -1,0 +1,436 @@
+
+	HTML:
+_______________________________________________________
+
+INDICE:
+
+[1]. Estructura HTML
+[2]. Etiquetas para textos
+[3]. Listas
+[4]. Imágenes
+[5]. Tablas
+[6]. Formularios
+[7]. Enlaces
+[8]. Referencia de elementos HTML
+[9]. Página HTML Básica
+_______________________________________________________
+
+	[1]. Estructura HTML:
+_______________________________________________________
+
+La estructura de una página web es similar a la de un mapa conceptual, que se divide en jerarquias:
+
+	<!DOCTYPE html>
+	<html lang="es">
+		<head>
+			<meta charset="UTF-8">
+			<title>Mi primera Web</title>
+		</head>
+		<body>
+			<h1>Titulo de mi web</h1>
+			<h2>Bienvenidos a mi web</h2>
+			<!--Comentario-->
+		</body>
+	</html>
+
+- Con <!DOCTYPE html>, indicamos que el documento es html 5.
+
+- Con el atributo "lang", dentro de la etiqueta "html" indicamos el lenguaje de la página. Está etiqueta tiene dos grandes etiquetas hijas, el "head" y el "body".
+
+- En "head" (cabecera), van etiquetas de metadatos, que no hacen parte del contenido de la web, como el charset usado, el titulo de la pág. el cual se ve en la pestaña del navegador. tambien se puede incluir codigo javascript.
+
+- En la etiqueta "body", van todas las etiquetas encargadas de mostrar el contenido de la web.
+_______________________________________________________
+
+	[2]. Etiquetas para textos:
+_______________________________________________________
+
+Tenemos diferentes etiquetas para textos:
+
+	<h1> --> Encabezado o titulo de la pág. Van hasta el "h6". El "h1" solo se debe usar una vez en la pág. por SEO, los demás "h2"..."h6" se pueden repetir.
+
+	<p> --> parrafo.
+
+	<strong> --> sirve para poner un texto en negrilla.
+
+	<em> --> texto en cursiva.
+
+	<i> --> texto en cursiva o italica.
+
+	<blockquote> --> para citas de texto.
+
+	<span> --> no tiene ningun efecto en el texto, pero podemos usarlo para poner "id" y clases para luego cambiar estilos con CSS.
+
+	<sub> --> sirve para poner texto de subíndice (H2O) el 2 deberia estar en subíndice.
+
+	<sup> --> sirve para poner texto de superíndice (num²).
+
+	<pre> --> se utiliza para que el navegador interprete el texto tal y como está, respetando saltos de línea y tabulaciones.
+
+Etiquetas que no tienen contenido, por lo tanto se cierran al momento de usarlas:
+
+	<br/> --> Salto de línea( como un "enter" en word).
+
+	<hr/> --> Salto de línea que tambíen dibuja una línea de separación.
+
+Códigos HTML para caracteres especiales:
+
+	á --> &aacute;
+	ü --> &uuml;
+	ñ --> &ntilde;
+	¿ --> &#191;
+	¡ --> &#161;
+	1'000.000 -->tilde de millón &acute;
+
+Para más info:
+
+	https://ascii.cl/es/codigos-html.htm
+
+	http://www.pcweb.es/manual_html/mostrar.php?pagina=14 
+_______________________________________________________
+
+	[3]. Listas:
+_______________________________________________________
+
+Listas Ordenadas(con numeración):
+
+	<ol>
+		<li>Manzana</li>
+		<li>Naranja</li>
+		<li>Pera</li>
+		<li>Banano</li>
+	</ol>
+
+Listas sin orden(con puntos/viñetas):
+
+	<ul>
+		<li>Manzana</li>
+		<li>Naranja</li>
+		<li>Pera</li>
+		<li>Banano</li>
+	</ul>
+
+Podemos tener sub listas dentro de algun elemento:
+
+	<ol>
+		<li>Manzana
+			<ul>
+				<li>Roja</li>
+				<li>Verde</li>
+			</ul>
+		</li>
+		<li>Naranja</li>
+		<li>Pera</li>
+		<li>Banano</li>
+	</ol>
+_______________________________________________________
+
+	[4]. Imágenes:
+_______________________________________________________
+
+Para incluir imagenes dentro de la web, usamos la etiqueta "img", la cual no tiene contenido de texto y se cierra al momento de usarla:
+
+	<img src="imagenes/Cloyster_bg3.png" alt="Imagen del Pokemon Cloyster" title="Pokemon Cloyster" width="255px" />
+
+La etiqueta <img /> tiene los siguientes atributos:
+
+	src --> la url de donde se obtiene la imagen.
+
+	alt --> texto descriptivo que suplantara a la imagen si no se carga.
+
+	title -->muestra un pequeño tooltip con el texto cuando se pasa el ratón sobre la imagen.
+
+	width --> atributo opcional para ajustar el ancho de la imagen, se puede indicar en pixeles y en porcentaje.
+_______________________________________________________
+
+	[5]. Tablas:
+_______________________________________________________
+
+Para crear tablas usamos:
+
+	<table border="2px">
+		<tr>
+			<td>Celda 1</td>
+			<td>Celda 2</td>
+			<td>Celda 3</td>
+		</tr>
+		<tr>
+			<td>Celda 4</td>
+			<td>Celda 5</td>
+			<td>Celda 6</td>
+		</tr>
+	</table>
+
+Esto crea una tabla así:
+
+	+---------+---------+---------+
+	| Celda 1 | Celda 2 | Celda 3 |
+	+---------+---------+---------+
+	| Celda 4 | Celda 5 | Celda 6 |
+	+---------+---------+---------+
+
+Dentro de la etiqueta "table", es necesario usar el atributo border="2px", para que se dibujen los bordes de la tabla, de lo contrario no se muestran.
+
+Con:
+	<tr> --> indicamos filas (table row).
+
+	<td> --> indicamos celdas de una tabla que contiene datos (table data).
+
+Podemos unificar celdas de forma horizontal con el atributo "colspan":
+
+	<table border="2px">
+		<tr>
+			<td>Celda 1</td>
+			<td>Celda 2</td>
+			<td>Celda 3</td>
+		</tr>
+		<tr>
+			<td colspan="2">Celda 4 y 5</td>
+			<td>Celda 6</td>
+		</tr>
+	</table>
+
+Esto crea una tabla así:
+
+	+---------+---------+---------+
+	| Celda 1 | Celda 2 | Celda 3 |
+	+---------+---------+---------+
+	|    Celda 4 y 5    | Celda 6 |
+	+---------+---------+---------+
+
+Para unificar celdas de forma vertical usamos "rowspan":
+
+	<table border="2px">
+		<tr>
+			<td rowspan="3">Celdas Unificadas</td>
+			<td>Celda 2</td>
+			<td>Celda 3</td>
+		</tr>
+		<tr>
+			<td>Celda 5</td>
+			<td>Celda 6</td>
+		</tr>
+		<tr>
+			<td>Celda 8</td>
+			<td>Celda 9</td>
+		</tr>
+	</table>
+
+Esto crea una tabla así:
+
+	+------------+---------+---------+
+	|            | Celda 2 | Celda 3 |
+	+   Celdas   +---------+---------+
+	|            | Celda 5 | Celda 6 |
+	+ Unificadas +---------+---------+
+	|            | Celda 8 | Celda 9 |
+	+------------+---------+---------+
+
+Para usar encabezados, para resaltar en negrilla los titulos de cada columna, en vez de usar "td" usamos "th":
+
+	<table border="2px">
+		<tr>
+			<th>Nombre</th>
+			<th>Apellido</th>
+			<th>País</th>
+		</tr>
+		<tr>
+			<td>Juan</td>
+			<td>Perez</td>
+			<td>España</td>
+		</tr>
+		<tr>
+			<td>Maria</td>
+			<td>Fernandez</td>
+			<td>Bolivia</td>
+		</tr>
+	</table>
+_______________________________________________________
+
+	[6]. Formularios:
+_______________________________________________________
+
+Los formularios nos sirven para que el usuario ingrese información a la pág. Los creamos con la etiqueta "form":
+
+	<form action="" method="get">
+		<p>
+			<label for="nombre">Nombre:</label>
+			<input type="text" name="nombre" id="nombre" placeholder="Escribe tu nombre..." required/>
+		</p>
+		<p>
+			<label for="email">Ingrese su correo: </label>
+			<input type="email" name="email" id="email" required>
+		</p>
+		<p>
+			<label for="mensaje">Mensaje:</label>
+			<textarea name="mensaje" id="mensaje" placeholder="Tu mensaje aquí..."></textarea>
+		</p>
+		<p>
+			<label>Sexo:</label>
+			<label for="varon">
+				<input type="radio" name="sexo" id="varon" value="Varón">Hombre<br/>
+			</label>
+			<label for="mujer">
+				<input type="radio" name="sexo" id="mujer" value="Mujer">Mujer<br/>
+			</label>
+		</p>
+		<label for="pet-select">Elige una mascota:</label>		
+		<select id="pet-select">
+			<option value="" disabled selected>--Escoja una opcion--</option>
+			<option value="perro">Perro</option>
+			<option value="gato">Gato</option>
+			<option value="hamster">Hamster</option>
+			<option value="loro">Loro</option>
+			<option value="goldfish">Pez Dorado</option>
+		</select>
+		<input type="submit" name="enviar" value="Enviar" />
+	</form>
+
+Los atributos de la etiqueta "form" son:
+
+	action --> indica la url que se encarga de procesar los datos del formulario.
+
+	method --> metodo HTTP empleado al enviar el formulario (GET o POST).
+_______________________________________________________
+
+	[7]. Enlaces:
+_______________________________________________________
+
+Podemos tener hipervínculos, links o enlaces, que dirigen a partes locales o externas a la página.
+
+Enlaces Locales: nos llevan a otra parte dentro de la misma página.
+
+Para hacer estos enlaces debemos:
+
+	- Establecer marcadores a lo largo de la pág. (con los lugares a los que queremos saltar con los enlaces).
+
+	- Poner enlaces que saltan a los marcadores
+
+Ejemplo:
+
+	<!DOCTYPE html>
+	<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>Mi primera Web</title>
+	</head>
+	<body>
+		<a name="arriba"></a>
+		Ir a:
+		<a href="#primero">Caperucita Roja</a>
+		<a href="#segundo">Blancanieves</a>
+		
+		<!-- ...Contenido... -->
+		
+		<a name="primero"><h2>Cuento de Caperucita Roja</h2></a>
+
+		<!-- ...Contenido... -->
+
+		<a name="segundo"><h2>Cuento de Balncanieves</h2></a>
+
+		<!-- ...Contenido... -->
+
+		<a href="#arriba">Volver arriba</a>
+	</body>
+	</html>
+
+En este ejemplo tenemos que:
+
+	<a name="arriba"></a> --> este es el marcador.
+
+	<a href="#arriba">Volver arriba</a> --> este es el enlace.
+
+Enlaces Externos: nos dirigen a otra pág. con el atributo "target", controlamos si se abre en una pestaña nueva o en la misma pestaña del navegador.
+
+	<a href="http://www.google.com.co" target="_blank" title="Esto es un tooltip">Acceder al mejor buscador en una nueva ventana</a>
+
+El atributo "target" tiene los siguientes valores:
+
+	_blank --> abre el documento vinculado en una nueva ventana del navegador.
+
+	_self --> ´valor por defecto, abre el documento vinculado en el mismo marco o ventana que el vinculo.
+
+El atributo "title" hace que aparezca una descripción (tooltip) cuando se pasa el mouse encima del enlace.
+_______________________________________________________
+
+	[8]. Referencia de elementos HTML:
+_______________________________________________________
+
+Para consultar el uso de muchas más etiquetas HTML:
+
+	https://developer.mozilla.org/en-US/docs/Web/HTML/Element
+
+_______________________________________________________
+
+	[9]. Página HTML Básica:
+_______________________________________________________
+
+Una estructura HTML para una página básica, puede ser la siguiente:
+
+	<!DOCTYPE html>
+	<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>Mi primera Web</title>
+	</head>
+	<body>
+		<!-- HEADER -->
+		<header>
+			<h1>El título de la página</h1>
+		</header>
+		
+		<!-- MENU -->
+			<!-- Puede ir dentro de "HEADER"-->
+		<nav>
+			<ul>
+				<li><a href="">Inicio</a></li>
+				<li><a href="">Productos</a></li>
+				<li><a href="">Servicios</a></li>
+				<li><a href="">Contacto</a></li>
+			</ul>
+		</nav>
+
+		<!-- usamos este "div" para agrupar el contenido principal y la barra lateral -->
+		<div id="area-contenido">
+
+			<!-- CONTENIDO PRINCIPAL -->
+			<main role="main">
+
+				<!-- ARTICLE -->
+				<article>
+					<!-- Encabezado del "ARTICLE" -->
+					<header>
+						<!-- Cuando veamos el detalle de un artículo, este "h2" lo cambiamos por un "h1", y el "h1" principal (el del título del sitio), lo cambiamos por otra etiqueta -->
+						<h2>Título del artículo</h2>
+					</header>
+					<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officiis soluta placeat vel autem laudantium quisquam voluptatibus dolore ullam natus, recusandae iusto voluptates quam sapiente sed assumenda atque. Consequatur, iure eveniet.</p>
+					
+					<!-- SECTION -->
+						<!-- Agrupa contenido relacionado por su naturaleza o temática.
+						
+							Representa una sección, en este caso del articulo, o tambien puede ser una sección de otra parte de la página 
+							
+						-->
+					<section>
+						<h3>Subtítulo</h3>
+						<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae adipisci delectus commodi cupiditate perspiciatis similique deleniti accusamus at et. Corporis, ab molestiae doloribus modi fuga nihil quos harum sit obcaecati.</p>
+					</section>
+				</article>
+
+				<!-- Si tenemos un listado de artículos o productos irian acá. -->
+			</main>
+
+			<!-- ASIDE -->
+			<aside>
+				<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Excepturi aliquid inventore impedit minus pariatur, ea veniam, aspernatur voluptas amet eveniet totam rem voluptate doloremque cupiditate neque, hic autem saepe natus!    </p>
+			</aside>
+		</div>
+		
+		<!-- FOOTER -->
+		<footer>
+			<div class="copyright">
+				<p>&copy; 2021 Ricardo Landínez</p>
+			</div>
+		</footer>
+	</body>
+	</html>

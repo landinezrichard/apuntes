@@ -1,0 +1,153 @@
+	PUG oldJADE:
+_______________________________________________________
+
+1) Instalar Node.js
+
+2) Instalar stylus con:
+
+	npm install -g pug
+
+	npm install -g jade
+
+3) Creamos un archivo "index.pug"(index.jade):
+
+	doctype html
+	html(lang="es")
+		head
+			meta(charset="utf-8")
+			title Pagina Web
+			link(rel="stylesheet", href="css/estilos.css")
+		body
+			h1 Hola Jade Templates
+			div(class="nombreClase")
+				h2 Este esta dentro del div.
+
+Nota: No es necesario cerrar las etiquetas, como por ejemplo </div> ya no es necesario.
+
+4) Para compilar el archivo escribimos:
+
+	
+
+	jade index.jade
+
+Esto comprime el html en una sola línea. Para que lo muestre bonito, tal y como si lo hubieramos escrito nosotros:
+
+	jade -P index.jade
+
+Nota: el -P es de pretty (bonito).
+
+Jade tambien tiene algunos flags como stylus, como por ejemplo para quedar escuchando (watch) cambios en el archivo:
+
+	jade -P -w index.jade
+
+O para indicarle en donde sacar el resultado (output):
+
+	jade -P -w -o ../public index.jade
+
+_______________________________________________________
+
+Convertir Html a Jade:
+
+	http://html2jade.org/
+
+Para probar ejemplos:
+
+	http://naltatis.github.io/jade-syntax-docs/
+
+	https://pugjs.org/api/getting-started.html
+
+_______________________________________________________
+
+	ORDENAR POR COMPONENTES:
+
+Aprovechando las clases por componentes que creamos con las convenciones suitcss, vamos a hacer un template de cada componente. Esto nos permite re utilizar el componente en cualquier otra pág. y es muy util tenerlo así para mantenimiento y sostenibilidad de la pág.
+
+1) Creamos dentro de la carpeta del proyecto, otra carpeta llamada: "dev" (development o desarrollo), y otra carpeta llamada "public", la cual contendra los archivos de producción listos para el server.
+
+2) En la carpeta "dev", movemos el archivo template de toda nuestra pág. "index.jade".
+
+Creamos Una carpeta llamada "components", en donde creamos una carpeta por cada componente, y la nombramos con el mismo nombre del componente. Ejemplo: "MainMenu"
+
+Dentro de la carpeta del componente, crearemos un archivo "estilos.styl" en donde pondremos los estilos propios del componente, ejemplo:
+
+	.MainMenu
+		&-button
+			color gris_oscuro			
+		&-title
+			font-size 1.1em
+
+Este archivo "estilos.styl" del componente, lo importamos dentro del archivo "estilos.styl" principal de toda la pág. 
+
+Ejemplo: 
+	@import "../components/MainMenu/estilos.styl"
+
+3) Dentro de la carpeta del componente creamos un archivo "template.jade", el cual contendra el codigo html del componente:
+
+	nav(class="MainMenu")
+		button(type="button", class="MainMenu-button")
+		ul(class="MainMenu-list")
+			li(class="MainMenu-item")
+				a(class="MainMenu-link") Opcion1
+
+4) Para importar o incluir este template en el template principal:"index.jade", usamos:
+
+	doctype html
+	html(lang="es")
+		head
+			meta(charset="utf-8")
+			title Pagina Web
+			link(rel="stylesheet", href="css/estilos.css")
+		body
+			h1 Hola Jade Templates
+			div(class="nombreClase")
+				h2 Este esta dentro del div.
+				include ./components/MainMenu/template.jade
+
+_______________________________________________________
+
+	USAR VARIABLES Y TEMPLATES EN JAVASCRIPT:
+
+Definimos las variables en nuestro archivo "template.jade":
+
+	div.remodal(data-remodal-id="#{id}")
+		button.remodal-close(data-remodal-action="close")
+		h1
+			| #{titulo}
+		p
+			| #{mensaje}
+		br
+		button.remodal-confirm(data-remodal-action="confirm")
+			| OK
+
+En este caso el template se renderizará con los valores que pasemos por javascript en las variables:
+
+	#{id}
+	#{titulo}
+	#{mensaje}
+
+Luego en nuestro archivo "app.js" requerimos el template y renderizamos pasando los valores:
+
+	let modal_template = require('../modal/template.jade');
+
+	let modal_data = {
+	    "modal1": {
+	        "id"     : "modal1",
+	        "titulo" : "Enviado!!!",
+	        "mensaje": "Tu mensaje ha sido enviado, en poco tiempo me pondré en contacto contigo."
+	    },
+	    "modal2": {
+	        "id"     : "modal2",
+	        "titulo" : "Ups!!!",
+	        "mensaje": "Parece que algo ha salido mal… Intenta enviar tu mensaje nuevamente."
+	    }
+	};
+
+	$('.remodal-bg').append( modal_template(modal_data.modal1) );
+
+	$('.remodal-bg').append( modal_template(modal_data.modal2) );
+
+Nota: en este caso los valores los definimos en "modal_data", que es un array de objetos con los diferentes valores a renderizar.
+
+Importante!!!: para poder renderizar el template, es necesario usar "browserify" e instalar "jadeify" para hacer la transformación:
+
+	"build-js": "browserify ./dev/app.js -t babelify -t jadeify -o ./public/js/app.js"

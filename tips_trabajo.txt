@@ -1,0 +1,5 @@
+para que no crezcan los items grid y respeten un tamaño les ponemos
+
+min-width:0;
+
+https://stackoverflow.com/questions/43311943/prevent-content-from-expanding-grid-items

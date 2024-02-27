@@ -1,0 +1,527 @@
+
+	Webpack:
+_______________________________________________________
+
+INDICE:
+
+[1]. ¿Qué es Webpack?
+[2]. Creando primer build
+    [2.1]. Instalando webpack
+    [2.2]. Modo Desarrollo o Producción
+[3]. Configurando Builds en un proyecto
+    [3.1]. Configuración de "webpack.config.js"
+[4]. "Loaders" y "Plugins"
+    [4.1]. Loader para JavaScript moderno
+    [4.2]. Plugin para HTML
+
+_______________________________________________________
+
+	[1]. ¿Qué es Webpack?:
+_______________________________________________________
+
+Webpack es un paquete de módulos (module bundler). Su objetivo principal es agrupar archivos JavaScript para su uso en un navegador, pero también es capaz de transformar, agrupar o empaquetar casi cualquier recurso o activo.
+
+Tambien nos permite gestionar dependencias, ejecutar tareas y dejar nuestro código preparado para producción.
+
+Permite trabajar con:
+
+- HTML
+- CSS
+- JavaScript
+- Archivos estáticos
+- Imágenes
+- Fuentes
+
+Webpack permite tener módulos de JS en formato: AMD, Common JS y ES15.
+
+_______________________________________________________
+
+	[2]. Creando primer build:
+_______________________________________________________
+
+1) Desde consola, creamos la carpeta del proyecto y nos ubicamos en está:
+
+    mkdir curso-webpack
+    cd curso-webpack
+
+2) Iniciamos el repositorio de git:
+
+    git init
+
+3) Inicializamos nuestro proyecto con npm (crear el archivo "package.json"):
+
+    npm init
+
+4) Si usamos Visual Studio Code, podemos abrir la carpeta del proyecto con:
+
+    code .
+
+5) Creamos la carpeta "src", donde estara todo al código fuente del proyecto.
+
+6) Dentro de la carpeta "src", creamos el archivo "index.js", el cual sera el punto de entrada con la lógica del proyecto:
+
+    const hello = 'hello';
+
+    console.log(hello);
+_______________________________________________________
+
+	[2.1]. Instalando webpack:
+_______________________________________________________
+
+1) Instalamos Webpack:
+
+    npm i webpack webpack-cli -D
+
+Nota: tambien se isntala "webpack-cli", que añade un conjunto de comandos para crear una configuración personalizada.
+
+2) Como Webpack no se instalo de forma global, sino solo dentro de la carpeta del proyecto, usamos "npx" para poder ejecutarlo:
+
+    npx webpack
+
+Nota: si sale en consola un "warning", es normal, en este caso lo ignoramos, ya que no se está definiendo ningun modo para el build (los modos pueden ser producción o desarrollo).
+
+Esto nos crea en la carpeta de nuestro proyecto, una carpeta "dist", con nuestro primer archivo build "main.js":
+
+    console.log("hello");
+
+Como podemos ver, Webpack tambien optimiza nuestro codigo, en este caso por defecto se optimizo para "producción", y elimino la creación de la constante, ya que era inecesario crearla para solo imprimir el valor.
+
+_______________________________________________________
+
+	[2.2]. Modo Desarrollo o Producción:
+_______________________________________________________
+
+Para cambiar la forma en que se generan los builds, podemos definir los modos de "desarrollo" o "producción" con los siguientes comandos:
+
+    npx webpack --mode development
+    npx webpack --mode production
+
+Si ejecutamos el comando definiendo el modo de desarrollo, nuestro archivo "dist/main.js", quedo con un codigo indicado para debuggear y observar más facilmente en donde se puede generar un error:
+
+    /*
+    * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+    * This devtool is neither made for production nor for readable output files.
+    * It uses "eval()" calls to create a separate source file in the browser devtools.
+    * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+    * or disable the default devtool with "devtool: false".
+    * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+    */
+    /******/ (() => { // webpackBootstrap
+    /******/ 	var __webpack_modules__ = ({
+
+    /***/ "./src/index.js":
+    /*!**********************!*\
+    !*** ./src/index.js ***!
+    \**********************/
+    /***/ (() => {
+
+    eval("const hello = 'hello';\r\n\r\nconsole.log(hello);\n\n//# sourceURL=webpack://curso-webpack/./src/index.js?");
+
+    /***/ })
+
+    /******/ 	});
+    /************************************************************************/
+    /******/ 	
+    /******/ 	// startup
+    /******/ 	// Load entry module and return exports
+    /******/ 	// This entry module can't be inlined because the eval devtool is used.
+    /******/ 	var __webpack_exports__ = {};
+    /******/ 	__webpack_modules__["./src/index.js"]();
+    /******/ 	
+    /******/ })()
+    ;
+
+En cambio el modo production deja el código comprimido y mas limpio para usarse.
+_______________________________________________________
+
+	[3]. Configurando Builds en un proyecto:
+_______________________________________________________
+
+Vamos a configurar los builds de un proyecto(los archivos para producción), configurando los archivos de entrada y salida, para que Webpack nos genere todo.
+
+Primero preparamos el proyecto el cual se va a configurar:
+
+1) Clonamos el proyecto:
+
+    git clone https://github.com/gndx/js-portfolio.git
+
+    cd js-portfolio
+
+2) Instalamos Webpack:
+
+    npm install webpack webpack-cli -D
+
+3) Generamos el primer build:
+
+    npx webpack --mode production
+
+_______________________________________________________
+
+	[3.1]. Configuración de "webpack.config.js":
+_______________________________________________________
+
+El archivo de configuración "webpack.config.js" nos  permite establecer la configuración necesaria para que Webpack genere nuestros builds.
+
+En este archivo indicamos el punto de entrada del proyecto (input), donde generar los builds (output) y las extensiones que vamos usar.
+
+1) En la raíz del proyecto, creamos un archivo "webpack.config.js":
+
+    // Requerimos el modulo "path" de Node.js
+    const path = require('path');
+
+    // Creamos el modulo que vamos a exportar, con un objeto, el cual tendra la configuración necesaria.
+    module.exports = {
+        entry: "./src/index.js",
+        output: {
+            path: path.resolve(__dirname, "dist"),
+            filename: "main.js"
+        },
+        resolve: {
+            // Aqui ponemos las extensiones que tendremos en nuestro proyecto
+            extensions: [".js"]
+        },
+    }
+
+En donde tenemos:
+
+    "entry" --> nos permite indicar el punto de entrada de nuestra aplicación (input).
+
+    "output" --> indicamos en dónde se va a crear los builds generados por Webpack.
+
+    "path" --> indicamos la ruta donde se creara la carpeta con builds y el nombre de la misma
+            
+        Con path.resolve(__dirname) indicamos que se cree en la misma ubicación del proyecto.
+
+    "filename" --> le pone el nombre al archivo final.
+
+    "extensions" --> pasamos en un array, las extensiones que se van a usar.
+
+2) En consola ejecutamos el siguiente comando:
+
+    npx webpack --mode production --config webpack.config.js
+
+Con el flag "--config", le indicamos a webpack que se ejecute con ese archivo de configuración.
+
+3) Para hacer más facil la ejecución de este comando, podemos generar un "script", dentro del archivo "package.json":
+
+    ...
+
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "webpack --mode production",
+        "dev": "webpack --mode development"
+    },
+
+    ...
+
+Nota: no es necesario indicar el flag: "--config webpack.config.js", porque se ejecutara este comando desde la raiz del proyecto, y se encontrara el archivo de configuración de Webpack.
+
+4) Corremos nuestro script con el comando:
+
+    npm run build
+
+_______________________________________________________
+
+	[4]. "Loaders" y "Plugins":
+_______________________________________________________
+
+"Loaders": Los "loaders" nos permiten preprocesar archivos, no solo de JavaScript.
+
+Webpack solamente entiende JavaScript y JSON. Los loaders nos permite procesar archivos de otros tipos para convertirnos en módulos válidos que serán consumidos por nuestras aplicaciones y agregadas como dependencias.
+
+En alto nivel, los loaders poseen 2 configuraciones principales:
+
+    "test" --> propiedad que identifica cuáles archivos deberán ser transformados
+    "use" --> propiedad que identifica el loader que será usado para transformar a dichos archivos
+
+Nota: para más info de los "loaders":
+
+    https://webpack.js.org/loaders/
+
+
+"Plugins": Webpack tiene una gran interfaz de plugins(complementos). La mayoria de las funciones dentro de Webpack utilizan plugins, esto hace que Webpack sea flexible.
+
+Los plugins son utilizados para extender tareas específicas, como la optimización de paquetes, la gestión de activos y la inyección de variables de entorno.
+
+Nota: Para más info de plugins ir a:
+
+    https://webpack.js.org/plugins/
+
+_______________________________________________________
+
+	[4.1]. Loader para JavaScript moderno:
+_______________________________________________________
+
+Vamos a añadir un "loader" de "Babel", el cual nos transpila el codigo JavaScript, permitiendonos usar código moderno y compatible en todos los navegadores.
+
+Nota: para más info del "babel-loader":
+
+    https://webpack.js.org/loaders/babel-loader/
+
+1) Instalamos como dependencia de desarrollo los siguientes paquetes:
+
+    npm install -D babel-loader @babel/core @babel/preset-env @babel/plugin-transform-runtime
+
+En donde:
+
+    @babel/core --> es babel en general.
+    
+    @babel/preset-env --> trae y te permite usar las ultimas características de JavaScript.
+
+    @babel/plugin-transform-runtime --> te permite trabajar con todo el tema de asincronismo como async y await.
+
+2) Creamos la configuración de Babel, creando un archivo ".babelrc" en la raíz del proyecto:
+
+    {
+        "presets": [
+            "@babel/preset-env"
+        ],
+        "plugins": [
+            "@babel/plugin-transform-runtime"
+        ]
+    }
+
+Nota: los archivos con el ".extensión" sin nombre, son archivos ocultos.
+
+3) Añadimos la configuración a Webpack en "webpack.config.js":
+
+    resolve: {
+        ...
+    },
+    module: {
+        rules: [
+            {
+                test: /\.m?js$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: "babel-loader"
+                },
+            }
+        ]
+    }
+
+Con "test" indicamos en una expresión regular, que extensión de archivos aplicara el loader, en este caso busca la extensción ".mjs" o ".js" (".mjs" la "m" es de modulo.).
+
+Con "exclude", excluimos u omitimos los archivos de la carpeta "node_modules"
+
+Con "use", le indicamos el "loader que vamos a utilizar."
+
+4) Ya esta lista la configuración de nuestro "loader", podemos probarlo, viendo nuestro código de "/dist/main.js", y luego corriendo:
+
+    npm run build
+_______________________________________________________
+
+	[4.2]. Plugin para HTML:
+_______________________________________________________
+
+Webpack tiene una gran interfaz de plugins(complementos). La mayoria de las funciones dentro de Webpack utilizan plugins, esto hace que Webpack sea flexible.
+
+Nota: Para más info de plugins ir a:
+
+    https://webpack.js.org/plugins/
+
+Vamos a añadir un plugin para manejar los archivos HTML del proyecto.
+
+1) Instalamos nuestro plugin "html-webpack-plugin" como dependencia de desarrollo:
+
+    npm i -D html-webpack-plugin
+
+Nota 1: para más info del plugin:
+
+    https://webpack.js.org/plugins/html-webpack-plugin/
+
+Nota 2: Para manejar los archivos HTML tambien podemos usar un loader:
+
+    https://webpack.js.org/loaders/html-loader/
+
+2) En nuestro archivo de configuración "webpack.config.js", requerimos y usamos nuestro plugin:
+
+    const HtmlWebpackPlugin = require('html-webpack-plugin');
+    ...
+
+    module: {
+        ...
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            inject: 'body',
+            template: './public/index.html',
+            filename: './index.html'
+        })
+    ]
+
+En donde:
+
+    "inject" --> indicamos que injecte los assets en el contenido de la plantilla, es decir si tenemos por ejemplo un script al final del body, apuntando a un archivo .js aparte, podemos quitar ese script del body, y con esta opción se injectara el script que webpack compile en el HTML.
+
+    "template" --> indicamos la ruta relativa o absoluta al archivo HTML.
+
+    "filename" --> indicamos el nombre del archivo HTML final, tambien podemos indicar la carpeta de destino.
+
+Nota: para ver las opciones y configuraciones del plugin:
+
+    https://github.com/jantimon/html-webpack-plugin#options
+
+Ahora, si en nuestra plantilla llamabamos al archivo bundle que estamos armando con Webpack, ya no es necesario llamarlo, porque lo vamos a injectar con nuestro plugin:
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../src/styles/main.css">
+    <title>JS Portfolio</title>
+    </head>
+
+    <body>
+        <div id="main"></div>
+        <script type="module" src="../src//index.js"></script>
+    </body>
+
+    </html>
+
+En este caso esta línea ya no va en nuestro HTML:
+
+    <script type="module" src="../src//index.js"></script>
+
+Y al compilar en modo desarrollo lo deja así:
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../src/styles/main.css">
+    <title>JS Portfolio</title>
+    </head>
+
+    <body>
+        <div id="main"></div>
+        <script defer src="main.js"></script>
+    </body>
+
+    </html>
+_______________________________________________________
+
+	[4.3]. Loaders para CSS y preprocesadores:
+_______________________________________________________
+
+Vamos a usar unos loaders y pluguins para poder trabajar con CSS en Webpack.
+
+1) Instalamos el loader "css-loader", para reconocer los archivos CSS e instalamos el pluguin "mini-css-extract-plugin", para poder trabajar con CSS dividido en diferentes partes de nuestra aplicación y luego unirlo:
+
+    npm install -D css-loader mini-css-extract-plugin
+
+2) En nuestro archivo "/public/index.html", eliminamos la siguiente línea, ya que vamos a inyectar directamente el CSS:
+
+    <link rel="stylesheet" href="../src/styles/main.css">
+
+3) En el archivo "/src/index.js", importamos nuestros estilos:
+
+    import './styles/main.css';
+
+4) Añadimos la configuración a Webpack en el archivo "webpack.config.js": 
+
+    ...
+    const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
+    ...
+    module: {
+        rules: [
+            ...,
+            {
+                test: /\.css$/i,
+                use: [MiniCssExtractPlugin.loader, 
+                'css-loader'
+                ]
+            }
+        ]
+    },
+        plugins: [
+            new HtmlWebpackPlugin({
+                inject: 'body',
+                template: './public/index.html',
+                filename: './index.html'
+            }),
+            new MiniCssExtractPlugin(),
+    ]
+
+Primero requerimos el plugin, luego añadimos la nueva regla del loader, en donde indicamos con expresión regular que vamos a trabajar con archivos de extensión ".css" y por ultimo indicamos el plugin que vamos a usar.
+
+5) Probamos con el comando:
+
+    npm run dev
+
+En consola podemos ver que ahora se generaron los siguientes archivos:
+
+    asset main.js 30.3 KiB [emitted] (name: main)
+    asset main.css 4.87 KiB [emitted] (name: main)
+    asset ./index.html 428 bytes [emitted]
+
+Nota: con la extensión "Live Server" para "Visual Studio Code", podemos ver el archivo "/dist/index.html" corriendo en el navegador.
+
+_______________________________________________________
+
+	[4.3.1]. Loaders para preprocesar "Stylus":
+_______________________________________________________
+
+Para trabajar con el preprocesador "Stylus", vamos a instalar otro loader:
+
+1) Instalamos el loader "stylus-loader":
+
+    npm install -D stylus-loader
+
+2) Indicamos en el archivo de configuración "webpack.config.js", la extensión de los archivos a trabajar y el loader, en la misma regla creada anteriormente:
+
+    test: /\.css|.styl$/i,
+    use: [MiniCssExtractPlugin.loader, 
+        'css-loader',
+        'stylus-loader'
+    ]
+
+3) Para probar, creamos dentro de "/src/styles/" un archivo de Stylus "vars.styl":
+
+    $color-red = red
+
+    body
+        color $color-red
+
+4) En el archivo "/src/index.js", importamos nuestros archivos de Stylus:
+
+    import './styles/vars.styl';
+
+5) Probamos con el comando:
+
+    npm run dev
+
+6) Si vemos el archivo generado en "/dist/main.css", veremos que el archivo de Stylus se fusiono con el de css, y se genero un solo archivo.
+
+_______________________________________________________
+
+	[4.3.2]. Loaders para preprocesar "Sass":
+_______________________________________________________
+
+De forma muy similar a Stylus, instalamos el loader:
+
+    npm i -D sass-loader sass
+
+Y en el archivo de configuración "webpack.config.js":
+
+    {
+        test: /\.s?css$/,
+        use: [MiniCssExtractPlugin.loader,
+            "css-loader",
+            "sass-loader"
+        ]
+    },
+
+
+
+
+
+User: hosting@ariadnacg.com Pass: ,9m:M4$evu'5;V{a
+

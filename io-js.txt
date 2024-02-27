@@ -1,0 +1,2263 @@
+______________________________________________________
+			
+
+			io.JS:
+
+______________________________________________________	
+
+Instalar io.js desde:
+
+http://iojs.org
+
+O por consola con:
+
+	nvm install iojs
+
+Nota: requiere instalar nvm, que está en github: https://github.com/creationix/nvm
+
+Verificar en consola si se tiene instalado io.js con:
+
+	iojs -v
+______________________________________________________
+			
+
+	Proyecto a crear en io.JS: 
+
+		Vídeo chat en tiempo real (sin sonido, y el video es como un gif)
+
+______________________________________________________	
+
+1) Clonamos el proyecto (consola de git) con:
+
+	git clone http://github.com/julianduque/animate-server
+
+Esto nos copia en nuestro pc el proyecto ya terminado.
+
+______________________________________________________
+
+	COMANDOS USADOS PARA SEGUIR EL PASO A PASO DEL PROYECTO:		
+
+Ver cambios entre versiones con:
+
+	git checkout 00
+
+	git checkout 01
+
+Ver comentarios guía con:
+
+	git log
+
+Ver cambios de código entre cada paso con:
+
+	git diff 00..01
+
+Descartar los cambios hechos en los archivos		
+
+	git reset --hard	
+______________________________________________________
+
+2) Pasamos al primer paso del proyecto con:
+
+	git checkout 00
+
+En una consola, con el siguiente comando:
+
+	npm init
+
+Creamos un archivo "package.json" para definir las dependencias de nuestra aplicación.
+
+El comando "npm init", hará algunas preguntas iniciales
+sobre nuestro proyecto:
+
+	name: animate-server
+	version: 1.0
+	description: A real time chat server using animated gif-like videos
+	entry point: server.js
+	test comand:
+	git repository:
+	keywords:
+	autor: Julian Duque <julianduquej@gmail.com>
+	license: BSD
+
+______________________________________________________
+
+Creamos un Archivo ".gitignore", para ignorar archivos y carpetas que no se deben subir a github (Como la carpeta node_modules, ya que allí van las dependencias del proyecto y no se deben subir a github, ya que estas dependencias son binarios y su compilación depende del sistema operativo):
+
+	node_modules
+	*.log
+
+Nota: lo hecho hasta ahora corresponde a lo hecho en el checkout 01, entonces para cambiarnos a ese checkout, deshacemos los pasos con git reset --hard	
+
+______________________________________________________
+
+3)Nos pasamos al otro checkout con:
+
+	git checkout 01		
+
+Creamos el archivo principal llamado "server.js":
+
+	'use strict'
+
+	const http = require('http')
+	const port = process.env.PORT || 8080
+
+	const server = http.createServer()
+
+	server.listen(port)
+
+En la primera línea le indicamos que use lenguaje javaScript estricto (para usar ECMAScript 6 -ES6).
+
+const --> sirve para definir una constante (ES6).
+
+Con "require('http')", pedimos el módulo http, para crear un servidor http básico (No hace nada).
+
+Con "process.env.PORT || 8080", indicamos que se guarde en la constante "port", el puerto que le asignemos por consola al ejecutar el servidor, y si no se indica un puerto toma por defecto el puerto 8080.
+
+Así, para ejecutar el servidor con el puerto por defecto, en consola escribimos:
+
+	node server.js	
+
+Y si queremos ejecutar el server con otro puerto, lo ejecutamos con: 	
+	
+	PORT=8081 node server.js
+______________________________________________________
+
+NOTA USUARIOS WINDOWS:
+
+El comando "node server.js", tal vez genere error porque node no tiene soporte ES6, para solucionarlo usar:
+
+	iojs server.js
+
+El comando "PORT=8081 node server.js" no sirve en windows, si buscas la documentación de node o iojs, del comando "process.env.PORT" (enlace: https://iojs.org/api/process.html#process_process_env), encontraras que te indican lo siguiente "See environ(7)." Al intentar buscar eso en la documentación, no encuentras NADA.
+
+Buscando en google, encuentras una discusión muy bonita (en inglés) en donde un usuario pregunta que carajos significa eso en la documentación, a lo que un usuario le responde que se refiere a las variables de entorno en linux. El usuario agradece y dice que la documentación es muy ambigua en ese sentido y que deberían mejorarla, y que un usuario windows no entendería eso. Ahí se arma pleito diciendo que la documentación sería muy larga si explican todo sobre cómo funcióna un pc, etc...en fin los pendejos no solucionan un carajo, así que aquí está la solución:
+
+Link a la discusión absurda: https://groups.google.com/forum/#!topic/nodejs/JpAfMHJ0BPg
+
+Link a la documentación de variables de entorno en Linux: http://linux.die.net/man/7/environ
+
+Link a una explicación de comandos y variables de entorno en Windows: http://www.javcasta.com/2009/08/15/lenguaje-de-comandos-scripts-cmd-bat/
+
+Resumiendo: para que sirva "PORT=8081 node server.js" en Windows, primero escribe en consola:
+
+	set PORT=8081
+
+Y luego ejecuta:
+
+	iojs server.js PORT
+
+En el navegador ve a:
+
+	localhost:8081
+
+Nota: una vez definida la variable de entorno con solo ejecutar el comando:
+	
+	iojs server.js
+
+Corre el servidor en el puerto 8081, sin necesidad de pasarle PORT.
+______________________________________________________
+
+Con el servidor http básico que hemos creado se explicaran conceptos de programación asíncrona muy utilizados en io.js / Node.
+
+* Callbacks
+* Event Emitter
+* Streams
+______________________________________________________
+
+4) Cambiamos al checkout 02
+
+	git checkout 02
+
+Aquí agregamos un par de callbacks a nuestro servidor, el primero es una función anónima que se ejecutará cada vez que llegue una petición http a nuestro servidor, el segundo se ejecutará cuando el servidor inicie por primer vez.
+
+Un callback es una función JavaScript que se ejecuta cuando una operación asíncrona ha terminado.
+
+	'use strict'
+
+	const http = require('http')
+	const port = process.env.PORT || 8080
+
+	const server = http.createServer(function (req, res) {
+		res.end("Hola io.js")
+	})
+
+	server.listen(port, function () {
+  		console.log('Server running in port ' + port)
+	})
+
+Con "res.end" indicamos que envíen en la respuesta después del request.
+
+______________________________________________________
+
+5) Cambiamos a:	git checkout 03
+
+Una muy buena práctica para evitar el temido `callback hell` es utilizar named functions, esto es, declarar las funciónes que servirán como tus callbacks y utilizarlas en vez de crear funciónes anónimas para cada llamado asíncrono.
+
+"Callback hell" --> piramide de callbacks o un callback dentro de otro
+
+De esta manera es incluso más fácil hacer mantenimiento de tu código.
+
+	'use strict'
+
+	const http = require('http')
+	const port = process.env.PORT || 8080
+
+	const server = http.createServer(onRequest)
+
+	server.listen(port, onListening)
+
+	function onRequest (req, res) {
+	  res.end('Hello io.js')
+	}
+
+	function onListening () {
+	  console.log('Server running in port ' + port)
+	}
+
+______________________________________________________
+
+6) Cambiamos a:	git checkout 04
+
+Eliminamos callback y utilizamos eventos(Event Emitter):
+
+Event Emitter es un concepto muy utilizado en io.js / Node el cual permite trabajar con eventos de una manera muy sencilla y permite que la programación asíncrona con io.js / Node sea muy poderosa.
+
+	'use strict'
+
+	const http = require('http')
+	const port = process.env.PORT || 8080
+
+	const server = http.createServer()
+
+	server.on('request', onRequest)
+	server.on('listening', onListening)
+
+	server.listen(port)
+
+	function onRequest (req, res) {
+	  res.end('Hello io.js')
+	}
+
+	function onListening () {
+	  console.log('Server running in port ' + port)
+	}
+
+En este refactor es un poco más claro (sin conocer el API), que la función `onRequest` se ejecutará cada que el evento `request` en el servidor sea llamado.
+
+Para ver los eventos del server ir a:
+
+	https://iojs.org/api/http.html#http_class_http_server	
+______________________________________________________
+
+7) Cambiamos a:	git checkout 05
+
+En este commit creamos un servidor web estático muy básico, solo está sirviendo un archivo index.html de la carpeta public y estamos utilizando el módulo `fs` (file system) para leer el archivo. 
+
+En este caso hemos utilizado la API síncrona de `fs` (lo cual no es recomendado) y hemos hecho otro par de faltas que es mejor que solucionemos en los próximos commits.
+
+	'use strict'
+
+	const http = require('http')
+	const fs = require('fs')
+	const port = process.env.PORT || 8080
+
+	const server = http.createServer()
+
+	server.on('request', onRequest)
+	server.on('listening', onListening)
+
+	server.listen(port)
+
+	function onRequest (req, res) {
+	  let file = fs.readFileSync('public/index.html')
+	  res.end(file)
+	}
+
+	function onListening () {
+	  console.log('Server running in port ' + port)
+	}
+
+let --> nos permite crear una variable (similar a "var"), pero con un scope seguro, es decir, sabemos que en ningún otro bloque se tendrá acceso a esa variable, es decir es una variable local de esta función.	
+
+Nota: para más info del módulo fs (File System) ir a: https://nodejs.org/api/fs.html
+______________________________________________________	
+
+Creamos una carpeta llamada: "public", y dentro de está el archivo "index.html":
+
+	<!DOCTYPE html>
+	<html>
+	  <head>
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width">
+	    <title>:: Animate :: </title>
+	  </head>
+	  <body>
+	    <p>Hola io.js</p>
+	  </body>
+	</html>
+______________________________________________________
+
+8) Cambiamos a:	git checkout 06
+
+Ahora cambiamos el llamado del archivo de síncrono a asíncrono (módulo "fs"). También usamos un módulo Path, para manejar la ruta del archivo html.
+
+	'use strict'
+
+	const http = require('http')
+	const fs = require('fs')
+	const path = require('path')
+	const port = process.env.PORT || 8080
+
+	const server = http.createServer()
+
+	server.on('request', onRequest)
+	server.on('listening', onListening)
+
+	server.listen(port)
+
+	function onRequest (req, res) {
+	  let index = path.join(__dirname, 'public', 'index.html')
+
+	  fs.readFile(index, function (err,file) {
+	  	if(err) 
+	  		return res.end(err.message)
+
+	  	res.setHeader('Content.Type', 'text/html')	
+	  	res.end(file)
+	  })	  
+	}
+
+	function onListening () {
+	  console.log('Server running in port ' + port)
+	}
+
+El módulo `path` se usa para manejo de rutas de archivos, es muy mala práctica manejar estas rutas sin este módulo pues hay sistemas operativos (como Windows) que manejan los paths diferentes.
+
+	__dirname --> directorio actual donde se ejecuta la aplicación.
+
+envíamos la cabecera `Content-Type` en la petición http, para que el navegador entienda que lo que le estamos envíando es un archivo html.
+
+______________________________________________________
+	
+9) Cambiamos a:	git checkout 07
+
+En este commit hacemos un refactor para utilizar Streams, uno de los conceptos más poderosos de io.js / Node.
+
+En el anterior paso el archivo se carga todo en el buffer y cuando este termina de cargarse lo pasa al response cuando está listo. Con streams a medida que se va leyendo el archivo este lo va pasando al response y el performance es mucho mejor (Claro está, que es visto cuando se trabaja con archivos más grandes).
+
+	'use strict'
+
+	const http = require('http')
+	const fs = require('fs')
+	const path = require('path')
+	const port = process.env.PORT || 8080
+
+	const server = http.createServer()
+
+	server.on('request', onRequest)
+	server.on('listening', onListening)
+
+	server.listen(port)
+
+	function onRequest (req, res) {
+	  let index = path.join(__dirname, 'public', 'index.html')
+	  let rs = fs.createReadStream(index)
+
+	  res.setHeader('Content-Type', 'text/html')
+	  rs.pipe(res)
+
+	  rs.on('error', function (err) {
+	    res.setHeader('Content-Type', 'text/plain')
+	    res.end(err.message)
+	  })
+	}
+
+	function onListening () {
+	  console.log('Server running in port ' + port)
+	}
+______________________________________________________
+
+10) Cambiamos a: git checkout 08
+
+Template strings es una característica de ES6(ECMAScript6), con este ya podemos concatenar información a un string de una manera mucho más limpia.
+
+	function onListening () {
+	  console.log(`Server running in port ${port}`)
+	}
+
+La variable va ahora dentro del string con: ${nombreVariable}	
+
+Nota: para que sirva es necesario cambiar en el string, las comillas simples ('') o dobles ("") por comillas invertidas (``) (Alt+96).	
+
+Este es un pequeño refactor educativo.
+______________________________________________________
+
+11)	Nuestro servidor, solo está sirviendo el archivo "index.html", si queremos enlazar en ese archivo por ejemplo, un script, nuestro servidor no tiene la capacidad de ir a la ruta y devolver el archivo javascript enlazado (solo devuelve el "index.html").
+
+Ahora vamos a nuestro archivo "index.html", en donde cargaremos un script llamado "app.js". También añadimos unos tags en donde cargaremos el video (gif) de nuestro chat: 
+
+	<!DOCTYPE html>
+	<html>
+	  <head>
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width">
+	    <title>:: Animate :: </title>
+	  </head>
+	  <body>
+	    <div id="video-preview"></div>
+	    <button id="record">Record</button>
+	    <script src="/app.js"></script>
+	  </body>
+	</html>
+
+El código del archivo "app.js" es el siguiente:
+
+	const record = document.querySelector('#record')
+
+	record.addEventListener('click', function (e) {
+	  e.preventDefault()
+
+	  console.log('Button clicked')
+	})
+
+Aquí lo que hacemos es obtener el botón html con id "record". Añadimos un evento al botón, que se ejecuta cuando se hace click, y nos imprime en consola "botón clickeado".	
+______________________________________________________		
+
+Como nuestro servidor aún no tiene la capacidad de "servir" el script, ya que siempre que hacemos request, nos entrega el archivo "index.html" modificamos nuestro "sever.js":
+
+	//...todo el código anterior igual...
+
+	function onRequest (req, res) {
+	  let uri = req.url
+
+	  if (uri.startsWith('/index') || uri === '/') return serveIndex(res)
+
+	  if (uri.startsWith('/app.js')) return serveApp(res)
+
+	  res.statusCode = 404
+	  res.setHeader('Content-Type', 'text/plain')
+	  res.end(`404 Not found: ${uri}`)
+	}
+
+	function serveIndex (res) {
+	  let index = path.join(__dirname, 'public', 'index.html')
+	  let rs = fs.createReadStream(index)
+
+	  res.setHeader('Content-Type', 'text/html')
+	  rs.pipe(res)
+
+	  rs.on('error', function (err) {
+	    res.setHeader('Content-Type', 'text/plain')
+	    res.end(err.message)
+	  })
+	}
+
+	function serveApp (res) {
+	  let app = path.join(__dirname, 'public', 'app.js')
+	  let rs = fs.createReadStream(app)
+
+	  res.setHeader('Content-Type', 'text/javascript')
+	  rs.pipe(res)
+
+	  rs.on('error', function (err) {
+	    res.setHeader('Content-Type', 'text/plain')
+	    res.end(err.message)
+	  })
+	}
+
+	//...todo el código anterior igual...
+
+Creamos dos métodos `serveIndex` y `serveApp`, estos serán utilizados para servir nuestro archivo index y javascript. 
+
+La función "onRequest", será la encargada de ejecutar un método u otro, preguntado con "if", si es la url del index (o raíz /) o si se está pidiendo el script (app.js). En caso de que se esté pidiendo otro archivo, se responde con el código 404 o no encontrado.
+
+Si seguimos este patrón nuestro código empezará a ser muy difícil de mantener de ahora en adelante.
+
+En los siguientes pasos vamos a ver cómo podemos arreglar ese lio sin necesidad de utilizar un framework completo, para esto usaremos librerías que solucionan problemas específicos como el de servir archivos estáticos (*.html / *.js / *.css e imágenes) y manejar rutas.
+______________________________________________________
+
+12) Instalamos un nuevo módulo llamado "st", el cual sirve archivos estáticos. Para instalarlo usamos el comando: 
+
+	npm install st --save
+
+Usamos --save para que se guarde en el archivo "package.json" como dependencia.
+
+Ahora creamos una carpeta llamada "router" (se encuentra al mismo nivel que la carpeta "public" o el archivo "server.js"). 
+
+Dentro de esta carpeta, creamos un archivo "index.js", que será el enrutador encargado de servir los archivos estáticos:
+
+	const path = require('path')
+	const st = require('st')	
+
+	const mount = st({
+		path: path.join(__dirname, '..', 'public'),
+		index: 'index.html'
+	})
+
+	function onRequest (req, res){
+		mount(req, res, function (err){
+			if(err)
+				return fail(err, res)
+
+			res.statusCode = 404
+			res.end(`404 Not Found: ${req.url}`)
+		})
+	}
+
+	function fail (err, res){
+		res.statusCode = 500
+		res.setHeader('Content-Type', 'text/plain')
+		res.end(err.message)
+	}
+
+	module.exports = onRequest
+
+Primero requerimos el módulo "path", para manejar la ruta donde se encuentra la carpeta "public", la cual contendrá todos nuestros archivos estáticos que vamos a servir (javascript, html, css, imágenes).
+
+Luego requerimos el módulo "st", para servir esos archivos estáticos.
+
+En la constante "mount", definimos la configuración inicial de nuestro módulo "st".
+
+	path --> indicamos la ruta de nuestra carpeta con archivos estáticos. Aquí usamos el módulo "path", para indicar que se salga de la carpeta donde se encuentra (..) y busque la carpeta 'public'.
+
+	index --> aquí indicamos el archivo principal de nuestra aplicación.
+
+Luego definimos aquí la función "onRequest", que antes la teníamos en el archivo "server.js"
+
+Con "module.exports = onRequest", exportamos la función "onRequest" para hacerle un llamado en otro módulo.
+
+Nota: para más info del módulo "st": https://www.npmjs.com/package/st  
+______________________________________________________
+
+Modificamos el archivo "server.js":
+
+	'use strict'
+
+	const http = require('http')
+	const router = require('./router')
+
+	const server = http.createServer()
+	const port = process.env.PORT || 8080
+
+	server.on('request', router)
+	server.on('listening', onListening)
+
+	server.listen(port)
+
+	function onListening () {
+	  console.log(`Server running in port ${port}`)
+	}
+
+Creamos una constante "router", en donde importamos o requerimos el router creado en la carpeta "router" (archivo "index.js").
+
+Eliminamos la función "onRequest", ya que ahora se encuentra en el archivo "index.js". Y hacemos que cuando el servidor reciba una petición (evento 'request'), ejecute la función del router "onRequest" que se exporto en "index.js".
+______________________________________________________
+
+Hasta Aquí Creamos un Servidor Http Estático, es decir, sirve los archivos html, css, javascript, e imágenes que estén en la carpeta "public".
+
+Correr el servidor en consola con:
+
+	PORT=8081 node server.js
+
+Y en el navegador probar el index con:
+
+	localhot:8081	
+______________________________________________________
+
+	CREACIÓN VIDEO A PARTIR DE IMÁGENES:
+
+Para crear nuestro chat, vamos a instalar "Browserify", que es una utilidad que nos permite tomar archivos de node (con código propio de node como "require", etc) y convertirlo para que se pueda usar en el cliente (navegador).
+
+Hay que recordar que en "npm", existen librerías y módulos no solo para node, sino también para el cliente. Al igual que hicimos con la creación del servidor estático, Browserify nos permitirá armar nuestra aplicación con pequeños módulos, en vez de descargar todo un framework.
+______________________________________________________
+
+13) Instalamos Browserify como una dependencia de desarrollo, es decir no sirve para producción.
+
+	npm install --save-dev browserify
+
+Para que se diferencie en el archivo "package.json", las dependencias normales a las de desarrollo, usamos el comando "--save-dev". 	
+
+Creamos una carpeta llamada "client", que es donde usaremos módulos de npm del cliente, y que después compilaremos con Browserify, para guardarlos en la carpeta "public".
+
+Creamos un archivo llamado "app.js" dentro de la carpeta "client":
+
+	const record = document.querySelector('#record')
+
+	record.addEventListener('click', function(e){
+		e.preventDefault()
+	
+		//grabe el video
+
+	}, false)
+
+Este archivo "app.js" va a reemplazar el script "app.js" que teníamos linkeado en el "index.html".
+
+Lo que hacemos es obtener el botón html, el cual va a grabar el video en el momento que le hacemos click.	
+
+Para grabar el video, lo que vamos a hacer es utilizar el módulo "webrtc2images", el cual convierte el video capturado de la cámara web, en una secuencia de imágenes.
+
+Para instalar "webrtc2images" como una dependencia usamos:
+
+	npm install webrtc2images --save
+
+Ahora en nuestro archivo "app.js" del cliente (carpeta "client"), requerimos y usamos el módulo:
+
+	const webrtc2images = require('webrtc2images')
+	
+	const rtc = new webrtc2images({
+	  width: 200,
+	  height: 200,
+	  frames: 10,
+	  type: 'image/jpeg',
+	  quality: 0.4,
+	  interval: 200
+	});
+
+	rtc.startVideo(function (err) {
+	  if (err) 
+	    return logError(err)	  
+	});
+
+	const record = document.querySelector('#record')
+
+	record.addEventListener('click', function(e){
+		e.preventDefault()
+	
+		//grabe el video
+
+		rtc.recordVideo(function (err, frames) {
+		    if (err) 
+		      return logError(err)
+		    
+		    console.log(frames);		    
+		})    
+
+	}, false)
+
+Con la constante "rtc", definimos las opciónes para usar el módulo "webrtc2images".
+
+	width y height --> indicamos el ancho y el alto de nuestro video.
+	frames --> la cantidad de imágenes a capturar.
+	type --> el tipo (extensión ej. .jpg, .png) de imagen que vamos a capturar.
+	quality --> la calidad de las imágenes.
+	interval --> indicamos el tiempo en milisegundos que pasa entre captura y captura de cada imagen.
+
+Con "rtc.startVideo" iniciamos la captura del video.
+
+Con "rtc.recordVideo", capturamos las imágenes al hacer click en el botón. Por consola imprimimos las imágenes.		
+	
+Nota: para más info y documentación del módulo "webrtc2images": https://www.npmjs.com/package/webrtc2images
+
+Para que la captura del video funcióne, el módulo "webrtc2images" necesita que se incluya en el html el siguiente tag:
+
+	<div id="video-preview"></div>
+
+Nota: esta etiqueta ya se incluyo en el archivo "index.html", sin embargo revisar para evitar errores.	
+
+Ahora para convertir este archivo "app.js" del cliente, para que sirva en el navegador, usamos el comando:
+
+	browserify client/app.js -o public/app.js
+
+En donde, con "client/app.js", indicamos el archivo de entrada (input), y con "-o public/app.js" indicamos el output o el archivo resultante.
+
+Nota: Si no sirve browserify, re instalar de forma global con:
+
+	npm install -g browserify
+______________________________________________________
+
+Ahora si corremos nuestro sevidor:
+
+	PORT=8081 node server.js
+
+Y abrimos el navegador en: 
+
+	localhot:8081
+
+Nos va a preguntar si queremos permitir el uso de la webcam, aceptamos, y apenas demos click en el botón "Record", se imprimirá en la consola del navegador un array con las 10 imágenes codificadas.
+______________________________________________________
+
+El comando "browserify client/app.js -o public/app.js" es un comando repetitivo, que tendremos que ejecutar varias veces hasta que finalicemos la codificación de "app.js" en la carpeta "client", por lo tanto es una tarea que podríamos automatizar su ejecución con herramientas como grunt o gulp. Sin embargo no los usaremos, a cambio, correremos esos scripts con npm.
+
+Para esto nos dirigimos al archivo "package.json" y agregamos los scripts:
+
+	{
+	  "name": "animate-server",
+	  "version": "1.0.0",
+	  "description": "A realtime chat server using animated gif-like videos",
+	  "main": "server.js",
+	  "scripts": {
+	    "postinstall": "npm run build-js",
+	    "build-js": "browserify client/app.js -o public/app.js",
+	    "start": "node server.js"
+	  },
+	  "repository": {
+	    "type": "git",
+	    "url": "https://github.com/julianduque/animate-server.git"
+	  },
+	  "author": "Julian Duque <julianduquej@gmail.com>",
+	  "license": "BSD",
+	  "bugs": {
+	    "url": "https://github.com/julianduque/animate-server/issues"
+	  },
+	  "homepage": "https://github.com/julianduque/animate-server",
+	  "dependencies": {
+	    "st": "^0.5.3"
+	  }
+	}
+
+* Para construir nuestro archivo browserify usaremos `build-js`
+* Para lanzar el servidor usaremos `start`
+* Para ejecutar las tareas de construcción después de la instalación de dependencias, usaremos `postinstall`
+
+"start" y "postinstall" son tareas estandard de npm. "build-js" es una tarea custom construida por nosotros para que se compile el archivo "app.js" de la carpeta "client", y nos genere el archivo "app.js" en la carpeta "public".
+
+Para ejecutar el servidor, ahora usamos el comando:
+
+	npm start
+
+Para construir nuestro archivo browserify usamos:
+
+	npm run build-js
+
+Nota Windows: cambiar el script: 
+
+	"start": "node server.js"
+
+Por "start": "iojs server.js" 
+______________________________________________________
+
+14) Ahora que capturamos las imágenes a través de la cámara web, necesitamos desde el cliente envíarlas por ajax al servidor. Para esto usaremos otro módulo de npm llamado "course", el cual lo instalamos como dependencia:
+
+	npm install --save course
+
+Este módulo funcióna muy buen con el servidor `http` y nos
+da características similares a `express`.	
+
+Ahora en el archivo "./router/index.js" requerimos el nuevo módulo:
+
+	const path = require('path')
+	const course = require('course')
+	const st = require('st')
+
+	const router = course()	
+
+	const mount = st({
+		path: path.join(__dirname, '..', 'public'),
+		index: 'index.html',
+		passthrough: true
+	})
+
+	function onRequest (req, res){
+		mount(req, res, function (err){
+			if(err)
+				return fail(err, res)
+
+			router(req, res, function(err){
+
+				if(err)
+					return fail(err, res)
+
+				res.statusCode = 404
+				res.end(`404 Not Found: ${req.url}`)		
+			})
+			
+		})
+	}
+
+	function fail (err, res){
+		res.statusCode = 500
+		res.setHeader('Content-Type', 'text/plain')
+		res.end(err.message)
+	}
+
+	module.exports = onRequest
+
+Después de requerir el módulo "course", en la configuración del servidor estático, con la opción "passthrough: true", indicamos que cuando se le haga el request, sino existe el archivo "index.html", no arroje el error 404, sino que intente buscar la ruta, y si la ruta no existe ahí si arroje el error.
+
+Esto nos sirve para qué continúe la ejecución del router, es decir, no arroja el error, y sigue con la ejecución de "onRequest".
+
+Con "const router = course()" creamos el enrutador, el cual se ejecuta en el método "onRequest".
+
+Para más info del módulo "course": https://www.npmjs.com/package/course
+______________________________________________________
+
+15) Para hacer el envió por ajax al servidor, instalamos un módulo llamado "xhr" con el comando:
+
+	npm install --save xhr
+
+Ahora en nuestro archivo "/client/app.js", requerimos el módulo "xhr" y hacemos el envió por ajax:
+
+	const xhr = require('xhr')
+
+	//...todo el código igual...
+
+	record.addEventListener('click', function(e){
+		e.preventDefault()
+
+		//grabe el video
+
+		rtc.recordVideo(function (err, frames) {
+		    if (err) 
+		      return logError(err)
+		    
+		    xhr({
+		    	uri: '/process',
+		    	method: 'post',
+		    	headers: {
+		    		'Content-Type': 'application/json'
+		    	},
+		    	body: JSON.stringify({ images: frames })
+		    }, function(err, res, body){
+		    	if(err)
+		    		return logError(err)
+		    	console.log(JSON.parse(body))	
+		    })		    
+		})    
+
+	}, false)
+
+Las opciónes para la petición ajax del módulo "xhr" son:
+
+	uri --> La ruta hacia donde hacemos la petición.
+
+	method --> el método de la petición.
+
+	headers --> las cabeceras que envíaremos al servidor, en este caso le indicamos que le vamos a envíar un json.
+
+	body --> Aquí, en "frames" teníamos un array con las imágenes capturadas, con el método "stringify" las convertimos en el json que se envíara al servidor.
+
+	function(err, res, body) --> como xhr hace una petición asíncrona al servidor, recibe esta función callback, la cual recibe el error, la respuesta y el body, la respuesta del servidor.
+
+	Aquí hay que diferenciar lo siguiente:
+
+		res --> recibe el status code del servidor, es decir si recibió bien la respuesta, los headers, etc.
+
+		body --> es la respuesta del servidor, es decir, si el servidor nos envía un json, o una imagen, o un número, etc, vendría aquí.
+
+	En este caso, en la función callback, el servidor nos va a devolver un json, el cual parseamos para procesarlo con "JSON.parse(body)"	
+
+Para más info del módulo "xhr": https://www.npmjs.com/package/xhr	
+______________________________________________________
+
+Como en el servidor vamos a recibir información en JSON, para poderla procesar, necesitamos un módulo llamado "body", el cual instalamos con:
+
+	npm install --save body
+
+Lo que hace este módulo es parsear los datos recibidos en el server.
+
+Para usarlo, lo requerimos en el enrutador "/router/index.js" según el tipo de dato que queremos parsear, es decir, en este caso requerimos del módulo "body" la funciónalidad "body/json":
+
+	//...el mismo código de require...
+
+	const jsonBody = require('body/json')
+
+	//...el mismo código de router y mount...	
+
+	router.post('/process', function(req, res){
+		jsonBody(req,res,{ limit: 3 * 1024 * 1024 }, function(err, body){
+			if(err)
+				return fail(err, res)
+
+			res.setHeader('Content-Type', 'application/json')
+			res.end(JSON.stringify({ ok : true}))	
+		})
+	})
+
+	//...el mismo código de onRequest, fail y module.exports...
+
+En este archivo, como ya requeríamos el módulo "course", ya podemos manejar cualquier ruta, en este caso con:
+
+	"router.post('/process', function(req, res){})"
+
+Creamos la ruta "process", encargada de recibir el json del navegador con las imágenes.
+
+Con "jsonBody(req,res,{}, function(err, body)", recibimos en body, el json que nos envió el navegador. Si hay un error, respondemos usando el helper "fail", que ya habíamos creado. Y si no hay error, indicamos en la cabecera de respuesta que vamos a responder json, y un simple objeto json indicando que todo estuvo ok.
+
+Con { limit: 3 * 1024 * 1024 } envíamos la opción de configuración al jsonBody. Segun la documentación, el límite del tamaño del json que podemos envíar al servidor es de 1MB, así que con esto, ampliamos ese límite a 3MB.
+
+Para más info del módulo "body": https://www.npmjs.com/package/body
+
+Ahora compilamos nuestro archivo browserify:
+
+	npm run build-js
+
+Ejecutamos nuestro servidor:
+
+	npm start
+
+Y en la consola del navegador, después de darle click en el botón de grabar, debemos recibir el json:
+
+	Object {ok: true}		
+______________________________________________________
+
+16) Creamos una carpeta llamada "helper" y dentro un archivo "index.js":
+
+	'use strict'
+
+	module.exports = {
+		convertVideo: require('./video')
+	}
+
+Creamos la base del helper con el cual vamos a trabajar la conversión del video, este helper es un EventEmitter el cual emite un evento `video` cuando el video está listo para ser envíado al cliente.
+
+Dentro de la carpeta "helper", creamos un nuevo archivo llamado "video.js":
+
+	'use strict'
+
+	const EventEmitter = require('events').EventEmitter
+
+	module.exports = function(images){
+		let events = new EventEmitter()
+
+		setTimeout(function(){
+			events.emit('video', 'this will be the encoded video')
+		}, 1000)
+
+		return events
+	}
+
+El módulo "events", corresponde al core de node o iojs, por lo tanto no hay que instalarlo. El evento que estamos creando se llama "video", y por el momento contiene un mensaje. Este evento se ejecuta cuando pasa 1 segundo (emulación de que estamos transmitiendo un video).
+
+Para poder usar el módulo que acabamos de crear (helper) en el enrutador "/router/index.js", primero lo requerimos:
+
+	const helper = require('../helper')
+
+Aquí, con tan solo indicarle la ruta de la carpeta, automáticamente se trae el archivo llamado "index.js", por eso tanto este router como el "helper" que creamos, lleban el nombre "index.js".
+
+Ahora modificamos la función encargada de procesar las imágenes:
+
+	router.post('/process', function(req, res){
+		jsonBody(req,res,{ limit: 3 * 1024 * 1024 }, function(err, body){
+			if(err)
+				return fail(err, res)
+
+			if(Array.isArray(body.images)){
+				let converter = helper.convertVideo(body.images)
+
+				converter.on('video', function(video){
+					res.setHeader('Content-Type', 'application/json')
+					res.end(JSON.stringify({ video : video }))	
+				})
+			} else {
+				res.statusCode = 500
+				res.end(JSON.stringify({ error : 'parameter `images` is required' }))	
+			}
+			
+		})
+	})
+
+Para verificar que nuestro EventEmitter se esté ejecutando, corremos nuestro servidor: "npm start", hacemos click en el botón "Record", y verificamos que en la consola del navegador muestre:
+
+	Object {video: "this will be the encoded video"}
+
+Nota: es posible que al ejecutar el servidor de error, todo porque en el router usamos "let" sin indicarle que es modo estricto, para solucionarlo ponemos: 'use strict'
+______________________________________________________
+
+17) vamos a usar el módulo "async", el cual tiene muchos métodos muy útiles para manejar colecciones de datos de forma asíncrona, así como métodos para manejar el flujo de trabajo. Es uno de los módulos más usados en node para hacer cosas nivel Pro.
+
+El módulo `async` nos facilitará el trabajo con las funciónes asíncronas para procesar las imágenes y crear el video.
+
+	npm install --save async
+
+Ahora vamos al helper "video.js", y empezamos a definir las funciónes que necesitamos:
+
+	'use strict'
+
+	const EventEmitter = require('events').EventEmitter
+
+	module.exports = function(images){
+		let events = new EventEmitter()
+
+		function decodeImages() {}
+
+		function createVideo() {}
+
+		function encodeVideo() {}
+
+		function cleanup() {}
+
+		function convertFinished() {}
+
+		setTimeout(function(){
+			events.emit('video', 'this will be the encoded video')
+		}, 1000)
+
+		return events
+	}
+
+decodeImages --> Las imágenes llegan a nuestro servidor codificadas en base 64 o "data-uri", entonces hay que decodificarlas para que sean nuevamente imágenes.
+
+createVideo --> tomara las imágenes y las convertirá en un video.
+
+encodeVideo --> codificara el video en base 64 o "data-uri", para poderlo envíar al navegador.
+
+cleanup --> borra las imágenes y el video del servidor para que no ocupen espacio.		
+
+Inicialmente usaremos `async.series` que ejecuta un arreglo de funciónes en serie, esto es, la siguiente función se ejecuta solo cuando la primera termina su ejecución. También usaremos funciónes con nombre para evitar code smells y tener un código más mantenible.
+
+	'use strict'
+
+	const EventEmitter = require('events').EventEmitter
+	const async = require('async')
+
+	module.exports = function(images){
+		let events = new EventEmitter()
+
+		async.series([
+			decodeImages,
+			createVideo,
+			encodeVideo,
+			cleanup
+		], convertFinished)
+
+		function decodeImages(done) {
+			done()
+		}
+
+		function createVideo(done) {
+			done()
+		}
+
+		function encodeVideo(done) {
+			done()
+		}
+
+		function cleanup(done) {
+			done()
+		}
+
+		function convertFinished(err) {
+			setTimeout(function(){
+				events.emit('video', 'this will be the encoded video')
+			}, 1000)
+		}		
+
+		return events
+	}
+
+convertFinished --> es el callback o la función que se ejecuta de ultimo, al primero ejecutarse las de "async.series". Recibe un error si lo hay, de la ejecución de las otras tareas. este método simulara la transmisión del video.
+
+done --> es un callback que se ejecuta cuando la tarea termina. Si no lo ejecutamos dentro de la tarea, ocurrirá un error de timeout, ya que entonces la tarea nunca termina de ejecutarse, y no seguiría la siguiente. Por el momento para probar ponemos este "done", pero a medida que llenemos de código ya no será necesario.
+
+Hasta el momento definimos la estructura de las funciónes que usaremos.
+
+Para más info del módulo "async": https://www.npmjs.com/package/async	
+______________________________________________________
+
+18) El primer paso para convertir las imágenes a video es realizar la decodificación y guardar la imagen en disco duro, para eso utilizamos el módulo `data-uri-to-buffer` que me convierte de un "data-uri" a un binario (buffer), este buffer lo almacenamos en nuestro sistema de archivos utilizando streams del módulo `fs`.
+
+Instalamos el módulo "data-uri-to-buffer":
+
+	npm install --save data-uri-to-buffer
+
+Ahora requerimos el módulo en el helper "video.js":
+
+	const dataURIBuffer = require('data-uri-to-buffer')
+
+Y ahora nos encargamos de decodificar las imágenes.
+
+Ya que las imágenes son un arreglo vamos a utilizar la función `async.eachSeries` para aplicar la decodificación a cada una de las imágenes en orden.
+
+	//Decode images to files
+	function decodeImages(done) {		
+		async.eachSeries(images, decodeImage, done)
+	}
+
+	function decodeImage(image, done) {
+
+	}
+
+El directorio donde guardaremos las imágenes, es el temporal del sistema y para evitar conflictos con otros usuarios al convertir las imágenes, utilizaremos el módulo `uuid` para generar un nombre único.
+
+Instalamos el módulo "uuid" como dependencia:
+
+	npm install --save uuid
+
+Requerimos el módulo en "video.js":
+
+	const uuid = require('uuid')
+
+Para crear un id único a cada imagen, creamos un contador, el cual se le sumara al id único creado por nuestro módulo "uuid":
+
+	//...código igual...
+
+	module.exports = function(images){
+		let events = new EventEmitter()
+		let count = 0
+		let baseName = uuid.v4()	
+
+Ahora para guardar esas imágenes decodificadas, usamos el módulo "os", el cual no se instala porque lo incluye el core de iojs:
+
+	const os = require('os')
+
+Este módulo nos permite acceder a características del sistema operativo, como la carpeta de archivos temporales:
+
+	//...código igual...
+
+	module.exports = function(images){
+		let events = new EventEmitter()
+		let count = 0
+		let baseName = uuid.v4()
+		let tmpDir = os.tmpDir()
+
+Ya que vamos a trabajar con directorios y archivos, requerimos 2 módulos que ya habíamos usado antes como "path" y "fs":
+
+	const fs = require('fs')
+	const path = require('path')			
+
+Terminamos la funciónalidad de decodificar la imagen:
+
+	//Decode a single image
+	function decodeImage(image, done) {
+		let fileName = `${baseName}-${count++}.jpg`
+		let buffer = dataURIBuffer(image)
+		let ws = fs.createWriteStream(path.join(tmpDir, fileName))
+
+		ws.on('error', done)
+		  .end(buffer, done)
+
+		events.emit('log', `Converting ${fileName}`)  
+	}
+
+En "fileName" --> creamos el id único de cada imagen, concatenando en template strings (ES6).
+
+En "buffer" --> decodificamos la imagen.
+
+Con "ws" --> creamos un stream de escritura, para grabar la imagen decodificada en la carpeta temporal del servidor.
+
+"ws.on('error', done)" --> Si el stream tiene algún error, como por ejemplo que no existe el archivo, ejecutamos el callback, y el callback recibe como primer argumento el error parando la ejecución asíncrona.
+
+".end(buffer, done)" --> cuando esté listo el stream, le pasa el buffer(la imagen decodificada), y ejecuta el callback sin parámetro de error.
+
+"events.emit" --> emitimos un evento de tipo log, indicando que imagen se esta decodificando.
+
+Para que este evento se ejecute, incluimos el siguiente cod. en el "/router/index.js":
+
+	let converter = helper.convertVideo(body.images)
+
+	converter.on('log', function (msg) {
+	  console.log(msg)
+	})
+
+	converter.on('video', function(video){
+		res.setHeader('Content-Type', 'application/json')
+		res.end(JSON.stringify({ video : video }))	
+	})	
+
+Para saber si todo esta ok, ejecutamos nuestro servidor, hacemos click en record, luego en consola ejecutamos:
+
+	node
+
+Dentro de node:
+
+	os.tmpDir()
+
+Esto nos da la ubicación de la carpeta temporal en el sistema operativo donde estemos. (Recordar salir con ctrl+c) 
+
+Cambiamos al directorio con: cd "rutaDirectorioTemporal", y con: "ls *.jpg" debemos ver las 10 imágenes.
+
+Para más info del módulo "data-uri-to-buffer": https://www.npmjs.com/package/data-uri-to-buffer
+
+Para más info del módulo "uuid": https://www.npmjs.com/package/uuid
+______________________________________________________
+
+19) Como en la carpeta temporal del servidor, no solo se guardan las imágenes, sino también otros archivos, es necesario crear un helper que nos ayude a filtrar los archivos de las imágenes que guardamos, para luego poderlas convertir en video y eliminarlas.
+
+Creamos en la carpeta helper un archivo llamado "list.js":
+
+	'use strict'
+
+	const fs = require('fs')
+
+	module.exports = function(folder, filter, callback){
+		fs.readdir(folder, onReaddir)
+
+		function onReaddir (err, results){
+			if(err)
+				return callback(err)
+
+			let files = results.filter(filterFiles)
+			
+			callback(null, files)	
+		}
+
+		function filterFiles(file){
+			return file.startsWith(filter)
+		}
+	}
+
+Este helper, recibirá 3 parámetros:
+
+	folder --> la carpeta en donde queremos buscar los archivos, en nuestro caso es la carpeta temporal.
+
+	filter --> el filtro por el que queremos buscar, en este caso es el nombre base de las imágenes.
+
+	Callback --> la función callback
+
+Con  "fs.readdir" --> le indicamos la carpeta a leer, y el callback "onReaddir", el cual, si no logra leer la carpeta temporal, ejecuta el callback con el error. Y si logra leer la carpeta temporal, toma todos los archivos de la carpeta y los filtra (ver método filter del módulo async), en donde la función "filterFiles" es el iterator, es decir, esta función recibe el archivo que va a filtrar, y lo filtra según el parámetro de búsqueda (filter) que le pasamos (nombre base).
+
+"startsWith" --> es una búsqueda que solo podemos usar con ES6. 			 
+Luego dentro de la función "onReaddir", defino el callback, el primer parámetro es "null" porque no recibe error, y le pasamos los archivos (files) que necesitamos.
+______________________________________________________
+
+Ahora en nuestro archivo "video.js", requerimos el módulo que acabamos de crear para listar archivos, y terminamos la función para eliminar estos archivos:
+
+	const listFiles = require('./list')
+
+	//...código igual...
+
+	//Cleanup temp folder
+	function cleanup(done) {
+		events.emit('log', 'Cleaning up')
+
+		listFiles(tmpDir, baseName, function(err, files){
+			if(err)
+				return done(err)
+		
+			//Delete files
+			done()	
+		})		
+	}
+
+Primero emitimos un log, para que se imprima en la consola lo que estamos haciendo. Luego listamos los archivos, si hay un error se llama al callback "done", el cual acaba la ejecución, y queda pendiente el código que elimina definitivamente los archivos.	
+______________________________________________________
+
+20) Terminamos la funciónalidad de eliminar los archivos de la carpeta temporal:
+
+	//Cleanup temp folder
+	function cleanup(done) {
+		events.emit('log', 'Cleaning up ')
+
+		listFiles(tmpDir, baseName, function(err, files){
+			if(err)
+				return done(err)
+		
+			//Delete files
+			deleteFiles(files, done)	
+		})		
+	}
+
+	//Delete all files
+	function deleteFiles(files, done){
+		async.each(files, deleteFile, done)
+	}
+
+	//Delete One file
+	function deleteFile(file, done){
+		events.emit('log', `Deleting ${file}`)
+
+		fs.unlink(path.join(tmpDir, file), function(err){
+			//ignore error
+
+			done()
+		})
+	}
+
+Volvemos a utilizar técnicas async para eliminar los archivos creados por el proceso de conversión, esta vez utilizamos el 	método `async.each` el cual realiza el proceso asíncrono en paralelo (sin importar el orden) y cuando todas las operaciones terminen se ejecutará el callback `done` que continua con la cadena de ejecución.
+______________________________________________________
+
+21) Instalamos FFmpeg, que nos servirá para convertir las imágenes a video.
+
+Para instalarlo vamos a: 
+
+	https://www.ffmpeg.org/		
+
+Verificamos que lo tengamos instalado escribiendo en consola:  
+
+	ffmpeg
+
+Y miramos en una de esas líneas que diga: "--enable-libvpx" que es el codec que nos permitirá convertir a video formato web-m		
+______________________________________________________
+
+INSTALAR FFMPEG WINDOWS:
+
+Para instalarlo vamos a: 
+
+	https://www.ffmpeg.org/
+
+Vamos a download, escogemos Windows, Windows Builds, y se nos redireccionará a: 
+
+	http://ffmpeg.zeranoe.com/builds/
+
+Escogemos la versión Static dependiendo de nuestro sistema (32 o 64 bits). Creamos una carpeta en alguna parte de nuestro PC (recomendado archivos de programa) y extraemos el contenido del paquete descargado.
+
+Para que podamos correr el comando "ffmpeg" desde cualquier parte del equipo, es necesario que:
+
+	- El ejecutable (ffmpeg.exe) se encuentre dentro de la carpeta de nuestro proyecto (cosa que no haremos para no ensuciar nuestro código).
+
+	- O que incluyamos la ruta del ejecutable "ffmpeg" en la variable de entorno "PATH".
+
+Para hacer esto, tenemos 2 caminos:
+
+	- Vamos a Equipo, clic derecho, propiedades, en el panel izquierdo buscamos: "Configuración avanzada del sistema", pestaña "opciónes Avanzadas", y al final buscamos el botón "Variables de entorno".
+
+	Y ya sea en "Variables de usuario para tuNombreDeUsuario", o en "Variables del sistema", buscamos donde dice "PATH", hacemos click para seleccionarla y luego click en el botón editar.
+
+	En "Valor de la variable", dejamos todo lo que está, y al final añadimos (sin las comillas): ";C:\laRutaAlaCarpeta\FFmpeg\bin"
+
+	En mi caso, seria: ";C:\Program Files\FFmpeg\bin". En la carpeta "bin", es donde esta mi archivo "ffmpeg.exe".
+
+	- la otra forma de añadir la ruta a la variable de entrono "PATH", es muy similar, solo que cambia: Inicio, click sobre el avatar(la imagen) de nuestro usuario, en el panel izquierdo buscamos: "Cambiar las variables de entorno", y continuamos todo lo ya indicado. 
+
+Para finalizar, abrimos una consola y verificamos que el comando funcióne:  
+
+	ffmpeg			
+______________________________________________________
+
+Ahora creamos nuestro archivo helper para la conversión del video, llamado "ffmpeg.js":
+
+	'use strict'
+
+	const os = require('os')
+	const path = require('path')
+	const spawn = require('child_process').spawn
+
+	module.exports = function(options, callback){
+		if(!options.baseName)
+			return callback(new TypeError('You must specify a baseName'))
+		
+		let folder = options.folder || os.tmpDir()
+		let baseName = options.baseName
+		let fileSrc = path.join(folder, `${baseName}-%d.jpg`)
+		let fileDest = path.join(folder, `${baseName}.webm`)
+
+		//ffmpeg -i images-%d.jpg -filter:v "setpts=2.5*PTS" -vcodec libvpx -an video.webm
+
+		let ffmpeg = spawn('ffmpeg', [
+			'-i',
+			fileSrc,
+			'-filter:v',
+			'setpts=2.5*PTS',
+			'-vcodec',
+			'libvpx',
+			'-an',
+			fileDest
+		])
+
+		ffmpeg.stdout.on('close', function(code){
+			if(!code)
+				return callback(null)
+
+			callback(new Error(`ffmpeg exited with code ${code}`))	
+		})
+	}
+
+Dentro de module exports, tenemos el comando que toma todas las imágenes cuyo nombre empieza por "images-", y las convierte en un video con formato webm. Para ejecutar este comando de consola, requerimos del módulo "child_process", el cual se encuentra en el core de iojs, este módulo, nos permite ejecutar comandos del sistema, y tiene 3 métodos:
+
+	spawn --> ejecuta el comando y entrega streams para `stdout` y `stderr`.
+
+	exec --> ejecuta el comando y hace buffer del comando, así cuando termina nos envía el buffer.
+
+	fork --> ejecuta un proceso javascript o node.
+
+"spawn" recibe 3 argumentos, el primero es el comando a ejecutar, en este caso es "ffmpeg", el segundo es un arreglo con c/u de los parámetros del comando.
+
+Como las imágenes a convertir, las tenemos guardadas en la carpeta temporal, requerimos el módulo "os", y en la variable "folder", indicamos que si en "options" no especificamos la carpeta, use la carpeta temporal.
+
+Para buscar estas imágenes, recordemos que las nombramos con un nombre base, el cual es un parámetro obligatorio, que pedimos se incluya en "options.baseName". Si no lo pasan, llamamos al callback con un nuevo tipo de error.
+
+spawn, después de ejecutar el comando, nos devuelve una salida en "ffmpeg.stdout", el cual siempre que termine de ejecutarse, ya sea con error o exitosamente, ejecuta el evento "close", el cual devuelve un código de ejecución.
+
+Si ese código es 0, significa que se ejecuto bien, si envía otro numero diferente a 0, hay un error. Como en javaScript "0", es falso, entonces en el if, negamos el código (!code), para indicar que sea verdadero, y si se ejecuta bien, retornamos el callback con parámetro "null". 
+
+Si por el contrario hay un error (code = numero Diferente de 0), indicamos que "ffmpeg fallo y el código de error."
+______________________________________________________
+
+Ahora retornamos a nuestro archivo helper "video.js", y escribimos el código para crear nuestro video:
+
+	const ffmpeg = require('./ffmpeg')
+
+	//...todo el código igual...
+
+	//Create Video from images with ffmpeg
+	function createVideo(done) {
+		events.emit('log', 'Creating video')
+		ffmpeg({
+			baseName: baseName,
+			folder: tmpDir
+		},done)
+	}
+______________________________________________________
+
+22) Ahora necesitamos codificar nuestro video en base 64 o "data-uri", para poder envíarlo al navegador. Para esto usamos el módulo "concat-stream": 
+
+	npm install --save concat-stream
+
+Este módulo concatena todos los `chunks` del archivo en un buffer, es decir, lo que hará, será tomar el stream de datos del video, y almacenarlo en un solo buffer, como si fuera un solo paquete.
+
+Requerimos el módulo en el helper "video.js":
+
+	const concat = require('concat-stream')
+
+	//...todo el código igual...
+
+	let baseName = uuid.v4()
+	let tmpDir = os.tmpDir()
+	let video
+
+	//...todo el código igual...
+
+	//Encode the video
+	function encodeVideo(done) {
+		let fileName = `${baseName}.webm`
+		let rs = fs.createReadStream(path.join(tmpDir, fileName))
+
+		events.emit('log', `Encoding video ${fileName}` )
+
+		rs.pipe(concat(function(videoBuffer){
+			video = `data:video/webm;base64,${videoBuffer.toString('base64')}`
+			done() 
+		}))
+
+		rs.on('error', done)
+	}
+
+	//...todo el código igual...
+
+	//Convertion finished
+	function convertFinished(err) {
+		if(err)
+			return events.emit('error', err)
+
+		events.emit('video', video)
+	}
+
+	//...todo el código igual...	
+
+En la variable "video", tendremos el video final.
+
+En la función "encodeVideo", en "fileName", obtenemos el nombre del video. Con "rs", creamos un stream de lectura, el cual luego envíamos "pipe" a un stream de concatenación (módulo concat-stream). En donde lo convertimos a "data-uri" utilizando el método `toString` codificado a `base64`.
+
+En la función "convertFinished", ya no necesitamos el timeOut, sino que emitimos el error si lo hay, y si no, envíamos el video al navegador.
+______________________________________________________
+
+23) Luego de procesado el video ya lo vamos a renderizar en el navegador. Para esto, modificamos nuestro archivo cliente "index.html", asignandole el tag video, que es en donde mostraremos el video codificado:
+
+	<!DOCTYPE html>
+	<html>
+	  <head>
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width">
+	    <title>:: Animate :: </title>
+	  </head>
+	  <body>
+	    <div id="video-preview"></div>
+	    <video id="video" width="200" height= "200"></video>
+	    <button id="record">Record</button>
+	    <script src="/app.js"></script>
+	  </body>
+	</html>
+
+Ahora, en nuestro otro archivo cliente "/client/app.js", envés de imprimir el video en consola, obtenemos el elemento html, y asignamos el video del servidor como contenido:
+
+	//...todo el código igual...	
+	
+		rtc.recordVideo(function (err, frames) {
+		    if (err) 
+		      return logError(err)
+		    
+		    xhr({
+		    	uri: '/process',
+		    	method: 'post',
+		    	headers: {
+		    		'Content-Type': 'application/json'
+		    	},
+		    	body: JSON.stringify({ images: frames })
+		    }, function(err, res, body){
+		    	if(err)
+		    		return logError(err)
+
+		    	//Parseamos el video:
+		    	body = JSON.parse(body)
+
+		    	if(body.video){
+		    		const video = document.querySelector("#video")
+		    		video.src = body.video
+		    		video.loop = true
+		    		video.play()
+		    	}	
+		    })		    
+		})    
+
+	}, false)
+
+	function logError (err) {
+	  console.error(err)
+	}
+
+Acá indicamos con "loop", que el video se repita una y otra vez, y con "play", que se reproduzca. Y con esto hemos terminado esta parte!!
+
+Ahora para probar, que no se nos olvide compilar nuestro archivo cliente:	
+
+	npm run build-js
+
+Iniciamos el server:
+
+	npm start
+
+Y a probar.
+
+______________________________________________________
+
+	CREACIÓN CHAT:
+
+24) Primero vamos a modificar la estructura de "index.html" y agregar unos pequeños estilos.
+
+	<!DOCTYPE html>
+	<html>
+	  <head>
+	    <meta charset="utf-8">
+	    <meta name="viewport" content="width=device-width">
+	    <link rel="stylesheet" href="css/normalize.css">
+	    <link rel="stylesheet" href="css/main.css">
+	    <title>:: Animate :: </title>
+	  </head>
+	  <body>
+	    <section>
+	      <ul id="messages"></ul>
+	    </section>
+	    <footer>
+	      <div id="video-preview"></div>
+	      <form>
+	        <input type="text" name="message">
+	      </form>
+	    </footer>
+	  </body>
+	  <script src="/app.js"></script>
+	</html>
+
+Ver los estilos y demás archivos (normalize) en git con: git checkout 24
+______________________________________________________
+
+25) Hemos modificado la estructura html de nuestra aplicación, ahora envés de hacer click en un botón "record", tenemos un campo input en el cual escribiremos un mensaje y envíaremos al servidor. Al momento de envíar el texto introducido, se grabaran las imágenes para el video.
+
+Para cambiar esto, quitamos el evento click, del botón record, y ahora abstraemos esa funciónalidad en una nueva función. El archivo a modificar es "/client/app.js":
+
+	//eliminamos esta línea:
+	//const record = document.querySelector('#record')
+
+	function record(){
+		//Obtenemos el mensaje del input
+		const input = document.querySelector('input[name="message"]')
+		const message = input.value
+		//borramos lo escrito en el input
+		input.value = ""
+
+		//grabe el video
+
+		rtc.recordVideo(function (err, frames) {
+		    if (err) 
+		      return logError(err)
+		    
+		    xhr({
+		    	uri: '/process',
+		    	method: 'post',
+		    	headers: {
+		    		'Content-Type': 'application/json'
+		    	},
+		    	body: JSON.stringify({ images: frames })
+		    }, function(err, res, body){
+		    	if(err)
+		    		return logError(err)
+
+		    	//Parseamos el video:
+		    	body = JSON.parse(body)
+
+		    	if(body.video){
+		    		//agregamos el nuevo mensaje
+		    		addMessage( { message: message, video: body.video } )
+		    	}	
+		    })		    
+		})    
+
+	}
+
+	function addMessage (message){
+
+	}
+
+Primero eliminamos la línea:
+
+	const record = document.querySelector('#record')
+
+Ya que ese botón no existe, y dentro de nuestra función record, obtenemos el mensaje del input, y luego borramos lo escrito en el input.
+
+Después de parsear el video, en vez de agregar el video, creamos una nueva función "addMessage", encargada de mostrar en el navegador el mensaje nuevo, con su respectivo video.
+
+Esta función "addMessage", usara templates de handlebars, para mostrar los mensajes y videos nuevos, por lo tanto, instalamos la librería con:
+
+	npm install handlebars --save
+
+También necesitamos instalar un precompilador de "Handlebars" para Browserify llamado "hbsfy", esta solo va a ser una dependencia de desarrollo, la cual nos ayudara a obtener los templates:		
+
+	npm install --save-dev hbsfy
+
+Una vez instalado, en nuestro archivo "package.json", modificamos el comando de "build-js", para que browserify use la librería "hbsfy":
+
+	"build-js": "browserify -t hbsfy client/app.js -o public/app.js",
+
+En nuestra carpeta "client", creamos una nueva carpeta llamada "templates". Y dentro de esta carpeta, creamos nuestro archivo template llamado "message.hbs":
+
+	<li>
+		<video class="video-container" src="{{video}}" loop autoplay></video>
+		<p>{{message}}</p>
+	</li>
+
+Este archivo es el encargado de mostrar el mensaje y el video de cada usuario.
+
+Nota: la extensión ".hbs", significa que es un archivo de "Handlebars".	
+
+Para más info del módulo "hbsfy": https://www.npmjs.com/package/hbsfy
+______________________________________________________
+
+Regresamos al archivo de cliente "app.js", y requerimos el archivo template:
+
+	const messageTpl = require('./templates/message.hbs')
+
+	//...todo el código igual...
+	rtc.startVideo(function (err) { //...igual...
+	});
+
+	//Obtenemos el elemento "ul" con id "messages", al cual le agregaremos los elementos "li" del template
+	
+	const messages = document.querySelector('#messages')
+
+	//obtenemos el formulario
+
+	const form = document.querySelector('form')
+
+	//Añadimos el evento submit al formulario, y ejecutamos la función "record"
+
+	form.addEventListener('submit', function(e){
+		e.preventDefault()
+
+		record()
+	}, false)
+
+	//...todo el código igual...
+
+	function addMessage (message){
+		const m = messageTpl(message)
+	}
+
+En la función "addMessage", tenemos el template con código html, sin embargo, necesitamos otro módulo para convertirlo en un elemento del DOM y poder mostrarlo en la pagína. El módulo se llama "domify":
+
+ 	npm install --save domify
+
+Ahora en "/client/app.js" requerimos el  módulo "domify", y lo usamos en la función "addMessage":
+
+	const domify = require('domify')
+
+	//...todo el código igual...
+
+	function addMessage (message){
+		const m = messageTpl(message)
+		messages.appendChild(domify(m))
+		window.scrollTo(0, document.body.scrollHeight)
+	}
+
+Con "window.scrollTo(0, document.body.scrollHeight)", hacemos que se auto scrollee la página, esto sirve para que cada vez que se ingrese un mensaje, se haga scroll hacia abajo y se muestre el último mensaje agregado, de lo contrario el mensaje se añade, y queda debajo de la previsualización de la cámara web.	
+
+Para más info del módulo "domify": https://www.npmjs.com/package/domify
+
+Podemos probar con:	
+
+	npm run build-js
+
+Iniciamos el server:
+
+	npm start
+______________________________________________________
+
+26) Creamos un servidor realtime con `socket.io`, este módulo nos permitirá utilizar web sockets de una forma muy sencilla, para instalarlo usamos:
+
+	npm install --save socket.io
+
+Para poder usarlo del lado del clinte (navegador) instalamos el módulo "socket.io-client", para realizar la funciónalidad en tiempo real de nuestro chat:	
+
+	npm install --save socket.io-client
+
+Para más info del módulo "socket.io": https://www.npmjs.com/package/socket.io	
+
+Para más info del módulo "socket.io-client": https://www.npmjs.com/package/socket.io-client
+
+Ahora creamos una carpeta llamada "realtime", en donde crearemos un nuevo módulo con un archivo llamado "index.js":
+
+	'use strict'
+
+	const socketio = require('socket.io')
+
+	module.exports = function(server){
+		const io = socketio(server)
+
+		io.on('connection', onConnection)
+
+		function onConnection(socket){
+			console.log(`Client connected ${socket.id}`)
+		}
+	}
+ 
+Para que "socket.io" funcióne, es necesario pasarle la instancia de nuestro servidor (server). 
+
+Con "const io = socketio(server)" estamos instanciando "socket.io".
+
+"socket.io" funcióna con EventEmmiter, así que cuando se conecte un usuario al servidor, se dispara el evento de conexión, el cual ejecuta una función, esa función tiene el parámetro socket, el cual es el canal de comunicación entre el cliente (navegador) y el servidor.
+
+La función "onConnection", por el momento imprimirá en consola el id de sesión del cliente.
+
+Para usar nuestro módulo "realtime", vamos a nuestro archivo "server.js", y lo requerimos e inicializamos:
+
+	'use strict'
+
+	const http = require('http')
+	const router = require('./router')
+	const realtime = require('./realtime')
+
+	const server = http.createServer()
+	const port = process.env.PORT || 8080
+
+	realtime(server)
+
+	//...todo el código igual...
+
+Ahora trabajamos en el socket para el cliente en el archivo "/client/app.js" requerimos el módulo respectivo:
+
+	const io = require('socket.io-client')
+
+	io.connect()
+
+Con "io.connect()", nos conectamos al servidor. Al no indicarle un servidor en específico, "socket.io-client" asume que es la misma maquina donde corremos el archivo.
+
+Nota: Ya que estamos utilizando un gestor de rutas debemos evitar conflictos con la ruta por defecto de `socket.io` es por eso que en nuestro route handler ignoramos las peticiones a `/socket.io` ya que el servidor realtime se encargará de esta ruta.
+
+Así quedaría nuestro archivo "/router/index.js":
+
+	//...todo el código igual...
+
+	function onRequest (req, res){
+
+		if(req.url.startsWith('/socket.io'))
+			return
+
+	//...todo el código igual...
+	
+No retornamos nada, para ignorar la ruta "/socket.io"
+
+Podemos probar con:	
+
+	npm run build-js
+
+Iniciamos el server:
+
+	npm start
+
+Al abrir el navegador, en la consola del servidor, nos deberá aparecer el id de sesión del cliente conectado.
+______________________________________________________	
+
+27) Ahora modificamos el archivo "/router/index.js", y eliminamos la ruta "/process", ya que ahora utilizaremos los sockets.
+
+	//eliminar:
+
+	router.post('/process', function(req, res){
+		...
+	})
+
+	//...todo lo demás igual...	
+
+También en "/client/app.js" podemos eliminar el módulo de ajax:	
+
+	//eliminamos el módulo xhr:
+
+	//const xhr = require('xhr')
+
+	//añadimos un nuevo módulo:
+
+	const uuid = require('uuid')
+
+	//obtenemos el socket de la conexión:
+
+	const socket = io.connect()
+
+	const id = uuid.v4()
+
+	//...todo lo demás igual...	
+
+	//En la función "record" eliminamos la petición Ajax:
+
+	function record(){
+		const input = document.querySelector('input[name="message"]')
+		const message = input.value
+		input.value = ""
+
+		//grabe el video
+
+		rtc.recordVideo(function (err, frames) {
+		    if (err) 
+		      return logError(err)
+		    
+		    socket.emit('message', { id:id, message: message, frames: frames } )		    
+		})
+	}
+
+	//...todo lo demás igual...	
+
+En la función "record" eliminamos la petición ajax, y con sockets, envíamos al servidor las imágenes capturadas, el mensaje, y también requerimos el módulo "uuid", para envíar un id único por usuario, para distinguir las imágenes de cada persona en el servidor. Este socket hace esto emitiendo un evento custom al que llamamos "message"
+
+Ahora antes de la función "record", definimos que en el evento que se dispara "message", ejecute la función "addMessage" para que me muestre los nuevos mensajes, y también definimos el evento "messageack", el cual ejecutara la función que nos añadirá a nosotros mismos nuestro mensaje, con el video nuestro ya procesado por el servidor:
+
+	socket.on('message', addMessage) 
+
+	socket.on('messageack', function(message){
+		if(message.id === id){
+			addMessage(message)
+		}
+	})
+
+Ahora en el lado del servidor, en el archivo "/realtime/index.js" escuchamos el evento "message", y requerimos al helper encargado de la conversión del video:
+
+	'use strict'
+
+	const helper = require('../helper')
+	const socketio = require('socket.io')
+
+	module.exports = function(server){
+		const io = socketio(server)
+		
+		io.on('connection', onConnection)
+
+		function onConnection(socket){
+			console.log(`Client connected ${socket.id}`)
+
+			socket.on('message', function(message){
+				const converter = helper.convertVideo(message.frames)
+
+				converter.on('log', console.log)
+
+				converter.on('video', function(video){
+					delete message.frames
+					message.video = video
+
+					//Send video to everyone
+					socket.broadcast.emit('message', message)
+
+					//Send video to sender
+					socket.emit('messageack', message) 
+				})
+			})
+		}
+	}
+
+Aquí cuando se dispare el evento "message", creamos el video, escuchamos el evento "video", en donde borramos los frames, y con el método "broadcast", emitimos a todos los clientes el evento "message". "broadcast" envía a todos el mensaje, con excepción de la persona que lo creo. 	
+
+Luego emitimos el evento "messageack" para envíarnos a nostros mismos el mensaje propio. 
+
+Podemos probar con:	
+
+	npm run build-js
+
+Iniciamos el server:
+
+	npm start
+
+Con esto ya tenemos funciónando nuestro chat en tiempo real!!!	
+______________________________________________________
+
+28) Ahora implementaremos una pequeña base de datos, para almacenar unos cuantos mensajes del chat.
+
+Para esto creamos una carpeta llamada: "database", en donde crearemos el módulo para el manejo de la base de datos en un archivo "index.js":
+
+	'use strict'
+
+	module.exports = function(options){
+		options = options || {}
+
+		function save(message, callback){
+			callback()
+		}
+
+		function list(callback){
+			callback()
+		}
+
+		return {
+			save: save,
+			list: list
+		}
+	}
+
+Este módulo realiza las operaciones de base de datos, solo tendremos dos acciones `save` y `list`.
+
+En el archivo "/realtime/index.js" requerimos el módulo database, y generamos una instancia de la base de datos:
+
+	const database = require('../database')
+
+	//...todo lo demás igual...	
+
+	module.exports = function(server){
+		const db = database()
+
+		//...todo lo demás igual... y dentro de la función "onConnection"...	
+
+			converter.on('video', function(video){
+				delete message.frames
+				message.video = video
+
+				//Save message				
+				db.save(message, function(err){
+					if (err) 
+						return console.error(err)
+				})
+______________________________________________________
+
+29) La base de datos que usaremos es "level", no es tanto como una base de datos, sino que es como un "local storage" del lado del servidor. Para instalar este módulo usamos:
+
+	npm install --save level
+
+LevelDB, es una base de datos NoSQL tipo key - value	
+
+Para más info del módulo "level": https://www.npmjs.com/package/level
+______________________________________________________					
+
+	NOTA LEVELDB WINDOWS:
+
+Al tratar de instalar, puede que de un error, porque falta instalar python:
+
+	https://www.python.org/getit/windows
+
+Descargar versión 2.7
+
+también toca instalar Visual Studio:
+
+	http://download.microsoft.com/download/1/F/5/1F519CC5-0B90-4EA3-8159-33BFB97EF4D9/wdexpress_full.exe		
+______________________________________________________					
+
+Ahora requerimos level en nuestro módulo "/database/index.js":
+
+	'use strict'
+
+	const level = require('level')
+	const uuid = require('uuid')
+
+	module.exports = function(options){
+		options = options || {}
+
+		const db = level('./messages.db') 
+
+		function save(message, callback){
+			let key = `message-${Date.now()}-${uuid.v4()}`
+			let options = {
+				valueEncoding: 'json'
+			}
+
+			db.put(key, message, options, callback)		
+		}
+
+	//...todo lo demás igual...	
+
+Con "level('./messages.db')" creamos una base de datos llamada "messages".
+
+Cada mensaje se guardara con un llave (key), que empieza con el texto "message", un guion (-), la fecha en ese instante, y un "uuid" (por si llegan 2 o más mensajes al mismo tiempo). 
+
+En "options", pasamos unos parámetros al método "put" de "levelDB", para configurar la DB.
+
+	valueEncoding --> aquí indicamos que la codificación del valor que vamos a guardar es un json, es decir guardamos el objeto tal cual viene. Por defecto "levelDB" trabaja con utf-8 (guarda strings).
+
+Con el método put, guardamos en la DB la pareja llave-valor:
+
+	"db.put(key, message)"
+______________________________________________________	
+
+30) En la DB, solo vamos a guardar los últimos 10 minutos de mensajes, y luego los eliminaremos. Para esto usamos uno de los tantos módulos para "levelDB" llamado "level-ttl" (ttl viene de Time To Live), esto nos permitirá definir cuanto tiempo están guardados los datos, y después se borraran.
+
+Para instalar "level-ttl" usamos:
+
+	npm install --save level-ttl
+
+Ahora requerimos el módulo en el archivo "/database/index.js":
+
+	const ttl = require('level-ttl')
+
+	module.exports = function(options){
+		options = options || {}
+
+		let duration = options.duration || 10 * 60 * 1000
+
+		const db = ttl( level('./messages.db'), {checkFrequency: 10000} )
+
+		function save(message, callback){
+		let key = `message-${Date.now()}-${uuid.v4()}`
+		let options = {
+			valueEncoding: 'json',
+			ttl: duration
+		}
+
+	//...todo lo demás igual...		
+
+El tiempo que van a durar los datos, lo podemos envíar en "options", y si no se envía, por defecto toma 10 minutos.
+
+Para implementar la funciónalidad de "ttl" a "level", lo hacemos en la creación de la DB de la siguiente forma:
+
+	//antes:
+	const db = level('./messages.db') 
+
+	//después
+
+	const db = ttl( level('./messages.db') )
+
+A "ttl", adicionalmente le envíamos el parámetro "checkFrequency: 10000", con el cual le indicamos que cada 10 segundos verifique si hay datos por borrar.
+
+Finalmente, en el objeto "options" (en la función save), indicamos la duración de cada dato (ttl: duration).	
+
+Para más info del módulo "level-ttl": https://www.npmjs.com/package/level-ttl
+______________________________________________________
+
+31) En este paso obtenemos los mensajes que guardamos previamente. LevelDB nos entrega un stream de lectura para leer los registros que tenemos guardados, solo envíaremos los últimos 10 registros al cliente.
+
+En el archivo "/database/index.js", en la función "list", obtendremos los mensajes de la DB y se los envíaremos al cliente (navegador):
+
+	//...todo lo demás igual...	
+
+	let duration = options.duration || 10 * 60 * 1000
+
+	let limit = options.limit || 10
+
+	//...todo lo demás igual...	
+
+	function list(callback){
+		let rs = db.createValueStream({
+			limit: limit,
+			valueEncoding: 'json',
+			reverse: true,
+			gt: 'message'
+		})
+
+		callback()
+	}
+
+Con "limit", indicamos que la búsqueda me la límite solo a 10 mensajes en la DB.
+
+En la función "list", leemos de la DB. "Level" usa streams para la lectura y búsqueda de datos en la DB.
+
+Este stream que creamos le pasamos las siguientes opciónes:
+
+	limit --> que solo busque 10 mensajes.
+
+	valueEncoding --> le indicamos que los datos que extraiga de la DB, me los entregue en formato json.
+
+	reverse --> aquí con "true", le indicamos que los 10 datos que extraiga, los saque desde los últimos que se ingresaron en la DB.
+
+	gt --> (greater than) nos sirve para hacer un query. en este caso le indicamos que busque solo en los datos cuya llave empiece por "message". Hacemos esto ya que en "levelDB", al usar "ttl", en la misma base de datos, también se guardan los registros que se van a borrar y otros datos internos que usa "ttl", es por eso que al guardar los registros indicamos que la llave empezara con "message".
+
+Ahora requerimos el módulo "concat-stream", para concatenar todos estos datos que estamos leyendo de la DB.
+
+	const concat = require('concat-stream')	
+
+	//...todo lo demás igual...	
+
+	function list(callback){
+		let rs = db.createValueStream({
+			limit: limit,
+			valueEncoding: 'json',
+			reverse: true,
+			gt: 'message'
+		})
+
+		rs.pipe(concat(function(messages){
+			callback(null, messages.reverse())
+		}))
+
+		rs.on('error', callback)
+	}
+
+Como los datos (mensajes), los extrajimos de la DB, desde el ultimo hasta los otros 9 anteriores, para que no me los muestre en desorden, volvemos a reversar en el callback con "messages.reverse()"
+______________________________________________________
+
+En nuestro archivo "/realtime/index.js", implementamos la funciónalidad para envíar esos 10 mensajes al navegador:
+	
+	//...todo lo demás igual...	
+	
+	function onConnection(socket){
+		console.log(`Client connected ${socket.id}`)
+
+		db.list(function(err, messages){
+			if(err)
+				return console.error(err)
+
+			socket.emit('messages', messages)	
+		})
+
+	//...todo lo demás igual...		
+
+Cuando el cliente se conecta listamos los 10 mensajes, si hay un error, lo imprimimos en consola, pero no detenemos la ejecución.
+
+Luego emitimos un nuevo evento llamado "messages", en el cual envíamos los 10 mensajes al navegador.
+______________________________________________________
+
+Para mostrar esos 10 mensajes en el navegador, modificamos el archivo "/client/app.js" para que escuche el evento del servidor llamado "messages":
+
+	//...todo lo demás igual...
+
+	socket.on('messageack', function(message){//...igual...
+	}
+
+	socket.on('messages', function(messages){
+		messages.forEach(addMessage)
+	})
+
+	//...todo lo demás igual... 
+
+Podemos probar con:	
+
+	npm run build-js
+
+Iniciamos el server:
+
+	npm start
+
+Con esto ya hemos terminado nuestro chat en tiempo real!!! Lo único que queda es separar la parte del cliente y la del servidor para tener más orden en el proyecto.	
+______________________________________________________
+
+	OPTIMIZACIÓN PROYECTO CLIENTE/SERVIDOR:
+
+Extraemos el código del cliente a otro proyecto para una mejor administración y lo subimos a github.
+
+Los archivos extraídos son:
+
+- Toda la carpeta "client":
+
+	"/client/app.js"
+	"/client/templates/message.hbs"
+
+- Toda la carpeta "public":	
+
+	"/public/css/main.css"
+	"/public/css/normalize.css"
+	"/public/index.html"
+
+Nota: ver el proyecto cliente y sus archivos en: https://github.com/julianduque/animate-client	
+______________________________________________________	
+
+En los archivos del server, cambiamos unas líneas en el archivo "/router/index.js":
+
+	const animateClient = require('animate-client')
+
+	const course = require('course')
+	const st = require('st')
+	const jsonBody = require('body/json')	
+	const helper = require('../helper')
+	 
+	const router = course()
+
+	const mount = st({	
+		path: animateClient,
+		index: 'index.html',
+		passthrough: true
+	})
+
+	//...todo lo demás igual...
+
+Aquí requerimos un módulo llamado "animate-client", que crearemos más adelante. 	
+______________________________________________________
+
+Ahora en el proyecto cliente tendremos 2 carpetas: "client" y "public" 
+
+Al mismo nivel de las carpetas, creamos un archivo "package.json" para definir las dependencias de nuestra aplicación (recordar que este archivo lo podemos crear con el comando "npm init"). Este archivo tendrá:
+
+	{
+	   "name": "animate-client",
+	   "version": "1.0.0",
+	   "description": "A client for animate-server",
+	   "main": "index.js",
+	   "scripts": {
+	     "postinstall": "npm run build-js",
+	     "build-js": "browserify -t hbsfy client/app.js -o public/js/app.js"
+	   },
+	   "repository": {
+	     "type": "git",
+	     "url": "https://github.com/julianduque/animate-client.git"
+	   },
+	   "author": "Julian Duque <julianduquej@gmail.com>",
+	   "license": "BSD",
+	   "bugs": {
+	     "url": "https://github.com/julianduque/animate-client/issues"
+	   },
+	   "homepage": "https://github.com/julianduque/animate-client",
+	   "dependencies": {
+	     "domify": "^1.3.3",
+	     "handlebars": "^3.0.1",
+	     "socket.io-client": "^1.3.5",
+	     "uuid": "^2.0.1",
+	     "webrtc2images": "^1.4.4"
+	   },
+	   "devDependencies": {
+	     "browserify": "^9.0.8",
+	     "hbsfy": "^2.2.1"
+	   }
+	}
+
+En este archivo, pasamos los scripts "postinstall" y "build-js" que teníamos en el servidor.
+
+También pasamos todas las dependencias del lado del cliente ("domify", "handlebars", "socket.io-client", "uuid" y "webrtc2images"), y las que son de desarrollo del cleinte ("browserify" y "hbsfy").
+
+En este "package.json", indicamos que el archivo principal es "index.js", el cual creamos al mismo nivel que las carpetas "client" y "public".
+
+El código de "index.js" será:
+
+	'use strict'
+
+	const path = require('path')
+
+	module.exports = path.join(__dirname, 'public') 
+
+Aquí lo que hacemos es exportar la ruta a la carpeta "public". Así, el archivo de nuestro server "/router/index.js" podrá requerir este módulo.
+______________________________________________________
+
+Para poder usar el módulo cliente, tenemos 2 opciónes, la primera es subirlo a npm, y la segunda es subirlo a git-hub, y luego instalarlo como dependencia de nuestro sevidor, para esta última opción usamos:
+
+	npm install <user>/<repo> --save
+
+Que en este caso sería: 
+
+	npm install https://github.com/julianduque/animate-client --save
+
+Y nuestro archivo "package.json" para el servidor quedaría:
+
+	{
+	  "name": "animate-server",
+	  "version": "1.0.0",
+	  "description": "A realtime chat server using animated gif-like videos",
+	  "main": "server.js",
+	  "scripts": {
+	    "start": "node server.js"
+	  },
+	  "repository": {
+	    "type": "git",
+	    "url": "https://github.com/julianduque/animate-server.git"
+	  },
+	  "author": "Julian Duque <julianduquej@gmail.com>",
+	  "license": "BSD",
+	  "bugs": {
+	    "url": "https://github.com/julianduque/animate-server/issues"
+	  },
+	  "homepage": "https://github.com/julianduque/animate-server",
+	  "dependencies": {
+	    "animate-client": "git://github.com/julianduque/animate-client.git",
+	    "async": "^0.9.0",
+	    "body": "^5.0.0",
+	    "concat-stream": "^1.4.8",
+	    "course": "0.0.1",
+	    "data-uri-to-buffer": "0.0.3",
+	    "level": "^0.18.0",
+	    "level-ttl": "^3.0.6",
+	    "socket.io": "^1.3.5",
+	    "st": "^0.5.3",
+	    "uuid": "^2.0.1"
+	  }
+	}
+
+Como podemos ver, en este archivo borramos todas las dependencias que correspondían al cliente.
+______________________________________________________
+
+Para correr nuestro proyecto en un host de node:
+
+	https://www.heroku.com/

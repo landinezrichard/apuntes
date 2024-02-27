@@ -1,0 +1,271 @@
+	Empezando Proyecto GIT
+_______________________________________________________
+
+Ver todos los comandos con:
+
+	git --help
+
+Ver un comando en especifico:
+
+	git --help add
+_______________________________________________________	
+
+Crear la carpeta del proyecto, y en consola estando dentro de la carpeta iniciar el repositorio en git con:
+
+	git init
+_______________________________________________________		
+
+Indica los nuevos cambios que tiene el repositorio:
+
+	git status
+
+Añadir un archivo al historial de cambios(prepararlo para agregarlo al repo):
+
+	git add <NombreArchivo>
+
+Añadir todos los archivos al historial:
+
+	git add -A
+
+Registrando y Guardando los Cambios en el Repo:
+
+	git commit -m "Descripción de lo que se hizo"
+
+Antes de subir cualquier commit, y si se trabaja con más personas, descargamos los nuevos cambios del repo con:
+
+	git pull	
+
+Subir el commit a Github:
+
+	git push
+_______________________________________________________
+
+	CREANDO EL PROYECTO
+_______________________________________________________
+
+1) Crear el "index.html", y estructurar la información.
+
+_______________________________________________________
+
+2) Crear carpetas:
+
+	- img
+	- js
+	- css
+	- stylus
+_______________________________________________________
+
+NOTA: Para el siguiente paso, instalar Node.	
+
+3)En una consola, ubicarnos en la carpeta del proyecto, y crear el archivo "package.json" con el siguiente comando:
+
+	npm init
+
+El comando "npm init", hará algunas preguntas iniciales
+sobre nuestro proyecto:
+
+	name: nombreProyecto
+	version: 1.0
+	description: A real time chat server using animated gif-like videos
+	entry point: server.js
+	test comand:
+	git repository:
+	keywords:
+	autor: Ricardo Landínez <landinezrichard@gmail.com>
+	license: BSD
+
+Nota: en licencia tambien pódemos usar MIT. 
+
+Para instalar las dependencias de un proyecto que hayamos descargado y que tenga el archivo "package.json":
+
+	npm install
+
+Creamos un Archivo ".gitignore", para ignorar archivos y carpetas que no se deben subir a github (Como la carpeta node_modules, ya que allí van las dependencias del proyecto y no se deben subir a github, ya que estas dependencias son binarios y su compilación depende del sistema operativo):
+
+	node_modules
+	*.log	
+_______________________________________________________
+
+4) Instalar stylus, si se quiere se puede instalar como dependencia de desarrollo con:
+
+	npm install --save-dev stylus
+
+Tambien la extensión de stylus:
+
+	npm install --save-dev nib
+
+Creamos dentro de la carpeta "stylus" un archivo llamado "estilos.styl"
+
+Dentro de la misma carpeta descargamos el archivo "normalize.styl"		
+
+En el archivo "estilos.styl", incluimos las siguientes líneas:
+
+	@import "nib"
+	@import "normalize.styl"
+
+	body
+		background red
+
+Podemos usar "npm" para compilar nuestro stylus, para esto vamos al archivo "package.json", y en scripts añadimos:
+
+	"scripts": {
+	  "build-css": "stylus -u nib -c -w -o css/ stylus/estilos.styl"
+	},
+
+Para ejecutar el script usamos en consola:
+
+	npm run build-css				
+
+_______________________________________________________
+
+5) Agregar clases al html usando componentes (ver paso 6 del archivo "Creación de una PAG_WEB desde 0").
+_______________________________________________________
+
+6) Adicionamos la fuente "Open Sans", tal y como se indica en el punto 7 del mismo archivo, pero para usar stylus, no linkeamos sino que incluimos la siguiente línea en el archivo "estilos.styl":
+
+	@import url('http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700')
+_______________________________________________________	
+
+8) Definir los estilos, el primer estilo, en "normalize.styl", para definir el tamaño de la letra:
+
+	html {
+		font-size:16px;
+	}
+_______________________________________________________	
+
+9) Ya que se estan usando clases por componentes, ordenar el codigo por componentes (ver archivo "Jade.txt").
+
+Debe quedar dentro de la carpeta del proyecto:
+
+	- dev
+		- components
+			- CarpetaNombreComponente
+				- estilos.styl
+				- template.jade
+
+		- stylus
+			- estilos.styl
+			- normalize.styl
+
+		- index.jade
+
+	- public
+		- css
+			- estilos.css
+
+		- fonts			
+		- img
+		- js
+			- libs
+				- hammer.min.js
+
+		- index.html
+
+	- .gitignore
+	- package.json
+
+Nota: no olvidar cambiar la ruta de los scripts en el archivo "package.json":
+
+	"scripts": {
+	  "build-css": "stylus -u nib -c -w -o public/css/ dev/stylus/estilos.styl",
+	  "build-html": "jade -P -w -o ./public ./dev/index.jade"
+	},
+
+Nota: las rutas hacia imagenes, iconos como fuentes, el enlace de los scripts y css, se deben hacer, como si estubieramos hubicados dentro de la carpeta "public", así se compile desde "dev".
+
+_______________________________________________________	
+
+10) Creamos el código JavaScript para nuestra aplicación. Si lo hacemos en varios archivos mucho mejor, he intentar que la funcionalidad de cada componente este aparte.
+
+Incluir las librerias de desarrollo, por CDN o en local(las guardamos en "/public/js/lib"), hacer las pruebas de que todo este corriendo OK.
+
+Luego, para incluir un solo archivo en el "index.html" o en el "index.jade" principal, empezamos a instalar, por ejemplo jQuery con npm:
+
+	npm install jquery --save
+
+Usamos --save para que se guarde en el archivo "package.json" como dependencia.	
+
+Ahora podemos borrar la línea:
+
+	<script type="text/javascript" src="js/libs/jQuery.min.js"></script>
+
+Ó borrar está, en el archivo "index.jade"
+
+	script(type="text/javascript", src="js/libs/jQuery.min.js")
+
+Pero aún no se estan enlazando, la idea es tener dentro de la carpeta "public/js" un solo archivo llamado "app.js", el cual sí enlazaremos en nuestro "index.html" principal.
+
+Este archivo "app.js", lo crearemos con una herramienta magica llamada "Browserify", la cual toma todos nuestros archivos JavaScript (incluidas las librerias como jQuery), y los une en uno solo.
+
+Además de esto, nos permite que por cada componente hagamos un archivo "index.js", en el cual, si por ejemplo necesitamos de jQuery, lo requerimos tal y como se requiere o enlaza un archivo en "node" ó "iojs":
+
+	'use strict'
+
+	const $ = require('jquery')
+
+	/*
+		... 
+		Todo nuestro codigo del módulo
+		...
+	*/
+
+Nota: tambien podemos requerir muchos otros modulos de npm usados del lado del frontend.	
+
+Este archivo "index.js", estara dentro de la carpeta de su respectivo componente:
+
+	- dev
+		- components
+			- CarpetaNombreComponente
+				- estilos.styl
+				- template.jade	
+				- index.js
+
+Y en nuestro archivo principal de la carpeta "dev", "app.js", requerimos el módulo, o componente.
+
+Ejemplo:
+
+	'use strict'
+
+	const mainMenu = require('./components/MainMenu')
+
+Nota: se buscara el archivo "index.js" en la ruta "./components/MainMenu", si el archivo se llama diferente, indicarlo:
+
+	const mainMenu = require('./components/MainMenu/nombreArchivo.js')
+
+Así el código de cada módulo o componente es muy corto, sencillo de entender y mantenible.
+
+Si requerimos un modulo que se autoejecuta:
+
+	require('./components/MainMenu')
+
+_______________________________________________________	
+
+	BROWSERIFY:
+
+Finalmente con "browserify", compilamos y contruimos dentro de "public/js" el archivo final "app.js". Para esto primero instalamos "browserify" con:
+
+	npm install --save-dev browserify
+
+Y para compilar usamos:	
+
+	browserify ./dev/app.js -o ./public/js/app.js
+
+En donde, con "./dev/app.js", indicamos el archivo de entrada (input), y con "-o ./public/js/app.js" indicamos el output o el archivo resultante.
+
+Nota: Si no sirve browserify, re instalar de forma global con:
+
+	npm install -g browserify
+
+Nota: ya que "use strict" pertenece a ES6, y aún no es soportado por todos los navegadores, es necesario usar "Babel" o "Babelify":
+
+	npm install --save-dev babelify
+
+Y para hacer la transformación a código ES5 con browserify, compilamos así:
+
+	browserify ./dev/app.js -t babelify -o ./public/js/app.js
+
+
+
+Construyendo Modulos Frontend con Browserify:
+
+https://getmango.com/blog/construyendo-modulos-de-front-end-con-browserify/			 					

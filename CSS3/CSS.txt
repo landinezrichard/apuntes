@@ -1,0 +1,3314 @@
+
+	CSS:
+_______________________________________________________
+
+INDICE:
+
+[1]. Incluir CSS
+[2]. Selectores
+	[2.1]. Selector Universal
+	[2.2]. Selector de Etiqueta
+	[2.3]. Selector Descendente
+	[2.4]. Selector de Clase
+	[2.5]. Selector de Id
+	[2.6]. Selector de Atributos
+	[2.7]. Selector de hijos
+	[2.8]. Selector Adyacente
+	[2.9]. Pseudo Clases
+	[2.10]. Pseudo Elementos
+[3]. TEXTO - Tipografía
+	[3.1]. font-family
+		[3.1.1]. Fuentes Personalizadas(Google Fonts)
+	[3.2]. TRUCO MEDIDAS DE TEXTO
+	[3.3]. TEXTO - Formato
+		[3.3.1]. text-align
+		[3.3.2]. line-height
+		[3.3.3]. text-decoration
+		[3.3.4]. text-transform
+		[3.3.5]. vertical-align
+		[3.3.6]. text-indent
+		[3.3.7]. letter-spacing / word-spacing
+		[3.3.8]. white-space
+[4]. Colores
+[5]. Fondos
+	[5.1]. background-color
+	[5.2]. background-image
+	[5.3]. background-repeat
+	[5.4]. background-position
+	[5.5]. background-attachment
+	[5.6]. background - Shorthand
+	[5.7]. Doble imagen de Fondo
+	[5.8]. background-size
+[6]. Modelo de Cajas
+	[6.1]. Width y Height
+	[6.2]. Margin
+		[6.2.1]. Centrar Horizontalmente con Margin
+	[6.3]. Padding
+	[6.4]. Border
+[7]. Posicionamiento
+	[7.1]. Position
+		[7.1.1]. static
+		[7.1.2]. relative
+		[7.1.3]. absolute
+		[7.1.4]. fixed
+		[7.1.5]. sticky
+		[7.1.6]. z-index
+	[7.2]. Float
+		[7.2.1]. clear
+	[7.3]. Visualización
+		[7.3.1]. display
+		[7.3.2]. visibility
+		[7.3.3]. overflow
+		[7.3.4]. Hack clearfix (de Desbordamiento)
+	[7.4]. Flexbox
+		[7.4.1]. Display Flex / inline-flex
+		[7.4.2]. Dirección de los ejes / flex-direction
+		[7.4.3]. Envolver / flex-wrap
+		[7.4.4]. Shorthand / flex-flow
+		[7.4.5]. Alineación de ítems
+			[7.4.5.1]. Alineación horizontal / justify-content
+			[7.4.5.2]. Alineación vertical / align-items
+			[7.4.5.3]. Alineación de varias filas / align-content
+		[7.4.6]. CENTRADO PERFECTO
+		[7.4.7]. order
+		[7.4.8]. flex-grow
+		[7.4.9]. flex-shrink
+		[7.4.10]. flex-basis
+		[7.4.11]. Shorthand / flex
+		[7.4.12]. align-self
+	[7.5]. Grid Layout
+		[7.5.1]. Display Grid / inline-grid
+		[7.5.2]. Grid Gap(espacio entre celdas)
+		[7.5.3]. grid-template-columns
+		[7.5.4]. grid-template-rows
+		[7.5.5]. Posición en la grid
+			[7.5.5.1]. Alinear Contenido Celda Horizontalmente / justify-items / justify-self
+			[7.5.5.2]. Alinear Contenido Celda Verticalmente / align-items / align-self
+			[7.5.5.3]. Distribuir rejilla horizontalmente / justify-content
+			[7.5.5.4]. Distribuir rejilla verticalmente / align-content
+		[7.5.6]. Expandir Ítems
+			[7.5.6.1]. Expandir Columnas
+			[7.5.6.2]. Expandir Filas
+		[7.5.7]. Plantilla de Área
+			[7.5.7.1]. Usar "grid-area" sin plantilla de área
+		[7.5.8]. Limitar el tamaño del ítem usando la función "minmax"
+		[7.5.9]. Crear diseños flexibles con "auto-fill"
+		[7.5.10]. Crear diseños flexibles con "auto-fit"
+		[7.5.11]. Tamaños predefinidos para filas y columnas automáticas
+		[7.5.12]. Flujo para filas y columnas automáticas
+[8]. Sombras
+[9]. Animaciones y Efectos
+	[9.1]. Transformaciones
+	[9.2]. Transiciones
+		[9.2.1]. transition-property
+		[9.2.2].transition-duration
+		[9.2.3].transition-timing-function
+		[9.2.4].transition-delay
+	[9.3]. Animaciones Avanzadas
+[10]. Responsive Web Design
+[11]. Función calc()
+
+_______________________________________________________
+
+	[1]. Incluir CSS:
+_______________________________________________________
+
+Cascading Style Sheets, en español "Hojas de estilo en cascada", se puede incluir de 3 formas:
+
+1) En línea:
+
+		<p style="color:red;">
+
+2) Forma interna embebida:
+
+	<head>
+		<style type="text/css">
+			p{color:red;}
+		</style>
+	</head>
+
+3) Archivo externo:
+
+	<head>
+		<link rel="stylesheet" type="text/css" href="ruta/estilo.css">
+	</head>
+
+El archivo externo llamado "estilo.css":
+
+	/*Esta es un comentario de la hoja de estilos*/
+
+	p{
+		color:red;
+		background-color:#000000;
+	}
+
+Si en una pág. tenemos las 3 formas, y aplicamos diferentes colores, el párrafo queda con el color definido en la forma en línea, ya que los navegadores dan prioridad 1), 2), 3).
+_______________________________________________________
+
+	[2]. Selectores:
+_______________________________________________________
+
+Los selectores, nos sirven para dar estilos a partes específicas de la pág.
+_______________________________________________________
+
+	[2.1]. Selector Universal:
+_______________________________________________________
+
+Sirve para dar estilo a todos los elementos de la pág.
+
+	/*Selector Universal*/
+	*{
+		font-family: Verdana, Geneva, Tahoma, sans-serif;
+	}
+_______________________________________________________
+
+	[2.2]. Selector de Etiqueta:
+_______________________________________________________
+
+Este se aplica directamente sobre el tag "body".
+
+	/*Selector de Etiqueta*/
+	body{
+		background-color: #A9D0F5;
+	}
+
+Sirve para los 2 tags "h".
+
+	h1, h2{
+		color: #990000;
+	}
+_______________________________________________________
+
+	[2.3]. Selector Descendente:
+_______________________________________________________
+
+Solo afecta a los "li", que estén dentro de un "ul", que a su vez este dentro de un tag "nav".
+
+	nav ul li{
+		colot: #333;
+	}
+_______________________________________________________
+
+	[2.4]. Selector de Clase:
+_______________________________________________________
+
+Todos los tags con la clase "azulon" quedan con el mismo estilo.
+
+	/*Selector de Clase*/
+	.azulon{
+		color: #006699;
+	}
+
+Todos los párrafos con atributo class="aviso":
+
+	p.aviso { ... }
+
+Todos los elementos con atributo class="aviso" que estén dentro de cualquier párrafo:
+
+	p .aviso { ... }
+
+Todos los párrafos y todos los elementos con atributo class="aviso"
+	
+	p, .aviso { ... }
+	
+Aplicar varias clases de estilos a un elemento:
+
+	<p class="clase1 clase2 clase3">Párrafo de texto...</p>
+
+	.clase1 { color: red; }
+	.clase2 { font-size: 15px; }
+	.clase3 { font-weight: bold; }
+
+Selector de clase avanzado:
+
+	<p class="clase1 clase2 clase3">Párrafo de texto...</p>
+
+	.clase3 { color: red; }
+	.clase3.clase2 { color: blue; }
+	.clase2 { font-size: 15px; }
+	.clase1 { font-weight: bold; }
+
+En este caso el color de la letra del texto es azul y no rojo. Porque se usó el selector de clase múltiple: .clase3.clase2, que se interpreta como "aquellos elementos de la página que dispongan de un atributo class con al menos los valores clase3 y clase2".
+_______________________________________________________
+
+	[2.5]. Selector de Id:
+_______________________________________________________
+
+Para un tag con el id "parrafoVerde", solo un tag puede tener un id igual, por lo tanto afecta a un solo elemento.
+
+	/*Selector de ID*/
+	#parrafoVerde{
+		color: #093;
+	}
+_______________________________________________________
+
+	[2.6]. Selector de Atributos:
+_______________________________________________________
+
+Solo afecta a los "input" cuyo atributo "type" sea igual a "text".
+
+	/*Selector de Atributo*/
+	input[type="text"]{
+		margin-bottom: 15px;
+		padding: 10px;
+		width: 300px;
+	}
+
+Se muestran de color azul todos los enlaces que tengan un atributo "class", independientemente de su valor:
+
+	a[class]{ color: blue; }
+	
+Se muestran de color azul todos los enlaces que apunten al sitio "http://www.ejemplo.com":
+
+	a[href="http://www.ejemplo.com"] { color: blue; }
+
+Se muestran de color azul todos los enlaces que tengan un atributo "class" en el que al menos uno de sus valores sea "externo":
+
+	a[class~="externo"] { color: blue; }
+_______________________________________________________
+
+	[2.7]. Selector de hijos:
+_______________________________________________________
+
+Selecciona cualquier "span" que sea hijo directo de un párrafo:
+
+	/*Selector de Hijo*/
+	p > span{
+		color: blue;
+	}
+
+	<p><span>Texto1</span></p>
+	<p><a href="#"><span>Texto2</span></a></p>
+
+En este ejemplo solo el "Texto1" saldría de color azul.
+_______________________________________________________
+
+	[2.8]. Selector Adyacente:
+_______________________________________________________
+
+Selecciona todos los "h2" que se encuentran inmediatamente después de un "h1"(que sea hermano del "h1").
+
+	h2 { color: green; }
+
+	h1 + h2 { color: red }
+
+
+	<h1>Titulo1</h1>
+	<h2>Subtítulo</h2>
+	...
+	<h2>Otro subtítulo</h2>
+
+Nota: en este caso, todos los "h2" salen de color verde, y el "h2" que se encuentra justo después de un "h1" sale de color rojo.
+
+Para ver más selectores:
+
+	https://www.w3schools.com/cssref/css_selectors.asp
+_______________________________________________________
+
+	[2.9]. Pseudo Clases:
+_______________________________________________________
+
+Se usan para definir un estado especial de un elemento.
+
+	a{
+		color: #333333;
+		text-decoration: none;
+	}
+
+- Cambia de color al enlace cuando no se ha hecho clic(link sin visitar):
+	
+	a:link{
+		color:#900;
+	}
+
+- Cambia de color al enlace cuando ya se ha hecho clic(link visitado):
+
+	a:visited{
+		color: #003399;
+	}
+
+- Cambia el color de fondo del enlace cuando se pasa el mouse encima(mouse sobre el link):
+
+	a:hover{
+		background-color: #ccc,
+	}
+
+- Cuando se le hace clic al link, cambia el color de fondo en ese momento que se tiene el botón presionado:
+
+	a:active{
+		background-color: #222;
+	}
+
+NOTA: Las pseudo-clases ":link" y ":visited" solamente están definidas para los enlaces, pero las pseudo-clases ":hover" y ":active" se definen para todos los elementos HTML.
+
+Para más info de estas pseudo clases:
+
+	https://uniwebsidad.com/libros/css/capitulo-7
+
+- Cambia el color de fondo del "input" cuando se hace clic para escribir en él:
+
+	input: focus{
+		background-color: #000;
+		color: #fff;
+	}
+
+- Cambia el color de fondo al primer hijo de una lista, en este caso el primer "li":
+
+	ul li:first-child{
+		background-color: #090;
+	}
+
+- El ultimo hijo de la lista "ul", es decir el ultimo "li":
+
+	ul li:last-child{...}
+
+- El número entre paréntesis indica que hijo cambiar, en este caso cambia el segundo "li":
+
+	ul li:nth-child(2){...}
+
+- Seleccionar impares:
+
+	ul li:nth-child(2n+1){...}
+
+2n --> selecciona el segundo item. Si se escribe 3n selecciona el tercero, etc.
+
+1 --> indica al navegador que empiece en el primer elemento(1), acá funciona como un arreglo, así que "1" es el segundo elemento.
+
+Tambien se puede escribir:
+
+	ul li:nth-child(odd){...}
+
+odd --> impar.
+even --> par.
+
+Para ver más pseudo clases ir a:
+
+	http://www.w3schools.com/cssref/css_selectors.asp
+
+Revisar la pseudo clase ":target".
+_______________________________________________________
+
+	[2.10]. Pseudo Elementos:
+_______________________________________________________
+
+Un pseudo-elemento CSS se usa para dar estilo a partes específicas de un elemento.
+
+Por ejemplo, se puede usar para:
+
+	-Aplicar estilo a la primera letra o línea de un elemento.
+
+	-Insertar contenido antes o después del contenido de un elemento.
+
+- Agregar un estilo especial a la primera línea de un texto:
+
+	p::first-line {
+		color: #ff0000;
+		font-variant: small-caps;
+	}
+
+- Agregar un estilo especial a la primera letra de un texto:
+
+	p::first-letter {
+		color: #ff0000;
+		font-size: 36px;
+		font-weight. bold;
+	}
+
+El pseudo-elemento "::before" se puede usar para insertar algún contenido antes del contenido de un elemento.
+
+- Inserta una imagen antes del contenido de cada elemento <h1>:
+
+	h1::before {
+		content: url(smiley.png);
+	}
+
+El pseudo-elemento "::after" se puede usar para insertar algo de contenido después del contenido de un elemento.
+
+- Inserta una imagen después del contenido de cada elemento <h1>:
+
+	h1::after {
+		content: url(smiley.png);
+	}
+
+Para más info de los pseudo elementos:
+
+	https://www.w3schools.com/css/css_pseudo_elements.asp
+
+Revisar el pseudo elemento "::selection".
+_______________________________________________________
+
+	[3]. TEXTO - Tipografía:
+_______________________________________________________
+
+Algunas de las propiedades para modificar la tipografía (apariencia) del texto son las siguientes:
+
+	color
+	font-family
+	font-size
+	font-style
+	font-variant
+	font-weight
+	font
+	letter-spacing
+
+Algunos ejemplos de estás propiedades:
+
+	/*Cambia el color y el Tipo de Fuente para todo el documento*/
+	body{
+		color:#777;
+		font-family:Arial,Helvetica,sans-serif;
+	}
+
+	/*Indican el tamaño y el ancho del texto (negrilla) respectivamente*/
+	.parrafo1{
+		font-size:32px;
+		font-weight:bold;
+	}
+
+	/*Letra Itálica o Cursiva*/
+	.parrafo2{
+		font-style:italic;
+	}
+
+	/*Un texto "así" lo pone "ASÍ"*/
+	.parrafo3{
+		font-variant:small-caps;
+	}
+
+Para más info de estás propiedades:
+
+	https://uniwebsidad.com/libros/css/capitulo-6
+
+	https://uniwebsidad.com/libros/referencia-css2
+_______________________________________________________
+
+	[3.1]. font-family:
+_______________________________________________________
+
+font-family --> Establece el tipo de letra utilizado para el texto.
+
+El tipo de letra del texto se puede indicar de dos formas diferentes:
+
+	- Mediante el nombre de una familia tipográfica: en otras palabras, mediante el nombre del tipo de letra, por ejemplo "Arial", "Verdana", "Garamond", etc.
+
+	- Mediante el nombre genérico de una familia tipográfica: los nombres genéricos no se refieren a ninguna fuente en concreto, sino que hacen referencia al estilo del tipo de letra. Las familias genéricas definidas son serif (tipo de letra similar a Times New Roman), sans-serif (tipo Arial), cursive (tipo Comic Sans), fantasy (tipo Impact) y monospace (tipo Courier New).
+
+El valor de font-family suele definirse como una lista de tipos de letra alternativos separados por comas. El último valor de la lista es el nombre de la familia tipográfica genérica que más se parece al tipo de letra que se quiere utilizar. 
+
+Las listas de tipos de letra más utilizadas son las siguientes:
+
+	font-family: Arial, Helvetica, sans-serif;
+	font-family: "Times New Roman", Times, serif;
+	font-family: "Courier New", Courier, monospace;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+_______________________________________________________
+
+	[3.1.1]. Fuentes Personalizadas(Google Fonts):
+_______________________________________________________
+
+Para establecer una funte personalizada, podemos usar el servicio de google:
+
+	https://fonts.google.com/
+
+Una vez escogemos la fuente, se puede usar de 3 formas:
+
+1) Embebida, se enlaza en el head:
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+
+Y en la hoja de estilos:
+
+	html{
+		font-family: 'Roboto', sans-serif; /* Fuente de google fonts */
+	}
+
+2) Importada en la hoja de estilos:
+
+	@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
+	html{
+		font-family: 'Roboto', sans-serif; /* Fuente de google fonts */
+	}
+
+3) Descargamos los archivos de fuentes y los incluimos en la hoja de estilos:
+
+	@font-face{
+		font-family:"Digital";
+		src:url(fonts/dited.ttf),url(fonts/dited.eot),url(fonts/dited.otf);
+	}
+
+	.parrafo-personalizado{
+		font-family: "Digital", "Comic Sans MS";
+	}
+
+"Digital" es el nombre que se le dio a la fuente. Los archivos dited.ttf .eot y .otf, corresponden a las fuentes en diferentes extensiones para cada navegador. En caso de que no pueda encontrar el archivo, asigna la fuente "Comic Sans MS".
+_______________________________________________________
+
+	[3.2]. TRUCO MEDIDAS DE TEXTO:
+_______________________________________________________
+
+Para usar las medidas em y % en el tamaño de texto, pero pensando en pixeles se usa el siguiente truco:
+
+	body {
+		font-size: 62.5%;
+	}
+
+El tamaño de letra del elemento "body", y por tanto el tamaño de letra base del resto de elementos de la pág., se establece como el 62.5% del tamaño por defecto (16px). Si se calcula el resultado de 16px * 62.5% se obtienen 10px.
+
+La ventaja de establecer el tamaño de letra del "body" de esa forma es que ahora se pueden utilizar "em" mientras se piensa en "px". 
+
+Las siguientes reglas muestran el truco en la práctica:
+
+	body {
+		font-size: 62.5%;
+	}
+
+	h1 {
+		font-size: 2em; /* 2em = 2 * 10px = 20px */
+	}
+
+	p {
+		font-size: 1.4em; /* 1.4em * 10px = 14px */
+	}
+
+Como el tamaño base son 10px, cualquier valor de "em" cuya referencia sea el elemento "body" debe multiplicarse por 10, por lo que se puede trabajar con "em" mientras se piensa en px.
+_______________________________________________________
+
+	[3.3]. TEXTO - Formato:
+_______________________________________________________
+
+Para dar formato al texto usamos las siguientes propiedades:
+
+	text-align
+	line-height
+	text-decoration
+	text-transform
+	vertical-align
+	text-indent
+	letter-spacing
+	word-spacing
+	white-space
+
+Para más info de cada propiedad, y otras propiedades como "text-direction",  "text-shadow" y "text-overflow":
+
+	https://www.w3schools.com/css/css_text.asp
+_______________________________________________________
+
+	[3.3.1]. text-align:
+_______________________________________________________
+
+Se usa para establecer la alineación horizontal de un texto: a la izquierda (left), a la derecha (right), centrado (center) y justificado (justify).
+
+	div {
+		text-align: justify;
+	}
+
+La propiedad text-align no sólo alinea el texto que contiene un elemento, sino que también alinea todos sus contenidos, como por ejemplo las imágenes.
+_______________________________________________________
+
+	[3.3.2]. line-height:
+_______________________________________________________
+
+Se usa para especificar el espacio entre líneas(interlineado).
+
+	p.small {
+		line-height: 0.7;
+	}
+
+	p.big {
+		line-height: 1.8;
+	}
+_______________________________________________________
+
+	[3.3.3]. text-decoration:
+_______________________________________________________
+
+Establece la decoración del texto (subrayado, tachado,
+parpadeante, etc.). Sus valores pueden ser:
+
+	underline --> subraya el texto.
+	overline --> añade una línea en la parte superior del texto.
+	line-through --> muestra el texto tachado con una línea continua.
+	blink --> muestra el texto parpadeante.
+
+	h1 {
+		text-decoration: overline;
+	}
+_______________________________________________________
+
+	[3.3.4]. text-transform:
+_______________________________________________________
+
+Se puede usar para convertir todo en letras mayúsculas o minúsculas, o poner en mayúscula la primera letra de cada palabra.
+
+	p.uppercase {
+		text-transform: uppercase;
+	}
+
+	p.lowercase {
+		text-transform: lowercase;
+	}
+
+	p.capitalize {
+		text-transform: capitalize;
+	}
+_______________________________________________________
+
+	[3.3.5]. vertical-align:
+_______________________________________________________
+
+Determina la alineación vertical de los contenidos de un elemento.
+
+Se aplica a elementos en línea y celdas de tabla.
+
+Para más info y ejemplos:
+
+	https://uniwebsidad.com/libros/css/capitulo-6/texto-2
+
+	https://www.w3schools.com/cssref/pr_pos_vertical-align.asp
+
+	https://www.w3schools.com/cssref/tryit.asp?filename=trycss_vertical-align
+_______________________________________________________
+
+	[3.3.6]. text-indent:
+_______________________________________________________
+
+Se usa para especificar la tabulación(sangría) de la primera línea de un texto:
+
+	p {
+		text-indent: 15px;
+	}
+_______________________________________________________
+
+	[3.3.7]. letter-spacing / word-spacing:
+_______________________________________________________
+
+Se utiliza para especificar el espacio entre los caracteres de un texto.
+
+	h2 {
+		letter-spacing: -3px;
+	}
+
+Se usa para especificar el espacio entre las palabras en un texto.
+
+	h1 {
+		word-spacing: 10px;
+	}
+
+Nota: Cuando se utiliza un valor numérico en las propiedades "letter-spacing" y "word-spacing", se interpreta como la separación adicional que se añade (si el valor es positivo) o se quita (si el valor es negativo) a la separación por defecto entre letras y palabras respectivamente.
+_______________________________________________________
+
+	[3.3.8]. white-space:
+_______________________________________________________
+
+Especifica cómo se maneja el espacio en blanco dentro de un elemento.
+
+	p.c {
+		white-space: pre;
+	}
+
+Para más info, ejemplos y ver los posibles valores de la propiedad:
+
+	https://uniwebsidad.com/libros/css/capitulo-6/texto-2
+
+	https://www.w3schools.com/cssref/pr_text_white-space.asp
+
+	https://www.w3schools.com/cssref/playit.asp?filename=playcss_white-space
+_______________________________________________________
+
+	[4]. Colores:
+_______________________________________________________
+
+En CSS podemos usar las siguientes notaciones de colores:
+
+	/*Colores del Sistema*/
+	color: purple;
+
+	/*Colores Hexadecimales*/
+	color: #6753ca;
+
+	/*Colores RGB*/
+	color: rgb(255,225,107);
+
+	/*Colores RGBA*/
+	color: rgb(90,225,107, 0.7);
+_______________________________________________________
+
+	[5]. Fondos:
+_______________________________________________________
+
+El fondo solamente se visualiza en el área ocupada por el contenido y su relleno, ya que el color de los bordes se controla directamente desde los bordes y las zonas de los márgenes siempre son transparentes.
+
+Para definir el fondo en un elemento, disponemos de las siguientes propiedades:
+
+	background-color
+	background-image
+	background-repeat
+	background-attachment
+	background-position
+_______________________________________________________
+
+	[5.1]. background-color:
+_______________________________________________________
+
+Establece un color de fondo sólido, su valor por defecto es "transparent".
+
+	/*pág. con un color gris claro de fondo*/
+	body {
+	  background-color: #F5F5F5;
+	}
+_______________________________________________________
+
+	[5.2]. background-image:
+_______________________________________________________
+
+Establece una imagen de fondo para el elemento, su valor por defecto es "none".
+
+	body { background-image: url("imagenes/fondo.png"); }
+
+CSS permite establecer de forma simultánea un color y una imagen de fondo. En este caso, la imagen se muestra delante del color, por lo que solamente si la imagen contiene zonas transparentes es posible ver el color de fondo.
+
+Por defecto, la imagen se repite para que cubra todo el elemento.
+_______________________________________________________
+
+	[5.3]. background-repeat:
+_______________________________________________________
+
+Controla la forma en que se repiten las imágenes de fondo, su valor por defecto es "repeat".
+
+Sus posibles valores son: "repeat", "no-repeat", "repeat-x", "repeat-y".
+_______________________________________________________
+
+	[5.4]. background-position:
+_______________________________________________________
+
+Permite indicar la distancia que se desplaza la imagen de fondo respecto de su posición original situada en la esquina superior izquierda. 
+
+Su valor por defecto es "0% 0%" (desplazamiento horizontal desplazamiento vertical).
+
+Si solamente se indica un porcentaje o una medida, se considera que es el 	desplazamiento horizontal y al desplazamiento vertical se le asigna automáticamente el valor de 50%.
+
+Las palabras clave permitidas son equivalentes a algunos porcentajes significativos: top = 0%, left = 0%, center = 50%, bottom = 100%, right = 100%.
+
+Ejemplo: https://www.w3schools.com/cssref/playit.asp?filename=playcss_background-position
+_______________________________________________________
+
+	[5.5]. background-attachment:
+_______________________________________________________
+
+Especifica si la imagen de fondo debe desplazarse o ser fija (no se desplazará con el resto de la página):
+
+	body {
+	  background-image: url("img_tree.gif");
+	  background-repeat: no-repeat;
+	  background-attachment: fixed;
+	}
+_______________________________________________________
+
+	[5.6]. background - Shorthand:
+_______________________________________________________
+
+Permite especificar, color, imagen, repetición, attachment y posición en una sola línea:
+
+	body {
+	  background: #ffffff url("img_tree.png") no-repeat right top;
+	}
+_______________________________________________________
+
+	[5.7]. Doble imagen de Fondo:
+_______________________________________________________
+
+Con el siguiente código, podemos tener múltiples fondos, en este caso
+“linux.png” es una silueta que aparece encima del otro fondo.
+
+	body{
+		background-image:url(imgs/linux.png),url(imgs/textura.jpg);
+		background-repeat:no-repeat,repeat;
+		background-position:center,left top;
+		background-size:20% 25%;
+	}
+_______________________________________________________
+
+	[5.8]. background-size:
+_______________________________________________________
+
+Especifica el tamaño de una imagen de fondo con "auto" y en píxeles
+
+div {
+	background-image:url('w3css.gif');
+	background-repeat:no-repeat;
+	background-size:auto;
+}
+
+Hay tres sintaxis diferentes para la propiedad: 
+
+	1) palabras clave ("auto", "cover" and "contain").
+
+	2) un valor (establece el ancho de la imagen (la altura se convierte en "auto").
+
+	3) dos valores (primer valor: ancho de la imagen, segundo valor: altura)
+
+Ejemplos: https://www.w3schools.com/cssref/playit.asp?filename=playcss_background-size&preval=cover
+
+	"auto" --> Valor por defecto. La imagen de fondo se muestra en su tamaño original.
+
+	"cover" --> Cambia el tamaño de la imagen de fondo para cubrir todo el contenedor, incluso si tiene que estirar la imagen o cortar un poco uno de los bordes.
+
+	"contain" --> Cambia el tamaño de la imagen de fondo para asegurarse de que la imagen sea completamente visible.
+_______________________________________________________
+
+	[6]. Modelo de Cajas:
+_______________________________________________________
+
+Todos los elementos HTML se pueden considerar como cajas. En CSS, el término "modelo de caja" se usa cuando se habla de diseño y disposición.
+
+El modelo de cajas CSS es esencialmente un cuadro que envuelve cada elemento HTML. Consiste en: márgenes, bordes, relleno y el contenido real.
+
+	+---------------------------------------+
+	|				Margin					|
+	|	+-------------------------------+	|
+	|	|			Border					|
+	|	|	+-----------------------+	|	|
+	|	|	|		Padding			|	|	|
+	|	|	|	+---------------+	|	|	|
+	|	|	|	|	Contenido	|	|	|	|
+	|	|	|	+---------------+	|	|	|
+	|	|	|						|	|	|
+	|	|	+-----------------------+	|	|
+	|	|								|	|
+	|	+-------------------------------+	|
+	|										|
+	+---------------------------------------+
+
+Contenido: el contenido de la caja, donde aparecen el texto y las imágenes.
+
+Padding(Relleno): espacio transparente entre el contenido y el borde.
+
+Border(borde): línea que encierra completamente el contenido y su relleno.
+
+Margin(margen): separación transparente entre la caja y el resto de cajas adyacentes.
+
+	div {
+		background-color: lightgrey;
+		width: 300px;
+		border: 15px solid green;
+		padding: 50px;
+		margin: 20px;
+	}
+_______________________________________________________
+
+	[6.1]. Width y Height:
+_______________________________________________________
+
+Permiten establecer el ancho y alto del área de contenido.
+
+Se aplican a todos los elementos, salvo los elementos en línea que no sean imágenes y las filas de tabla.
+
+	- Width y Height no admiten valores negativos.
+	
+	- Si se indica un porcentaje, se calculan a partir de la anchura/altura de su elemento padre.
+	
+	- El valor inherit indica que la anchura/altura del elemento se hereda de su elemento padre.
+	
+	- El valor auto, indica que el navegador debe calcular automáticamente la anchura/altura del elemento, teniendo en cuenta sus contenidos y el sitio disponible en la página.
+
+Para calcular el tamaño completo de un elemento, también se debe agregar relleno, bordes y márgenes.
+
+	div {
+		width: 320px;
+		padding: 10px;
+		border: 5px solid gray;
+		margin: 0;
+	}
+
+El anterior div, tiene un ancho de 350px, que se calcula así:
+
+	320px (width)
+	+ 20px (left + right padding)
+	+ 10px (left + right border)
+	+ 0px (left + right margin)
+	= 350px
+
+Al poner porcentaje (%), tiene la ventaja que se adapta al tamaño de la ventana del navegador.
+
+	div{ 
+		width: 50%; height:200px; border:solid; 
+	}
+
+Con elementos como canvas o video, es mejor no usar el tamaño en css, ya que lo que haría es estirar el contenido.
+
+Para poder tener cajas que se les pueden modificar el tamaño(que aparecen unas líneas diagonales en la esquina inferior derecha) se usa la propiedad resize:
+
+	div{
+		width: 30px;
+		height:30px;
+		resize:both;
+		border:solid;
+	}
+_______________________________________________________
+
+	[6.2]. Margin:
+_______________________________________________________
+
+Las unidades más utilizadas para indicar los márgenes de un elemento son los píxeles (cuando se requiere una precisión total), los em (para hacer diseños que mantengan las proporciones) y los porcentajes (para hacer diseños líquidos o fluidos).
+
+	div img {
+		margin-top: .5em;
+		margin-bottom: .5em;
+		margin-left: 1em;
+		margin-right: .5em;
+	}
+
+Alternativa directa:
+
+	div img {
+		margin: .5em .5em .5m 1em;
+	}
+	
+Otra alternativa:
+
+	div img {
+		margin: .5em;
+		margin-left: 1em;
+	}
+
+Fusión de márgenes: Los márgenes superior e inferior de los elementos a veces se fusionan en un único margen que es igual al mayor de los dos márgenes.
+
+	h1 {
+		margin: 0 0 50px 0;
+	}
+
+	h2 {
+		margin: 20px 0 0 0;
+	}
+
+Como los márgenes se fusionan, la separación vertical de los dos elementos seria "50px" y no "70px"(20px + 50px).
+
+En el caso de un elemento que se encuentra en el interior de otro y sus márgenes se fusionan de forma automática, se puede evitar este comportamiento añadiendo un pequeño relleno (padding: 1px) o un borde (border: 1px solid transparent) al elemento contenedor.
+
+	div {
+		border: 1px solid transparent;
+		margin-top: 50px;
+	}
+
+	p.ex1 {
+		margin-top: 20px;
+	}
+
+El HTML es:
+
+	<div>
+		<p class="ex1">Yo soy Groot. Yo soy Groot. Yo soy Groot.</p>
+	</div>
+_______________________________________________________
+
+	[6.2.1]. Centrar Horizontalmente con Margin:
+_______________________________________________________
+
+Podemos centrar el contenido de una pág. horizontalmente con "margin: auto":
+
+	#contenido{
+		width: 800px;
+		margin: auto;
+		background-color:# c2c2c2;
+	}
+
+El HTML es:
+
+	<div>
+		This div will be horizontally centered because it has margin: auto;
+	</div>
+
+El elemento ocupará entonces el ancho especificado y el espacio restante se dividirá en partes iguales entre los márgenes izquierdo y derecho.
+_______________________________________________________
+
+	[6.3]. Padding:
+_______________________________________________________
+
+Se usa de forma muy similar a la propiedad "margin":
+
+	/* Todos los rellenos valen 2em */
+	body {padding: 2em}
+
+	/* Superior e inferior = 1em, 
+		Izquierdo y derecho = 2em */
+	body {padding: 1em 2em}
+
+	/*	Superior = 1em, 
+		derecho = 2em, 
+		inferior = 3em, 
+		izquierdo = 2em  
+	*/
+	body {padding: 1em 2em 3em}
+
+	/*	Superior = 1em,
+		derecho = 2em,
+		inferior = 3em,
+		izquierdo = 4em
+	*/
+	body {padding: 1em 2em 3em 4em}
+
+Cuando definimos el ancho o el alto de un elemento, la medida real del elemento se calcula junto con el padding:
+
+	div {
+		width: 300px;
+		padding: 25px;
+	}
+
+El anterior div, tiene un ancho de 350px. Para mantener el ancho a "300px", sin importar la cantidad de "padding", usamos la propiedad "box-sizing":
+
+	div {
+		width: 300px;
+		padding: 25px;
+		box-sizing: border-box;
+	}
+
+Esto hace que el elemento mantenga su ancho. Si aumenta el "padding", el espacio de contenido disponible disminuirá.
+_______________________________________________________
+
+	[6.4]. Border:
+_______________________________________________________
+
+CSS permite modificar el aspecto de cada uno de los cuatro bordes de la caja de un elemento. Para cada borde se puede establecer su anchura o grosor, su color y su estilo, por lo que en total CSS define 21 propiedades relacionadas con los bordes.
+
+	/*Ancho de los Bordes*/
+	div {
+		border-top-width: 10px;
+		border-right-width: 1em;
+		border-bottom-width: thick;
+		border-left-width: thin;
+	}
+
+	/*Color de los Bordes*/
+	div {
+		border-top-color: #CC0000;
+		border-right-color: blue;
+		border-bottom-color: #00FF00;
+		border-left-color: #CCC;
+	}
+
+	/*Estilo del Borde*/
+	div {
+		border-top-style: dashed;
+		border-right-style: double;
+		border-bottom-style: dotted;
+		border-left-style: solid;
+	}
+
+	/*Shorthand*/
+	p {
+		border: 5px solid red;
+	}
+
+	/*Bordes Redondeados*/
+	p.round {
+		border: 2px solid red;
+		border-radius: 12px;
+	}
+
+Para la propiedad "border-radius" se pueden indicar valores para cada esquina:
+
+	border-radius:esquinaSupIzq esquinaSupDer esquinaInfDer esquinaInfIzq;
+
+Si se indican diferentes valores para cada esquina, se puede tener una forma irregular, como por ejemplo la de una hoja:
+
+		border-radius:10px 100px 10px 100px;
+
+Esta propiedad es muy útil para hacer que una imagen cuadrada se vea redonda y con borde:
+
+		border-radius:50%;	
+
+Para más info de las propiedades de los bordes:
+
+	https://uniwebsidad.com/libros/css/capitulo-4/bordes
+
+	https://www.w3schools.com/css/css_border.asp
+_______________________________________________________
+
+	[7]. Posicionamiento:
+_______________________________________________________
+
+El estándar de CSS define los siguientes modelos diferentes para posicionar una caja:
+
+	- Posicionamiento normal o estático: se trata del posicionamiento que utilizan los navegadores si no se indica lo contrario.
+
+	- Posicionamiento relativo: variante del posicionamiento normal que consiste en posicionar una caja según el posicionamiento normal y después desplazarla respecto de su posición original.
+
+	- Posicionamiento absoluto: la posición de una caja se establece de forma absoluta respecto de su elemento contenedor y el resto de elementos de la página ignoran la nueva posición del elemento.
+
+	- Posicionamiento fijo: variante del posicionamiento absoluto que convierte una caja en un elemento inamovible, de forma que su posición en la pantalla siempre es la misma independientemente del resto de elementos e independientemente de si el usuario sube o baja la página en la ventana del navegador.
+
+	- Posicionamiento adhesivo: hace que un elemento se convierta en fijo, cuando llegue a determinada posición en el scroll.
+
+	- Posicionamiento flotante: se trata del modelo más especial de posicionamiento, ya que desplaza las cajas todo lo posible hacia la izquierda o hacia la derecha de la línea en la que se encuentran.
+_______________________________________________________
+
+	[7.1]. Position:
+_______________________________________________________
+
+Selecciona el posicionamiento con el que se mostrará el elemento. Su valor por defecto es "static" y puede tener los siguientes valores:
+
+	static
+	relative
+	fixed
+	absolute
+	sticky
+_______________________________________________________
+
+	[7.1.1]. static:
+_______________________________________________________
+
+Corresponde al posicionamiento normal o estático. Si se utiliza este valor, se ignoran los valores de las propiedades top, right, bottom y left.
+
+	div.static {
+		position: static;
+		border: 3px solid #73AD21;
+	}
+
+En este posicionamiento normal sólo se tiene en cuenta si el elemento es de bloque o en línea, sus propiedades width y height y su contenido.
+
+Si las cajas en línea ocupan más espacio del disponible en su propia línea, el resto de cajas se muestran en las líneas inferiores. Si las cajas en línea ocupan un espacio menor que su propia línea, se puede controlar la distribución de las cajas mediante la propiedad "text-align" para centrarlas, alinearlas a la derecha o justificarlas.
+_______________________________________________________
+
+	[7.1.2]. relative:
+_______________________________________________________
+
+Posicionamiento relativo. Desplaza la caja fuera de su posición normal. El desplazamiento se controla con las propiedades "top", "right", "bottom" y "left".
+
+"top", "right", "bottom", "left" --> Indican el desplazamiento horizontal y vertical del elemento respecto de su posición original.
+
+	"top" --> se emplea para mover las cajas de forma descendente.
+	
+	"bottom" --> mueve las cajas de forma ascendente.
+	
+	"left" --> se utiliza para desplazar las cajas hacia la derecha.
+	
+	"right" --> mueve las cajas hacia la izquierda.
+
+Si se utilizan valores negativos en las propiedades "top", "right", "bottom" y "left", su efecto es el inverso.
+
+Si tanto "left" como "right" tienen un valor de auto (valor por defecto) la caja no se mueve de su posición original. 
+
+Solo se puede usar "left" o "right, uno de los dos valores se tiene que ignorar porque son mutuamente excluyentes.
+
+	div.relative {
+		position: relative;
+		left: 30px;
+		border: 3px solid #73AD21;
+	}
+
+El desplazamiento relativo de una caja no afecta al resto de cajas adyacentes, que se muestran en la misma posición que si la caja desplazada no se hubiera movido de su posición original.
+
+	Posicionamiento normal:
+	+---------------------------------------+
+	|	+-------+  +-------+  +-------+		|
+	|	| Caja1 |  | Caja2 |  | Caja3 |		|
+	|	+-------+  +-------+  +-------+		|
+	|	+-------------------------------+	|
+	|	|			 Caja 4				|	|
+	|	+-------------------------------+	|
+	+---------------------------------------+
+
+	Posicionamiento relativo de la "Caja2":
+	+---------------------------------------+
+	|	+-------+  			  +-------+		|
+	|	| Caja1 |  			  | Caja3 |		|
+	|	+-------+  			+-------+-+		|
+	|	+-------------------| Caja2 |---+	|
+	|	|			 Caja 4	+-------+	|	|
+	|	+-------------------------------+	|
+	+---------------------------------------+
+_______________________________________________________
+
+	[7.1.3]. absolute:
+_______________________________________________________
+
+Posicionamiento absoluto. El desplazamiento de la caja también se controla con las propiedades top, right, bottom y left, pero su interpretación es mucho más compleja, ya que el origen de coordenadas del desplazamiento depende del posicionamiento de su elemento contenedor.
+
+Cuando una caja se posiciona de forma absoluta, el resto de elementos de la página se ven afectados y modifican su posición.
+
+	Posicionamiento normal:
+	+---------------------------------------+
+	|	+-------+  +-------+  +-------+		|
+	|	| Caja1 |  | Caja2 |  | Caja3 |		|
+	|	+-------+  +-------+  +-------+		|
+	|	+-------------------------------+	|
+	|	|			 Caja 4				|	|
+	|	+-------------------------------+	|
+	+---------------------------------------+
+
+	Posicionamiento absoluto de la "Caja2":
+	+---------------------------------------+
+	|	+-------+  +-------+  				|
+	|	| Caja1 |  | Caja3 |  				|
+	|	+-------+  +-------++-------+		|
+	|	+-------------------| Caja2 |---+	|
+	|	|			 Caja 4	+-------+	|	|
+	|	+-------------------------------+	|
+	+---------------------------------------+
+
+Un elemento con "position: absolute", se posiciona en relación con el ancestro posicionado más cercano(cuya posición es cualquier cosa menos estática).
+
+Sin embargo, si un elemento con "position: absolute" no tiene ancestros posicionados, la referencia es la ventana del navegador, que no debe confundirse con el elemento "body" de la página.
+
+	div.relative {
+		position: relative;
+		width: 400px;
+		height: 200px;
+		border: 3px solid #73AD21;
+	} 
+
+	div.absolute {
+		position: absolute;
+		top: 80px;
+		right: 0;
+		width: 200px;
+		height: 100px;
+		border: 3px solid #73AD21;
+	}
+
+El HTML es:
+
+	<div class="relative">This div element has position: relative;
+		<div class="absolute">This div element has position: absolute;</div>
+	</div>
+
+Nota: si se quiere posicionar un elemento de forma absoluta respecto de su elemento contenedor, es imprescindible posicionar este último. Para ello, sólo es necesario añadir la propiedad position: relative, por lo que no es obligatorio desplazar el elemento contenedor respecto de su posición original.
+
+Para más info del posicionamiento absoluto:
+
+	https://uniwebsidad.com/libros/css/capitulo-5/posicionamiento-absoluto
+_______________________________________________________
+
+	[7.1.4]. fixed:
+_______________________________________________________
+
+Posicionamiento fijo. Se posiciona en relación con la ventana gráfica(viewport), lo que significa que siempre permanece en el mismo lugar, incluso si se desplaza la página.
+
+Un elemento "fixed" no deja un espacio en la página donde normalmente se habría ubicado.
+
+	div.fixed {
+		position: fixed;
+		bottom: 0;
+		right: 0;
+		width: 300px;
+		border: 3px solid #73AD21;
+	}
+_______________________________________________________
+
+	[7.1.5]. sticky:
+_______________________________________________________
+
+Un elemento con "position: sticky"(adhesivo) se posiciona en función de la posición de desplazamiento del usuario.
+
+Un elemento adhesivo alterna entre relativo y fijo, dependiendo de la posición de desplazamiento. Se posiciona en forma relativa hasta que se alcanza una posición de desplazamiento determinada en la ventana gráfica, luego se "pega" en su lugar (como "position:fixed").
+
+	div.sticky {
+		position: sticky;
+		top: 0;
+		padding: 5px;
+		background-color: #cae8ca;
+		border: 2px solid #4CAF50;
+	}
+
+En este ejemplo, el elemento adhesivo se adhiere a la parte superior de la página ("top: 0"), cuando alcanza su posición de desplazamiento.
+
+Para más info del posicionamiento "sticky" y de los otros posicionamientos:
+
+	https://developer.mozilla.org/es/docs/Web/CSS/position
+_______________________________________________________
+
+	[7.1.6]. z-index:
+_______________________________________________________
+
+Cuando los elementos se posicionan, pueden superponerse a otros elementos.
+
+La propiedad "z-index" especifica el orden de apilamiento de un elemento (qué elemento debe colocarse delante o detrás de los demás).
+
+	img {
+		position: absolute;
+		left: 0px;
+		top: 0px;
+		z-index: -1;
+	}
+
+El HTML es:
+
+	<h1>This is a heading</h1>
+	<img src="w3css.gif" width="100" height="140">
+	<p>Como la imagen tiene un z-index de -1, aparecerá detrás del texto.</p>
+
+Un elemento con un orden de pila mayor siempre está delante de un elemento con un orden de pila menor.
+
+Si dos elementos posicionados se superponen sin un "z-index" especificado, el elemento colocado en último lugar en el código HTML se mostrará en la parte superior.
+
+Nota: La propiedad "z-index" sólo tiene efecto en los elementos posicionados, por lo que es obligatorio que la propiedad "z-index" vaya acompañada de la propiedad "position".
+_______________________________________________________
+
+	[7.2]. Float:
+_______________________________________________________
+
+Cuando una caja se posiciona con el modelo de posicionamiento flotante, automáticamente se convierte en una caja flotante, lo que significa que se desplaza hasta la zona más a la izquierda o más a la derecha de la posición en la que originalmente se encontraba.
+
+	Posicionamiento normal:
+	+-------------------------+
+	|	+-------+			  |
+	|	| Caja1 | 			  |
+	|	+-------+			  |
+	|	+-------+ 			  |
+	|	| Caja2 |  			  |
+	|	+-------+  			  |
+	|	+-------+  			  |
+	|	| Caja3 |			  |
+	|	+-------+  			  |
+	+-------------------------+
+
+	Posicionamiento "float: right" de la "Caja1":
+	+-------------------------+
+	|	+-------+	+-------+ |
+	|	| Caja2 | 	| Caja1 | |
+	|	+-------+	+-------+ |
+	|	+-------+ 			  |
+	|	| Caja3 |  			  |
+	|	+-------+  			  |
+	|			 			  |
+	|						  |
+	|			 			  |
+	+-------------------------+
+
+Cuando se posiciona una caja de forma flotante: 
+
+	- La caja deja de pertenecer al flujo normal de la página, lo que significa que el resto de cajas ocupan el lugar dejado por la caja flotante. 
+
+	- La caja flotante se posiciona lo más a la izquierda o lo más a la derecha posible de la posición en la que se encontraba originalmente.
+
+Si en el anterior ejemplo, se flota la "Caja1" a la izquierda, el resultado es que la caja 1 se muestra encima de la nueva posición de la caja 2 y tapa todos sus contenidos.
+
+Si existen otras cajas flotantes, al posicionar de forma flotante otra caja, se tiene en cuenta el sitio disponible. En el siguiente ejemplo se posicionan de forma flotante hacia la izquierda las tres cajas:
+
+	Posicionamiento "float: left" de las tres cajas:
+	+--------------------------------+
+	| +-------+ +-------+ +-------+  |
+	| | Caja1 | | Caja2 | | Caja3 |  |
+	| +-------+ +-------+ +-------+  |
+	| 			 					 |
+	|			 					 |
+	|			 					 |
+	+--------------------------------+
+
+Si no existe sitio en la línea actual, la caja flotante baja a la línea inferior hasta que encuentra el sitio necesario para mostrarse lo más a la izquierda o lo más a la derecha posible en esa nueva línea.
+
+Las cajas flotantes influyen en la disposición de todas las demás cajas. Los elementos en línea hacen sitio a las cajas flotantes adaptando su anchura al espacio libre dejado por la caja desplazada. Los elementos de bloque no les hacen sitio, pero sí que adaptan sus contenidos para que no se solapen con las cajas flotantes.
+
+	img {
+		float: right;
+		width: 170px;
+		height: 170px;
+		margin-left: 15px;
+	}
+
+El HTML es:
+
+	<p>
+		<img src="pineapple.jpg" alt="Pineapple" >
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum, nisi lorem egestas odio, vitae scelerisque enim ligula venenatis dolor. Maecenas nisl est, ultrices nec congue eget, auctor vitae massa. Fusce luctus vestibulum augue ut aliquet. Mauris ante ligula, facilisis sed ornare eu, lobortis in odio. Praesent convallis urna a lacus interdum ut hendrerit risus congue. Nunc sagittis dictum nisi, sed ullamcorper ipsum dignissim ac. In at libero sed nunc venenatis imperdiet sed ornare turpis. Donec vitae dui eget tellus gravida venenatis. Integer fringilla congue eros non fermentum. Sed dapibus pulvinar nibh tempor porta. Cras ac leo purus. Mauris quis diam velit.
+	</p>
+
+Uno de los principales motivos para la creación del posicionamiento float fue precisamente la posibilidad de colocar imágenes alrededor de las cuales fluye el texto.
+
+Para más info del posicionamiento flotante:
+
+	https://uniwebsidad.com/libros/css/capitulo-5/posicionamiento-flotante
+_______________________________________________________
+
+	[7.2.1]. clear:
+_______________________________________________________
+
+Permite modificar el comportamiento por defecto del posicionamiento flotante para forzar a un elemento a mostrarse debajo de cualquier caja flotante.
+
+	Posicionamiento "float" de la imagen:
+	+--------------------------------+
+	| +-------+-------------------+  |
+	| | Caja1 | TextoTextoTextoTex|  |
+	| |   	  | oTextoTextoTextoTe|  |
+	| | float |-------------------+	 |
+	| | :left |+------------------+	 |
+	| +-------+TextoTextoTextoText|  |
+	| |oTextoTextoTextoTextoTextoT|	 |
+	| +---------------------------+  |
+	|			 					 |
+	+--------------------------------+
+
+	Párrafo con "clear:left":
+	+--------------------------------+
+	| +-------+-------------------+  |
+	| | Caja1 | TextoTextoTextoTex|  |
+	| |   	  | oTextoTextoTextoTe|  |
+	| | float |-------------------+	 |
+	| | :left |						 |
+	| +-------+					     |
+	| +---------------------------+	 |
+	| |oTextoTextoTextoTextoTextoT|  |
+	| +---------------------------+  |
+	|			 					 |
+	+--------------------------------+
+
+Los valores de clear, pueden ser:
+
+	"left" --> el elemento se desplaza de forma descendente hasta que pueda colocarse en una línea en la que no haya ninguna caja flotante en el lado izquierdo.
+
+	La especificación oficial de CSS explica este comportamiento como "un desplazamiento descendente hasta que el borde superior del elemento esté por debajo del borde inferior de cualquier elemento flotante hacia la izquierda".
+
+	"right" --> el comportamiento es similar, salvo que en este caso se tienen en cuenta los elementos desplazados hacia la derecha.
+
+	"both" --> despeja los lados izquierdo y derecho del elemento, ya que desplaza el elemento de forma descendente hasta que el borde superior se encuentre por debajo del borde inferior de cualquier elemento flotante hacia la izquierda o hacia la derecha.
+
+Al despejar "floats", se debe hacer coincidir el despeje con el "float": si un elemento flota a la izquierda, entonces se debe despejar a la izquierda. El elemento flotante continuará flotando, pero el elemento con "clear" aparecerá debajo de él en la página web.
+
+Ejemplo de uso de "clear":
+
+	#paginacion {
+		border: 1px solid #CCC;
+		background-color: #E0E0E0;
+		padding: .5em;
+	}
+
+	.derecha   { float: right; }
+	.izquierda { float: left;  }
+
+El HTML es:
+
+	<div id="paginacion">
+		<span class="izquierda">&laquo; Anterior</span>
+		<span class="derecha">Siguiente &raquo;</span>
+	</div>
+
+Los elementos "Anterior" y "Siguiente" se salen de su elemento contenedor y el resultado es visualmente incorrecto. 
+
+El motivo de este comportamiento es que un elemento posicionado de forma flotante ya no pertenece al flujo normal de la página HTML. Por tanto, el elemento <div id="paginacion"> en realidad no encierra ningún contenido.
+
+Una de las soluciones es agregar un div sin contenido, y darle un estilo "clear:both":
+
+	div.clear {
+		clear: both;
+	}
+
+El HTML es:
+
+	<div id="paginacion">
+		<span class="izquierda">&laquo; Anterior</span>
+		<span class="derecha">Siguiente &raquo;</span>
+		<div class="clear"></div>
+	</div>
+
+Otra forma de resolver el mismo problema es con la propiedad "overflow" sobre el elemento contenedor:
+
+	#paginacion {
+	  border: 1px solid #CCC;
+	  background-color: #E0E0E0;
+	  padding: .5em;
+	  overflow: hidden;
+	}
+
+	.derecha   { float: right; }
+	.izquierda { float: left;  }
+_______________________________________________________
+
+	[7.3]. Visualización:
+_______________________________________________________
+
+Para controlar la visualización de los elementos se usan las siguientes propiedades: "display", "visibility", "overflow" y "z-index".
+_______________________________________________________
+
+	[7.3.1]. display:
+_______________________________________________________
+
+Permite controlar la forma de visualizar un elemento e incluso ocultarlo completamente, haciendo que desaparezca de la página. Como el elemento oculto no se muestra, el resto de elementos de la página se mueven para ocupar su lugar.
+
+Su valor por defecto es inline, y puede tener los siguientes valores: inline | block | none | list-item | run-in | inline-block | table | inline-table | table-row-group | table-header-group | table-footer-group | table-row | table-column-group | table-column | table-cell | table-caption | inherit.
+
+Los valores más utilizados son "inline", "block" y "none".
+
+	"inline" --> Muestra un elemento como un elemento en línea (como <span>). Las propiedades de alto y ancho no tendrán efecto.
+
+	"block" --> Muestra un elemento como un elemento de bloque (como <p>). Comienza en una nueva línea y ocupa todo el ancho.
+
+	"none" --> oculta un elemento y hace que desaparezca de la página. El resto de elementos de la página se visualizan como si no existiera el elemento oculto, es decir, pueden ocupar el espacio en el que se debería visualizar el elemento.
+
+	"inline-block" --> Muestra un elemento como un contenedor de bloque de nivel en línea. El elemento en sí está formateado como un elemento en línea, pero puede aplicar valores de alto y ancho.
+
+Para ver más valores de la propiedad "display":
+
+	https://www.w3schools.com/cssref/pr_class_display.asp
+
+Nota: Establecer la propiedad "display" de un elemento solo cambia la forma en que se muestra el elemento, NO qué tipo de elemento es. Entonces, un elemento en línea con "display: block" no se le permite tener otros elementos de bloque dentro de él.
+
+	a {
+		display: block;
+	}
+_______________________________________________________
+
+	[7.3.2]. visibility:
+_______________________________________________________
+
+Permite hacer visibles e invisibles a los elementos.
+
+Su valor por defecto es "visible", y puede tener los siguientes valores:
+
+	"hidden" --> es posible convertir una caja en invisible para que no muestre sus contenidos. El resto de elementos de la página se muestran como si la caja todavía fuera visible, por lo que en el lugar donde originalmente se mostraba la caja invisible, ahora se muestra un hueco vacío.
+
+	"collapse" --> Solo para filas de tabla (<tr>), grupos de filas (<tbody>), columnas (<col>), grupos de columnas (<colgroup>). Su efecto es similar al de la propiedad "display", ya que oculta completamente la fila y/o columna y se pueden mostrar otros contenidos en ese lugar. Si se utiliza el valor "collapse" sobre cualquier otro tipo de elemento, su efecto es idéntico al valor "hidden".
+
+	h1.hidden {
+		visibility: hidden;
+	}
+_______________________________________________________
+
+	[7.3.3]. overflow:
+_______________________________________________________
+
+Controla lo que sucede con el contenido que es demasiado grande para caber en un área (el contenido que se desborda).
+
+Se aplica a elementos de bloque y celdas de tablas.
+
+Su valor por defecto es "visible" y puede tener los siguientes valores:
+
+	"visible" --> el contenido no se corta y se muestra sobresaliendo la zona reservada para visualizar el elemento.
+
+	"hidden" --> el contenido sobrante se oculta y sólo se visualiza la parte del contenido que cabe dentro de la zona reservada para el elemento.
+
+	"scroll" --> solamente se visualiza el contenido que cabe dentro de la zona reservada para el elemento, pero también se muestran barras de scroll que permiten visualizar el resto del contenido.
+
+	"auto" --> Similar a "scroll", pero agrega barras de desplazamiento solo cuando es necesario.
+
+Nota: La propiedad de desbordamiento solo funciona para elementos de bloque con una altura especificada.
+
+Para más info de la propiedad "overflow":
+
+	https://uniwebsidad.com/libros/css/capitulo-5/visualizacion
+
+	https://www.w3schools.com/css/css_overflow.asp
+_______________________________________________________
+
+	[7.3.4]. Hack clearfix (de Desbordamiento):
+_______________________________________________________
+
+Si un elemento es más alto que el elemento que lo contiene y está flotando, se "desbordará" fuera de su contenedor:
+
+	div {
+		border: 3px solid #4CAF50;
+		padding: 5px;
+	}
+
+	.img1 {
+		float: right;
+	}
+
+	.clearfix {
+		overflow: auto;
+	}
+
+El HTML es:
+
+	<div class="clearfix">
+		<img class="img1" src="pineapple.jpg" alt="Pineapple" width="170" height="170">
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum...
+	</div>
+
+Con "overflow: auto" funciona bien siempre que pueda mantener el control de sus márgenes y relleno (de lo contrario, puede ver barras de desplazamiento). 
+
+Sin embargo, el nuevo y moderno hack de clearfix es más seguro de usar:
+
+	div {
+		border: 3px solid #4CAF50;
+		padding: 5px;
+	}
+
+	.img1 {
+		float: right;
+	}
+
+	.clearfix::after {
+		content: "";
+		clear: both;
+		display: table;
+	}
+
+El HTML es:
+
+	<div class="clearfix">
+		<img class="img1" src="pineapple.jpg" alt="Pineapple" width="170" height="170">
+		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus imperdiet, nulla et dictum interdum...
+	</div>
+_______________________________________________________
+
+	[7.4]. Flexbox:
+_______________________________________________________
+
+Nos permite distribuir varios elementos de bloque(cajas) de forma flexible y adaptable(responsive), sin usar "float" o "position". Para usar flexbox, debemos tener un contenedor.
+
+Tenemos el siguiente codigo html:
+
+	<h1>Aprendiendo Flexbox</h1>
+	<div class="Container">
+		<div class="caja red">Caja 1</div>
+		<div class="caja green">Caja 2</div>
+		<div class="caja blue">Caja 3</div>
+		<div class="caja orange">Caja 4</div>
+		<div class="caja pink">Caja 5</div>
+		<div class="caja turquoise">Caja 6</div>
+	</div>
+	<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus eligendi aut, dignissimos ipsa saepe tenetur.</p>
+
+Y le indicamos los siguientes estilos:
+
+	.Container{
+		border: 3px solid black;
+		padding: 5px;
+	}
+
+	.caja{
+		margin: 10px;
+		padding: 20px;
+		background-color: gray;
+		border: 4px solid #222;
+		color: white;
+		font-size: 20px;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	.red{
+		background-color: red;
+	}
+	.green{
+		background-color: green;
+	}
+	.blue{
+		background-color: blue;
+	}
+	.orange{
+		background-color: orange;
+	}
+	.pink{
+		background-color: pink;
+	}
+	.turquoise{
+		background-color: turquoise;
+	}
+
+En el navegador podemos ver las cajas así:
+
+	+-------------------+
+	|+----------------+	|
+	||     Caja 1     |	|
+	|+----------------+	|
+	|+----------------+	|
+	||     Caja 2     |	|
+	|+----------------+	|
+	|+----------------+	|
+	||     Caja 3     |	|
+	|+----------------+	|
+	+-------------------+
+
+Tanto el contenedor como las cajas internas son elementos de bloque que ocupan todo el ancho disponible.
+
+Flexbox está diseñado para crear estructuras de una sola dimensión. Los elementos del esquema flexbox son:
+
+											|
+	+---------------------------------------|-------+
+	|			Contenedor flex 			|		|
+	|	+--------+	+--------+	+--------+	|		|
+	|	| item   |	| 		 |	|		 |	|		|
+----|---| flex   |--| 		 |--| 		 |--|-------|--------Eje principal
+	|	+--------+	+--------+	+--------+	|		|
+	+---------------------------------------|-------+
+											|
+											|
+										Eje secundario
+
+
+Contenedor: Existe un elemento padre que es el contenedor que tendrá en su interior cada uno de los ítems flexibles y adaptables.
+
+	Eje principal: Los contenedores flexibles tendrán una orientación principal específica. Por defecto, es en horizontal (fila).
+
+	Eje secundario: De la misma forma, los contenedores flexibles tendrán una orientación secundaria, perpendicular a la principal. Si la principal es en horizontal, la secundaria será en vertical, y viceversa.
+	
+Ítem: Cada uno de los hijos flexibles que tendrá el contenedor en su interior.
+_______________________________________________________
+
+	[7.4.1]. Display Flex / inline-flex:
+_______________________________________________________
+
+Al indicar la propiedad "display: flex;" al contenedor de las cajas:
+
+	.Container{
+		border: 3px solid black;
+		padding: 5px;
+		display: flex;
+	}
+
+Podemos observar que las cajas interiores se comportan como si se les hubiera aplicado la propiedad "float: left;", pero con la ventaja que no se rompe el modelo de cajas(por lo tanto no hay solapamiento, ni hay que aplicar el hack clearfix).
+
+	+-----------------------------------------------+
+	|	+--------+	+--------+	+--------+			|
+	|	| Caja 1 |	| Caja 2 |	| Caja 3 |			|
+	|	+--------+	+--------+	+--------+			|
+	+-----------------------------------------------+
+
+El contenedor sigue ocupando todo el ancho disponible, pero las cajas interiores ocupan solo el ancho de sus contenidos(incluyendo padding).
+
+Si indicamos la propiedad "display: inline-flex;" al contenedor de las cajas:
+
+	.Container{
+		border: 3px solid black;
+		padding: 5px;
+		display: inline-flex;
+	}
+
+	+----------------------------------------+
+	|	+--------+	+--------+	+--------+	 |
+	|	| Caja 1 |	| Caja 2 |	| Caja 3 |	 |
+	|	+--------+	+--------+	+--------+	 |
+	+----------------------------------------+
+
+El contenedor de las cajas, se comporta como un elemento de "bloque en línea" (inline-block), y ocupa solo el tamaño de sus contenidos(incluyendo padding).
+
+El contenedor de las cajas(contenedor flex), se le pueden dar las siguientes propiedades:
+
+	flex-direction
+	flex-wrap
+	flex-flow
+	justify-content
+	align-items
+	align-content
+
+Las propiedades para las cajas(elementos flex) son:
+
+	order
+	flex-grow
+	flex-shrink
+	flex-basis
+	flex
+	align-self
+
+Nota1: las propiedades "float", "clear", "vertical-align", NO tienen efecto en un elemento flex.
+
+Nota2: para más info de las propiedades de flexbox:
+
+	https://lenguajecss.com/p/css/propiedades/flexbox
+
+	https://www.w3schools.com/css/css3_flexbox.asp
+
+	https://github.com/landinezrichard/CSS3_Flexbox/blob/master/preview.png
+
+	https://css-tricks.com/snippets/css/a-guide-to-flexbox/
+
+_______________________________________________________
+
+	[7.4.2]. Dirección de los ejes / flex-direction:
+_______________________________________________________
+
+La propiedad "flex-direction" define en qué dirección quiere el contenedor apilar las cajas(elementos flex). Cambia la orientación del eje principal.
+
+	.Container{
+		border: 3px solid black;
+		padding: 5px;
+		display: inline-flex;
+		flex-direction: column;
+	}
+
+Por defecto trae el valor "row"(fila), pero se le puede indicar "column"(columna), "row-reverse"(fila invertida) y "column-reverse"(columna invertida).
+
+Al aplicar "flex-direction: column-reverse;", se vería así:
+
+	+-------------------+
+	|	+----------+	|
+	|	|  Caja 3  |	|
+	|	+----------+	|
+	|	+----------+	|
+	|	|  Caja 2  |	|
+	|	+----------+	|
+	|	+----------+	|
+	|	|  Caja 1  |	|
+	|	+----------+	|
+	+-------------------+
+_______________________________________________________
+
+	[7.4.3]. Envolver / flex-wrap:
+_______________________________________________________
+
+La propiedad "flex-wrap" especifica si el contenedor de las cajas(elementos flex) debería envolverlos(ajustarlos) o no. Evita o permite el desbordamiento (multilínea). 
+
+Se usa cuando el número de cajas internas no caben en el ancho del contenedor(hay un desbordamiento y se salen las cajas).
+
+	+----------------------------------------+
+	|	+--------+	+--------+	+--------+	+--------+
+	|	| Caja 1 |	| Caja 2 |	| Caja 3 |	| Caja 4 | 
+	|	+--------+	+--------+	+--------+	+--------+
+	+----------------------------------------+
+
+Para solucionar ese desbordamiento de contenido usamos la propiedad "flex-wrap: wrap;":
+
+	.Container{
+		border: 3px solid black;
+		padding: 5px;
+		display: inline-flex;
+		flex-direction: column;
+		flex-wrap: wrap;
+	}
+
+Se vería así:
+
+	+----------------------------------------+
+	|	+--------+	+--------+	+--------+	 |
+	|	| Caja 1 |	| Caja 2 |	| Caja 3 |	 |
+	|	+--------+	+--------+	+--------+	 |
+	|	+--------+							 |
+	|	| Caja 4 |							 |
+	|	+--------+							 |
+	+----------------------------------------+
+
+Por defecto, la propiedad "flex-wrap", tiene el valor de "nowrap"(no envolver), y también se le puede dar el valor de "wrap-reverse":
+
+	+----------------------------------------+
+	|	+--------+							 |
+	|	| Caja 4 |							 |
+	|	+--------+							 |
+	|	+--------+	+--------+	+--------+	 |
+	|	| Caja 1 |	| Caja 2 |	| Caja 3 |	 |
+	|	+--------+	+--------+	+--------+	 |
+	+----------------------------------------+
+_______________________________________________________
+
+	[7.4.4]. Shorthand / flex-flow:
+_______________________________________________________
+
+Propiedad shorthand para establecer la dirección(flex-direction)y ajuste(flex-wrap) en una sola línea:
+
+	.Container{
+		border: 3px solid black;
+		padding: 5px;
+		display: inline-flex;
+		flex-flow: row wrap;
+	}
+_______________________________________________________
+
+	[7.4.5]. Alineación de ítems:
+_______________________________________________________
+
+Para alinear las cajas o ítems flex, disponemos de 4 propiedades:
+
+	- justify-content: Actúa sobre el Eje principal(horizontal por defecto).
+
+	- align-content: Actúa sobre el	Eje principal(horizontal por defecto). Alinea varias filas.
+
+	- align-items: Actúa sobre el Eje secundario(vertical por defecto).
+
+	- align-self: Actúa sobre el Eje secundario(vertical por defecto).
+
+La primera(justify-content) y la tercera propiedad(align-items), son las más importantes (las otras dos son casos particulares).
+_______________________________________________________
+
+	[7.4.5.1]. Alineación horizontal / justify-content:
+_______________________________________________________
+
+Para alinear las cajas horizontalmente usamos la propiedad "justify-content". Ayuda a distribuir el espacio libre adicional sobrante cuando todos los elementos flexibles en una línea son inflexibles o son flexibles, pero han alcanzado su tamaño máximo.
+
+	.Container{
+		border: 3px solid black;
+		padding: 5px;
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: center;
+	}
+
+Su valor por defecto es "flex-start", y puede tener los valores: 
+
+	"flex-start"	--> por defecto. Agrupa los ítems al principio del eje principal.
+
+	"flex-end"		--> Agrupa los ítems al final del eje principal.
+
+	"center"		--> Agrupa los ítems al centro del eje principal.
+
+	"space-around"	--> alinea las cajas con espacio antes, entre y después de las líneas(espacio antes de la primera caja, entre las cajas, y después de la última caja). Tenga en cuenta que visualmente los espacios no son iguales, el primer elemento tendrá una unidad de espacio contra el borde del contenedor, pero dos unidades de espacio entre el siguiente elemento porque el siguiente elemento tiene su propio espacio que se aplica.
+
+	"space-between"	--> Distribuye los ítems dejando el mismo espacio entre ellos (elimina el espacio antes de la primera y última caja).
+
+	"space-evenly"	--> distribuye el espacio entre ítems de manera uniforme. Es similar a "space-around" pero proporciona espacio igual en lugar de medio tamaño en los bordes. Se puede usar tanto en CSS flexbox como en grid.
+_______________________________________________________
+
+	[7.4.5.2]. Alineación vertical / align-items:
+_______________________________________________________
+
+Para alinear las cajas en el eje secundario del contenedor(verticalmente) usamos "align-items".
+
+	.Container{
+		border: 3px solid black;
+		padding: 5px;
+		height: 500px;
+		display: flex;
+		flex-flow: row wrap;
+		justify-content: center;
+		align-items: center;
+	}
+
+Nota: se le dio un "height: 500px;" al contenedor, para ver el efecto de la propiedad "align-items".
+
+Su valor por defecto es "stretch", y puede tener los siguientes valores:
+
+	"flex-start"	--> Alinea los ítems al principio del eje secundario.
+
+	"flex-end"		--> Alinea los ítems al final del eje secundario.
+
+	"center"		--> alinea al centro.
+
+	"baseline"		--> Alinea los ítems en el contenedor con respecto al texto de los ítems.
+
+	"stretch"		--> hace que los ítems ocupen el alto del contenedor(estira las cajas).
+_______________________________________________________
+
+	[7.4.5.3]. Alineación de varias filas / align-content:
+_______________________________________________________
+
+Alinea las filas de un contenedor flexible cuando hay espacio adicional vertical, similar a la propiedad "justify-content", pero en vertical.
+
+Nota: esta propiedad no tiene efecto cuando solo hay una línea de elementos flexibles.
+
+	.Container{
+		border: 3px solid black;
+		padding: 5px;
+		width: 500px;
+		height: 700px;
+		display: flex;
+		flex-flow: row wrap;
+		align-content: space-between;
+	}
+
+Nota: se le dio al contenedor un "width: 500px;" para crear 2 filas con las seis cajas, y también se le dio un "height: 700px;" para observar el comportamiento de la propiedad "align-content".
+
+El valor por defecto de la propiedad es "stretch", y puede tener los siguientes valores:
+
+	"flex-start"	--> alinea todas las filas al principio del contenedor.
+
+	"flex-end"		--> alinea al final del contenedor.
+
+	"center"		--> alinea en la mitad del contenedor.
+
+	"stretch"		--> por defecto, estira las cajas(verticalmente) para ocupar el espacio restante.
+
+	"space-around"	--> muestra las filas con espacio antes, entre y después de ellas.
+
+	"space-between"	--> muestra las filas con espacio entre ellas(las filas se van hacia los extremos arriba y abajo del contenedor).La primera fila está al comienzo del contenedor mientras que la última está al final.
+
+	"space-evenly"	--> distribuye el espacio entre filas de manera uniforme. Es similar a "space-around" pero proporciona espacio igual en lugar de medio tamaño en los extremos.
+_______________________________________________________
+
+	[7.4.6]. CENTRADO PERFECTO:
+_______________________________________________________
+
+En el siguiente ejemplo resolveremos un problema de estilo muy común: centrado perfecto.
+
+Tenemos el siguiente código HTML:
+
+	<div class="Container">
+		<div class="caja">Caja</div>
+	</div>
+
+Le damos los siguientes estilos:
+
+	.Container {
+		height: 300px;
+		background-color: DodgerBlue;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.caja {
+		background-color: #f1f1f1;
+		text-align: center;
+		width: 100px;
+		height: 100px;
+	}
+
+Logramos centrar la caja de forma horizontal y vertical con las propiedades "justify-content: center;" y "align-items: center;".
+_______________________________________________________
+
+	[7.4.7]. order:
+_______________________________________________________
+
+Controla el orden en el que se muestra cada caja(elemento flex), su valor por defecto es 0:
+
+	.Container{
+		border: 3px solid black;
+		padding: 5px;
+		display: inline-flex;
+		flex-flow: row wrap;
+	}
+
+	.caja{
+		margin: 10px;
+		padding: 20px;
+		background-color: gray;
+		border: 4px solid #222;
+		color: white;
+		font-size: 20px;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	.red{
+		background-color: red;
+		order: 4;
+	}
+	.green{
+		background-color: green;
+	}
+	.blue{
+		background-color: blue;
+		order: 2;
+	}
+	.orange{
+		background-color: orange;
+		order: 3;
+	}
+	.pink{
+		background-color: pink;
+		order: 1;
+	}
+	.turquoise{
+		background-color: turquoise;
+		order: 5;
+	}
+
+Se verían en el siguiente orden:
+
++---------------------------------------------------------------------------+
+|	+--------+	+--------+	+--------+	+--------+	+--------+	+--------+	|
+|	| Caja 2 |	| Caja 5 |	| Caja 3 |	| Caja 4 | 	| Caja 1 |	| Caja 6 |	|
+|	+--------+	+--------+	+--------+	+--------+	+--------+	+--------+	|
++---------------------------------------------------------------------------+
+
+Nota: la "Caja 2"(green), no se le indico ningún orden, y se ve de primeras.
+_______________________________________________________
+
+	[7.4.8]. flex-grow:
+_______________________________________________________
+
+Especifica cuánto crecerá una caja(elemento flex) en relación con el resto de los elementos flexibles. Se usa para que las cajas crezcan(si tienen espacio disponible en el contenedor).
+
+Si todos los ítems tienen "flex-grow: 1", el espacio restante en el contenedor se distribuirá por igual a todas las cajas. Si una de las cajas tiene un valor de 2, ocuparía el doble de espacio que los demás (o al menos lo intentará).
+
+	.red{
+		background-color: red;
+		flex-grow: 1;
+	}
+	.green{
+		background-color: green;
+	}
+	.blue{
+		background-color: blue;
+	}
+	.orange{
+		background-color: orange;
+		flex-grow: 8;
+	}
+	.pink{
+		background-color: pink;
+	}
+	.turquoise{
+		background-color: turquoise;
+	}
+
+Se verían así:
+
++---------------------------------------------------------------------------+
+| +-----------+ +------+ +------+ +---------------------+ +------+ +------+	|
+| |   Caja 1  | |Caja 2| |Caja 3| |		  Caja 4		| |Caja 5| |Caja 6|	|
+| +-----------+ +------+ +------+ +---------------------+ +------+ +------+	|
++---------------------------------------------------------------------------+
+
+La "Caja 1" crece una vez más que los otros elementos, y la "Caja 4" crece 8 veces más que las demás.
+
+Su valor por defecto es 0.
+
+Nota: para ver el crecimiento de las cajas, su contenedor debe tener "display: flex;" (para que tenga espacio disponible), o un ancho o alto definidos.
+_______________________________________________________
+
+	[7.4.9]. flex-shrink:
+_______________________________________________________
+
+Especifica cuánto se reducirá una caja(elemento flex) en relación con el resto de los elementos flexibles.
+
+	.Container{
+		border: 3px solid black;
+		padding: 5px;
+		display: flex;
+		flex-flow: row nowrap;
+	}
+
+	.caja{
+		width: 300px;
+		margin: 10px;
+		padding: 20px;
+		background-color: gray;
+		border: 4px solid #222;
+		color: white;
+		font-size: 20px;
+		font-weight: bold;
+		text-align: center;
+	}
+
+	.green{
+		background-color: green;
+		flex-shrink: 2;
+	}
+
+Al redimensionar la ventana del navegador y hacerla más pequeña, se puede ver como las cajas se reparten el espacio disponible, y a medida que se disminuye el espacio, la "caja green" disminuye también.
+
+Su valor por defecto es 1.
+
+Nota: para que esta propiedad funcione, es necesario que cada caja tenga un ancho fijo, o que todos los demás elementos flex tengan un "flex-grow" definido.
+_______________________________________________________
+
+	[7.4.10]. flex-basis:
+_______________________________________________________
+
+Define el tamaño predeterminado de una caja(elemento flex) antes de que se distribuya el espacio restante.
+
+	.orange{
+		background-color: orange;
+		flex-basis: 400px;
+	}
+
+Por defecto su valor es "auto".
+_______________________________________________________
+
+	[7.4.11]. Shorthand / flex:
+_______________________________________________________
+
+Propiedad abreviada para usar "flex-grow", "flex-shrink", y "flex-basis", en una sola línea.
+
+	.orange{
+		background-color: orange;
+		flex: 0 0 200px;
+	}
+
+El segundo y tercer parámetro("flex-shrink", y "flex-basis") son opcionales. Recordar que los valores por defecto de las 3 propiedades son: "0 1 auto".
+
+Se recomienda usar esta propiedad en vez de las propiedades individuales, ya que está shorthand establece los otros valores de forma inteligente.
+_______________________________________________________
+
+	[7.4.12]. align-self:
+_______________________________________________________
+
+La propiedad "align-self" especifica la alineación vertical para el elemento seleccionado dentro del contenedor flexible. Es igual a la propiedad del contenedor "align-items", pero está se usa para alinear una sola caja.
+
+La propiedad "align-self" anula la alineación predeterminada establecida por la propiedad "align-items" del contenedor.
+
+	.Container{
+		border: 3px solid black;
+		padding: 5px;
+		height: 700px;
+		display: flex;
+		flex-flow: row wrap;
+		align-items: center;
+	}
+
+	.pink{
+		background-color: pink;
+		align-self: flex-end;
+	}
+
++---------------------------------------------------------------------------+
+|																			|
+|																			|
+|																			|
+|																			|
+|	+--------+	+--------+	+--------+	+--------+				+--------+	|
+|	| Caja 1 |	| Caja 2 |	| Caja 3 |	| Caja 4 | 				| Caja 6 |	|
+|	+--------+	+--------+	+--------+	+--------+				+--------+	|
+|																			|
+|													+--------+				|
+|													| Caja 5 | 				|
+|													+--------+				|
++---------------------------------------------------------------------------+
+
+Su valor por defecto es "stretch", y puede tener los siguientes valores:
+
+	"flex-start"	--> alinea hacia arriba del contenedor.
+
+	"flex-end"		--> alinea hacia abajo del contenedor.
+
+	"center"		--> alinea al centro.
+
+	"baseline"		--> alinea con respecto al texto de los ítems.
+
+	"stretch"		--> hace que los ítems ocupen el alto del contenedor(estira las cajas).
+
+	"auto"			-->	Hereda el valor de "align-items" del padre (o si no lo tiene, stretch).
+_______________________________________________________
+
+	[7.5]. Grid Layout:
+_______________________________________________________
+
+Grid Layout o Diseño de cuadrícula.
+
+El módulo de diseño de cuadrícula CSS ofrece un sistema de diseño basado en cuadrícula, con filas y columnas, lo que facilita el diseño de páginas web sin tener que usar flotantes y posicionamiento(position).
+_______________________________________________________
+
+	[7.5.1]. Display Grid / inline-grid:
+_______________________________________________________
+
+Para tener un Grid Layout, se necesita un contendor, con la propiedad "display: grid;" o "display: inline-grid;":
+
+	.Container{
+		display: grid;
+		border: 3px solid black;
+	}
+
+Los hijos directos del contenedor grid, automáticamente se convierten en grid ítems.
+
+Nota1: Usamos el código HTML y CSS básico usado en Flexbox(sección [7.4.1]).
+
+Nota2: Si se usa "display: inline-grid;", el contenedor se comporta como si fuera un elemento "inline-block".
+
+Las propiedades para los contenedores grid son:
+
+	- display: grid/inline-grid
+
+	- grid-gap___grid-column-gap
+			  |__grid-row-gap
+
+	- grid-template-columns
+
+	- grid-template-rows
+
+	- justify-items
+
+	- align-items
+
+	- justify-content
+
+	- align-content
+
+	- grid-template-areas
+
+	- grid-auto-columns
+
+	- grid-auto-rows
+
+	- grid-auto-flow
+
+Las propiedades para los ítems grid son:
+	
+	- grid-column___grid-column-start
+				 |__grid-column-end
+
+	- grid-row___grid-row-start
+			  |__grid-row-end
+
+	- justify-self
+
+	- align-self
+
+	- grid-area
+
+Nota: para más info del grid layout:
+
+	https://www.w3schools.com/css/css_grid.asp
+
+	https://lenguajecss.com/p/css/propiedades/grid-css#disqus_thread
+	
+_______________________________________________________
+
+	[7.5.2]. Grid Gap(espacio entre celdas):
+_______________________________________________________
+
+Los espacios entre cada columna/fila se llaman gaps(huecos). Son como los márgenes de separación entre las cajas(grid ítems).
+
+	
+		| columna  |
+	+---------------------------------------------------+
+	|	|		   |			   |	|				|
+----|---+----------+	+----------+	+----------+	|
+fila|	|  Caja 1  |	|  Caja 2  |	|  Caja 3  |	|
+----|---+----------+----+----------+----+----------+----|----------
+	|							   |	|				| row gap
+	|---+----------+----+----------+----+----------+----|----------
+	|	|  Caja 4  |	|  Caja 5  |	|  Caja 6  |	|
+	|	+----------+	+----------+	+----------+	|
+	|							   |	|				|
+	+---------------------------------------------------+
+								   |col.|				
+								   |gap |
+
+
+Los gaps, los podemos ajustar con las siguientes propiedades:
+
+	- grid-column-gap --> obsoleta, usar column-gap
+	- grid-row-gap --> --> obsoleta, usar row-gap
+	- grid-gap
+
+Estas propiedades se aplican en el contenedor grid:
+
+	.Container{
+		display: grid;
+		grid-column-gap: 10px;
+	}
+
+La propiedad "grid-gap" es un shorthand de las otras propiedades:
+
+	.Container{
+		display: grid;
+		grid-gap: 50px 10px;
+	}
+
+Los "50px" corresponden a "grid-row-gap" y los "10px" a "grid-column-gap". Si los dos valores fueran iguales, se puede indicar así:
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+	}
+_______________________________________________________
+
+	[7.5.3]. grid-template-columns:
+_______________________________________________________
+
+La propiedad "grid-template-columns" define el número de columnas en el grid layout, y el ancho de cada columna.
+
+Su valor es una lista separada por espacios, donde cada valor define la longitud de la columna respectiva.
+
+Si desea que el grid layout contenga 4 columnas, especifique el ancho de las 4 columnas o "auto" si todas las columnas deben tener el mismo ancho.
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns: auto auto auto auto;
+	}
+
+Nota: Si tiene más de 4 elementos en una cuadrícula de 4 columnas, la cuadrícula agregará automáticamente una nueva fila para colocar los elementos.
+
+Si queremos 2 columnas:
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns: calc(50% - 12.5px) calc(50% - 12.5px);
+		border: 3px solid black;
+	}
+
+Acá usamos la función "calc()", para calcular el porcentaje que debe tener cada columna, ya que le restamos el espacio de 25px(25px/2= 12.5px) que se le da con "grid-gap", si no hacemos esto se desborda del contenedor.
+
+También podemos asignar un tamaño fijo:
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns: 250px 400px;
+		border: 3px solid black;
+	}
+
+Una medida que se puede usar para definir el tamaño de las columnas es la fracción(fr) que simboliza una fracción de espacio restante en el grid: 
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+		border: 3px solid black;
+	}
+
+Acá tenemos 4 columnas bien distribuidas, y cada una mide 1fr(una fracción), lo cual es equivalente a "grid-template-columns: auto auto auto auto;".
+
+	fr: establece la columna o fila en una fracción del espacio disponible,
+
+	auto: establece la columna o fila al ancho o alto de su contenido automáticamente,
+
+	%: ajusta la columna o fila al ancho porcentual de su contenedor.
+
+En estos casos en los que se repite el valor de la medida para las columnas, podemos usar la función "repeat([#veces], [valor o valores])":
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns: repeat(4, 1fr);
+		border: 3px solid black;
+	}
+
+El número 4, indica cuantas veces se repite, y después el valor a repetir.
+
+Nota: para más info de esta función:
+
+	https://developer.mozilla.org/es/docs/Web/CSS/repeat
+_______________________________________________________
+
+	[7.5.4]. grid-template-rows:
+_______________________________________________________
+
+La propiedad "grid-template-rows" define el número de filas en el grid layout, y puede definir el alto de cada fila.
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: 100px 200px 150px;
+		border: 3px solid black;
+	}
+
+En este ejemplo se definieron 3 filas y 4 columnas. 
+
+Si el número de ítems grid, no ocupa todas las filas, igual se respeta el espacio de la fila, en este ejemplo la última fila sale vacía.
+
+Si el número de ítems grid ocupa más espacio que las filas definidas, se añaden en una nueva fila.
+_______________________________________________________
+
+	[7.5.5]. Posición en la grid:
+_______________________________________________________
+
+Las propiedades para alinear contenidos y distribuir ítems dentro de la cuadrícula son:
+
+	- justify-items -->	Alinea el contenido de la celda en el eje horizontal.
+
+	- align-items --> Alinea el contenido de la celda en el eje vertical.
+
+	- justify-content --> Distribuye los elementos en el eje horizontal.
+
+	- align-content --> Distribuye los elementos en el eje vertical.
+
+	- justify-self --> hace lo mismo que "justify-items", pero en un solo elemento.
+
+	- align-self --> hace lo mismo que "align-items", pero en un solo elemento.
+_______________________________________________________
+
+	[7.5.5.1]. Alinear Contenido Celda Horizontalmente / justify-items / justify-self:
+_______________________________________________________
+
+En CSS Grid, el contenido de cada elemento se encuentra en un cuadro que se denomina celda. Puede alinear la posición del contenido dentro de su celda horizontalmente utilizando la propiedad "justify-items".
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns: repeat(4, 100px);
+		grid-template-rows: 100px 200px 150px;
+		justify-items: end;
+		border: 3px solid black;
+	}
+
+Por defecto, esta propiedad tiene un valor de "stretch" y también acepta otros valores:
+
+	"start"		--> alinea el contenido a la izquierda de la celda.
+
+	"center"	--> alinea el contenido al centro de la celda.
+
+	"end"		--> alinea el contenido a la derecha de la celda.
+
+	"stretch"(estiramiento)	--> hará que el contenido llene todo el ancho de la celda.
+
+Nota: para ver mejor el efecto de está propiedad, inspeccionar el elemento en el navegador Firefox y usar "Superponer rejilla"(para hacer esto ver tema [7.5.6].). También el ancho de las columnas debe ser mayor al tamaño del contenido de cada ítem.
+
+Si queremos alinear el contenido de la celda de un solo ítem, usamos la propiedad "justify-self":
+
+	.orange{
+		background-color: orange;
+		justify-self: start;
+	}
+
+_______________________________________________________
+
+	[7.5.5.2]. Alinear Contenido Celda Verticalmente / align-items / align-self:
+_______________________________________________________
+
+Funciona de forma similar a la propiedad "justify-items", pero de forma vertical. Alinea la posición del contenido dentro de su celda verticalmente:
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns: repeat(4, 100px);
+		grid-template-rows: 100px 200px 150px;
+		justify-items: end;
+		align-items: center;
+		border: 3px solid black;
+	}
+
+La propiedad "align-items" puede tener los valores:
+
+	"start"		--> alinea el contenido hacia arriba de la celda.
+
+	"center"	--> alinea el contenido al centro de la celda.
+
+	"end"		--> alinea el contenido hacia abajo de la celda.
+
+	"stretch"(estiramiento)	--> por defecto, hará que el contenido llene todo el alto de la celda.
+
+Nota: para ver mejor el efecto de está propiedad, inspeccionar el elemento en el navegador Firefox y usar "Superponer rejilla"(para hacer esto ver tema [7.5.6].). También el alto de las filas debe ser mayor al alto del contenido de cada ítem.
+
+Si queremos alinear el contenido de la celda verticalmente, de un solo ítem, usamos la propiedad "align-self":
+
+	.turquoise{
+		background-color: turquoise;
+		align-self: start;
+	}
+_______________________________________________________
+
+	[7.5.5.3]. Distribuir rejilla horizontalmente / justify-content:
+_______________________________________________________
+
+Funciona de la misma forma que la propiedad "justify-content" de Flexbox, alinea toda la cuadrícula dentro del contenedor, alinea los ítems horizontalmente.
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns: repeat(4, 200px);
+		grid-template-rows: 100px 200px 150px;
+		justify-items: end;
+		align-items: center;
+		justify-content: space-around;
+		border: 3px solid black;
+	}
+
+Acá lo curioso es que al usar "space-around", "space-between" o "space-evenly" el "grid-column-gap" se incrementa.
+
+Tiene los mismos valores que su propiedad de flexbox:
+	
+	start | end | center | stretch | space-around | space-between | space-evenly
+
+Nota1: El ancho total de la cuadrícula debe ser menor que el ancho del contenedor para que la propiedad "justify-content" tenga algún efecto.
+
+Nota2: ver tema [7.4.5.1].
+_______________________________________________________
+
+	[7.5.5.4]. Distribuir rejilla verticalmente / align-content:
+_______________________________________________________
+
+Funciona de la misma forma que la propiedad "align-content" de Flexbox, alinea verticalmente toda la cuadrícula dentro del contenedor, alinea los ítems verticalmente.
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns: repeat(4, 200px);
+		grid-template-rows: 100px 200px;
+		justify-items: end;
+		align-items: center;
+		justify-content: space-around;
+		align-content: space-between;
+		border: 3px solid black;
+		height: 700px;
+	}
+
+Tiene los mismos valores que su propiedad de flexbox:
+	
+	start | end | center | stretch | space-around | space-between | space-evenly
+
+Nota1: La altura total de la cuadrícula debe ser menor que la altura del contenedor para que la propiedad de contenido de alineación tenga algún efecto.
+
+Nota2: ver tema [7.4.5.3].
+_______________________________________________________
+
+	[7.5.6]. Expandir Ítems:
+_______________________________________________________
+
+De forma predeterminada, un contenedor tiene un ítem grid para cada columna, en cada fila, pero se puede hacer que los ítems grid abarquen varias columnas y / o filas.
+
+Líneas de cuadrícula:
+
+Las líneas entre columnas se llaman líneas de columna.
+
+Las líneas entre filas se llaman líneas de fila.
+
+							Líneas de Columna
+
+			Linea1			Linea2			Linea3			Linea4
+			|				 |				|				 |
+  Linea1----+----------------|--------------|----------------+
+			|				 |				|				 |
+			|	+----------+ | +----------+ | +----------+	 |
+			|	|  Caja 1  | | |  Caja 2  | | |  Caja 3  |	 |
+			|	+----------+ | +----------+ | +----------+	 |		Líneas
+  Linea2----|----------------|--------------|----------------|		de
+			|	+----------+ | +----------+ | +----------+	 |		Fila
+			|	|  Caja 4  | | |  Caja 5  | | |  Caja 6  |	 |
+			|	+----------+ | +----------+ | +----------+	 |
+			|				 |			    |				 |
+  Linea3----+------------------------------------------------+
+
+Nota: en el navegador Firefox, podemos ver el diagrama de la rejilla(grid layout), indicando las líneas, columnas, filas y gap, basta con inspeccionar elemento, buscamos la pestaña "Disposición-->Superponer rejilla", marcamos el contenedor grid, y en "Configuración de la rejilla --> Mostrar números de línea". o podemos seguir los pasos del siguiente enlace:
+
+	https://developer.mozilla.org/es/docs/Tools/Page_Inspector/How_to/Examine_grid_layouts
+
+Podemos expandir los ítems grid, como si fueran celdas en Excel, y los combináramos con la celda de al lado, pero en este caso no se combinan, sino que se expande hacia la celda de al lado, desplazando la celda de al lado.
+_______________________________________________________
+
+	[7.5.6.1]. Expandir Columnas:
+_______________________________________________________
+
+Esto lo hacemos en el ítem grid con las propiedades "grid-column-start" y "grid-column-end":
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: 100px 200px 150px;
+		border: 3px solid black;
+	}
+
+	.red{
+		background-color: red;
+		grid-column-start: 1;
+		grid-column-end: 5; 
+	}
+
+En este caso tenemos 4 columnas, por lo tanto 5 líneas, y expandimos la "Caja1"(la roja), toda la fila, desde la línea 1 hasta la línea 5.
+
+La propiedad "grid-column" es una propiedad abreviada de las propiedades "grid-column-start" y "grid-column-end":
+
+	.red{
+		background-color: red;
+		grid-column: 1 / 5;
+	}
+
+Para colocar un elemento, se puede hacer referencia a los números de línea o utilizar la palabra clave "span"(abarcar) para definir cuántas columnas abarcará el elemento:
+
+Hacer que "Caja1"(.red) comience en la "línea de columna 1" y abarque 3 columnas:
+
+	.red{
+		background-color: red;
+		grid-column: 1 / span 3;
+	}
+
+En este caso, la "Caja1"(.red) empieza en la "línea de columna 1" y ocupa 3 columnas(entonces su fin estaría en la "línea de columna 4").
+
+Los valores para las 3 propiedades son:
+
+	"auto" --> Valor por defecto. El ítem se colocará siguiendo el flujo.
+
+	"span n" --> Especifica el número de columnas que abarcará el elemento.
+
+	"Número de línea de columna" --> Especifica en qué columna empezar a mostrar el ítem.
+_______________________________________________________
+
+	[7.5.6.2]. Expandir Filas:
+_______________________________________________________
+
+De igual forma como expandimos columnas, usamos "grid-row-start", "grid-row-end" y el shorthand "grid-row":
+
+	.green{
+		background-color: green;
+		grid-column: 4 / 5;
+		grid-row-start: 1;
+		grid-row-end: 4;
+	}
+
+	.blue{
+		background-color: blue;
+		grid-row: 2 / 4;
+	}
+
+Nota: en este ejemplo, se le asigna un "grid-column" a la "Caja2"(.green), porque si no s ele asigna, se ubica en la "línea de columna 1", y desplaza la "Caja1"(.red) "Caja4", "Caja5" y "Caja6" hasta la "línea de fila 4 y 5".
+_______________________________________________________
+
+	[7.5.7]. Plantilla de Área:
+_______________________________________________________
+
+Se puede agrupar celdas de la cuadrícula en un área y asignarle un nombre personalizado. Lo hacemos con la propiedad "grid-template-areas" en el contenedor, posteriormente, en cada ítem hijo, utilizamos la propiedad "grid-area" para indicar el nombre del área a la que pertenece:
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns: repeat(4, 200px);
+		grid-template-rows: 100px 200px 150px;
+		grid-template-areas: "header header header header"
+							 "content content content lateral"
+							 "footer footer footer footer";
+		border: 3px solid black;
+		height: 700px;
+	}
+
+Combinamos 4 celdas superiores en un área llamada "header", 3 celdas en el medio en un área llamada "content" y un área llamada "lateral", y 4 celdas inferiores en un área llamada "footer".
+
+Nota: Cada palabra en el código representa una celda y cada par de comillas representa una fila. Además de las etiquetas personalizadas, se puede usar un punto(.) para designar una celda vacía(o sin nombre) en la cuadrícula.
+
+	grid-template-areas: "header header header header"
+						 "content content . lateral"
+						 "footer footer footer footer";
+
+Después de crear una plantilla de área en el contenedor, se puede colocar un ítem en el área personalizada, haciendo referencia al nombre que se le dio. Para hacer esto, usamos la propiedad "grid-area":
+
+	.green{
+		background-color: green;
+		grid-area: header;
+	}
+
+En este caso la "Caja2"(.green), es el segundo elemento HTML, sin embargo, lo posicionamos en primer lugar, y ocuparía las 4 columnas superiores(área "header").
+_______________________________________________________
+
+	[7.5.7.1]. Usar "grid-area" sin plantilla de área:
+_______________________________________________________
+
+Si la cuadrícula no tiene una plantilla de áreas para hacer referencia, se puede crear un área sobre la marcha para colocar un ítem:
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns: repeat(4, 200px);
+		grid-template-rows: 100px 200px 150px;
+		border: 3px solid black;
+		height: 700px;
+	}
+
+	.pink{
+		background-color: pink;
+		grid-area: 1/1/4/2;
+	}
+
+Los valores en la propiedad son:
+
+	"grid-area: [grid-row-start] / [grid-column-start] / [grid-row-end] / [ grid-column-end];"
+
+Entonces, el elemento en el ejemplo(.pink), consumirá las filas entre las líneas 1 y 4, y las columnas entre las líneas 1 y 2.
+
+Nota: cómo podemos ver, la propiedad "grid-area", es un shorthand de las propiedades para expandir filas y columnas.
+
+También podemos usar la sintaxis con "span"(abarcar):
+
+	.turquoise{
+		background-color: turquoise;
+		grid-area: 2/3/span 2/ span 2;
+	}
+
+En este caso, la "Caja6"(.turquoise), empieza en la "línea de fila 2" y "línea de columna 3", y abarca 2 filas y 2 columnas. Es equivalente a:
+
+	.turquoise{
+		background-color: turquoise;
+		grid-area: 2/3/4/5;
+	}
+_______________________________________________________
+
+	[7.5.8]. Limitar el tamaño del ítem usando la función "minmax":
+_______________________________________________________
+
+"minmax" es otra función incorporada para usar con "grid-template-columns" y "grid-template-rows". Se utiliza para limitar el tamaño de los elementos cuando el contenedor grid cambia de tamaño. Para hacer esto, se especifica el rango de tamaño aceptable para el ítem:
+
+	grid-template-columns: 100px minmax(50px, 200px);
+
+Se crean crear dos columnas, la primera tiene un ancho de 100px y la segunda tiene un ancho mínimo de 50px y un ancho máximo de 200px.
+_______________________________________________________
+
+	[7.5.9]. Crear diseños flexibles con "auto-fill":
+_______________________________________________________
+
+La función "repeat" viene con una opción llamada "auto-fill"(llenado automático). Esto le permite insertar automáticamente tantas filas o columnas del tamaño deseado como sea posible, dependiendo del tamaño del contenedor. Se pueden crear diseños flexibles al combinar autocompletar con minmax:
+
+	repeat(auto-fill, minmax(60px, 1fr));
+
+Cuando el contenedor cambia de tamaño, esta configuración sigue insertando columnas de 60px y estirándolas hasta que pueda insertar otra. Nota: Si el contenedor no puede acomodar todos los ítems en una fila, los moverá a una nueva.
+_______________________________________________________
+
+	[7.5.10]. Crear diseños flexibles con "auto-fit":
+_______________________________________________________
+
+"auto-fit"(ajuste automático) funciona casi de manera idéntica a "auto-fill". La única diferencia es que cuando el tamaño del contenedor excede el tamaño de todos los ítems combinados, "auto-fill" sigue insertando filas o columnas vacías y empuja sus elementos hacia un lado, mientras que "auto-fit" contrae esas filas o columnas vacías y estira sus elementos para adaptarse al tamaño del contenedor.
+
+Nota: Si el contenedor no puede acomodar todos los ítems en una fila, los moverá a una nueva.
+
+	grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+_______________________________________________________
+
+	[7.5.11]. Tamaños predefinidos para filas y columnas automáticas:
+_______________________________________________________
+
+Cuando tenemos una cuadricula, que genera automáticamente filas y columnas, podemos conservar cierto control sobre el tamaño de las filas/columnas creadas implícitamente. Esto lo hacemos con las propiedades "grid-auto-columns" y "grid-auto-rows".
+
+Para que una cuadricula genere filas o columnas automáticas, se pueden presentar en las siguientes condiciones:
+
+	- El número de ítems total, no cabe en las filas/columnas definidas en el contenedor.
+
+	- Definimos una cuadricula, por ejemplo de 2 filas y 2 columnas, pero ubicamos los ítems(con las propiedades "grid-area", "grid-row" y/ó "grid-column") en la columna 3 y fila 3, como esa columna y fila no están definidas, se crean automáticamente.
+
+	- No definimos una cuadricula(no usamos las propiedades "grid-template-columns", "grid-template-rows" y/ó "grid-template-areas"), pero creamos una cuadricula ubicando ítems como el caso anterior.
+
+Ejemplo:
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-auto-columns: 150px;
+		grid-auto-rows: 100px;
+		border: 3px solid black;
+		height: 700px;
+	}
+
+	.blue{
+		background-color: blue;
+		grid-area: 1/2/2/5;
+	}
+
+	.orange{
+		background-color: orange;
+		grid-area: 2/2/5/3;
+	}
+
+	.pink{
+		background-color: pink;
+		grid-area: 1/1/4/2;
+	}
+
+	.turquoise{
+		background-color: turquoise;
+		grid-area: 2/3/span 2/ span 2;
+	}
+
+En este ejemplo, no definimos la cuadricula en el contenedor, sin embargo, se creó una rejilla o cuadricula, ubicando los ítems. Cada columna tiene el ancho de 150px y cada fila el alto de 100px, por lo que cada celda es de 150px*100px.
+
+El valor por defecto de "grid-auto-columns" y "grid-auto-rows" es "auto" y puede tener los valores:
+
+	"auto"	--> Valor por defecto. El tamaño de las columnas/filas está determinado por el tamaño del contenedor.
+
+	"max-content"	--> Establece el tamaño de cada columna/fila según el elemento más grande de la columna/fila.
+
+	"min-content"	--> Establece el tamaño de cada columna/fila según el elemento más pequeño de la columna/fila.
+
+	"Medida"	--> se puede indicar en unidades de medida "px", "%", etc. y se puede usar la función "minmax()".
+
+Nota: para ver otro ejemplo:
+
+	https://alligator.io/css/css-grid-auto-rows-columns/
+
+Para más info de las propiedades:
+
+	https://www.w3schools.com/cssref/pr_grid-auto-columns.asp
+_______________________________________________________
+
+	[7.5.12]. Flujo para filas y columnas automáticas:
+_______________________________________________________
+
+Podemos controlar el flujo(fila o columna) de los elementos, con la propiedad "grid-auto-flow"(flujo automático de cuadrícula).
+
+Por defecto, los elementos que se derraman fuera de las pistas(tracks) de cuadrícula definidas, aparecerán en nuevas filas generadas automáticamente. A menos que establezcamos "grid-auto-flow" en "column".
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-auto-flow: column;
+		border: 3px solid black;
+		height: 700px;
+	}
+
+En este ejemplo, como no se definió la estructura de la cuadricula, por defecto cada ítem estaría en una fila, y habría 1 sola columna, pero con la propiedad "grid-auto-flow: column;", hacemos que los elementos se ubiquen en nuevas columnas, en vez de filas.
+
+	.Container{
+		display: grid;
+		grid-gap: 25px;
+		grid-template-columns:repeat(4, 150px);
+		grid-template-rows: 200px 200px;
+		grid-auto-flow: column;
+		border: 3px solid black;
+		height: 700px;
+	}
+
+En este ejemplo, si no se pone "grid-auto-flow: column;", se vería así:
+
+	+----------------------------------------------------------------+
+	|												 				 |
+	|	+----------+   +----------+   +----------+   +----------+	 |
+	|	|  Caja 1  |   |  Caja 2  |   |  Caja 3  |	 |  Caja 4  |	 |
+	|	+----------+   +----------+   +----------+	 +----------+	 |
+	|												 				 |
+	|	+----------+   +----------+   +----------+					 |
+	|	|  Caja 5  |   |  Caja 6  |   |  Caja 6  |	 				 |
+	|	+----------+   +----------+   +----------+	 				 |
+	|												 				 |
+	+----------------------------------------------------------------+
+
+Y con "grid-auto-flow: column;" cambiamos el flujo de los ítems:
+
+	+----------------------------------------------------------------+
+	|												 				 |
+	|	+----------+   +----------+   +----------+   				 |
+	|	|  Caja 1  |   |  Caja 3  |   |  Caja 5  |	 				 |
+	|	+----------+   +----------+   +----------+	 				 |
+	|												 				 |
+	|	+----------+   +----------+   +----------+					 |
+	|	|  Caja 2  |   |  Caja 4  |   |  Caja 6  |	 				 |
+	|	+----------+   +----------+   +----------+	 				 |
+	|												 				 |
+	+----------------------------------------------------------------+
+
+El valor por defecto de la propiedad "grid-auto-flow" es "row", y puede tener los siguientes valores:
+
+	"row"	--> Coloca elementos llenando cada fila.
+
+	"column"	--> Coloca elementos llenando cada columna.
+
+	"dense"	--> Coloca elementos para llenar los agujeros en la cuadrícula.
+
+	"row dense"	--> Coloca los elementos llenando cada fila y rellenando los agujeros en la cuadrícula.
+
+	"column dense"	--> Coloca elementos llenando cada columna y rellenando los agujeros en la cuadrícula.
+
+Nota: para ver ejemplos de los valores de la propiedad:
+
+	https://www.w3schools.com/cssref/playit.asp?filename=playcss_grid-auto-flow
+
+	https://www.w3schools.com/cssref/pr_grid-auto-flow.asp
+_______________________________________________________
+
+	[8]. Sombras:
+_______________________________________________________
+
+Para una sombra de un texto usamos la propiedad:
+	
+	text-shadow: desplazamientoX desplazamientoY difuminación color;
+
+Ej: text-shadow: 5px 5px 5px rgba(0,0,0,0.5);
+
+Si indicamos valores negativos en el "desplazamientoX" corremos la sombra del texto a la izquierda:
+
+	 text-shadow: -10px 1px 5px black;
+
+Si indicamos valores negativos en el "desplazamientoY" corremos la sombra del texto arriba de esté:
+
+	text-shadow: 1px -10px 5px black;
+
+Si necesitamos usar una propiedad similar, pero para la sombra de una caja usamos:
+
+	"box-shadow"
+
+Se pueden usar múltiples sombras(tanto para textos como para cajas), por ejemplo de dos o más colores.
+
+	#example1 {
+		box-shadow: 5px 5px blue, 10px 10px red, 15px 15px green;
+	}
+
+Podemos indicar que la sombra este dentro del elemento:
+
+	#example2 {
+		border: 1px solid;
+		padding: 10px;
+		box-shadow: 5px 10px 20px red inset;
+	}
+
+Para más info:
+
+	https://www.w3schools.com/css/css3_shadows.asp
+
+	https://www.w3schools.com/cssref/css3_pr_box-shadow.asp
+_______________________________________________________
+
+	[9]. Animaciones y Efectos:
+_______________________________________________________
+
+Los elementos los podemos animar transformándolos(rotar, escalar, sesgar y trasladar) o cambiando los valores de sus propiedades CSS, como por ejemplo el "background-color" en el estado de un elemento(como "hover"). 
+
+Estas animaciones se pueden suavizar(para que el cambio no sea brusco) con la propiedad "transition".
+_______________________________________________________
+
+	[9.1]. Transformaciones:
+_______________________________________________________
+
+La propiedad "transform", nos permite hacer varios tipos de transformaciones, entre ellas: rotar, escalar, y sesgar.
+
+Para otros valores de la propiedad transform (diferentes a rotar, escalar, y sesgar), podemos buscar la referencia en w3schools.
+
+	Rotación (rotate)--> permite rotar el elemento determinados grados. 
+		
+			transform:rotate(270deg);
+
+		También existe el valor rotateX y rotateY.
+
+	Escala (scale)--> agranda o encoge el elemento.
+	
+		transform:scale(2,2);
+
+	Sesgar (skew)--> tuerce hacia un lado el elemento.
+	
+		skew(x-angle,y-angle);
+		transform:skew(10deg,10deg);
+
+	Trasladar (translate)--> mueve de una coordenada(x1,y1) a otra(x2,y2).
+	
+		transform:translate(100px,100px);
+
+NOTA: si se tienen problemas de compatibilidad entre navegadores, se deben usar prefijos:
+
+	-webkit-transform:rotate(20deg);
+	-moz-transform:rotate(20deg);
+	-o-transform:rotate(20deg);		
+	-ms-transform:rotate(20deg);
+
+La propiedad Transform, se puede usar en el estado de un elemento, como hover.
+
+	.Elemento{
+		...
+	}
+
+	.Elemento:hover{
+		transform:rotate(270deg);
+	}
+_______________________________________________________
+
+	[9.2]. Transiciones:
+_______________________________________________________
+
+Aunque una transformación, se haga en un estado (ej:hover), esto ocurre tan rápidamente que puede ser un cambio brusco y desagradable. Para que la animación se vea de una forma más natural y fluida (como añadiendo frames), es necesario usar la propiedad "transition":
+
+"transition" --> Añade un estado intermedio entre una propiedad a otra.
+
+Es un comando shorthand de:
+	transition-property
+	transition-duration
+	transition-timing-function
+	transition-delay
+
+"Transition", la propiedad shorthand, recibe como parámetros:
+
+	transition: property duration timing-function delay|initial|inherit;
+
+Ej:
+	.Elemento {
+		border: 1px solid black;
+		background-color: lightblue;
+		width: 270px;
+		height: 200px;
+		overflow: auto;
+		transition = "all 2s";
+	}
+
+	.Elemento:hover {
+		background-color: coral;
+		width: 570px;
+		height: 500px;
+		padding: 100px;
+		border-radius: 50px;
+	}
+
+En este caso la propiedad "transition", recibe 2 parámetros, el primero("transition-property"), indica que debe cambiar todas las propiedades("all"), y el segundo ("transition-duration") indica que la animación dura 2 segundos en completarse.
+
+También podemos especificar un tiempo diferente de transición para cada propiedad:
+
+	div {
+		width: 100px;
+		height: 100px;
+		background: red;
+		transition: width 2s, height 4s;
+	}
+
+	div:hover {
+		width: 300px;
+		height: 300px;
+	}
+_______________________________________________________
+
+	[9.2.1]. transition-property:
+_______________________________________________________
+
+Especifica el nombre de la propiedad CSS a la cual se le va a hacer la transición.
+
+Ej:
+	div {
+		width: 100px;
+		height: 100px;
+		background: red;
+		transition-property: width;
+	}
+
+	div:hover {
+		width: 300px;
+	}
+
+En este caso, se ve la animación de una caja, la cual cambia de tamaño (se agranda desde 100px hasta que llega a los 300px) al tener el mouse encima.
+
+Se pueden indicar varias propiedades separadas por coma:
+	
+	transition-property: width, height;
+_______________________________________________________
+
+	[9.2.2].transition-duration:
+_______________________________________________________
+
+Especifica en segundos o milisegundos cuánto tarda la transición.
+
+	transition-duration: 5s;
+_______________________________________________________
+
+	[9.2.3].transition-timing-function:
+_______________________________________________________
+
+Especifica la curva de velocidad que tiene el efecto de transición.
+
+	transition-timing-function: ease;
+
+Hay más valores, como linear, etc.
+
+_______________________________________________________
+
+	[9.2.4].transition-delay:
+_______________________________________________________
+
+Indica cuanto se demora en empezar la animación o transición.
+
+	transition-delay: 2s;
+_______________________________________________________
+
+	[9.3]. Animaciones Avanzadas:
+_______________________________________________________
+
+Para controlar aún más cada estado de la animación (fotograma inicial y final), se usa la propiedad: "animation", la cual es una propiedad shorthand de:
+
+	animation-name, animation-duration, animation-timing-function, animation-delay, animation-iteration-count y animation-direction
+
+Por defecto tiene de valores:
+
+	animation-name: none
+	animation-duration: 0s
+	animation-timing-function: ease
+	animation-delay: 0s
+	animation-iteration-count: 1
+	animation-direction: normal
+	animation-fill-mode: none	
+
+Para más info de esta propiedad ir a:
+	
+	https://developer.mozilla.org/es/docs/Web/CSS/Usando_animaciones_CSS
+
+	https://www.w3schools.com/css/css3_animations.asp
+
+Ejemplo:
+
+	div{
+		width: 100px;
+		height: 100px;
+		background: red;
+		position: relative;
+		animation: 10s NombreAnimacion infinite;
+	}
+
+Los parámetros que recibe "animation" en este caso son:
+
+	10s --> Duración en segundos
+
+	NombreAnimacion -->	el nombre de la animación, la cual definimos en un @keyframes (puntos de trayectoria o fotogramas).
+
+	infinite --> indica el número de veces que se repite la animación.
+
+En los @keyframes, definimos las propiedades que se van a animar, así como el nombre de la animación, es como si esta animación fuera una función:
+
+	@keyframes NombreAnimacion {
+		0%   {top: 0px;}
+		25%  {top: 200px;}
+		75%  {top: 50px}
+		100% {top: 100px;}
+	}
+
+En el @keyframe es obligatorio definir el fotograma inicial ("0%" o "from") y el fotograma final ("100%" ó "to"). 
+
+En el ejemplo de arriba teníamos 4 fotogramas, pero también se pueden tener más o menos:
+
+	@keyframes NombreAnimacion{
+		from {
+			margin-left: 100%;
+			width: 300%
+		}
+
+		to {
+			margin-left: 0%;
+			width: 100%;
+		}
+	}
+
+Otro ejemplo:
+		
+	@keyframes slidein {
+		from {
+			margin-left:100%;
+			width:300%
+		}
+
+		75% {
+			font-size:300%;
+			margin-left:25%;
+			width:150%;
+		}
+
+		to {
+			margin-left:0%;
+			width:100%;
+		}
+	}
+
+_______________________________________________________
+
+	[10]. Responsive Web Design:
+_______________________________________________________
+
+Para hacer algo con "Diseño Web Adaptable" (Responsive Design)", es necesario tener en cuenta:
+
+1) Pensar en la metodología: "Mobile First", que consiste en diseñar un sitio desde un principio (diseño gráfico), pensando en la versión para móviles. Esto servirá para darnos cuenta del contenido esencial que debe tener nuestra página, y también para simplificar su diseño, pensando en algo claro e intuitivo.
+
+2) Crear nuestra página web desde cero, estructurándola semánticamente, y luego añadiendo los estilos (usando metodología de componentes suit css), pensando en un diseño elástico.
+
+3) Una vez testeada la página, mirando que el diseño elástico funcione en diversos tamaños (es decir que no se sobrepongan o solapen elementos, o se oculte contenido al cambiar el tamaño del navegador), agregamos: 
+
+	<meta name="viewport" content="width:device-width, minimum-scale=1, maximum-scale=1"/>
+
+En donde tenemos las propiedades:
+
+	"width:device-width" --> hace que nuestra página tome el ancho de la pantalla del dispositivo donde se abra.
+
+	"minimum-scale=1, maximum-scale=1" --> hace que el tamaño máximo y el mínimo de la pantalla sean del 100%.
+
+4) Luego, en nuestra hoja de estilos aplicamos los: "Media Queries"
+
+	@media screen and (min-width:800px){
+		body{
+			background: red;
+		}
+	}
+
+En este caso, este "Media Querie" hace que en un dispositivo que tenga un ancho de pantalla inferior a los 800px, tome los estilos que definimos en el archivo .css, y para un dispositivo con ancho de pantalla igual a los 800px o superior, tomaran los estilos aplicados en la media query, en este caso aplicándoles un fondo rojo.
+
+De esta forma, en un media query, también podemos cambiar el diseño a nuestra página, aplicándoles a los elementos nuevas posiciones, tamaños, colores, fondos, e incluso contenido nuevo que en un dispositivo móvil no se verán (display:none para el dispositivo móvil).
+
+Podemos tener varios "Media Queries": 
+
+	@media screen and (min-width:800px){
+		...
+	}
+
+	@media screen and (min-width:1280px){
+		...
+	}
+
+En la última media querie (el de 1280px), se aplicaran los estilos definidos en los media queries (dispositivo móvil), los estilos definidos en el media querie de 800px, y finalmente los estilos para pantallas con ancho igual o superior a los 1280px.
+
+Nota: Los puntos de corte para poner media queries que yo uso son:
+
+	0
+	480px
+	600px
+	840px
+	960px
+	1280px
+	1440px
+	1600px
+_______________________________________________________
+
+	[11]. Función calc():
+_______________________________________________________
+
+La función calc() realiza un cálculo para ser utilizado como el valor de la propiedad.
+
+	#div1{
+		position: absolute;
+		left: 50px;
+		width: calc(100% - 100px);
+		border: 1px solid black;
+		background-color: yellow;
+		padding: 5px;
+		text-align: center;
+	}
+
+El div tiene un espacio de 50 píxeles a la derecha e izquierda de este, por eso se le restan los 100px al ancho.
+
+Si la ventana del navegador se redimensiona, el ancho del div cambia.

@@ -1,0 +1,3423 @@
+
+	BOOTSTRAP 4:
+_______________________________________________________
+
+INDICE:
+
+[1]. Introducción
+[2]. Layout
+	[2.1]. Contenedores
+	[2.2]. Filas y Columnas
+	[2.3]. Clases Grid
+	[2.4]. Reglas para el Sistema Grid
+[3]. Texto / Tipografía
+	[3.1]. Estilos <h1> - <h6>
+[4]. Colores
+	[4.1]. Color para Texto
+	[4.2]. Color de Fondo
+[5]. Tablas
+	[5.1]. Rayas Cebra
+	[5.2]. Tabla con/sin bordes
+	[5.3]. Filas Hover
+	[5.4]. Tabla Fondo Oscuro
+	[5.5]. Clases Contextuales
+	[5.6]. Color de fondo para los Encabezados de la Tabla
+	[5.7]. Tabla Pequeña
+	[5.8]. Tabla Responsive
+[6]. Imágenes
+	[6.1]. Esquinas Redondeadas
+	[6.2]. Imagen Redonda
+	[6.3]. Miniatura(thumbnail)
+	[6.4]. Alinear imágenes
+[7]. Jumbotron
+[8]. Alertas
+	[8.1]. Enlaces de Alerta
+	[8.2]. Cerrar Alertas
+	[8.3]. Alertas Animadas
+[9]. Botones
+	[9.1]. Botones de contorno/borde
+	[9.2]. Tamaños de Botones
+	[9.3]. Botones de nivel de bloque
+	[9.4]. Botones Activos/Deshabilitados
+	[9.5]. Botones con Spinner
+	[9.6]. Grupo de Botones
+	[9.7]. Grupo de Botones Verticales
+	[9.8]. Grupos de botones anidados y menús desplegables
+[10]. Insignias(badges)
+	[10.1]. Insignias Píldora
+	[10.2]. Insignias dentro de un elemento
+[11]. Barras de Progreso
+	[11.1]. Etiquetas para Barras de Progreso
+	[11.2]. Barras de Progreso a rayas
+	[11.3]. Barras de Progreso Animadas
+	[11.4]. Múltiples Barras de Progreso
+[12]. Spinners/loaders
+[13]. Paginación
+	[13.1]. Paginación activa/deshabilitada
+	[13.2]. Tamaño de la Paginación
+	[13.3]. Alineación de la Paginación
+	[13.4]. Migas de Pan(Breadcrumbs)
+[14]. Lista de Grupos
+	[14.1]. Lista de Grupos con Elementos <a>
+	[14.2]. Lista de Grupos Activa/Deshabilitada
+	[14.3]. Lista de Grupos Flush/Eliminar Bordes
+	[14.4]. Lista de Grupos Horizontal
+	[14.5]. Lista de Grupos con Clases Contextuales
+	[14.6]. Lista de Grupos con Insignias(badges)
+[15]. Cards(Tarjetas)
+	[15.1]. Títulos, Texto y Enlaces para las Cards
+	[15.2]. Imágenes para las Cards
+		[15.2.1]. Superposiciones de imagen para las Cards
+	[15.3]. Enlace Extendido(Stretched) para las Cards
+	[15.4]. Columnas Tarjetas
+	[15.5]. Baraja de Tarjetas
+	[15.6]. Grupo de Tarjetas
+[16]. Listas desplegables(Dropdowns)
+	[16.1]. Divisor para el desplegable
+	[16.2]. Titulo para el desplegable
+	[16.3]. Ítems Activos/deshabilitados
+	[16.4]. Posición para el desplegable
+[17]. Plegables(Collapsible)
+	[17.1]. Acordeón
+[18]. Navs
+	[18.1]. Alineación del Nav
+	[18.2]. Nav Vertical
+	[18.3]. Pestañas(Tabs)
+	[18.4]. Píldoras(Pills)
+	[18.5]. Pestañas/Píldoras Justificadas
+	[18.6]. Pestañas/Píldoras con Dropdown(desplegable)
+[19]. Barras de Navegación(Navbar)
+	[19.1]. Centrar la Barra de Navegación
+	[19.2]. Colorear la Barra de Navegación
+	[19.2]. Barra de Navegación con Logotipo
+	[19.3]. Colapsar Barra de Navegación
+	[19.4]. Navbar con Formulario y Botones
+	[19.5]. Texto en la Navbar
+	[19.6]. Navbar Fija(fixed) y Sticky(adhesiva)
+[20]. Formularios
+	[20.1]. Formulario apilado(Stacked)
+	[20.2]. Formulario en línea
+	[20.3]. Formulario de fila(row)/cuadrícula(grid)
+	[20.4]. Validación de Formularios
+	[20.5]. Inputs
+		[20.5.1]. Tamaño de control de formulario
+		[20.5.2]. Control de formulario con texto plano
+		[20.5.3]. Grupos de Input(helpers)
+			[20.5.3.1]. Tamaño de Grupos de Input
+			[20.5.3.2]. Múltiples Inputs y Helpers
+			[20.5.3.3]. Grupo de Inputs con Checkbox y Radio
+			[20.5.3.4]. Grupo de Inputs con Botones
+			[20.5.3.5]. Grupo de Input con Botón Desplegable(dropdown)
+			[20.5.3.6]. Etiquetas(labels) para Grupo de Input
+	[20.6]. Formularios Custom
+[21]. Carrusel
+	[21.1]. Leyendas(captions) a las diapositivas
+[22]. Modal
+	[22.1]. Animación para el Modal
+	[22.2]. Tamaño del Modal
+	[22.3]. Modal Centrado
+	[22.4]. Modal con Scroll(desplazamiento)
+[23]. Tooltip
+	[23.1]. Posición del Tooltip
+[24]. Popover
+	[24.1]. Posición del Popover
+	[24.2]. Cerrar el Popover
+[25]. Tostada(toast)
+	[25.1]. Mostrar y Esconder Tostada
+[26]. Scrollspy
+[27]. Utilidades
+	[27.1]. Bordes
+		[27.1.1]. Color de Bordes
+		[27.1.2]. Bordes Redondeados
+	[27.2]. Float y Clearfix
+		[27.2.1]. Float Responsive
+	[27.3]. Alinear al centro
+	[27.4]. Ancho(width)
+	[27.5]. Alto(height)
+	[27.6]. Espaciado(margin y padding)
+	[27.7]. Sombras
+	[27.8]. Alineación Vertical
+	[27.9]. Embebidos Responsive
+	[27.10]. Visibilidad
+	[27.11]. Posición
+	[27.12]. Elementos de Bloque
+	[27.13]. Clases Display
+	[27.14]. Icono de Cerrar
+[28]. Flex
+	[28.1]. Dirección Horizontal
+	[28.2]. Dirección Vertical
+	[28.3]. Justify Content
+	[28.4]. Rellenar(fill)/Anchos iguales
+	[28.5]. Grow/Shrink
+	[28.6]. Orden
+	[28.7]. Auto Margen
+	[28.8]. Wrap
+	[28.9]. Align Content
+	[28.10]. Align Items
+	[28.11]. Align Self
+[29]. Objetos Multimedia
+	[29.1]. Objetos Multimedia Anidados
+	[29.2]. Alineación de la Imagen del Objeto Multimedia
+
+_______________________________________________________
+
+	[1]. Introducción:
+_______________________________________________________
+
+Framework para CSS, nos da una serie de elementos ya desarrollados que nos van a servir como base para los proyectos.
+
+Bootstrap es un kit de herramientas de código abierto para desarrollar con HTML, CSS y JS. Sirve para hacer rápidamente prototipos o construir toda la aplicación con las variables y mixins Sass, sistema de cuadrícula adaptable, componentes precompilados extensos y complementos potentes creados en jQuery.
+
+Bootstrap utiliza un diseño adaptable de cuadrícula de 12 columnas y tiene plantillas de diseño para:
+
+	botones
+	imágenes
+	tablas
+	formularios
+	navegación
+
+Para usar Bootstrap, podemos usarlo con CDN, o descargar la versión compilada y minificada:
+
+	https://getbootstrap.com/docs/4.4/getting-started/download/
+
+Luego descomprimimos la carpeta en la carpeta del proyecto, y la renombramos a "bootstrap", por dentro tendrá las carpetas "css" y "js", con los archivos correspondientes.
+
+Linkeamos los archivos en nuestro HTML:
+
+	<!DOCTYPE html>
+	<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<title>Aprendiendo Bootstrap</title>
+		<link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="estilos.css">
+	</head>
+	<body>
+		<div>
+			<h1>Aprendiendo Bootstrap</h1>
+			
+		</div>
+		<script type="text/javascript" src="jQuery/jquery-3.5.0.min.js"></script>
+		<script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+	</body>
+	</html>
+
+Nota: Bootstrap necesita jQuery.
+_______________________________________________________
+
+	[2]. Layout:
+_______________________________________________________
+
+Bootstrap cuenta con diversas clases para ayudarnos en el layout(diseño) de nuestra pág.
+_______________________________________________________
+
+	[2.1]. Contenedores:
+_______________________________________________________
+
+Los contenedores son el elemento de diseño más básico en Bootstrap y son necesarios cuando se utiliza su sistema de cuadrícula predeterminado. Los contenedores se utilizan para contener, rellenar y (a veces) centrar el contenido dentro de ellos. Si bien los contenedores se pueden anidar, la mayoría de los diseños no requieren un contenedor anidado.
+
+En Bootstrap podemos usar 3 tipos de contenedores:
+
+	".container"	--> establece un ancho máximo(max-width) en cada punto de corte responsive.
+
+	".container-fluid"	--> en todos los puntos de corte responsive, tiene un "width: 100%".
+
+	.container-{puntos de corte responsive}	--> tiene un "width: 100%" hasta el punto de corte responsive especificado.
+
+Si queremos que el contenedor este centrado, usamos la clase ".container":
+
+	<div class="container">
+
+En este caso, en mi pantalla(1920*1080), el contenedor saldrá centrado, con un "max-width: 1140px".
+
+Nota 1: para ver los puntos de corte y las medidas:
+
+	https://getbootstrap.com/docs/4.4/layout/overview/
+
+Nota 2: por defecto los contenedores tienen un "padding" izquierdo y derecho de 15px (sin "padding" arriba y abajo). Sin embargo, podemos usar otras utilidades de Bootstrap para añadir "padding" superior, márgenes, borde, un color de fondo y letra diferentes, etc.
+_______________________________________________________
+
+	[2.2]. Filas y Columnas:
+_______________________________________________________
+
+Podemos definir filas y columnas. Bootstrap utiliza un diseño adaptable de cuadrícula de 12 columnas.
+
+	<div class="row">
+		<header class="col-12 bg-primary text-white">
+			<h1>Aprendiendo Bootstrap</h1>
+		</header>
+	</div>
+
+Acá definimos una fila (clase "row"), y una columna (clase "col-12"), que ocupa las 12 definidas en Bootstrap.
+
+El sistema de cuadrícula es responsive y las columnas se reorganizarán automáticamente según el tamaño de la pantalla.
+
+La suma de las columnas debe dar 12 o menos (no es necesario que use las 12 columnas disponibles).
+
+	<div class="row">
+		<div class="col bg-secondary">
+			Columna 1
+		</div>
+		<div class="col bg-success">
+			Columna 2
+		</div>
+		<div class="col bg-info">
+			Columna 3
+		</div>
+	</div>
+
+En este ejemplo usamos la clase "col", que hace que cada columna tenga el mismo ancho, en este caso tenemos 3 columnas.
+
+Otro ejemplo de una cuadricula básica:
+
+	<div class="container-fluid">
+		<!-- Controlando el ancho de columna, y cómo debe aparecer en diferentes dispositivos -->
+		<div class="row">
+			<div class="col-sm-6" style="background-color:yellow;">50%</div>
+			<div class="col-sm-6" style="background-color:orange;">50%</div>
+		</div>
+		<br>
+		
+		<div class="row">
+			<div class="col-sm-4" style="background-color:yellow;">33.33%</div>
+			<div class="col-sm-4" style="background-color:orange;">33.33%</div>
+			<div class="col-sm-4" style="background-color:yellow;">33.33%</div>
+		</div>
+		<br>
+
+		<!-- Aquí dejamos que Bootstrap maneje los tamaños automáticamente -->
+		<div class="row">
+			<div class="col-sm" style="background-color:yellow;">25%</div>
+			<div class="col-sm" style="background-color:orange;">25%</div>
+			<div class="col-sm" style="background-color:yellow;">25%</div>
+			<div class="col-sm" style="background-color:orange;">25%</div>
+		</div>
+		<br>
+		
+		<div class="row">
+			<div class="col" style="background-color:yellow;">25%</div>
+			<div class="col" style="background-color:orange;">25%</div>
+			<div class="col" style="background-color:yellow;">25%</div>
+			<div class="col" style="background-color:orange;">25%</div>
+		</div>
+	 </div>
+
+Nota: para más info. del sistema de cuadrícula de Boostrap:
+	
+	https://www.w3schools.com/bootstrap4/bootstrap_grid_basic.asp
+
+	https://www.w3schools.com/bootstrap4/bootstrap_grid_system.asp
+
+	https://getbootstrap.com/docs/4.4/layout/grid/
+_______________________________________________________
+
+	[2.3]. Clases Grid:
+_______________________________________________________
+
+El sistema de rejilla(grid), de bootstrap tiene las siguientes clases:
+
+	".col-" --> (dispositivos extra pequeños - ancho de pantalla inferior a 576px).
+
+	".col-sm-" --> (dispositivos pequeños - ancho de pantalla igual o mayor que 576px).
+
+	".col-md-" --> (dispositivos medianos - ancho de pantalla igual o mayor a 768px).
+
+	".col-lg-" --> (dispositivos grandes - ancho de pantalla igual o mayor que 992px).
+
+	".col-xl-" --> (dispositivos xlarge - ancho de pantalla igual o mayor a 1200px).
+
+Las clases anteriores se pueden combinar para crear diseños más dinámicos y flexibles.
+
+Nota: cada clase se escala, por lo que si desea establecer los mismos anchos para "sm" y "md", solo necesita especificar "sm".
+_______________________________________________________
+
+	[2.4]. Reglas para el Sistema Grid:
+_______________________________________________________
+
+- Las filas(rows) deben colocarse dentro de un ".container"(ancho fijo) o ".container-fluid"(ancho completo) para una alineación y relleno(padding) adecuados.
+
+- Use filas(rows) para crear grupos horizontales de columnas(columns).
+
+- El contenido debe colocarse dentro de las columnas, y solo las columnas pueden ser hijos inmediatos de las filas.
+
+- Clases predefinidas como ".row" y ".col-sm-4" están disponibles para hacer diseños de cuadrícula rápidamente.
+
+- Las columnas crean canales(gutters)(espacios entre el contenido de la columna) a través del relleno(padding). Ese relleno se compensa en filas para la primera y última columna a través de un margen negativo en ".rows".
+
+- Las columnas de cuadrícula se crean especificando el número de 12 columnas disponibles que desea abarcar. Por ejemplo, tres columnas iguales usarían tres ".col-sm-4".
+
+- Los anchos de columna están en porcentaje, por lo que siempre son fluidos y de tamaño relativo a su elemento padre.
+
+- Una gran ventaja de flexbox es que las columnas de cuadrícula sin un ancho especificado se diseñarán automáticamente como "columnas de igual ancho" (e igual altura). Ejemplo: Tres elementos con ".col-sm" tendrán automáticamente un 33.33% de ancho desde el punto de corte pequeño en adelante.
+_______________________________________________________
+
+	[3]. Texto / Tipografía:
+_______________________________________________________
+
+Por defecto Bootstrap usa "font-size" de 16px, "line-height" de 1.5, la "font-family" es "Helvetica Neue", Helvetica, Arial, sans-serif.
+
+Todos los párrafos (<p>) tienen "margin-top: 0" y "margin-bottom: 1rem".
+_______________________________________________________
+
+	[3.1]. Estilos <h1> - <h6>:
+_______________________________________________________
+
+Los estilos que aplica Bootstrap a los encabezados son en negrilla(font-weight: 500) y de tamaño:
+
+	h1 (2.5rem = 40px)
+	h2 (2rem = 32px)
+	h3 (1.75rem = 28px)
+	h4 (1.5rem = 24px)
+	h5 (1.25rem = 20px)
+	h6 (1rem = 16px)
+
+Usamos <small> o la clase "small" para crear un texto secundario dentro de un encabezado:
+
+	<h3>h3 heading <small>secondary text</small></h3>
+
+Bootstrap le aplica un "font-size: 80%" y un "font-weight: 400".
+
+Los encabezados de pantalla(Display Headings) se utilizan para destacar más que los encabezados normales (tamaño de fuente más grande y peso de fuente más ligero), y hay cuatro clases para elegir:
+
+	.display-1, .display-2, .display-3, .display-4
+
+Nota: para ver un listado de clases que podemos usar para dar estilos de tipografía:
+
+	https://www.w3schools.com/bootstrap4/bootstrap_typography.asp
+_______________________________________________________
+
+	[4]. Colores:
+_______________________________________________________
+
+Bootstrap 4 tiene algunas clases contextuales que se pueden usar para proporcionar "significado a través de colores".
+_______________________________________________________
+
+	[4.1]. Color para Texto:
+_______________________________________________________
+
+Las clases para dar color a los textos son:
+
+	.text-muted --> El texto está silenciado/deshabilitado (#6c757d).
+	.text-primary --> El texto es importante (#007bff).
+	.text-success --> El texto indica éxito (#28a745).
+	.text-info --> El texto representa alguna información (#17a2b8).
+	.text-warning --> El texto representa una advertencia (#ffc107).
+	.text-danger --> El texto representa peligro (#dc3545).
+	.text-secondary --> Texto secundario (#6c757d).
+	.text-white --> Texto blanco (#fff);
+	.text-dark --> Texto gris oscuro (#343a40).
+	.text-body --> Color del "body" por defecto(a menudo negro) (#212529). 
+	.text-light --> texto gris claro (#f8f9fa).
+
+Ejemplo de uso:
+
+	<p class="text-danger">Ejemplo </p>
+
+Las clases de texto contextual también se pueden usar en enlaces, lo que agregará un color más oscuro cuando se hace "hover".
+
+	<a href="#" class="text-success">Enlace verde.</a>
+
+También se puede agregar un 50% de opacidad para texto en blanco o negro con las clases ".text-black-50" o ".text-white-50".
+
+	<p class="text-black-50">Texto negro con opacidad al 50%</p>
+_______________________________________________________
+
+	[4.2]. Color de Fondo:
+_______________________________________________________
+
+Las clases para el color de fondo son:
+
+	.bg-primary --> #007bff
+	.bg-success --> #28a745
+	.bg-info --> #17a2b8
+	.bg-warning --> #ffc107
+	.bg-danger --> #dc3545
+	.bg-secondary --> #6c757d
+	.bg-dark --> #343a40
+	.bg-light --> #f8f9fa
+
+Ejemplo de uso:
+
+	<p class="bg-dark text-white">Color de fondo gris oscuro y letra blanca.</p>
+_______________________________________________________
+
+	[5]. Tablas:
+_______________________________________________________
+
+La clase ".table" agrega un estilo básico (padding ligero y divisores horizontales) a una tabla:
+
+	<table class="table">
+		<thead>
+		  <tr>
+			<th>Firstname</th>
+			<th>Lastname</th>
+			<th>Email</th>
+		  </tr>
+		</thead>
+		<tbody>
+		  <tr>
+			<td>John</td>
+			<td>Doe</td>
+			<td>john@example.com</td>
+		  </tr>
+		  <tr>
+			<td>Mary</td>
+			<td>Moe</td>
+			<td>mary@example.com</td>
+		  </tr>
+		  <tr>
+			<td>July</td>
+			<td>Dooley</td>
+			<td>july@example.com</td>
+		  </tr>
+		</tbody>
+	  </table>
+_______________________________________________________
+
+	[5.1]. Rayas Cebra:
+_______________________________________________________
+
+Para agregar rayas cebra(algunas filas con color de fondo gris y otras blancas), usamos la clase ".table-striped":
+
+	<table class="table table-striped">
+_______________________________________________________
+
+	[5.2]. Tabla con/sin bordes:
+_______________________________________________________
+
+La clase ".table-bordered" agrega bordes en todos los lados de la tabla y las celdas:
+
+	<table class="table table-bordered">
+
+Si queremos la tabla sin bordes usamos la clase ".table-borderless":
+
+	<table class="table table-borderless">
+_______________________________________________________
+
+	[5.3]. Filas Hover:
+_______________________________________________________
+
+La clase ".table-hover" agrega un efecto de cambio de color de fondo a gris en las filas de la tabla cuando se hace "hover".
+
+	<table class="table table-hover">
+_______________________________________________________
+
+	[5.4]. Tabla Fondo Oscuro:
+_______________________________________________________
+
+La clase ".table-dark" añade un color de fondo oscuro a la tabla (#343a40) y automáticamente cambia el texto de la tabla a blanco.
+
+	<table class="table table-dark">
+
+También podemos tener una tabla de fondo oscuro, con filas cebra:
+
+	<table class="table table-dark table-striped"> 
+
+O tabla de fondo oscuro con efecto en las filas hover:
+
+	<table class="table table-dark table-hover">
+_______________________________________________________
+
+	[5.5]. Clases Contextuales:
+_______________________________________________________
+
+Las clases contextuales se pueden usar para colorear toda la tabla (<table>), las filas de la tabla (<tr>) o las celdas de la tabla (<td>).
+
+	.table-primary --> indica una acción importante (Fondo #b8daff Borde #7abaff).
+	.table-success --> indica éxito o acción positiva (Fondo #c3e6cb Borde #8fd19e).
+	.table-danger --> indica peligro o acción negativa (Fondo #f5c6cb Borde #ed969e).
+	.table-info --> indica un cambio o acción informativa neutral (Fondo #bee5eb Borde #86cfda).
+	.table-warning --> indica una advertencia que podría necesitar atención (Fondo #ffeeba Borde #ffdf7e)
+	.table-active --> Aplica el color de "hover" a la fila o celda de la tabla (Fondo rgba(0,0,0,.075) Borde #dee2e6).
+	.table-secondary --> Indica una acción un poco menos importante (Fondo #d6d8db Borde #b3b7bb).
+	.table-light --> Tabla gris claro (Fondo #fdfdfe Borde #fbfcfc).
+	.table-dark --> Tabla gris oscuro (Fondo #343a40 Borde #454d55).
+
+Ejemplo de uso:
+
+	<tr class="table-success">
+		<td>Success</td>
+		<td>Doe</td>
+		<td>john@example.com</td>
+	</tr>
+
+Nota: para darle color a una sola celda usamos:
+	
+	<tr class="">
+		<td>Light</td>
+		<td class="table-danger">Angie</td>
+		<td>angie@example.com</td>
+	</tr>
+
+En este caso no se le da clase a la fila "<tr>", ya que, si se le da un color, tiene prioridad y no se le aplica el color de fondo a la celda (<td>), si se quiere tener un color de fondo para la fila, y una celda de otro color usamos "bg-[colorContextual]":
+
+	<tr class="table-dark text-dark">
+		<td>Dark</td>
+		<td class="bg-warning">Bo</td>
+		<td>bo@example.com</td>
+	</tr>
+_______________________________________________________
+
+	[5.6]. Color de fondo para los Encabezados de la Tabla:
+_______________________________________________________
+
+La clase ".thead-dark" agrega un fondo negro a los encabezados de la tabla, y la clase ".thead-light" agrega un fondo gris a los encabezados de la tabla:
+
+	<thead class="thead-dark">
+	  <tr>
+		<th>Firstname</th>
+		<th>Lastname</th>
+		<th>Email</th>
+	  </tr>
+	</thead>
+_______________________________________________________
+
+	[5.7]. Tabla Pequeña:
+_______________________________________________________
+
+La clase ".table-sm" hace que la tabla sea más pequeña al cortar el relleno(padding) de la celda por la mitad:
+
+	<table class="table table-bordered table-sm">
+_______________________________________________________
+
+	[5.8]. Tabla Responsive:
+_______________________________________________________
+
+La clase ".table-responsive" agrega una barra de desplazamiento a la tabla cuando es necesario (cuando es demasiado grande horizontalmente):
+
+	<div class="table-responsive">
+		<table class="table table-bordered">
+
+Nota: en este caso se puso la clase ".table-responsive" al div que contiene la tabla, para que la barra de desplazamiento horizontal este un poco separada de la tabla, sin embargo también se puede usar:
+
+	<table class="table table-bordered table-responsive">
+
+También se puede indicar cuándo la tabla debe tener la barra de desplazamiento, dependiendo del ancho de la pantalla:
+
+	.table-responsive-sm --> aparece la barra de desplazamiento cuando el ancho de pantalla es < 576px
+	.table-responsive-md	< 768px
+	.table-responsive-lg	< 992px
+	.table-responsive-xl	< 1200px
+
+Ejemplo de uso:
+
+	<table class="table table-bordered table-responsive-sm">
+_______________________________________________________
+
+	[6]. Imágenes:
+_______________________________________________________
+
+Las imágenes vienen en todos los tamaños. También las pantallas. Las imágenes responsive se ajustan automáticamente para adaptarse al tamaño de la pantalla.
+
+Creamos imágenes responsive agregando la clase ".img-fluid" a la etiqueta <img>. La imagen se escalará bien al elemento padre.
+
+	<img src="http://placeimg.com/640/480/any" class="img-fluid" alt="Responsive image">
+
+La clase ".img-fluid" aplica "max-width: 100%" y "height: auto" a la imagen.
+_______________________________________________________
+
+	[6.1]. Esquinas Redondeadas:
+_______________________________________________________
+
+La clase ".rounded" agrega esquinas redondeadas a una imagen:
+
+	<img src="http://placeimg.com/640/480/any" class="img-fluid rounded" alt="Responsive image">
+
+_______________________________________________________
+
+	[6.2]. Imagen Redonda:
+_______________________________________________________
+
+La clase ".rounded-circle" da forma a la imagen en un círculo:
+
+	<img src="http://placeimg.com/640/480/any" class="img-fluid rounded-circle" alt="Responsive image">
+
+Nota: en este caso la imagen sale en un ovalo, para que sea totalmente redonda, la imagen original debe ser cuadrada.
+_______________________________________________________
+
+	[6.3]. Miniatura(thumbnail):
+_______________________________________________________
+
+La clase ".img-thumbnail" da forma a la imagen en una miniatura (con borde):
+
+	<img src="http://placeimg.com/640/480/any" class="img-fluid img-thumbnail" alt="Responsive image">
+_______________________________________________________
+
+	[6.4]. Alinear imágenes:
+_______________________________________________________
+
+Flota una imagen hacia la derecha con la clase ".float-right" o hacia la izquierda con ".float-left":
+
+	<img src="http://placeimg.com/640/480/any" class="img-fluid rounded img-thumbnail float-right" alt="Responsive image">
+
+Para centrar una imagen usamos las clases de utilidad ".mx-auto" (margin: auto) y ".d-block" (display: block) a la imagen:
+
+	<img src="http://placeimg.com/640/480/any" class="img-fluid rounded img-thumbnail mx-auto d-block" alt="Responsive image">
+_______________________________________________________
+
+	[7]. Jumbotron:
+_______________________________________________________
+
+Un jumbotron indica una gran casilla gris para llamar la atención adicional sobre algún contenido o información especial.
+
+Dentro de un jumbotron se puede colocar casi cualquier HTML válido, incluidos otros elementos/clases de Bootstrap.
+
+	<div class="jumbotron">
+		<h1>Bootstrap Tutorial</h1>
+		<p>Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive, mobile-first projects on the web.</p>
+	</div>
+
+Si desea un jumbotron de ancho completo sin bordes redondeados, agregue la clase ".jumbotron-fluid" y un ".container" o ".container-fluid" dentro de él:
+
+	<div class="jumbotron jumbotron-fluid">
+	  <div class="container">
+		<h1>Bootstrap Tutorial</h1>
+		<p>Bootstrap is the most popular HTML, CSS, and JS framework for developing responsive, mobile-first projects on the web.</p>
+	  </div>
+	</div>
+_______________________________________________________
+
+	[8]. Alertas:
+_______________________________________________________
+
+Bootstrap 4 proporciona una manera fácil de crear mensajes de alerta predefinidos.
+
+Las alertas se crean con la clase ".alert", seguida de una de las clases contextuales: ".alert-success", ".alert-info", ".alert-warning", ".alert-danger", ".alert-primary", ".alert-secondary", ".alert-light" o ".alert-dark".
+
+	<div class="alert alert-success">
+		<strong>Success!</strong> This alert box could indicate a successful or positive action.
+	</div>
+
+De está forma veremos un "div" de color verde con el mensaje.
+_______________________________________________________
+
+	[8.1]. Enlaces de Alerta:
+_______________________________________________________
+
+Agregamos la clase ".alert-link" a cualquier enlace dentro del cuadro de alerta para crear "enlaces de colores coincidentes":
+
+	<div class="alert alert-warning">
+		<strong>Warning!</strong> You should <a href="#" class="alert-link">read this message</a>.
+	</div>
+
+De esta forma el enlace sale como en negrilla, pero de un color que coincide con el tipo de alerta.
+_______________________________________________________
+
+	[8.2]. Cerrar Alertas:
+_______________________________________________________
+
+Para cerrar el mensaje de alerta, agregamos la clase ".alert-dismissible" al contenedor de alertas luego la clase ".close" y el atributo data-dismiss="alert" a un enlace o elemento de botón (cuando hace clic en este, el cuadro de alerta desaparecerá).
+
+	<div class="alert alert-success alert-dismissible">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<strong>Success!</strong> Indicates a successful or positive action.
+	</div>
+
+Nota: &times; (×) es una entidad HTML que es el ícono preferido para los botones de cierre, en lugar de la letra "x". Para ver el listado de símbolos especiales y otras entidades HTML:
+
+	https://www.w3schools.com/charsets/ref_html_entities_4.asp
+_______________________________________________________
+
+	[8.3]. Alertas Animadas:
+_______________________________________________________
+
+Las clases ".fade" y ".show" agregan un efecto de desvanecimiento al cerrar el mensaje de alerta:
+
+	<div class="alert alert-primary alert-dismissible fade show">
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+		<strong>Primary!</strong> Indicates an important action.
+	</div>
+_______________________________________________________
+
+	[9]. Botones:
+_______________________________________________________
+
+Existen 10 estilos diferentes de botones:
+
+	<button type="button" class="btn">Basico</button>
+	<button type="button" class="btn btn-primary">Primario</button>
+	<button type="button" class="btn btn-secondary">Secondario</button>
+	<button type="button" class="btn btn-success">Exito</button>
+	<button type="button" class="btn btn-info">Info</button>
+	<button type="button" class="btn btn-warning">Advertencia</button>
+	<button type="button" class="btn btn-danger">Peligro</button>
+	<button type="button" class="btn btn-dark">Oscuro</button>
+	<button type="button" class="btn btn-light">Claro</button>
+	<button type="button" class="btn btn-link">Enlace</button>
+
+Nota: el botón básico no tiene ningún color, borde, ni efecto "hover", solo aparece un borde cuando se le da clic.
+
+Estas clases se pueden usar en elementos "<a>", "<button>", o "<input>":
+
+	<a href="#" class="btn btn-info" role="button">Enlace Botón</a>
+
+	<button type="button" class="btn btn-info">Botón</button>
+
+	<input type="button" class="btn btn-info" value="Input Botón">
+
+	<input type="submit" class="btn btn-info" value="Submit Botón">
+_______________________________________________________
+
+	[9.1]. Botones de contorno/borde:
+_______________________________________________________
+
+Podemos crear botones que muestran color solo en el borde y cambian su color de fondo cuando se hace hover:
+
+	<button type="button" class="btn btn-outline-primary">Primary</button>
+	<button type="button" class="btn btn-outline-secondary">Secondary</button>
+	<button type="button" class="btn btn-outline-success">Success</button>
+	<button type="button" class="btn btn-outline-info">Info</button>
+	<button type="button" class="btn btn-outline-warning">Warning</button>
+	<button type="button" class="btn btn-outline-danger">Danger</button>
+	<button type="button" class="btn btn-outline-dark">Dark</button>
+	<button type="button" class="btn btn-outline-light text-dark">Light</button>
+_______________________________________________________
+
+	[9.2]. Tamaños de Botones:
+_______________________________________________________
+
+Usamos la clase ".btn-lg" para botones grandes o la clase ".btn-sm" para botones pequeños:
+
+	<button type="button" class="btn btn-primary btn-lg">Grande</button>
+	<button type="button" class="btn btn-primary btn-md">Por defecto</button>
+	<button type="button" class="btn btn-primary btn-sm">Pequeño</button>
+_______________________________________________________
+
+	[9.3]. Botones de nivel de bloque:
+_______________________________________________________
+
+Añadimos la clase ".btn-block" para crear un botón de nivel de bloque que abarque todo el ancho de su elemento padre:
+
+	<button type="button" class="btn btn-success btn-block">Botón Ancho</button>
+
+Nota: podemos crear botón de nivel de bloque pequeños y grandes, ambos ocupan todo el ancho del contenedor padre, pero su alto y tamaño de fuente son más grandes/pequeñas:
+
+	<button type="button" class="btn btn-success btn-lg btn-block">Botón Grande </button>
+
+	<button type="button" class="btn btn-success btn-sm btn-block">Botón Pequeño</button>
+_______________________________________________________
+
+	[9.4]. Botones Activos/Deshabilitados:
+_______________________________________________________
+
+Un botón se puede establecer en un estado activo (aparece presionado) o deshabilitado (no cliqueable):
+
+	<button type="button" class="btn btn-primary active">Botón Activo</button>
+	
+	<button type="button" class="btn btn-primary" disabled>Botón Deshabilitado</button>
+	
+	<a href="#" class="btn btn-primary disabled">Enlace Deshabilitado</a>
+
+La clase ".active" hace que un botón parezca presionado, y el atributo "disabled" hace que un botón no se le pueda hacer clic. Los elementos "<a>" no admiten el atributo "disabled" y, por lo tanto, deben usar la clase ".disabled" para que aparezca visualmente deshabilitado.
+
+_______________________________________________________
+
+	[9.5]. Botones con Spinner:
+_______________________________________________________
+
+Se les puede añadir spinner(loaders circulares) a los botones:
+
+	<button class="btn btn-primary">
+		<span class="spinner-border spinner-border-sm"></span>
+	</button>
+
+	<button class="btn btn-primary">
+		<span class="spinner-border spinner-border-sm"></span>
+		Loading..
+	</button>
+
+	<button class="btn btn-primary" disabled>
+		<span class="spinner-border spinner-border-sm"></span>
+		Loading..
+	</button>
+
+	<button class="btn btn-primary" disabled>
+		<span class="spinner-grow spinner-grow-sm"></span>
+		Loading..
+	</button>
+_______________________________________________________
+
+	[9.6]. Grupo de Botones:
+_______________________________________________________
+
+Bootstrap 4 permite agrupar una serie de botones (en una sola línea) en un grupo de botones:
+
+	<div class="btn-group">
+		<button type="button" class="btn btn-primary">Apple</button>
+		<button type="button" class="btn btn-primary">Samsung</button>
+		<button type="button" class="btn btn-primary">Sony</button>
+	</div>
+
+En lugar de aplicar tamaños de botón a cada botón de un grupo, usamos la clase ".btn-group-lg" para un grupo de botones grande o ".btn-group-sm" para un grupo de botones pequeño:
+
+	<div class="btn-group btn-group-lg">
+		<button type="button" class="btn btn-primary">Apple</button>
+		<button type="button" class="btn btn-primary">Samsung</button>
+		<button type="button" class="btn btn-primary">Sony</button>
+	</div>
+
+	<div class="btn-group btn-group-sm">
+		<button type="button" class="btn btn-primary">Apple</button>
+		<button type="button" class="btn btn-primary">Samsung</button>
+		<button type="button" class="btn btn-primary">Sony</button>
+	</div>
+_______________________________________________________
+
+	[9.7]. Grupo de Botones Verticales:
+_______________________________________________________
+
+Se pueden agrupar botones de forma vertical con la clase ".btn-group-vertical":
+
+	<div class="btn-group-vertical">
+		<button type="button" class="btn btn-primary">Apple</button>
+		<button type="button" class="btn btn-primary">Samsung</button>
+		<button type="button" class="btn btn-primary">Sony</button>
+	</div>
+_______________________________________________________
+
+	[9.8]. Grupos de botones anidados y menús desplegables:
+_______________________________________________________
+
+Agrupe los grupos de botones para crear menús desplegables:
+
+	<div class="btn-group">
+		<button type="button" class="btn btn-primary">Apple</button>
+		<button type="button" class="btn btn-primary">Samsung</button>
+		<div class="btn-group">
+			<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+				Sony
+			</button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item" href="#">Tablet</a>
+				<a class="dropdown-item" href="#">Smartphone</a>
+			</div>
+		</div>
+	</div>
+
+También podemos tener el icono de menú desplegable como botón aparte(Split Button Dropdowns):
+
+	<div class="btn-group">
+		<button type="button" class="btn btn-primary">Sony</button>
+		<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown">
+		  <span class="caret"></span>
+		</button>
+		<div class="dropdown-menu">
+		  <a class="dropdown-item" href="#">Tablet</a>
+		  <a class="dropdown-item" href="#">Smartphone</a>
+		</div>
+	</div>
+_______________________________________________________
+
+	[10]. Insignias(badges):
+_______________________________________________________
+
+Las insignias se utilizan para agregar información adicional a cualquier contenido. Use la clase ".badge" junto con una clase contextual (como ".badge-secondary") dentro de los elementos "<span>" para crear insignias rectangulares. Tenga en cuenta que las insignias se escalan para coincidir con el tamaño del elemento padre (si lo hay):
+
+	<h3>Example heading <span class="badge badge-secondary">New</span></h3>
+
+Para cambiar el color de la insignia, usamos las clases contextuales:
+
+	"badge-primary"
+	"badge-secondary"
+	"badge-success"
+	"badge-danger"
+	"badge-warning"
+	"badge-info"
+	"badge-light"
+	"badge-dark"
+_______________________________________________________
+
+	[10.1]. Insignias Píldora:
+_______________________________________________________
+
+Para hacer que las insignias parezcan una píldora(bordes redondeados) añadimos la clase ".badge-pill":
+
+	<span class="badge badge-pill badge-dark">Dark</span>
+_______________________________________________________
+
+	[10.2]. Insignias dentro de un elemento:
+_______________________________________________________
+
+Un ejemplo de uso de una insignia dentro de un botón:
+
+	<button type="button" class="btn btn-primary">
+		Mensages <span class="badge badge-light">4</span>
+	</button>
+
+En este caso la insignia nos sirve para indicar al usuario que tiene 4 nuevos mensajes sin leer.
+_______________________________________________________
+
+	[11]. Barras de Progreso:
+_______________________________________________________
+
+Se puede usar una barra de progreso para mostrar a un usuario qué tan avanzado está en un proceso.
+
+Para crear una barra de progreso predeterminada, agregamos la clase ".progress" al elemento contenedor y la clase ".progress-bar" al elemento hijo. Use la propiedad de ancho CSS para establecer el ancho de la barra de progreso:
+
+	<div class="progress">
+		<div class="progress-bar" style="width:70%"></div>
+	</div>
+
+En este caso la barra está llena un 70% de color azul(color por defecto). Podemos cambiar el color azul, agregando las siguientes clases al elemento hijo:
+
+	"bg-success" --> verde.
+	"bg-info" --> turquesa.
+	"bg-warning" --> naranja
+	"bg-danger" --> rojo.
+	"bg-white" --> blanco.
+	"bg-secondary" --> gris.
+	"bg-light" --> gris claro.
+	"bg-dark" --> gris oscuro.
+
+Ejemplo de uso:
+
+	<!-- Green -->
+	<div class="progress">
+		<div class="progress-bar bg-success" style="width:20%"></div>
+	</div>
+
+La altura de la barra de progreso es de 16 píxeles por defecto. Use la propiedad de altura CSS para cambiarlo. Tenga en cuenta que debe establecer la misma altura para el contenedor de progreso y la barra de progreso
+
+	<div class="progress" style="height:30px">
+		<div class="progress-bar" style="width:60%;height:30px"></div>
+	</div>
+_______________________________________________________
+
+	[11.1]. Etiquetas para Barras de Progreso:
+_______________________________________________________
+
+Agregue texto dentro de la barra de progreso para mostrar el porcentaje visible:
+
+	<div class="progress">
+		<div class="progress-bar" style="width:70%">70%</div>
+	</div>
+_______________________________________________________
+
+	[11.2]. Barras de Progreso a rayas:
+_______________________________________________________
+
+Para añadir rayas diagonales a la barra de progreso, usamos la clase ".progress-bar-striped" al elemento hijo:
+
+	<div class="progress">
+		<div class="progress-bar bg-warning progress-bar-striped" style="width:60%"></div>
+	</div>
+_______________________________________________________
+
+	[11.3]. Barras de Progreso Animadas:
+_______________________________________________________
+
+Para añadir la animación que las barras diagonales se van moviendo, usamos la clase "progress-bar-animated":
+
+	<div class="progress">
+		<div class="progress-bar bg-info progress-bar-striped progress-bar-animated" style="width:50%">50%</div>
+	</div>
+_______________________________________________________
+
+	[11.4]. Múltiples Barras de Progreso:
+_______________________________________________________
+
+Las barras de progreso también se pueden apilar:
+
+	<div class="progress">
+		<div class="progress-bar bg-success" style="width:40%">
+		  Free Space
+		</div>
+		<div class="progress-bar bg-warning" style="width:10%">
+		  Warning
+		</div>
+		<div class="progress-bar bg-danger" style="width:20%">
+		  Danger
+		</div>
+	</div>
+
+En este caso, sale una barra de progreso con 3 colores diferentes.
+_______________________________________________________
+
+	[12]. Spinners/loaders:
+_______________________________________________________
+
+Para crear un spinner/loader, use la clase ".spinner-border":
+
+	<div class="spinner-border"></div>
+
+Use cualquier utilidad de color de texto para agregar un color al spinner:
+
+	<div class="spinner-border text-muted"></div>
+
+Use la clase ".spinner-grow" si desea que el spinner/loader crezca en lugar de girar:
+
+	<div class="spinner-grow text-warning"></div>
+
+Use ".spinner-border-sm" o ".spinner-grow-sm" para crear un spinner más pequeño:
+
+	<div class="spinner-border spinner-border-sm"></div>
+
+	<div class="spinner-grow spinner-grow-sm"></div>
+_______________________________________________________
+
+	[13]. Paginación:
+_______________________________________________________
+
+Si tiene un sitio web con muchas páginas, es posible que desee agregar algún tipo de paginación a cada página.
+
+Agregue la clase ".pagination" a un elemento "<ul>". Luego agregue ".page-item" a cada elemento "<li>" y la clase ".page-link" a cada enlace dentro de "<li>":
+
+	<ul class="pagination">
+		<li class="page-item"><a class="page-link" href="#">Previous</a></li>
+		<li class="page-item"><a class="page-link" href="#">1</a></li>
+		<li class="page-item"><a class="page-link" href="#">2</a></li>
+		<li class="page-item"><a class="page-link" href="#">3</a></li>
+		<li class="page-item"><a class="page-link" href="#">Next</a></li>
+	</ul>
+_______________________________________________________
+
+	[13.1]. Paginación activa/deshabilitada:
+_______________________________________________________
+
+La clase ".active" se usa para resaltar la página actual:
+
+	<ul class="pagination">
+		<li class="page-item"><a class="page-link" href="#">Previous</a></li>
+		<li class="page-item"><a class="page-link" href="#">1</a></li>
+		<li class="page-item active"><a class="page-link" href="#">2</a></li>
+		<li class="page-item"><a class="page-link" href="#">3</a></li>
+		<li class="page-item"><a class="page-link" href="#">Next</a></li>
+	</ul>
+
+La clase ".disabled" se usa para enlaces no cliqueables:
+
+	<ul class="pagination">
+		<li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+		<li class="page-item"><a class="page-link" href="#">1</a></li>
+		<li class="page-item"><a class="page-link" href="#">2</a></li>
+		<li class="page-item"><a class="page-link" href="#">3</a></li>
+		<li class="page-item"><a class="page-link" href="#">Next</a></li>
+	</ul>
+_______________________________________________________
+
+	[13.2]. Tamaño de la Paginación:
+_______________________________________________________
+
+Agregue la clase ".pagination-lg" para bloques más grandes o ".pagination-sm" para bloques más pequeños:
+
+	<ul class="pagination pagination-lg">
+		...
+
+	<ul class="pagination pagination-sm">
+		...
+_______________________________________________________
+
+	[13.3]. Alineación de la Paginación:
+_______________________________________________________
+
+Por defecto el menú de paginación viene alineado a la izquierda, para alinearlo al centro o a la derecha, usamos clases utilitarias de Bootstrap:
+
+	<ul class="pagination justify-content-center">
+
+	<ul class="pagination justify-content-end">
+_______________________________________________________
+
+	[13.4]. Migas de Pan(Breadcrumbs):
+_______________________________________________________
+
+Las clases ".breadcrumb" y ".breadcrumb-item" indican la ubicación de la página actual dentro de una jerarquía de navegación:
+
+	<ul class="breadcrumb">
+		<li class="breadcrumb-item"><a href="#">Photos</a></li>
+		<li class="breadcrumb-item"><a href="#">Summer 2017</a></li>
+		<li class="breadcrumb-item"><a href="#">Italy</a></li>
+		<li class="breadcrumb-item active">Rome</li>
+	</ul>
+
+En el navegador, la miga de pan sale así:
+
+	Photos / Summer 2017 / Italy / Rome
+_______________________________________________________
+
+	[14]. Lista de Grupos:
+_______________________________________________________
+
+Para crear un grupo de lista básico, use un elemento "<ul>" con la clase ".list-group" y elementos "<li>" con la clase ".list-group-item"
+
+	<ul class="list-group">
+		<li class="list-group-item">First item</li>
+		<li class="list-group-item">Second item</li>
+		<li class="list-group-item">Third item</li>
+	</ul>
+
+Los ítems de la lista salen con un borde como si estuvieran dentro de una tabla.
+_______________________________________________________
+
+	[14.1]. Lista de Grupos con Elementos <a>:
+_______________________________________________________
+
+Para crear un grupo de lista con elementos vinculados, use "<div>" en lugar de "<ul>" y "<a>" en lugar de "<li>". Opcionalmente, agregue la clase ".list-group-item-action" si desea un color de fondo gris al pasar el mouse(hover):
+
+	<div class="list-group">
+		<a href="#" class="list-group-item list-group-item-action">First item</a>
+		<a href="#" class="list-group-item list-group-item-action">Second item</a>
+		<a href="#" class="list-group-item list-group-item-action">Third item</a>
+	</div>
+_______________________________________________________
+
+	[14.2]. Lista de Grupos Activa/Deshabilitada:
+_______________________________________________________
+
+Use la clase ".active" para resaltar el elemento actual:
+
+	<ul class="list-group">
+		<li class="list-group-item active">Active item</li>
+		<li class="list-group-item">Second item</li>
+		<li class="list-group-item">Third item</li>
+	</ul>
+
+En este caso el primer ítem de la lista sale con fondo azul y la letra blanca.
+
+La clase ".disabled" agrega un color de texto más claro al elemento deshabilitado. Y cuando se usa en enlaces, eliminará el efecto de hover:
+
+	<div class="list-group">
+		<a href="#" class="list-group-item disabled">Disabled item</a>
+		<a href="#" class="list-group-item disabled">Disabled item</a>
+		<a href="#" class="list-group-item">Third item</a>
+	</div>
+
+En este caso los dos primeros enlaces salen deshabilitados y no se les puede hacer clic.
+_______________________________________________________
+
+	[14.3]. Lista de Grupos Flush/Eliminar Bordes:
+_______________________________________________________
+
+Use la clase ".list-group-flush" para eliminar algunos bordes y esquinas redondeadas:
+
+	<ul class="list-group list-group-flush">
+		<li class="list-group-item">First item</li>
+		<li class="list-group-item">Second item</li>
+		<li class="list-group-item">Third item</li>
+		<li class="list-group-item">Fourth item</li>
+	</ul>
+
+En este caso se eliminan los bordes exteriores de la lista, internamente los elementos "<li>" se separan con un borde(línea).
+_______________________________________________________
+
+	[14.4]. Lista de Grupos Horizontal:
+_______________________________________________________
+
+Si desea que los elementos de la lista se muestren horizontalmente en lugar de verticalmente (uno al lado del otro en lugar de uno encima del otro), agregue la clase ".list-group-horizontal" a ".list-group":
+
+	<ul class="list-group list-group-horizontal">
+		<li class="list-group-item">First item</li>
+		<li class="list-group-item">Second item</li>
+		<li class="list-group-item">Third item</li>
+		<li class="list-group-item">Fourth item</li>
+	</ul>
+_______________________________________________________
+
+	[14.5]. Lista de Grupos con Clases Contextuales:
+_______________________________________________________
+
+Podemos cambiar el color de cada ítem de la lista con clases contextuales:
+
+	<ul class="list-group">
+		<li class="list-group-item list-group-item-success">Success item</li>
+		<li class="list-group-item list-group-item-secondary">Secondary item</li>
+		<li class="list-group-item list-group-item-info">Info item</li>
+		<li class="list-group-item list-group-item-warning">Warning item</li>
+		<li class="list-group-item list-group-item-danger">Danger item</li>
+		<li class="list-group-item list-group-item-primary">Primary item</li>
+		<li class="list-group-item list-group-item-dark">Dark item</li>
+		<li class="list-group-item list-group-item-light">Light item</li>
+	</ul>
+_______________________________________________________
+
+	[14.6]. Lista de Grupos con Insignias(badges):
+_______________________________________________________
+
+Combine clases ".badge" con clases de utilidad/ayuda para agregar insignias dentro del grupo de listas:
+
+	<ul class="list-group">
+		<li class="list-group-item d-flex justify-content-between align-items-center">
+			Inbox
+			<span class="badge badge-primary badge-pill">12</span>
+		</li>
+		<li class="list-group-item d-flex justify-content-between align-items-center">
+			Ads
+			<span class="badge badge-primary badge-pill">50</span>
+		</li>
+		<li class="list-group-item d-flex justify-content-between align-items-center">
+			Junk
+			<span class="badge badge-primary badge-pill">99</span>
+		</li>
+	</ul>
+_______________________________________________________
+
+	[15]. Cards(Tarjetas):
+_______________________________________________________
+
+Una tarjeta en Bootstrap 4 es una caja bordeada con algo de relleno alrededor de su contenido. Incluye opciones para encabezados, pies de página, contenido, colores, etc.
+
+Se crea una tarjeta básica con la clase ".card", y el contenido dentro de la tarjeta tiene la clase ".card-body":
+
+	<div class="card">
+		<div class="card-body">Basic card</div>
+	</div>
+
+Usamos las clases ".card-header" y ".card-footer" para añadir encabezado y pie de pág. a la tarjeta:
+
+	<div class="card">
+		<div class="card-header">Header</div>
+		<div class="card-body">Content</div>
+		<div class="card-footer">Footer</div>
+	</div>
+
+Nota: el encabezado y el footer salen con color de fondo gris claro, y una línea de borde inferior y superior, respectivamente.
+
+Para añadir color de fondo usamos las clases contextuales:
+
+	<div class="card bg-info text-white">
+		<div class="card-body">Info card</div>
+	</div>
+_______________________________________________________
+
+	[15.1]. Títulos, Texto y Enlaces para las Cards:
+_______________________________________________________
+
+Use ".card-title" para agregar títulos de tarjeta a cualquier elemento de encabezado(etiquetas <h#>). 
+
+La clase ".card-text" se usa para eliminar los márgenes inferiores de un elemento "<p>" si es el last-child (o el único) en "card-body".
+
+La clase ".card-link" agrega un color azul a cualquier enlace y un efecto de hover.
+
+	<div class="card">
+		<div class="card-body">
+			<h4 class="card-title">Card title</h4>
+			<p class="card-text">Some example text. Some example text.</p>
+			<a href="#" class="card-link">Card link</a>
+			<a href="#" class="card-link">Another link</a>
+		</div>
+	</div>
+_______________________________________________________
+
+	[15.2]. Imágenes para las Cards:
+_______________________________________________________
+
+Añadimos ".card-img-top" o ".card-img-bottom" a una "<img>" para poner una imagen arriba o abajo dentro de la tarjeta
+
+	<div class="card" style="width:400px">
+		<img class="card-img-top" src="img_avatar1.png" alt="Card image" style="width:100%">
+		<div class="card-body">
+			<h4 class="card-title">John Doe</h4>
+			<p class="card-text">Some example text some example text. John Doe is an architect and engineer</p>
+			<a href="#" class="btn btn-primary">See Profile</a>
+		</div>
+	</div>
+
+Nota: añadimos la imagen fuera del ".card-body", para que está ocupe todo el ancho de la tarjeta. Si se pone dentro del ".card-body", la imagen sale con "paddings" separándola del borde de la tarjeta.
+
+Ejemplo imagen abajo:
+
+	<div class="card" style="width:400px">
+		<div class="card-body">
+			<h4 class="card-title">Jane Doe</h4>
+			<p class="card-text">Some example text some example text. Jane Doe is an architect and engineer</p>
+			<a href="#" class="btn btn-primary">See Profile</a>
+		</div>
+		<img class="card-img-bottom" src="img_avatar6.png" alt="Card image" style="width:100%">
+	</div>
+
+Nota: no solo se le añade la clase, sino que también el HTML de la imagen debe estar al final, porque si le ponemos la clase ".card-img-bottom" y se añade la imagen al principio, sale al principio de la tarjeta.
+_______________________________________________________
+
+	[15.2.1]. Superposiciones de imagen para las Cards:
+_______________________________________________________
+
+Para que la imagen quede como fondo de la tarjeta, y el texto quede encima de la imagen añadimos la clase ".card-img-overlay":
+
+	<div class="card img-fluid" style="width:500px">
+		<img class="card-img-top" src="img_avatar1.png" alt="Card image" style="width:100%">
+		<div class="card-img-overlay">
+			<h4 class="card-title">John Doe</h4>
+			<p class="card-text">Some example text some example text. Some example text some example text. Some example text some example text. Some example text some example text.</p>
+			<a href="#" class="btn btn-primary">See Profile</a>
+		</div>
+	</div>
+_______________________________________________________
+
+	[15.3]. Enlace Extendido(Stretched) para las Cards:
+_______________________________________________________
+
+Añadimos la clase ".stretched-link" a un enlace dentro de la tarjeta, y esto hace que toda la tarjeta sea cliqueable y con efecto hover (la tarjeta actúa como un enlace):
+
+	<a href="#" class="btn btn-primary stretched-link">See Profile</a>
+_______________________________________________________
+
+	[15.4]. Columnas Tarjetas:
+_______________________________________________________
+
+La clase ".card-columns" crea una cuadrícula de tarjetas de mampostería(como pinterest). El diseño se ajustará automáticamente a medida que inserte más tarjetas.
+
+	<div class="card-columns">
+		<div class="card bg-primary">
+		  <div class="card-body text-center">
+			<p class="card-text">Some text inside the first card</p>
+		  </div>
+		</div>
+		<div class="card bg-warning">
+		  <div class="card-body text-center">
+			<p class="card-text">Some text inside the second card</p>
+		  </div>
+		</div>
+		<div class="card bg-success">
+		  <div class="card-body text-center">
+			<p class="card-text">Some text inside the third card</p>
+		  </div>
+		</div>
+		<div class="card bg-danger">
+		  <div class="card-body text-center">
+			<p class="card-text">Some text inside the fourth card</p>
+		  </div>
+		</div>  
+		<div class="card bg-light">
+		  <div class="card-body text-center">
+			<p class="card-text">Some text inside the fifth card</p>
+		  </div>
+		</div>
+		<div class="card bg-info">
+		  <div class="card-body text-center">
+			<p class="card-text">Some text inside the sixth card</p>
+		  </div>
+		</div>
+	</div>
+
+En este caso se crean 3 columnas, en la primera columna se posicionan la primera y segunda tarjeta. Si añadimos otra tarjeta, se siguen manteniendo las 3 columnas, pero ahora cada columna contendrá 3 tarjetas(la última columna tendrá solo 1 tarjeta) y así sucesivamente.
+
+Nota 1: la cantidad de tarjetas en cada columna varía según el contenido, es decir, si por ejemplo tenemos las 65 tarjetas, y en la primera columna tenemos una tarjeta con un texto muy largo, y añadimos una 7ma tarjeta, en vez de la primera columna tener 3 tarjetas, tendrá solo 2 o 1, dependiendo de qué tan grande o extenso sea su contenido.
+
+Nota 2: Las tarjetas se muestran verticalmente en pantallas pequeñas(menos de 576px).
+_______________________________________________________
+
+	[15.5]. Baraja de Tarjetas:
+_______________________________________________________
+
+La clase ".card-deck" crea una cuadrícula de tarjetas que tienen la misma altura y anchura. El diseño se ajustará automáticamente a medida que inserte más tarjetas.
+
+	<div class="card-deck">
+		<div class="card bg-primary">
+			<div class="card-body text-center">
+				<p class="card-text">Some text inside the first card</p>
+				<p class="card-text">Some more text to increase the height</p>
+				<p class="card-text">Some more text to increase the height</p>
+				<p class="card-text">Some more text to increase the height</p>
+			</div>
+		</div>
+		<div class="card bg-warning">
+			<div class="card-body text-center">
+				<p class="card-text">Some text inside the second card</p>
+			</div>
+		</div>
+		<div class="card bg-success">
+			<div class="card-body text-center">
+				<p class="card-text">Some text inside the third card</p>
+			</div>
+		</div>
+		<div class="card bg-danger">
+			<div class="card-body text-center">
+				<p class="card-text">Some text inside the fourth card</p>
+			</div>
+		</div>
+	</div>
+
+En este caso cada tarjeta es una columna, y si se añaden más tarjetas, se convierten en más columnas. No importa cuánto contenido tenga cada tarjeta, todas salen con el mismo ancho y alto.
+
+Nota: Las tarjetas se muestran verticalmente en pantallas pequeñas (menos de 576px).
+_______________________________________________________
+
+	[15.6]. Grupo de Tarjetas:
+_______________________________________________________
+
+La clase ".card-group" es similar a ".card-deck", la única diferencia es que  ".card-group" quita los márgenes izquierdo y derecho entre las tarjetas.
+
+Nota: Las tarjetas se muestran verticalmente en pantallas pequeñas (menos de 576px), con margen superior e inferior.
+
+	<div class="card-group">
+		<div class="card bg-primary">
+			<div class="card-body text-center">
+				<p class="card-text">Some text inside the first card</p>
+				<p class="card-text">Some more text to increase the height</p>
+				<p class="card-text">Some more text to increase the height</p>
+				<p class="card-text">Some more text to increase the height</p>
+			</div>
+		</div>
+		<div class="card bg-warning">
+			<div class="card-body text-center">
+				<p class="card-text">Some text inside the second card</p>
+			</div>
+		</div>
+		<div class="card bg-success">
+			<div class="card-body text-center">
+				<p class="card-text">Some text inside the third card</p>
+			</div>
+		</div>
+		<div class="card bg-danger">
+			<div class="card-body text-center">
+				<p class="card-text">Some text inside the fourth card</p>
+			</div>
+		</div>
+	</div>
+_______________________________________________________
+
+	[16]. Listas desplegables(Dropdowns):
+_______________________________________________________
+
+Un menú desplegable es un menú conmutable que permite al usuario elegir un valor de una lista predefinida:
+
+	<div class="dropdown">
+		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+			Dropdown button
+		</button>
+		<div class="dropdown-menu">
+			<a class="dropdown-item" href="#">Link 1</a>
+			<a class="dropdown-item" href="#">Link 2</a>
+			<a class="dropdown-item" href="#">Link 3</a>
+		</div>
+	</div>
+
+La clase ".dropdown" se usa para indicar un menú desplegable.
+
+Use la clase ".dropdown-menu" para construir el menú desplegable.
+
+Para abrir el menú desplegable, use un botón o un enlace con una clase de ".dropdown-toggle" y data-toggle = "dropdown".
+
+La clase ".dropdown-item" a cada elemento (enlaces o botones) dentro del menú desplegable.
+_______________________________________________________
+
+	[16.1]. Divisor para el desplegable:
+_______________________________________________________
+
+La clase ".dropdown-divider" se usa para separar enlaces dentro del menú desplegable con un borde horizontal delgado:
+
+	<div class="dropdown">
+		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+			Dropdown button
+		</button>
+		<div class="dropdown-menu">
+			<a class="dropdown-item" href="#">Link 1</a>
+			<a class="dropdown-item" href="#">Link 2</a>
+			<a class="dropdown-item" href="#">Link 3</a>
+			<div class="dropdown-divider"></div>
+			<a class="dropdown-item" href="#">Another link</a>
+		</div>
+	</div>
+_______________________________________________________
+
+	[16.2]. Titulo para el desplegable:
+_______________________________________________________
+
+La clase ".dropdown-header" se usa para agregar encabezados dentro del menú desplegable:
+
+	<div class="dropdown">
+		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+			Dropdown button
+		</button>
+		<div class="dropdown-menu">
+			<h5 class="dropdown-header">Dropdown header</h5>
+			<a class="dropdown-item" href="#">Link 1</a>
+			<a class="dropdown-item" href="#">Link 2</a>
+			<a class="dropdown-item" href="#">Link 3</a>
+			<h5 class="dropdown-header">Dropdown header</h5>
+			<a class="dropdown-item" href="#">Another link</a>
+		</div>
+	</div>
+
+Esto nos sirve para por ejemplo dividir categorías.
+
+La clase ".dropdown-item-text" se usa para agregar texto sin formato a un elemento desplegable, o se usa en enlaces para el estilo de enlace predeterminado:
+
+	<div class="dropdown">
+		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+			Dropdown button
+		</button>
+		<div class="dropdown-menu">
+			<a class="dropdown-item" href="#">Link 1</a>
+			<a class="dropdown-item" href="#">Link 2</a>
+			<a class="dropdown-item-text" href="#">Text Link</a>
+			<span class="dropdown-item-text">Just Text</span>
+		</div>
+	</div>
+_______________________________________________________
+
+	[16.3]. Ítems Activos/deshabilitados:
+_______________________________________________________
+
+Resalte un elemento desplegable específico con la clase ".active" (agrega un color de fondo azul).
+
+Para deshabilitar un elemento en el menú desplegable, use la clase ".disabled" (color de texto gris claro y sin un ícono del mouse "mano señalando" al pasar el mouse):
+
+	<div class="dropdown">
+		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+			Dropdown button
+		</button>
+		<div class="dropdown-menu">
+			<a class="dropdown-item" href="#">Normal</a>
+			<a class="dropdown-item active" href="#">Active</a>
+			<a class="dropdown-item disabled" href="#">Disabled</a>
+		</div>
+	</div>
+_______________________________________________________
+
+	[16.4]. Posición para el desplegable:
+_______________________________________________________
+
+Podemos posicionar el desplegable a izquierda o derecha agregando la clase ".dropright" o ."dropleft" al elemento desplegable. Tenga en cuenta que el cursor/flecha se agrega automáticamente:
+
+	<div class="dropdown dropright">
+		<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+			Dropright button
+		</button>
+		<div class="dropdown-menu">
+			<a class="dropdown-item" href="#">Link 1</a>
+			<a class="dropdown-item" href="#">Link 2</a>
+			<a class="dropdown-item" href="#">Link 3</a>
+		</div>
+	</div>
+
+Si queremos que el menú desplegable este abajo, pero alineado a la derecha, usamos la clase ".dropdown-menu-right" aplicada a "dropdown-menu":
+
+	<div class="dropdown-menu dropdown-menu-right">
+
+Si desea que el menú desplegable se expanda hacia arriba en lugar de hacia abajo, cambie el elemento <div> con clase "dropdown" a "dropup":
+
+	<div class="dropup">
+_______________________________________________________
+
+	[17]. Plegables(Collapsible):
+_______________________________________________________
+
+Los plegables son útiles cuando desea ocultar y mostrar gran cantidad de contenido.
+
+	<button type="button" class="btn btn-primary" data-toggle="collapse" data-target="#demo">Simple collapsible</button>
+	<div id="demo" class="collapse">
+		Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+	</div>
+
+La clase ".collapse" indica un elemento plegable(en este caso el "<div>"). Este es el contenido que se mostrará u ocultará con solo hacer clic en un botón.
+
+Para controlar (mostrar/ocultar) el contenido contraíble, agregue el atributo data-toggle = "collapse" a un elemento "<a>" o "<button>". Luego agregue el atributo data-target = "# id" para conectar el botón con el contenido plegable (<div id = "demo">).
+
+Nota: Para los elementos "<a>", puede usar el atributo "href" en lugar del atributo "data-target":
+
+	<a href="#demo" class="btn btn-primary" data-toggle="collapse">Simple collapsible</a>
+	<div id="demo" class="collapse">
+		Lorem...
+
+Por defecto, el contenido plegable está oculto. Sin embargo, puede agregar la clase ".show" para mostrar el contenido de forma predeterminada:
+
+	<div id="demo" class="collapse show">
+		Lorem ipsum dolor text....
+	</div>
+_______________________________________________________
+
+	[17.1]. Acordeón:
+_______________________________________________________
+
+El siguiente ejemplo muestra un acordeón simple al extender el componente de tarjeta(card):
+
+	<div id="accordion">
+		<div class="card">
+			<div class="card-header">
+				<a class="card-link" data-toggle="collapse" href="#collapseOne">
+					Collapsible Group Item #1
+				</a>
+			</div>
+			<div id="collapseOne" class="collapse show" data-parent="#accordion">
+				<div class="card-body">
+					Lorem ipsum ...
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-header">
+				<a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+					Collapsible Group Item #2
+				</a>
+			</div>
+			<div id="collapseTwo" class="collapse" data-parent="#accordion">
+				<div class="card-body">
+					Lorem ipsum ...
+				</div>
+			</div>
+		</div>
+		<div class="card">
+			<div class="card-header">
+				<a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+					Collapsible Group Item #3
+				</a>
+			</div>
+			<div id="collapseThree" class="collapse" data-parent="#accordion">
+				<div class="card-body">
+					Lorem ipsum ...
+				</div>
+			</div>
+		</div>
+	</div>
+
+Nota: Use el atributo "data-parent" para asegurarse que todos los elementos plegables se cierren(colapsen) cuando se muestra otro.
+_______________________________________________________
+
+	[18]. Navs:
+_______________________________________________________
+
+Si desea crear un menú horizontal simple, agregue la clase ".nav" a un elemento "<ul>", seguido de ".nav-item" para cada "<li>" y agregue la clase ".nav-link" a sus enlaces:
+
+	<ul class="nav">
+		<li class="nav-item">
+			<a class="nav-link" href="#">Link</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#">Link</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#">Link</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link disabled" href="#">Disabled</a>
+		</li>
+	</ul>
+_______________________________________________________
+
+	[18.1]. Alineación del Nav:
+_______________________________________________________
+
+Por defecto el nav menú está alineado a la izquierda, añadimos la clase ".justify-content-center" para centrarla y ".justify-content-end" para alinearla a la derecha.
+
+	<!-- Centered nav -->
+	<ul class="nav justify-content-center">
+
+	<!-- Right-aligned nav -->
+	<ul class="nav justify-content-end">
+_______________________________________________________
+
+	[18.2]. Nav Vertical:
+_______________________________________________________
+
+Para crear un menú vertical añadimos la clase ".flex-column":
+
+	<ul class="nav flex-column">
+_______________________________________________________
+
+	[18.3]. Pestañas(Tabs):
+_______________________________________________________
+
+Convierta el menú de navegación en pestañas de navegación con la clase ".nav-tabs". Agregue la clase ".active" al enlace activo/actual. 
+
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+			<a class="nav-link active" href="#">Active</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#">Link</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#">Link</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link disabled" href="#">Disabled</a>
+		</li>
+	</ul>
+
+La pestaña activa sale con borde gris superior y a los lados, su color de texto es #495057. Los enlaces de las otras pestañas salen azules, a excepción del enlace deshabilitado.
+
+Para hacer las pestañas se alternen al hacer clic, agregue el atributo data-toggle = "tab" a cada enlace.
+Luego agregue la clase ".tab-pane" con un ID único para cada pestaña y envuélvalas dentro de un elemento "<div>" con la clase ".tab-content".
+
+	<!-- Nav tabs -->
+
+	<ul class="nav nav-tabs nav-justified" role="tablist">
+		<li class="nav-item">
+			<a class="nav-link active" data-toggle="tab" href="#home">Home</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#menu1">Menu 1</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" data-toggle="tab" href="#menu2">Menu 2</a>
+		</li>
+	</ul>
+
+	<!-- Tab panes -->
+
+	<div class="tab-content">
+		<div id="home" class="container tab-pane active"><br>
+			<h3>HOME</h3>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+		</div>
+		<div id="menu1" class="container tab-pane fade"><br>
+			<h3>Menu 1</h3>
+			<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+		</div>
+		<div id="menu2" class="container tab-pane fade"><br>
+			<h3>Menu 2</h3>
+			<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+		</div>
+	</div>
+
+Si desea que las pestañas se desvanezcan al hacer clic en ellas, agregue la clase ".fade" a ".tab-pane".
+_______________________________________________________
+
+	[18.4]. Píldoras(Pills):
+_______________________________________________________
+
+Convierta el menú de navegación en píldoras de navegación con la clase ".nav-pills".
+
+	<ul class="nav nav-pills">
+		...
+
+Las píldoras, a diferencia de la pestaña, sale la píldora activa con color de fondo azul y texto blanco.
+
+Para hacer que las píldoras alternen el contenido cuando hacemos clic, usamos el mismo código de las pestañas(tabs), pero cambiamos el atributo "data-toggle" a data-toggle="pill".
+_______________________________________________________
+
+	[18.5]. Pestañas/Píldoras Justificadas:
+_______________________________________________________
+
+Para justificar las pestañas/píldoras, añadimos la clase ".nav-justified"
+
+	<ul class="nav nav-pills nav-justified">..</ul>
+	<ul class="nav nav-tabs nav-justified">..</ul>
+
+Esto hace que todas las pestañas/píldoras tengan el mismo ancho, y se justifiquen(se distribuyen) por todo el ancho de su contenedor.
+_______________________________________________________
+
+	[18.6]. Pestañas/Píldoras con Dropdown(desplegable):
+_______________________________________________________
+
+Para hacer un dropdown en uno de los ítems del menú(para que se desplieguen más enlaces, como por ejemplo de categorías) usamos:
+
+	<ul class="nav nav-tabs">
+		<li class="nav-item">
+			<a class="nav-link active" href="#">Active</a>
+		</li>
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Dropdown</a>
+			<div class="dropdown-menu">
+				<a class="dropdown-item" href="#">Link 1</a>
+				<a class="dropdown-item" href="#">Link 2</a>
+				<a class="dropdown-item" href="#">Link 3</a>
+			</div>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link" href="#">Link</a>
+		</li>
+		<li class="nav-item">
+			<a class="nav-link disabled" href="#">Disabled</a>
+		</li>
+	</ul>
+
+Y para las píldoras:
+
+	<ul class="nav nav-pills">
+		<li class="nav-item">
+			<a class="nav-link active" href="#">Active</a>
+		</li>
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">Dropdown</a>
+			<div class="dropdown-menu">
+				<a class="dropdown-item" href="#">Link 1</a>
+				<a class="dropdown-item" href="#">Link 2</a>
+				<a class="dropdown-item" href="#">Link 3</a>
+			</div>
+		</li>
+		<li class="nav-item">
+		  <a class="nav-link" href="#">Link</a>
+		</li>
+		<li class="nav-item">
+		  <a class="nav-link disabled" href="#">Disabled</a>
+		</li>
+	</ul>
+_______________________________________________________
+
+	[19]. Barras de Navegación(Navbar):
+_______________________________________________________
+
+Una barra de navegación es un encabezado de navegación que se coloca en la parte superior de la página.
+
+Con Bootstrap, una barra de navegación puede extenderse o contraerse, dependiendo del tamaño de la pantalla.
+
+Se crea una barra de navegación estándar con la clase ".navbar", seguida de una clase de colapso responsive: ".navbar-expand-xl" | lg | md | sm (apila la barra de navegación verticalmente en pantallas extra grandes, grandes, medianas o pequeñas).
+
+Para agregar enlaces dentro de la barra de navegación, use un elemento "<ul>" con class = "navbar-nav". Luego agregue elementos "<li>" con la clase ".nav-item" seguido de un elemento "<a>" con la clase ".nav-link":
+
+	<nav class="navbar navbar-expand-sm bg-light">
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" href="#">Link 1</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Link 2</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Link 3</a>
+			</li>
+		</ul>
+	</nav>
+
+Si quitamos la clase ".navbar-expand-xl|lg|md|sm", creamos una barra de navegación vertical.
+_______________________________________________________
+
+	[19.1]. Centrar la Barra de Navegación:
+_______________________________________________________
+
+Agregue la clase ".justify-content-center" para centrar la barra de navegación:
+
+	<nav class="navbar navbar-expand-sm bg-light justify-content-center">
+		...
+	</nav>
+
+Esto centrará la barra de navegación en pantallas medianas, grandes y extra grandes. En pantallas pequeñas se mostrará verticalmente y alineado a la izquierda (debido a la clase ".navbar-expand-sm").
+_______________________________________________________
+
+	[19.2]. Colorear la Barra de Navegación:
+_______________________________________________________
+
+Use cualquiera de las clases ".bg-color" para cambiar el color de fondo de la barra de navegación (.bg-primary, .bg-success, .bg-info, .bg-warning, .bg-danger, .bg-secondary, .bg-dark and .bg-light).
+
+Con la clase ".navbar-dark", se le da un color de texto blanco a todos los enlaces en la barra de navegación, o use la clase ".navbar-light" para agregar un color de texto negro.
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<ul class="navbar-nav">
+			<li class="nav-item active">
+				<a class="nav-link" href="#">Active</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Link</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Link</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link disabled" href="#">Disabled</a>
+			</li>
+		</ul>
+	</nav>
+
+Agregue la clase ".active" a un elemento "<a>" para resaltar el enlace actual, o la clase ".disabled" para indicar que no se puede hacer clic en el enlace.
+_______________________________________________________
+
+	[19.2]. Barra de Navegación con Logotipo:
+_______________________________________________________
+
+La clase ".navbar-brand" se usa para resaltar el nombre de marca/logotipo/proyecto de la página:
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<!-- Brand/logo -->
+		<a class="navbar-brand" href="#">Logo</a>
+		
+		<!-- Links -->
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" href="#">Link 1</a>
+			...
+	</nav>
+
+Al usar la clase ".navbar-brand" en las imágenes, Bootstrap 4 aplicará un estilo automático a la imagen para que se ajuste verticalmente a la barra de navegación:
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<a class="navbar-brand" href="#">
+			<img src="bird.jpg" alt="Logo" style="width:40px;">
+		</a>
+		...
+	</nav>
+_______________________________________________________
+
+	[19.3]. Colapsar Barra de Navegación:
+_______________________________________________________
+
+Muy a menudo, especialmente en pantallas pequeñas, desea ocultar los enlaces de navegación y reemplazarlos con un botón que debería revelarlos al hacer clic en ellos(icono hamburguesa).
+
+Para crear una barra de navegación plegable, use un botón con class = "navbar-toggler", data-toggle = "collapse" y data-target = "#thetarget". Luego, envuelva el contenido de la barra de navegación (enlaces, etc.) dentro de un elemento "div" con class = "collapse navbar-collapse", seguido de un "id" que coincida con el objetivo de datos del botón: "thetarget".
+
+	<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+		<!-- Brand/logo -->
+		<a class="navbar-brand" href="#">Navbar</a>
+
+		<!-- Botón Hamburguesa -->
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<!-- Menú colapsable -->
+		<div class="collapse navbar-collapse" id="collapsibleNavbar">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" href="#">Link</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Link</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">Link</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
+En este ejemplo, la barra de navegación se oculta en pantallas pequeñas y se reemplaza por un botón en la esquina superior derecha.
+
+Solo cuando se hace clic en el botón, se mostrará la barra de navegación.
+
+Nota: si quitamos la clase ".navbar-expand-md", siempre se ocultan los enlaces de la barra de navegación y se muestra el botón de alternar.
+_______________________________________________________
+
+	[19.4]. Navbar con Formulario y Botones:
+_______________________________________________________
+
+Si queremos añadir un input, como un buscador a la barra de navegación, usamos el elemento "<form>" con class="form-inline" para agrupar inputs y botones lado a lado:
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<form class="form-inline" action="/action_page.php">
+			<input class="form-control mr-sm-2" type="text" placeholder="Search">
+			<button class="btn btn-success" type="submit">Search</button>
+		</form>
+	</nav>
+_______________________________________________________
+
+	[19.5]. Texto en la Navbar:
+_______________________________________________________
+
+Use la clase ".navbar-text" para alinear verticalmente cualquier elemento dentro de la barra de navegación que no sea un enlace (garantiza el relleno(padding) y el color de texto adecuados).
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+
+		<!-- Links -->
+		<ul class="navbar-nav">
+			<li class="nav-item">
+				<a class="nav-link" href="#">Link 1</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link" href="#">Link 2</a>
+			</li>
+		</ul>
+
+		<!-- Navbar text-->
+		<span class="navbar-text">
+			Navbar text
+		</span>
+
+	</nav>
+_______________________________________________________
+
+	[19.6]. Navbar Fija(fixed) y Sticky(adhesiva):
+_______________________________________________________
+
+La barra de navegación también se puede fijar en la parte superior o inferior de la página.
+
+Una barra de navegación fija permanece visible en una posición fija (superior o inferior) independiente del desplazamiento de la página.
+
+La clase ".fixed-top" hace que la barra de navegación esté fija en la parte superior:
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+		...
+	</nav>
+
+Use la clase ".fixed-bottom" para hacer que la barra de navegación permanezca en la parte inferior de la página:
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-bottom">
+		...
+	</nav>
+
+Para hacer una navbar sticky(adhesiva) usamos la clase ".sticky-top":
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
+		...
+	</nav>
+
+Está navbar la usamos cuando tenemos contenido antes de la barra de navegación, y luego cuando hacemos scroll y llegamos hasta la navbar, se convierte en "fixed" y queda en la parte superior de la pág.
+_______________________________________________________
+
+	[20]. Formularios:
+_______________________________________________________
+
+Los controles de formulario reciben automáticamente un estilo global con Bootstrap:
+
+Todos los elementos textuales "<input>", "<textarea>" y "<select>" con la clase ".form-control" tienen un ancho del 100%.
+
+Bootstrap proporciona dos tipos de diseños(layouts) de formulario:
+
+	- Formulario apilado(Stacked) (ancho completo).
+	- Formulario en línea.
+_______________________________________________________
+
+	[20.1]. Formulario apilado(Stacked):
+_______________________________________________________
+
+Este tipo de formulario ocupa todo el ancho del contenedor. Agregue un elemento contenedor con la clase ".form-group", alrededor de cada control de formulario, para garantizar los márgenes adecuados:
+
+	<form action="/action_page.php">
+		<div class="form-group">
+			<label for="email">Email:</label>
+			<input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+		</div>
+		<div class="form-group">
+			<label for="pwd">Password:</label>
+			<input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd">
+		</div>
+		<div class="form-group form-check">
+			<label class="form-check-label">
+				<input class="form-check-input" type="checkbox" name="remember"> Remember me
+			</label>
+		</div>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+_______________________________________________________
+
+	[20.2]. Formulario en línea:
+_______________________________________________________
+
+En un formulario en línea, todos los elementos están en línea y alineados a la izquierda.
+
+Agregue la clase ".form-inline" al elemento "<form>":
+
+	
+
+Nota: Esto solo se aplica a formularios dentro de ventanas gráficas que tienen al menos 576px de ancho. En pantallas de menos de 576px, se apilará horizontalmente.
+
+	<form class="form-inline" action="/action_page.php">
+		<label for="email">Email address:</label>
+		<input type="email" class="form-control" placeholder="Enter email" id="email">
+		<label for="pwd">Password:</label>
+		<input type="password" class="form-control" placeholder="Enter password" id="pwd">
+		<div class="form-check">
+			<label class="form-check-label">
+				<input class="form-check-input" type="checkbox"> Remember me
+			</label>
+		</div>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+
+El formulario anterior se ve "comprimido" y se verá mucho mejor con las utilidades de espaciado de Bootstrap. 
+
+El siguiente ejemplo agrega un margen derecho (.mr-sm-2) a cada "input" en todos los dispositivos (pequeños y superiores). Y se usa la clase de margen inferior (.mb-2) para estilar el "input" cuando se rompe (va de horizontal a vertical debido a que no hay suficiente espacio/ancho):
+
+	<form class="form-inline" action="/action_page.php">
+		<label for="email" class="mr-sm-2">Email address:</label>
+		<input type="email" class="form-control mb-2 mr-sm-2" placeholder="Enter email" id="email">
+		<label for="pwd" class="mr-sm-2">Password:</label>
+		<input type="password" class="form-control mb-2 mr-sm-2" placeholder="Enter password" id="pwd">
+		<div class="form-check mb-2 mr-sm-2">
+			<label class="form-check-label">
+				<input class="form-check-input" type="checkbox"> Remember me
+			</label>
+		</div>
+		<button type="submit" class="btn btn-primary mb-2">Submit</button>
+	</form>
+_______________________________________________________
+
+	[20.3]. Formulario de fila(row)/cuadrícula(grid):
+_______________________________________________________
+
+También se puede usar columnas(.col) para controlar el ancho y la alineación de los "input" sin utilizar las utilidades de espaciado. Solo recuerda ponerlos dentro de un contenedor ".row":
+
+	<form>
+		<div class="row">
+			<div class="col">
+				<input type="text" class="form-control" id="email" placeholder="Enter email" name="email">
+			</div>
+			<div class="col">
+				<input type="password" class="form-control" placeholder="Enter password" name="pswd">
+			</div>
+		</div>
+	</form>
+
+Si desea menos márgenes de cuadrícula (anular los "column gutters" por defecto), usamos ".form-row" en lugar de ".row":
+
+	<form>
+		<div class="form-row">
+			<div class="col">
+				<input type="text" class="form-control" id="email" placeholder="Enter email" name="email">
+			</div>
+			<div class="col">
+				<input type="password" class="form-control" placeholder="Enter password" name="pswd">
+			</div>
+		</div>
+	</form>
+_______________________________________________________
+
+	[20.4]. Validación de Formularios:
+_______________________________________________________
+
+Puede usar diferentes clases de validación para proporcionar comentarios valiosos a los usuarios. 
+
+Agregue ".was-validated" o ".needs-validation" al elemento "<form>", dependiendo de si desea proporcionar comentarios de validación antes o después de enviar el formulario. 
+
+Los campos "input" tendrán un borde verde(válido) o rojo(no válido) para indicar lo que falta en el formulario. 
+
+También puede agregar un mensaje ".valid-feedback" o ".invalid-feedback" para decirle explícitamente al usuario lo que falta o debe hacerse antes de enviar el formulario.
+
+	<form action="/action_page.php" class="was-validated">
+		<div class="form-group">
+			<label for="uname">Username:</label>
+			<input type="text" class="form-control" id="uname" placeholder="Enter username" name="uname" required>
+			<div class="valid-feedback">Valid.</div>
+			<div class="invalid-feedback">Please fill out this field.</div>
+		</div>
+		<div class="form-group">
+			<label for="pwd">Password:</label>
+			<input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd" required>
+			<div class="valid-feedback">Valid.</div>
+			<div class="invalid-feedback">Please fill out this field.</div>
+		</div>
+		<div class="form-group form-check">
+			<label class="form-check-label">
+				<input class="form-check-input" type="checkbox" name="remember" required> I agree on blabla.
+				<div class="valid-feedback">Valid.</div>
+				<div class="invalid-feedback">Check this checkbox to continue.</div>
+			</label>
+		</div>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+
+En el ejemplo anterior, usamos ".was-validated" para indicar lo que falta antes de enviar el formulario.
+
+	<form action="/action_page.php" class="needs-validation" novalidate>
+		<div class="form-group">
+			<label for="uname">Username:</label>
+			<input type="text" class="form-control" id="uname" placeholder="Enter username" name="uname" required>
+			<div class="valid-feedback">Valid.</div>
+			<div class="invalid-feedback">Please fill out this field.</div>
+		</div>
+		<div class="form-group">
+			<label for="pwd">Password:</label>
+			<input type="password" class="form-control" id="pwd" placeholder="Enter password" name="pswd" required>
+			<div class="valid-feedback">Valid.</div>
+			<div class="invalid-feedback">Please fill out this field.</div>
+		</div>
+		<div class="form-group form-check">
+			<label class="form-check-label">
+				<input class="form-check-input" type="checkbox" name="remember" required> I agree on blabla.
+				<div class="valid-feedback">Valid.</div>
+				<div class="invalid-feedback">Check this checkbox to continue.</div>
+			</label>
+		</div>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+
+	<script>
+	// Disable form submissions if there are invalid fields
+	(function() {
+		'use strict';
+		window.addEventListener('load', function() {
+
+			// Get the forms we want to add validation styles to
+			var forms = document.getElementsByClassName('needs-validation');
+
+			// Loop over them and prevent submission
+			var validation = Array.prototype.filter.call(forms, function(form) {
+				form.addEventListener('submit', function(event) {
+					if (form.checkValidity() === false) {
+						event.preventDefault();
+						event.stopPropagation();
+					}
+					form.classList.add('was-validated');
+				}, false);
+			});
+		}, false);
+	})();
+	</script>
+
+En el ejemplo anterior, usamos ".needs-validation", que agregará el efecto de validación DESPUÉS de que el formulario se haya enviado (si falta algo). Tenga en cuenta que también tendrá que agregar un código jQuery para que este ejemplo funcione correctamente.
+
+_______________________________________________________
+
+	[20.5]. Inputs:
+_______________________________________________________
+
+Bootstrap admite todos los tipos de input de HTML5: text, password, datetime, datetime-local, date, month, time, week, number, email, url, search, tel, y color.
+
+Nota: los inputs no tendrán un estilo completo si su tipo no se declara correctamente.
+
+	<form action="/action_page.php">
+
+		<!-- Input tipo "text" -->
+		<div class="form-group">
+			<label for="usr">Name:</label>
+			<input type="text" class="form-control" id="usr" name="username">
+		</div>
+
+		<!-- Input tipo "password" -->
+		<div class="form-group">
+			<label for="pwd">Password:</label>
+			<input type="password" class="form-control" id="pwd" name="password">
+		</div>
+
+		<!-- Textarea -->
+		<div class="form-group">
+			<label for="comment">Comment:</label>
+			<textarea class="form-control" rows="5" id="comment"></textarea>
+		</div>
+
+		<!-- Checkboxes -->
+		<div class="form-check">
+			<label class="form-check-label">
+				<input type="checkbox" class="form-check-input" value="">Option 1
+			</label>
+		</div>
+		<div class="form-check">
+			<label class="form-check-label">
+				<input type="checkbox" class="form-check-input" value="">Option 2
+			</label>
+		</div>
+		<div class="form-check">
+			<label class="form-check-label">
+				<input type="checkbox" class="form-check-input" value="" disabled>Option 3
+			</label>
+		</div>
+
+		<!-- Radio Buttons -->
+		<div class="form-check">
+			<label class="form-check-label">
+				<input type="radio" class="form-check-input" name="optradio">Option 1
+			</label>
+		</div>
+		<div class="form-check">
+			<label class="form-check-label">
+				<input type="radio" class="form-check-input" name="optradio">Option 2
+			</label>
+		</div>
+		<div class="form-check disabled">
+			<label class="form-check-label">
+				<input type="radio" class="form-check-input" name="optradio" disabled>Option 3
+			</label>
+		</div>
+
+		<!-- Select List -->
+		<div class="form-group">
+			<label for="sel1">Select list (select one):</label>
+			<select class="form-control" id="sel1" name="sellist1">
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+			</select>
+			<br>
+			<label for="sel2">Mutiple select list (hold ctrl or shift(or drag with the mouse) to select more than one):</label>
+			<select multiple class="form-control" id="sel2" name="sellist2">
+				<option>1</option>
+				<option>2</option>
+				<option>3</option>
+				<option>4</option>
+				<option>5</option>
+			</select>
+		</div>
+
+		<!-- Input de tipo "range" -->
+		<div class="form-group">
+			<input type="range" class="form-control-range" name="range">
+		</div>
+
+		<!-- Input de tipo "file" -->
+		<div class="form-group">
+			<input type="file" class="form-control-file border" name="file">
+		</div>
+
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+
+Como mencionamos en el capítulo de Formularios, utilizamos la clase ".form-control" para dar estilos a inputs con ancho completo y relleno adecuado(padding), etc.
+
+En los "checkboxes", la tercera opción está deshabilitada. Si queremos que los checkbox aparezcan en la misma línea usamos la clase ".form-check-inline".
+
+Los "botones de radio"(Radio Buttons) se usan si desea limitar al usuario a una sola selección de una lista de opciones preestablecidas. Al igual que los "checkbox", usamos la clase ".form-check-inline", si queremos que las opciones aparezcan en la misma línea.
+
+El input de tipo "range", nos permite hacer clic y arrastrar sobre un botón azul redondo en una barra horizontal, que también se colorea de azul al arrastrar hasta el final(lado derecho), es muy similar a como controlamos el brillo o volumen en android.
+
+El input de tipo "file", nos permite seleccionar un archivo de nuestro equipo para subirlo. Aparece el texto "Seleccionar archivo" en un botón, y al lado el texto "Ningún archivo seleccionado"
+
+_______________________________________________________
+
+	[20.5.1]. Tamaño de control de formulario:
+_______________________________________________________
+
+Cambie el tamaño del control de formulario con ".form-control-sm" o ".form-control-lg":
+
+	<input type="text" class="form-control form-control-sm">
+
+	<input type="text" class="form-control form-control-lg">
+_______________________________________________________
+
+	[20.5.2]. Control de formulario con texto plano:
+_______________________________________________________
+
+Use ".form-control-plaintext" si desea estilar el "input" como texto sin formato:
+
+	<div class="form-group">
+		<input type="text" class="form-control-plaintext" placeholder="Form control with plain text" name="text2">
+	</div>
+
+De esta forma, el "input", sale como texto plano, sin su borde característico, solo al dar clic, nos damos cuenta que es un input.
+_______________________________________________________
+
+	[20.5.3]. Grupos de Input(helpers):
+_______________________________________________________
+
+La clase ".input-group" es un contenedor para mejorar un "input" al agregar un icono, texto o un botón al frente o detrás del "input" como un "texto de ayuda".
+
+Use ".input-group-prepend" para agregar el texto de ayuda frente al "input", y ".input-group-append" para agregarlo detrás.
+
+Por último, agregue la clase ".input-group-text" para estilar el texto de ayuda.
+
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<span class="input-group-text">@</span>
+		</div>
+		<input type="text" class="form-control" placeholder="Username" id="usr" name="username">
+	</div>
+
+	<div class="input-group mb-3">
+		<input type="text" class="form-control" placeholder="Your Email" id="mail" name="email">
+		<div class="input-group-append">
+			<span class="input-group-text">@example.com</span>
+		</div>
+	</div>
+
+En el primer input se agregó la "@", para indicar al usuario que en ese campo debe ingresar su usuario de twitter.
+
+En el segundo input se le indica al usuario que debe ingresar el correo.
+
+Usamos la clase de utilidad ".mb-3" para garantizar que el grupo de input obtenga un margen inferior adecuado(para que se separe de otros input y del botón de submit).
+_______________________________________________________
+
+	[20.5.3.1]. Tamaño de Grupos de Input:
+_______________________________________________________
+
+Utilice la clase ".input-group-sm" para grupos de inputs pequeños y ".input-group-lg" para grupos de inputs grandes:
+
+	<div class="input-group mb-3 input-group-sm">
+		<div class="input-group-prepend">
+			<span class="input-group-text">Small</span>
+		</div>
+		<input type="text" class="form-control">
+	</div>
+
+	<div class="input-group mb-3 input-group-lg">
+		<div class="input-group-prepend">
+			<span class="input-group-text">Large</span>
+		</div>
+		<input type="text" class="form-control">
+	</div>
+_______________________________________________________
+
+	[20.5.3.2]. Múltiples Inputs y Helpers:
+_______________________________________________________
+
+Agregar múltiples inputs o complementos
+
+	<!-- Multiple inputs -->
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<span class="input-group-text">Person</span>
+		</div>
+		<input type="text" class="form-control" placeholder="First Name">
+		<input type="text" class="form-control" placeholder="Last Name">
+	</div>
+
+	<!-- Multiple addons / help text -->
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<span class="input-group-text">One</span>
+			<span class="input-group-text">Two</span>
+			<span class="input-group-text">Three</span>
+		</div>
+		<input type="text" class="form-control">
+	</div>
+_______________________________________________________
+
+	[20.5.3.3]. Grupo de Inputs con Checkbox y Radio:
+_______________________________________________________
+
+También puede usar casillas de verificación(Checkbox) o botones de opción(Radio) en lugar de texto:
+
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<div class="input-group-text">
+				<input type="checkbox">
+			</div>
+		</div>
+		<input type="text" class="form-control" placeholder="Some text">
+	</div>
+
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<div class="input-group-text">
+				<input type="radio">
+			</div>
+		</div>
+		<input type="text" class="form-control" placeholder="Some text">
+	</div>
+_______________________________________________________
+
+	[20.5.3.4]. Grupo de Inputs con Botones:
+_______________________________________________________
+
+Estos botones son útiles, como por ejemplo para añadir el botón al lado de un "input" de búsqueda, o dos botones en un "input", donde se actualizo una información, y un botón sea para actualizar, y el otro para cancelar.
+
+	<div class="input-group mb-3">
+		<div class="input-group-prepend">
+			<button class="btn btn-outline-primary" type="button">Basic Button</button>
+		</div>
+		<input type="text" class="form-control" placeholder="Some text">
+	</div>
+
+	<div class="input-group mb-3">
+		<input type="text" class="form-control" placeholder="Search">
+		<div class="input-group-append">
+			<button class="btn btn-success" type="submit">Go</button>
+		</div>
+	</div>
+
+	<div class="input-group mb-3">
+		<input type="text" class="form-control" placeholder="Something clever..">
+		<div class="input-group-append">
+			<button class="btn btn-primary" type="button">OK</button>
+			<button class="btn btn-danger" type="button">Cancel</button>
+		</div>
+	</div>
+_______________________________________________________
+
+	[20.5.3.5]. Grupo de Input con Botón Desplegable(dropdown):
+_______________________________________________________
+
+Agregue un botón desplegable en el grupo de input. Tenga en cuenta que no necesita el contenedor ".dropdown", como lo haría normalmente.
+
+	<div class="input-group mt-3 mb-3">
+		<div class="input-group-prepend">
+			<button type="button" class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+				Dropdown button
+			</button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item" href="#">Link 1</a>
+				<a class="dropdown-item" href="#">Link 2</a>
+				<a class="dropdown-item" href="#">Link 3</a>
+			</div>
+		</div>
+		<input type="text" class="form-control" placeholder="Username">
+	</div>
+_______________________________________________________
+
+	[20.5.3.6]. Etiquetas(labels) para Grupo de Input:
+_______________________________________________________
+
+Coloque etiquetas(labels) fuera del grupo de input y recuerde que el valor del atributo "for" debe coincidir con el "id" del "input".
+
+Haga clic en la etiqueta y se enfocará el correspondiente "input":
+
+	<label for="demo">Escriba su email acá:</label>
+	<div class="input-group mb-3">
+		<input type="text" class="form-control" placeholder="Email" id="demo" name="email">
+		<div class="input-group-append">
+			<span class="input-group-text">@example.com</span>
+		</div>
+	</div>
+_______________________________________________________
+
+	[20.6]. Formularios Custom:
+_______________________________________________________
+
+Bootstrap 4 viene con elementos de formulario personalizados, que están destinados a reemplazar los valores predeterminados del navegador.
+
+	- Custom checkbox (cambia el chulito de la casilla).
+	- Custom radio (cambia como se colorea el circulo).
+	- Custom Range (cambia como se colorea la barra horizontal).
+	- Custom Select menu (cambia el borde, padding, ancho completo e icono de flecha para ver las opciones desplegables).
+	- Custom File Upload (cambia el borde, padding, ancho completo y botón para seleccionar el archivo).
+	- Custom Switch (es un checkbox, que se ve como un interruptor, parecido a los switches en android, donde encendemos o no el wifi, etc).
+
+Para más info. de estas customizaciones:
+
+	https://www.w3schools.com/bootstrap4/bootstrap_forms_custom.asp
+_______________________________________________________
+
+	[21]. Carrusel:
+_______________________________________________________
+
+El carrusel es una presentación de diapositivas que va mostrando los elementos.
+
+	<div id="demo" class="carousel slide" data-ride="carousel">
+
+		<!-- Indicators -->
+		<ul class="carousel-indicators">
+			<li data-target="#demo" data-slide-to="0" class="active"></li>
+			<li data-target="#demo" data-slide-to="1"></li>
+			<li data-target="#demo" data-slide-to="2"></li>
+		</ul>
+
+		<!-- The slideshow -->
+		<div class="carousel-inner">
+			<div class="carousel-item active">
+				<img src="la.jpg" alt="Los Angeles">
+			</div>
+			<div class="carousel-item">
+				<img src="chicago.jpg" alt="Chicago">
+			</div>
+			<div class="carousel-item">
+				<img src="ny.jpg" alt="New York">
+			</div>
+		</div>
+
+		<!-- Left and right controls -->
+		<a class="carousel-control-prev" href="#demo" data-slide="prev">
+			<span class="carousel-control-prev-icon"></span>
+		</a>
+		<a class="carousel-control-next" href="#demo" data-slide="next">
+			<span class="carousel-control-next-icon"></span>
+		</a>
+
+	</div>
+
+Cada clase hace lo siguiente:
+
+	.carousel --> Crea el carrusel.
+
+	.slide --> Agrega una transición CSS y un efecto de animación cuando se desliza de un elemento al siguiente. Elimina está clase si no quieres este efecto.
+
+	.carousel-indicators --> Agrega indicadores para el carrusel. Estos son los pequeños puntos en la parte inferior de cada diapositiva (que indica cuántas diapositivas hay en el carrusel y qué diapositiva está viendo el usuario actualmente).
+
+	.carousel-inner --> Agrega diapositivas(slides) al carrusel.
+
+	.carousel-item --> Especifica el contenido de cada diapositiva.
+
+	.carousel-control-prev --> Agrega un botón izquierdo (anterior) al carrusel, que permite al usuario regresar entre las diapositivas.
+
+	.carousel-control-next --> Agrega un botón derecho (siguiente) al carrusel, que permite al usuario avanzar entre las diapositivas.
+
+	.carousel-control-prev-icon --> Se usa junto con ".carousel-control-prev" para crear un botón "anterior".
+
+	.carousel-control-next-icon --> crea la flecha de siguiente.
+_______________________________________________________
+
+	[21.1]. Leyendas(captions) a las diapositivas:
+_______________________________________________________
+
+Agregue elementos dentro de <div class = "carousel-caption"> dentro de cada <div class = "carousel-item"> para crear una leyenda para cada diapositiva:
+
+	<div class="carousel-item">
+		<img src="la.jpg" alt="Los Angeles">
+		<div class="carousel-caption">
+			<h3>Los Angeles</h3>
+			<p>We had such a great time in LA!</p>
+		</div>
+	</div>
+_______________________________________________________
+
+	[22]. Modal:
+_______________________________________________________
+
+El componente modal es un cuadro de diálogo/ventana emergente que se muestra en la parte superior de la página actual:
+
+	<!-- Button to Open the Modal -->
+	<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+		Open modal
+	</button>
+
+	<!-- The Modal -->
+	<div class="modal" id="myModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<!-- Modal Header -->
+				<div class="modal-header">
+					<h4 class="modal-title">Modal Heading</h4>
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+
+				<!-- Modal body -->
+				<div class="modal-body">
+					Modal body..
+				</div>
+
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+_______________________________________________________
+
+	[22.1]. Animación para el Modal:
+_______________________________________________________
+
+Use la clase ".fade" para agregar un efecto de desvanecimiento al abrir y cerrar el modal:
+
+	<!-- Fading modal -->
+	<div class="modal fade"></div>
+_______________________________________________________
+
+	[22.2]. Tamaño del Modal:
+_______________________________________________________
+
+Cambie el tamaño del modal agregando la clase ".modal-sm" para modales pequeños, la clase ".modal-lg" para modales grandes o ".modal-xl" para modales extra grandes.
+
+Agregue la clase de tamaño al elemento "<div>" con la clase ".modal-dialog":
+
+	<!-- Pequeño -->
+	<div class="modal-dialog modal-sm">
+
+	<!-- Grande -->
+	<div class="modal-dialog modal-lg">
+
+	<!-- Extra Grande -->
+	<div class="modal-dialog modal-xl">
+_______________________________________________________
+
+	[22.3]. Modal Centrado:
+_______________________________________________________
+
+Centre el modal vertical y horizontalmente dentro de la página, con la clase ".modal-dialog-centered":
+
+	<div class="modal-dialog modal-dialog-centered">
+_______________________________________________________
+
+	[22.4]. Modal con Scroll(desplazamiento):
+_______________________________________________________
+
+Cuando tiene mucho contenido dentro del modal, se agrega una barra de desplazamiento a la página.
+
+Sin embargo, es posible desplazarse solo dentro del modal, en lugar de la página en sí, agregando ".modal-dialog-scrollable" a ".modal-dialog":
+
+	<div class="modal-dialog modal-dialog-scrollable">
+_______________________________________________________
+
+	[23]. Tooltip:
+_______________________________________________________
+
+El "Tooltip" es un pequeño cuadro emergente que aparece cuando el usuario mueve el puntero del mouse sobre un elemento.
+
+Para crear un "tooltip", agregue el atributo data-toggle = "tooltip" a un elemento.
+
+Use el atributo "title" para especificar el texto que debe mostrarse dentro del "tooltip":
+
+	<a href="#" data-toggle="tooltip" title="Hooray!">Hover over me</a>
+
+Nota: el "tooltip" debe inicializarse con jQuery: seleccione el elemento especificado y llame al método "tooltip()":
+
+	<script>
+		$(document).ready(function(){
+			$('[data-toggle="tooltip"]').tooltip();
+		});
+	</script>
+_______________________________________________________
+
+	[23.1]. Posición del Tooltip:
+_______________________________________________________
+
+Por defecto, el "tooltip" aparecerá en la parte superior del elemento.
+
+Use el atributo "data-placement" para establecer la posición de la información sobre herramientas en la parte superior, inferior, izquierda o derecha del elemento:
+
+	<a href="#" data-toggle="tooltip" data-placement="top" title="Hooray!">Hover</a>
+	<a href="#" data-toggle="tooltip" data-placement="bottom" title="Hooray!">Hover</a>
+	<a href="#" data-toggle="tooltip" data-placement="left" title="Hooray!">Hover</a>
+	<a href="#" data-toggle="tooltip" data-placement="right" title="Hooray!">Hover</a>
+_______________________________________________________
+
+	[24]. Popover:
+_______________________________________________________
+
+El componente "Popover" es similar a el "tooltip"; Es un cuadro emergente que aparece cuando el usuario hace clic en un elemento. La diferencia es que el popover puede contener mucho más contenido.
+
+Para crear un "popover", agregue el atributo data-toggle = "popover" a un elemento.
+
+Use el atributo "title" para especificar el texto del encabezado del "popover", y use el atributo "data-content" para especificar el texto que debe mostrarse dentro del cuerpo del "popover":
+
+	<a href="#" data-toggle="popover" title="Popover Header" data-content="Some content inside the popover">Toggle popover</a>
+
+Nota: Los popovers deben inicializarse con jQuery: seleccione el elemento especificado y llame al método "popover()":
+
+	<script>
+		$(document).ready(function(){
+			$('[data-toggle="popover"]').popover();
+		});
+	</script>
+_______________________________________________________
+
+	[24.1]. Posición del Popover:
+_______________________________________________________
+
+Por defecto, el "popover" aparecerá en el lado derecho del elemento.
+
+Use el atributo "data-placement" para establecer la posición del "popover" en la parte superior, inferior, izquierda o derecha del elemento:
+
+	<a href="#" title="Header" data-toggle="popover" data-placement="top" data-content="Content">Click</a>
+	<a href="#" title="Header" data-toggle="popover" data-placement="bottom" data-content="Content">Click</a>
+	<a href="#" title="Header" data-toggle="popover" data-placement="left" data-content="Content">Click</a>
+	<a href="#" title="Header" data-toggle="popover" data-placement="right" data-content="Content">Click</a>
+
+Nota: Los atributos de ubicación no funcionan como espera si no hay suficiente espacio para ellos. Por ejemplo: si usa la ubicación superior en la parte superior de una página (donde no hay espacio para ello), en su lugar, mostrará el popover debajo del elemento o a la derecha (donde sea que haya espacio para él).
+_______________________________________________________
+
+	[24.2]. Cerrar el Popover:
+_______________________________________________________
+
+Por defecto, el "popover" se cierra cuando hace clic nuevamente en el elemento. Sin embargo, puede usar el atributo data-trigger = "focus" que cerrará el "popover" al hacer clic fuera del elemento:
+
+	<a href="#" title="Dismissible popover" data-toggle="popover" data-trigger="focus" data-content="Click anywhere in the document to close this popover">Click me</a>
+
+Si desea que se muestre el "popover" cuando mueva el puntero del mouse sobre el elemento, use el atributo "data-trigger" con un valor de "hover":
+
+	<a href="#" title="Header" data-toggle="popover" data-trigger="hover" data-content="Some content">Hover over me</a>
+_______________________________________________________
+
+	[25]. Tostada(toast):
+_______________________________________________________
+
+El componente de tostadas es como un cuadro de alerta que solo se muestra durante un par de segundos cuando sucede algo (es decir, cuando el usuario hace clic en un botón, envía un formulario, etc.).
+
+Para crear una tostada, use la clase ".toast" y agregue ".toast-header" y ".toast-body" dentro de ella:
+
+	<div class="toast">
+		<div class="toast-header">
+			Toast Header
+		</div>
+		<div class="toast-body">
+			Some text inside the toast body
+		</div>
+	</div>
+
+Nota: las "Toast" deben inicializarse con jQuery: seleccione el elemento especificado y llame al método "toast()":
+
+	<script>
+		$(document).ready(function(){
+			$('.toast').toast('show');
+		});
+	</script>
+_______________________________________________________
+
+	[25.1]. Mostrar y Esconder Tostada:
+_______________________________________________________
+
+Las tostadas están ocultas por defecto. Utilice el atributo data-autohide = "false" para mostrarlo de forma predeterminada. Para cerrarlo, use un elemento "<button>" y agregue data-dismiss="toast":
+
+	<div class="toast" data-autohide="false">
+		<div class="toast-header">
+			<strong class="mr-auto text-primary">Toast Header</strong>
+			<small class="text-muted">5 mins ago</small>
+			<button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+		</div>
+		<div class="toast-body">
+			Some text inside the toast body
+		</div>
+	</div>
+_______________________________________________________
+
+	[26]. Scrollspy:
+_______________________________________________________
+
+Scrollspy se usa para actualizar automáticamente enlaces en una lista de navegación basada en la posición de desplazamiento:
+
+	<!-- The scrollable area -->
+	<body data-spy="scroll" data-target=".navbar" data-offset="50">
+
+		<!-- The navbar - The <a> elements are used to jump to a section in the scrollable area -->
+		<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+			...
+			<ul class="navbar-nav">
+				<li><a href="#section1">Section 1</a></li>
+				...
+		</nav>
+
+		<!-- Section 1 -->
+		<div id="section1">
+			<h1>Section 1</h1>
+			<p>Try to scroll this page and look at the navigation bar while scrolling!</p>
+		</div>
+		...
+
+	</body>
+
+Agregue data-spy = "scroll" al elemento que debe usarse como área desplazable (a menudo, este es el elemento "<body>").
+
+Luego agregue el atributo "data-target" con un valor del "id" o el nombre de la clase de la barra de navegación (.navbar). Esto es para asegurarse de que la barra de navegación esté conectada con el área desplazable.
+
+Tenga en cuenta que los elementos desplazables deben coincidir con el ID de los enlaces dentro de los elementos de la lista de la barra de navegación (<div id = "section1"> coincide con <a href="#section1">).
+
+El atributo opcional "data-offset" especifica el número de píxeles para compensar desde la parte superior al calcular la posición del desplazamiento. Esto es útil cuando siente que los enlaces dentro de la barra de navegación cambian el estado activo demasiado pronto o demasiado temprano al saltar a los elementos desplazables. El valor predeterminado es de 10píxeles.
+
+Nota: Requiere posicionamiento relativo: el elemento con data-spy = "scroll" requiere la propiedad de posición CSS, con un valor de "relative" para funcionar correctamente.
+
+	<style>
+		body{
+			position: relative; 
+		}
+	</style>
+_______________________________________________________
+
+	[27]. Utilidades:
+_______________________________________________________
+
+Bootstrap 4 tiene muchas clases de utilidad/ayuda para estilar rápidamente elementos sin usar ningún código CSS.
+_______________________________________________________
+
+	[27.1]. Bordes:
+_______________________________________________________
+
+Use las clases de borde para agregar o quitar bordes de un elemento:
+
+	<span class="border"></span>
+	<span class="border border-0"></span>
+	<span class="border border-top-0"></span>
+	<span class="border border-right-0"></span>
+	<span class="border border-bottom-0"></span>
+	<span class="border border-left-0"></span>
+_______________________________________________________
+
+	[27.1.1]. Color de Bordes:
+_______________________________________________________
+
+Agregue un color al borde con cualquiera de las clases de color de borde contextual:
+
+	<span class="border border-primary"></span>
+	<span class="border border-secondary"></span>
+	<span class="border border-success"></span>
+	<span class="border border-danger"></span>
+	<span class="border border-warning"></span>
+	<span class="border border-info"></span>
+	<span class="border border-light"></span>
+	<span class="border border-dark"></span>
+	<span class="border border-white"></span>
+_______________________________________________________
+
+	[27.1.2]. Bordes Redondeados:
+_______________________________________________________
+
+Agregue esquinas redondeadas a un elemento con las clases redondeadas:
+
+	<span class="rounded-sm"></span>
+	<span class="rounded"></span>
+	<span class="rounded-lg"></span>
+	<span class="rounded-top"></span>
+	<span class="rounded-right"></span>
+	<span class="rounded-bottom"></span>
+	<span class="rounded-left"></span>
+	<span class="rounded-circle"></span>
+	<span class="rounded-0"></span>
+_______________________________________________________
+
+	[27.2]. Float y Clearfix:
+_______________________________________________________
+
+Haga flotar un elemento hacia la derecha con la clase ".float-right" o hacia la izquierda con ".float-left", y limpie los flotantes con la clase ".clearfix":
+
+	<div class="clearfix">
+		<span class="float-left">Float left</span>
+		<span class="float-right">Float right</span>
+	</div>
+_______________________________________________________
+
+	[27.2.1]. Float Responsive:
+_______________________________________________________
+
+Flota un elemento hacia la izquierda o hacia la derecha según el ancho de la pantalla, con las clases flotantes responsive (".float-*-left|right" donde "*" es: sm(>=576px), md(>=768px), lg(>=992 px) o xl(>=1200px)):
+
+	<div class="float-sm-right">Float right on small screens or wider</div><br>
+	<div class="float-md-right">Float right on medium screens or wider</div><br>
+	<div class="float-lg-right">Float right on large screens or wider</div><br>
+	<div class="float-xl-right">Float right on extra large screens or wider</div><br>
+	<div class="float-none">Float none</div>
+_______________________________________________________
+
+	[27.3]. Alinear al centro:
+_______________________________________________________
+
+Centre un elemento con la clase .mx-auto (agrega margin-left y margin-right: auto):
+
+	<div class="mx-auto bg-warning" style="width:150px">Centered</div>
+_______________________________________________________
+
+	[27.4]. Ancho(width):
+_______________________________________________________
+
+Establezca el ancho de un elemento con las clases "w-*" (".w-25", ".w-50", ".w-75", ".w-100", ".mw-100"):
+
+	<div class="w-25 bg-warning">Width 25%</div>
+	<div class="w-50 bg-warning">Width 50%</div>
+	<div class="w-75 bg-warning">Width 75%</div>
+	<div class="w-100 bg-warning">Width 100%</div>
+	<div class="mw-100 bg-warning">Max Width 100%</div>
+_______________________________________________________
+
+	[27.5]. Alto(height):
+_______________________________________________________
+
+Establezca la altura de un elemento con las clases "h-*" (".h-25", ".h-50", ".h-75", ".h-100", ".mh-100"):
+
+	<div style="height:200px;background-color:#ddd">
+		<div class="h-25 bg-warning">Height 25%</div>
+		<div class="h-50 bg-warning">Height 50%</div>
+		<div class="h-75 bg-warning">Height 75%</div>
+		<div class="h-100 bg-warning">Height 100%</div>
+		<div class="mh-100 bg-warning" style="height:500px">Max Height 100%</div>
+	</div>
+
+Nota: en el último "div", se asigna un alto de 500px, que en ese caso será el alto máximo del "div", si al "div" contenedor le cambiamos el alto de 200px por 600px se ve el efecto del "max height".
+_______________________________________________________
+
+	[27.6]. Espaciado(margin y padding):
+_______________________________________________________
+
+Bootstrap 4 tiene una amplia gama de clases de utilidad para márgenes responsive y "padding". Funcionan para todos los puntos de corte(breakpoints): "xs" (<=576px), "sm" (>=576px), "md" (>=768px), "lg" (>=992px) o "xl" (>=1200px)).
+
+Las clases se usan en el siguiente formato: 
+	
+	{propiedad}{lados}-{tamaño} para "xs"
+
+	{propiedad}{lados}-{breakpoint}-{tamaño} para "sm", "md", "lg", y "xl".
+
+Donde propiedad puede ser:
+
+	m --> para margin(márgenes).
+
+	p --> para padding(relleno).
+
+Donde lados puede ser:
+
+	t --> "margin-top" o "padding-top".
+
+	b --> "margin-bottom" o "padding-bottom".
+
+	l --> "margin-left" o "padding-left".
+
+	r --> "margin-right" o "padding-right".
+
+	x --> para ambos "padding-left" y "padding-right" o "margin-left" y "margin-right".
+
+	y --> ambos "padding-top" y "padding-bottom" o "margin-top" y "margin-bottom"
+
+	blank(nada) --> para "margin" o "padding" en los 4 lados del elemento.
+
+Donde tamaño puede ser:
+
+	0 --> "margin" o "padding" a 0.
+
+	1 --> "margin" o "padding" a 0.25rem (4px si "font-size" es 16px)
+	2 --> ... 0.5rem (8px si "font-size" es 16px)
+	3 --> ... 1rem (16px si "font-size" es 16px)
+	4 --> ... 1.5rem (24px si "font-size" es 16px)
+	5 --> ... 3rem (48px si "font-size" es 16px)
+	auto --> para "margin" "auto".
+
+Nota: los márgenes pueden ser negativos añadiendo la letra "n" delante del tamaño:
+
+	n4 --> "margin" a -1.5rem (-24px si "font-size" es 16px).
+
+Ejemplos:
+
+	<div class="pt-4 bg-warning">Yo solo tengo "top padding" (1.5rem = 24px)</div>
+
+	<div class="p-5 bg-success">Yo tengo "padding" en todos los lados (3rem = 48px)</div>
+
+	<div class="m-5 pb-5 bg-info">Yo tengo "margin" en todos los lados (3rem = 48px) y un  "bottom padding" (3rem = 48px)</div>
+_______________________________________________________
+
+	[27.7]. Sombras:
+_______________________________________________________
+
+Use las clases ".shadow-" para agregar sombras a un elemento:
+
+	<div class="shadow-none p-4 mb-4 bg-light">No shadow</div>
+	<div class="shadow-sm p-4 mb-4 bg-white">Small shadow</div>
+	<div class="shadow p-4 mb-4 bg-white">Default shadow</div>
+	<div class="shadow-lg p-4 mb-4 bg-white">Large shadow</div>
+_______________________________________________________
+
+	[27.8]. Alineación Vertical:
+_______________________________________________________
+
+Use las clases ".align-" para cambiar la alineación de los elementos (solo funciona en elementos en línea, bloque en línea, tabla en línea y celda de tabla):
+
+	<span class="align-baseline">baseline</span>
+	<span class="align-top">top</span>
+	<span class="align-middle">middle</span>
+	<span class="align-bottom">bottom</span>
+	<span class="align-text-top">text-top</span>
+	<span class="align-text-bottom">text-bottom</span>
+_______________________________________________________
+
+	[27.9]. Embebidos Responsive:
+_______________________________________________________
+
+Podemos embeber o incrustar videos o slideshows responsive, basados en el ancho del elemento padre.
+
+Añadimos ".embed-responsive-item" a cualquier elemento embebido(como "<iframe>" o "<video>") en un elemento padre con ".embed-responsive" y la relación de aspecto que se quiera:
+
+	<!-- 21:9 aspect ratio -->
+	<div class="embed-responsive embed-responsive-21by9">
+		<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/tgbNymZ7vqY"></iframe>
+	</div>
+
+	<!-- 16:9 aspect ratio -->
+	<div class="embed-responsive embed-responsive-16by9">
+		<iframe class="embed-responsive-item" src="..."></iframe>
+	</div>
+
+	<!-- 4:3 aspect ratio -->
+	<div class="embed-responsive embed-responsive-4by3">
+		<iframe class="embed-responsive-item" src="..."></iframe>
+	</div>
+
+	<!-- 1:1 aspect ratio -->
+	<div class="embed-responsive embed-responsive-1by1">
+		<iframe class="embed-responsive-item" src="..."></iframe>
+	</div>
+_______________________________________________________
+
+	[27.10]. Visibilidad:
+_______________________________________________________
+
+Con las clases ".visible" o ".invisible" controlamos la visibilidad de los elementos.
+
+	<div class="visible">I am visible</div>
+	<div class="invisible">I am invisible</div>
+
+Note: Estas clases no cambian el valor de la propiedad CSS "display". Solo añaden "visibility:visible" o "visibility:hidden".
+_______________________________________________________
+
+	[27.11]. Posición:
+_______________________________________________________
+
+Use la clase ".fixed-top" para hacer que cualquier elemento sea fijo/permanezca en la parte superior de la página:
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-top">
+		...
+	</nav>
+
+Use la clase ".fixed-bottom" para hacer que cualquier elemento sea fijo/permanezca en la parte inferior del pág.
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark fixed-bottom">
+		...
+	</nav>
+
+Use la clase ".sticky-top" para hacer que cualquier elemento sea fijo/permanezca en la parte superior de la página cuando se desplace.
+
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark sticky-top">
+		...
+	</nav>
+_______________________________________________________
+
+	[27.12]. Elementos de Bloque:
+_______________________________________________________
+
+Para convertir un elemento en un elemento de bloque, agregue la clase ".d-block". Utilice cualquiera de las clases ".d-*-block" para controlar CUANDO el elemento debe ser un elemento de bloque en un ancho de pantalla específico:
+
+	<span class="d-block bg-success">d-block</span>
+	<span class="d-sm-block bg-success">d-sm-block</span>
+	<span class="d-md-block bg-success">d-md-block</span>
+	<span class="d-lg-block bg-success">d-lg-block</span>
+	<span class="d-xl-block bg-success">d-xl-block</span>
+_______________________________________________________
+
+	[27.13]. Clases Display:
+_______________________________________________________
+
+Algunas de las clases para controlar el "display" de un elemento son:
+
+	.d-none --> Oculta un elemento.
+	.d-*-none --> Oculta un elemento en un tamaño de pantalla especifico.
+
+	.d-inline --> convierte un elemento a "en línea"(inline).
+	.d-*-inline --> convierte un elemento a "inline" en un tamaño de pantalla especifico.
+
+	.d-inline-block --> convierte un elemento a "inline block".
+	.d-*-inline-block --> convierte un elemento a "inline block" en un tamaño de pantalla especifico.
+
+	.d-table --> Muestra un elemento como una tabla(display: table).
+	.d-*-table--> Muestra un elemento como una tabla(display: table) en un tamaño de pantalla especifico.
+
+	.d-table-cell --> Muestra un elemento como una celda de tabla(display: table cell).
+	.d-*-table-cell--> Muestra un elemento como una celda de tabla(display: table cell) en un tamaño de pantalla especifico.
+
+	.d-table-row --> Muestra un elemento como una fila de tabla(display: table row).
+	.d-*-table-row --> Muestra un elemento como una fila de tabla(display: table row) en un tamaño de pantalla especifico.
+
+	.d-flex --> Crea un contenedor "flexbox" y transforma sus hijos directos en "flex ítems".
+	.d-*-flex --> Crea un contenedor "flexbox" en un tamaño de pantalla especifico.
+
+	.d-inline-flex --> Crea un contenedor "flexbox inline".
+	.d-*-inline-flex--> Crea un contenedor "flexbox inline" en un tamaño de pantalla especifico.
+_______________________________________________________
+
+	[27.14]. Icono de Cerrar:
+_______________________________________________________
+
+Use la clase ".close" para estilar un icono de cerrar. Esto se puede usar en alertas y ventanas modal. Usamos "&times;" para crear el icono, que por defecto flota a la derecha.
+
+	<button type="button" class="close">&times;</button>
+_______________________________________________________
+
+	[28]. Flex:
+_______________________________________________________
+
+La clase ".d-flex" crea un contenedor "flexbox" y transforma sus hijos directos en "flex ítems".
+
+	<div class="d-flex p-3 bg-secondary text-white">
+		<div class="p-2 bg-info">Flex item 1</div>
+		<div class="p-2 bg-warning">Flex item 2</div>
+		<div class="p-2 bg-primary">Flex item 3</div>
+	</div>
+
+La clase ".d-inline-flex" crea un contenedor "flexbox inline".
+
+Nota: Todas las clases flex, vienen con clases responsive adicionales, lo que facilita la configuración de una clase flex específica en un tamaño de pantalla específico. Para ver estas clases:
+
+	https://www.w3schools.com/bootstrap4/bootstrap_flex.asp
+_______________________________________________________
+
+	[28.1]. Dirección Horizontal:
+_______________________________________________________
+
+Use ".flex-row" para mostrar los elementos flexibles horizontalmente (uno al lado del otro)(por defecto).
+
+	<div class="d-flex flex-row bg-secondary">
+		<div class="p-2 bg-info">Flex item 1</div>
+		<div class="p-2 bg-warning">Flex item 2</div>
+		<div class="p-2 bg-primary">Flex item 3</div>
+	</div>
+
+Use ".flex-row-reverse" para alinear a la derecha, de derecha a izq.
+
+	<div class="d-flex flex-row-reverse bg-secondary">
+		<div class="p-2 bg-info">Flex item 1</div>
+		<div class="p-2 bg-warning">Flex item 2</div>
+		<div class="p-2 bg-primary">Flex item 3</div>
+	</div>
+
+En este caso, los ítems salen alineados a la derecha, en el siguiente orden: "Flex item 3", "Flex item 2", "Flex item 1".
+_______________________________________________________
+
+	[28.2]. Dirección Vertical:
+_______________________________________________________
+
+Use ".flex-column" para mostrar los elementos flexibles verticalmente (uno encima del otro), o ".flex-column-reverse" para invertir la dirección vertical:
+
+	<div class="d-flex flex-column">
+		<div class="p-2 bg-info">Flex item 1</div>
+		<div class="p-2 bg-warning">Flex item 2</div>
+		<div class="p-2 bg-primary">Flex item 3</div>
+	</div>
+
+	<div class="d-flex flex-column-reverse">
+		<div class="p-2 bg-info">Flex item 1</div>
+		<div class="p-2 bg-warning">Flex item 2</div>
+		<div class="p-2 bg-primary">Flex item 3</div>
+	</div>
+_______________________________________________________
+
+	[28.3]. Justify Content:
+_______________________________________________________
+
+Use las clases ".justify-content-*" para cambiar la alineación de los elementos flexibles. Las clases válidas son "start"(por defecto), "end", "center", "between" o "around":
+
+	<div class="d-flex justify-content-start">...</div>
+	<div class="d-flex justify-content-end">...</div>
+	<div class="d-flex justify-content-center">...</div>
+	<div class="d-flex justify-content-between">...</div>
+	<div class="d-flex justify-content-around">...</div>
+_______________________________________________________
+
+	[28.4]. Rellenar(fill)/Anchos iguales:
+_______________________________________________________
+
+Use ".flex-fill" en elementos flexibles para forzarlos a que tengan anchos iguales:
+
+	<div class="d-flex">
+		<div class="p-2 bg-info flex-fill">Flex item 1</div>
+		<div class="p-2 bg-warning flex-fill">Flex item 2</div>
+		<div class="p-2 bg-primary flex-fill">Flex item 3</div>
+	</div>
+_______________________________________________________
+
+	[28.5]. Grow/Shrink:
+_______________________________________________________
+
+Use ".flex-grow-1" en un elemento flexible para ocupar el resto del espacio:
+
+	<div class="d-flex">
+		<div class="p-2 bg-info">Flex item 1</div>
+		<div class="p-2 bg-warning">Flex item 2</div>
+		<div class="p-2 bg-primary flex-grow-1">Flex item 3</div>
+	</div>
+
+Los dos primeros elementos flexibles ocupan el espacio necesario, mientras que el último elemento ocupa el resto del espacio disponible.
+
+Use ".flex-shrink-1" en un elemento flexible para que se encoja si es necesario.
+_______________________________________________________
+
+	[28.6]. Orden:
+_______________________________________________________
+
+Cambie el orden visual de uno o varios elementos flexibles específicos con las clases ".order". Las clases válidas son de 0 a 12, donde el número más bajo tiene la máxima prioridad ("orden-1" se muestra antes del "orden-2", etc.):
+	
+	<div class="d-flex bg-secondary">
+		<div class="p-2 bg-info order-3">Flex item 1</div>
+		<div class="p-2 bg-warning order-2">Flex item 2</div>
+		<div class="p-2 bg-primary order-1">Flex item 3</div>
+	</div>
+_______________________________________________________
+
+	[28.7]. Auto Margen:
+_______________________________________________________
+
+Agregue fácilmente márgenes automáticos a elementos flexibles con ".mr-auto"(empuja ítems a la derecha), o utilizando ".ml-auto"(empuja ítems a la izquierda):
+
+	<div class="d-flex bg-secondary">
+		<div class="p-2 mr-auto bg-info">Flex item 1</div>
+		<div class="p-2 bg-warning">Flex item 2</div>
+		<div class="p-2 bg-primary">Flex item 3</div>
+	</div>
+
+	<div class="d-flex bg-secondary">
+		<div class="p-2 bg-info">Flex item 1</div>
+		<div class="p-2 bg-warning">Flex item 2</div>
+		<div class="p-2 ml-auto bg-primary">Flex item 3</div>
+	</div>
+_______________________________________________________
+
+	[28.8]. Wrap:
+_______________________________________________________
+
+Controle cómo los elementos flexibles se envuelven en un contenedor flexible con ".flex-nowrap" (predeterminado), ".flex-wrap" o ".flex-wrap-reverse":
+
+	<div class="d-flex flex-wrap">..</div>
+
+	<div class="d-flex flex-wrap-reverse">..</div>
+
+	<div class="d-flex flex-nowrap">..</div>
+_______________________________________________________
+
+	[28.9]. Align Content:
+_______________________________________________________
+
+Controle la alineación vertical de los elementos flexibles reunidos con las clases ".align-content-*". Las clases válidas son ".align-content-start" (predeterminado), ".align-content-end", ".align-content-center", ".align-content-between", ".align-content-around" y ".align-content-stretch".
+
+Nota: Estas clases no tienen efecto en filas individuales de elementos flexibles.
+
+	<div class="d-flex flex-wrap align-content-start">..</div>
+
+	<div class="d-flex flex-wrap align-content-end">..</div>
+
+	<div class="d-flex flex-wrap align-content-center">..</div>
+
+	<div class="d-flex flex-wrap align-content-around">..</div>
+
+	<div class="d-flex flex-wrap align-content-stretch">..</div>
+_______________________________________________________
+
+	[28.10]. Align Ítems:
+_______________________________________________________
+
+Controle la alineación vertical de filas individuales de elementos flexibles con las clases ".align-items-*". Las clases válidas son ".align-items-start", ".align-items-end", ".align-items-center", ".align-items-baseline" y ".align-items-stretch" (predeterminado).
+
+	<div class="d-flex align-items-start">..</div>
+
+	<div class="d-flex align-items-end">..</div>
+
+	<div class="d-flex align-items-center">..</div>
+
+	<div class="d-flex align-items-baseline">..</div>
+
+	<div class="d-flex align-items-stretch">..</div>
+_______________________________________________________
+
+	[28.11]. Align Self:
+_______________________________________________________
+
+Controle la alineación vertical de un elemento flexible especificado con las clases ".align-self-*". Las clases válidas son ".align-self-start", ".align-self-end", ".align-self-center", ".align-self-baseline" y ".align-self-stretch" (valor predeterminado).
+
+	<div class="d-flex bg-light" style="height:150px">
+		<div class="p-2 border">Flex item 1</div>
+		<div class="p-2 border align-self-start">Flex item 2</div>
+		<div class="p-2 border">Flex item 3</div>
+	</div>
+_______________________________________________________
+
+	[29]. Objetos Multimedia:
+_______________________________________________________
+
+Bootstrap proporciona una manera fácil de alinear objetos multimedia (como imágenes o videos) junto con el contenido. Los objetos multimedia a menudo se usan para mostrar comentarios de blog, tweets, etc.
+
+Para crear un objeto multimedia, agregue la clase ".media" a un elemento contenedor y coloque el contenido multimedia dentro de un contenedor hijo con la clase ".media-body". Agregue relleno(padding) y márgenes según sea necesario, con las utilidades de espaciado:
+
+	<div class="media border p-3">
+		<img src="img_avatar3.png" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+		<div class="media-body">
+			<h4>John Doe <small><i>Posted on February 19, 2016</i></small></h4>
+			<p>Lorem ipsum...</p>
+		</div>
+	</div>
+
+De está forma se crea un objeto muy similar a una tarjeta(card), con la imagen al lado izquierdo y el texto al lado derecho.
+_______________________________________________________
+
+	[29.1]. Objetos Multimedia Anidados:
+_______________________________________________________
+
+Los objetos multimedia se pueden anidar(uno dentro de otro), ponga un nuevo contenedor ".media" dentro del contenedor ".media-body":
+
+	<div class="media border p-3">
+		<img src="img_avatar3.png" alt="John Doe" class="mr-3 mt-3 rounded-circle" style="width:60px;">
+		<div class="media-body">
+			<h4>John Doe <small><i>Posted on February 19, 2016</i></small></h4>
+			<p>Lorem ipsum...</p>
+			<div class="media p-3">
+				<img src="img_avatar2.png" alt="Jane Doe" class="mr-3 mt-3 rounded-circle" style="width:45px;">
+				<div class="media-body">
+					<h4>Jane Doe <small><i>Posted on February 20 2016</i></small></h4>
+					<p>Lorem ipsum...</p>
+				</div>
+			</div> 
+		</div>
+	</div>
+
+En este caso, se crea una estructura que visualmente se parecen a los comentarios de un blog(el segundo objeto multimedia es como la respuesta al primer comentario, y tiene sangría a la izquierda).
+_______________________________________________________
+
+	[29.2]. Alineación de la Imagen del Objeto Multimedia:
+_______________________________________________________
+
+Para alinear a la derecha la imagen multimedia, agregue la imagen después del contenedor ".media-body":
+
+	<div class="media border p-3">
+		<div class="media-body">
+			<h4>John Doe <small><i>Posted on February 19, 2016</i></small></h4>
+			<p>Lorem ipsum...</p>
+		</div>
+		<img src="img_avatar3.png" alt="John Doe" class="ml-3 mt-3 rounded-circle" style="width:60px;">
+	</div>
+
+Use las utilidades "flex", las clases "align-self-*" para colocar el objeto multimedia en la parte superior, central o inferior:
+
+	<!-- Media top -->
+	<div class="media">
+		<img src="img_avatar1.png" class="align-self-start mr-3" style="width:60px">
+		<div class="media-body">
+			<h4>Media Top</h4>
+			<p>Lorem ipsum...</p>
+		</div>
+	</div>
+
+	<!-- Media middle -->
+	<div class="media">
+		<img src="img_avatar1.png" class="align-self-center mr-3" style="width:60px">
+		<div class="media-body">
+			<h4>Media Middle</h4>
+			<p>Lorem ipsum...</p>
+		</div>
+	</div>
+
+	<!-- Media bottom -->
+	<div class="media">
+		<img src="img_avatar1.png" class="align-self-end mr-3" style="width:60px">
+		<div class="media-body">
+			<h4>Media Bottom</h4>
+			<p>Lorem ipsum...</p>
+		</div>
+	</div>

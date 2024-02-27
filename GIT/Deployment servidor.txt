@@ -1,0 +1,35 @@
+﻿Deployment Servidor:
+Comandos consola:
+
+Creamos llave ssh:
+	ssh-keygen
+
+Vamos a la carpeta donde se creo la llave (para sacar la virgulilla es alt+126):
+	cd ~/.ssh
+
+Miramos el contenido de nuestra llave publica (.pub) para copiarlo:
+	cat id_rsa.pub 
+
+Vamos a github, en ajustes, SSH Keys, Add SSH Key, y pegamos el contenido de nuestra llave.
+
+Vamos a la carpeta del proyecto en local, empezamos a salvarla en git con:
+	git init
+
+Refrescamos la key con:
+	ssh-add
+
+Luego:
+	git status
+Y hacemos el comit con:
+ git add -A 
+ git commit -m "Comentario de lo que se hizo"
+ git status
+ git log
+
+ En git hub, en el repositorio, al lado de Http, esta SSH, hacemos clic alli y copiamos esa linea
+
+ luego en linea de comandos (origin es el nombre del remoto):
+ 	git remote -v
+ 	git remote add origin aquí_pegamos_lo_que_copiamos_de_github
+
+ 	git push origin master

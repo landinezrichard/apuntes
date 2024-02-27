@@ -1,0 +1,632 @@
+	PERSONALIZACIÓN DEL ÁREA DE ADMINISTRACIÓN DE WORDPRESS:
+_______________________________________________________
+
+Para personalizar el admin de wordpress, y que estas personalizaciones las podamos reutilizar en cualquier sitio, lo haremos crando un plugin.
+
+_______________________________________________________
+
+	PANTALLA DE INGRESO:
+_______________________________________________________
+
+Para cambiar el logo de wordpress, el enlace y texto de este logo, en la pantalla de loguin del admin, haremos lo siguiente:
+
+1) Creamos la carpeta del pluguin en la ruta:
+
+	C:\wamp\www\p_wallpapers\wp-content\plugins
+
+La carpeta la llamaremos "apk-custom-admin".
+
+2) Creamos dentro de la carpeta, un archivo llamado "apk-custom-admin.php":
+
+	<?php
+		/*
+		Plugin Name: Personalizar admin
+		Plugin URI:  https://franciscoamk.com/
+		Description: Este pluguin personaliza el área de admin. para los clientes.
+		Version:     1.0
+		Author:      Francisco Aguilera G.
+		Author URI:  https://franciscoamk.com/
+		License:     GPL2
+		License URI: https://www.gnu.org/licenses/gpl-2.0.html
+		*/
+
+	?>
+
+Con estas líneas, ya podremos ver el pluguin en el admin. de wordpress.
+
+Para mas info de la creación de pluguins:
+
+	https://codex.wordpress.org/Writing_a_Plugin
+
+	https://developer.wordpress.org/plugins/the-basics/header-requirements/
+
+3) En el archivo "apk-custom-admin.php", requerimos el archivo que crearemos más adelante para modificar el loguin:
+
+	//Pantalla de Ingreso
+	require_once('includes/custom-login.php'); 
+
+3) Creamos la carpeta "includes", y dentro de está el archivo "custom-login.php":
+
+	<?php
+		/*PANTALLA DE INGRESO*/
+
+
+		//Imágen Logo
+		function apk_login_logo(){
+
+			?>
+				<style type="text/css">
+
+					body.login div#login h1 a{
+						background-image: url('<?php echo plugin_dir_url(dirname(__FILE__)); ?>/img/login-logo.png');
+						background-size: contain;
+						-moz-background-size: contain;
+						-webkit-background-size: contain;
+						width: 100%;
+						height: 100px; 
+					}
+
+				</style>
+
+			<?php
+		}
+
+		add_action('login_enqueue_scripts', 'apk_login_logo');
+		
+		//Url (enlace) imagén Logo
+		function apk_login_link($url){
+			return home_url();
+		}
+
+		add_filter('login_headerurl', 'apk_login_link');
+
+		//Texto hover imágen logo
+		function apk_login_logo_title($message){
+			$message = get_bloginfo('name');
+			return $message;
+		}
+
+		add_filter('login_headertitle', 'apk_login_logo_title');
+	?>
+
+Nota: no olvidar copiar la imagen "login-logo.png" a la carpeta "img" dentro de la carpeta del plugin.
+_______________________________________________________
+
+	DASHBOARD:
+_______________________________________________________
+
+Vamos a hacer que la página de dashboard o escritorio de WordPress sea más sencilla. Para ello eliminaremos los widgets originales y añadiremos algunos widgets adicionales personalizados.
+
+1) En el archivo "apk-custom-admin.php", requerimos el archivo que crearemos más adelante:
+
+	//Dashboard WP
+	require_once('includes/custom-dashboard.php');
+
+2) Creamos el archivo "custom-dashboard.php":
+
+	<?php
+		/*CUSTOM DASHBOARD*/
+
+		function apk_setup_dashboard_widgets(){
+
+			//Remover metaboxes
+			remove_meta_box( 'dashboard_right_now', 'dashboard', 'normal' );
+			remove_meta_box( 'dashboard_activity', 'dashboard', 'normal' );
+			remove_meta_box( 'dashboard_quick_press', 'dashboard', 'side' );
+			remove_meta_box( 'dashboard_primary', 'dashboard', 'side' );
+
+			//Remover mensaje bienvenida
+			remove_action( 'welcome_panel', 'wp_welcome_panel' );
+
+			//Agregar metabox apk_dashboard_welcome
+			add_meta_box(
+				'apk_dashboard_welcome',
+				'Bienvenido al panel de control',
+				'apk_add_welcome_widget',
+				'dashboard',
+				'normal'
+			);
+
+			//Agregar metabox apk_dashboard_link
+			add_meta_box(
+				'apk_dashboard_link',
+				'Links de interés',
+				'apk_add_links_widget',
+				'dashboard',
+				'side'
+			);
+
+		}
+
+		add_action('wp_dashboard_setup' , 'apk_setup_dashboard_widgets');
+
+
+		//Define HTML para el widget apk_dashboard_welcome	
+		function apk_add_welcome_widget(){
+		?>
+			<p>Este sitio web funciona sobre <strong><a href="http://wordpress.org" target="_blank">WordPress</a></strong>, el CMS más utilizado alrededor del mundo.</p>
+
+			<p>Con este sistema de administración de contenidos podrás gestionar tu sitio web editando el material existente o publicando nuevas páginas.</p>
+
+			<p>Desde el menú izquierdo podrás gestionar lo siguiente:</p>
+
+			<ul>
+				<li><strong>Páginas</strong> - contenido estático del sitio web.</li>
+				<li><strong>Contacto</strong> - para editar a quien le llega el formulario de contacto.</li>
+				<li><strong>Perfil</strong> - para cambiar la contraseña de acceso.</li>
+			</ul>
+
+			<p>El sistema es muy simple, pero si lo necesitas, en cada pantalla encontrarás en la parte superior derecha un botón que te dará cierta ayuda.</p>
+
+		<?php
+		}
+
+		//Define HTML para el widget apk_dashboard_link
+		function apk_add_links_widget(){
+		?>
+			<p>Si quieres aprender más deberías dar un vistazo a estos links:</p>
+
+			<ul>
+				<li><a href="http://dominandowordpress.apkestudio.com/indice" target="_blank">Curso gratuito de APK Estudio sobre wordpress</a></li>
+				<li><a href="http://apkestudio.com" target="_blank">El sitio de APK Estudio</a></li>
+				<li><a href="http://wordpress.org" target="_blank">El sitio de wordpress</a></li>
+			</ul>
+
+		<?php
+		}
+
+	?>
+
+Lo más importante, lo hacemos en la función "apk_setup_dashboard_widgets", en donde usamos la función "remove_meta_box()" para eliminar los metaboxes widgets del dashboard.
+
+La funcion "remove_meta_box()", recibe tres parametros:
+
+	"id" --> el id del widget del dashboard. Esto lo podemos ver, inspeccionando el elemento en el navegador.
+
+	"pantalla" --< en que pantalla se esta mostrando el widget, en este caso "dashboard".
+
+	"área" --> en que área se está mostrando el widget ("normal" para la izquierda, "side" para la derecha)
+
+Luego con la función "add_meta_box()", creamos el widget que se mostrara en donde eliminamos los widgets, está función recibe los siguientes parametros:
+
+	"id" --> el id que le vamos a dar a nuestro widget (ej. "apk_dashboard_welcome")
+
+	"title" --> el titulo del widget (ej. "Bienvenido al panel de control")
+
+	"function" --> la función encargada de crear el código HTML del widget (ej. "apk_add_welcome_widget")
+
+	"pantalla" --> en que pantalla se va a mostrar este widget (ej. "dashboard")
+
+	"área" --> en que área queremos que se muestre el widget ("normal" para la izquierda, "side" para la derecha)
+_______________________________________________________
+
+	Cambiar menú "Entradas" por “Noticias”:
+_______________________________________________________
+
+La palabra “entradas” es algo confuso para aquellas personas que no están muy familiarizadas con WordPress, así que dependiendo del sitio que desarrollemos y de quien se encargará de administrarlo, podemos cambiar los textos de “Entradas” a “Noticias”, “Artículos” u otro nombre que decidas que es apropiado.
+
+1) En el archivo "apk-custom-admin.php", requerimos el archivo que crearemos más adelante:
+
+	//Cambio "Entradas" por "Noticias"
+	require_once('includes/custom-labels.php');
+
+2) Creamos el archivo "custom-labels.php":
+
+	<?php
+		//Cambiar nombre menú entradas
+
+		function apk_change_posts_menu_items() {
+			
+			//Aplicar sólo si el usuario puede editar posts
+			$user = wp_get_current_user();
+			if( $user->has_cap('edit_posts') ) {
+			
+				global $menu;
+				global $submenu;
+				
+				$menu[5][0] = 'Noticias';
+				$submenu['edit.php'][5][0] = 'Todas las noticias';
+				$submenu['edit.php'][10][0] = 'Agregar noticia';
+			
+			}
+			
+		}
+		add_action('admin_menu', 'apk_change_posts_menu_items');
+
+
+		//Cambiar labels de post_type entradas/posts
+
+		function apk_change_posts_object_labels() {
+			
+			//Aplicar sólo si el usuario puede editar posts
+			$user = wp_get_current_user();
+			if( $user->has_cap('edit_posts') ) {
+			
+				global $wp_post_types;
+				$labels = $wp_post_types['post']->labels;
+				
+				if ( empty($wp_post_types['post']) || !is_object($wp_post_types['post']) || !$labels  ) {
+					return ;
+				}
+				
+				//Mira http://codex.wordpress.org/Function_Reference/register_post_type#Arguments
+				$labels->name 				= 'Noticias';
+				$labels->singular_name		= 'Noticia';
+				$labels->add_new            = 'Agregar noticia';
+				$labels->add_new_item       = 'Nueva noticia';
+				$labels->all_items          = 'Todas las noticias';
+				$labels->edit_item          = 'Editar noticia';
+				$labels->name_admin_bar     = 'Noticias';
+				$labels->menu_name          = 'Noticias';
+				$labels->new_item           = 'Nueva Noticia';
+				$labels->not_found          = 'No se encontraron noticias';
+				$labels->not_found_in_trash = 'No hay noticias en la papelera';
+				$labels->search_items       = 'Buscar noticias';
+				$labels->view_item          = 'Ver noticia';
+
+			}
+			
+		}
+
+		add_action('init', 'apk_change_posts_object_labels');
+
+	?>
+
+Primero para cambiar el nombre de "Entradas" a "Noticias", en el menú izquierdo del admin, usdamos la función "apk_change_posts_menu_items()", que añadimos a la acción "admin_menu".
+
+Acá hay que tener en cuenta, que en el admin.(backend) de wordpress, pueden existir diferentes tipos de usuario (administrador, suscriptor, autor, editor, colaborador), y dependiendo del tipo de usuario, se mostrará o no se mostrará, el menu "Entradas", así que antes de cambiar este nombre a "Noticias", verificamos que el usuario tenga los permisos de editar entradas:
+
+	if( $user->has_cap('edit_posts') )
+
+Luego obtenemos la variable global "$menu" y "$submenu".
+
+Para cambiar el texto del menú "Entradas", accedemos a el con:
+	
+	$menu[5][0]
+
+La posición número "5", corresponde a las entradas, según la documentación de:
+
+	https://developer.wordpress.org/reference/functions/add_menu_page/#menu-structure
+
+Nota: podemos usar el siguiente código, para imprimir éste array y ver que posición queremos modificar:
+
+	echo '<pre>' . print_r( $GLOBALS[ 'menu' ], TRUE) . '</pre>';
+
+Para cambiar los textos del submenu (Todas las entradas, Agregar entrada, etc), accedemos a:
+
+	$submenu['edit.php'][5][0]
+
+En este caso es la página "edit.php", ya que al hacer click sobre entradas, en la url aparece:
+
+	http://localhost/p_wallpapers/wp-admin/edit.php
+
+Ahora debemos cambiar los textos, que aparecen, no en el menú, sino en la pantalla donde vemos el listado de "Entradas", seleccionamos una para editar, añadimos una nueva, etc.
+
+Esto lo hacemos en la función "apk_change_posts_object_labels()", añadida a la acción "init".
+
+Aca la comprobación que hacemos con:
+
+	if ( empty($wp_post_types['post']) || !is_object($wp_post_types['post']) || !$labels  ) {
+		return ;
+	}
+
+Es para evitar modificar los labels, si por ejemplo el usuario tiene otro pluguin que modifica estos.
+
+3) Como ultimo paso, volvemos al archivo "apk-custom-admin.php", y nos aseguramos que el cambio del "Dashboard", y de los custom labels "Noticias", solo carguen en el admin. (backend) de wordpress:
+
+	if( is_admin() ){
+
+		//Dashboard WP
+		require_once('includes/custom-dashboard.php');
+
+		//Cambio "Entradas" por "Noticias"
+		require_once('includes/custom-labels.php');
+	}
+
+_______________________________________________________
+
+	Remover ítems del menú:
+_______________________________________________________
+
+Algunos sitios son muy sencillos y no requieren la sección de entradas, ni los comentarios así que ¿Por qué mejor no los sacamos del menú de administración?
+
+1) En el archivo "apk-custom-admin.php", requerimos el archivo que crearemos más adelante:
+
+	//Eliminar items del menu
+	require_once('includes/remove-menu-items.php');
+
+2) Creamos el archivo "remove-menu-items.php":
+
+	<?php
+		//Eliminar items del menu admin
+
+		function apk_remove_menu_items() {
+			
+			remove_menu_page('separator1');
+			remove_menu_page('separator2');
+			remove_menu_page('edit.php');
+			remove_menu_page('edit-comments.php');
+			
+			$user = wp_get_current_user();
+			if( !$user->has_cap('manage_options') ) {
+			
+				remove_menu_page('tools.php');
+				remove_menu_page('upload.php');
+					
+			}
+			
+		}
+		
+		add_action('admin_menu', 'apk_remove_menu_items');
+	?>
+
+Acá estamos suponiendo que el sitio web solo tiene páginas, así que no va a necesitar entradas, y por eso quitamos esa opción del menú:
+
+	remove_menu_page('edit.php');
+
+Como las páginas estaticas, tampoco tienen comentarios, tambien removemos esa opción del menú:
+
+	remove_menu_page('edit-comments.php');
+
+Nota: Tanto "edit.php", como "edit-comments.php", son las paginas que vemos en la url, al hacer click sobre esas opciones.
+
+Al eliminar esas opciones, en el menú, veremos que aún se imprime un separador CSS, que hace que los elementos del menú esten separados, pero al no estar las opciones "Entradas", ni "Comentarios", se ve, feo, así que removemos estos separadores con:
+
+	remove_menu_page('separator1');
+	remove_menu_page('separator2');
+
+Ahora, en nuestro sitio, es buena idea crear un asuario "Editor", para que suba contenido al sitio, pero que no se meta a instalarle pluguins, ni nada de eso.
+
+Para este usuario "Editor", y todos los de menor categoria que él, vamos a eliminar las opciones del menú de "Herramientas", y de "Medios" (biblioteca multimedia).
+
+Ya que en "Herramientas", solo nos da una opción de un boton que se añade al navegador, usado para publicar contenido de otros sitios, que la verdad es una opción muy poco usada. 
+
+Y la de "Medios" tambien la eliminamos, ya que por lo general, cuando se va a subir una imagen, o un video, lo hacemos directamente en la página que se esta editando y no en esta opción.
+
+Para verificar el usuario y sus permisos lo hacemos con:
+
+	$user = wp_get_current_user();
+	if( !$user->has_cap('manage_options') ) {
+
+Y para eliminar las opciones:
+
+	remove_menu_page('tools.php');
+	remove_menu_page('upload.php');
+
+_______________________________________________________
+
+	Eliminar columnas del listado de páginas:
+_______________________________________________________
+
+Vamos a eliminar unas columnas de información, del listado de páginas, ya que si son páginas estaticas, no nos interesa ver la fecha de publicación de la página, la columna de comentarios, ni la columna que nos indica quien es el autor de la página.
+
+1) En el archivo "apk-custom-admin.php", requerimos el archivo que crearemos más adelante:
+
+	//Eliminar columnas del listado de páginas
+	require_once('includes/edit-columns.php');
+
+2) Creamos el archivo "edit-columns.php":
+
+	<?php
+		//Eliminar columnas del listado de páginas
+		function apk_remove_columns( $columns ) {
+			
+			unset( $columns['author'] );
+			unset( $columns['comments'] );
+			unset( $columns['date'] );
+			return $columns;
+			
+		} 
+
+		add_filter('manage_edit-page_columns', 'apk_remove_columns');
+	?>
+
+Usamos un filtro, es decir, interceptamos y modificamos información.
+_______________________________________________________
+
+	Eliminar botones de la barra superior:
+_______________________________________________________
+
+A veces no basta con eliminar los ítems del menú, sino que también deberemos eliminar ítems de la barra superior.
+
+¿Y si de paso sacamos el logo de WordPress también?
+
+1) En el archivo "apk-custom-admin.php", requerimos el archivo que crearemos más adelante, pero en este caso, lo rquerimos fuera de la comprobación "if( is_admin() ){", ya que la barra superior, tambien la podemos ver en la parte frontal del sitio cuando estamos logueados:
+
+	//Eliminar nodos de la barra de administración
+	require_once('includes/custom-admin-bar.php');
+
+2) Creamos el archivo "custom-admin-bar.php":
+
+	<?php
+		//Eliminar nodos de la barra de administración
+		function apk_remove_admin_bar_nodes() {
+			
+			global $wp_admin_bar;
+			
+			$wp_admin_bar->remove_node('wp-logo');
+			$wp_admin_bar->remove_node('comments');
+			$wp_admin_bar->remove_node('new-content');
+			$wp_admin_bar->remove_node('search');
+			
+			
+		}
+
+		add_action('admin_bar_menu', 'apk_remove_admin_bar_nodes', 999 );
+	?>
+
+Aca eliminamos el logo de wordpress, la opción de comentarios, la opción de añadir nuevo contenido, y un campo de busqueda, ya que al ser páginas estaticas, no tendremos mucho contenido para buscar.
+
+Cuando añadimos la acción "admin_bar_menu", usamos el número "999", para indicarle una prioridad alta, a esta acción, y se ejecute inmediatamente.
+_______________________________________________________
+
+	Modificar pie de página de WordPress:
+_______________________________________________________
+
+El pie de página es un lugar que podemos utilizar para hacer que nuestros clientes nos recuerden y nos vuelvan a contactar.
+
+1) En el archivo "apk-custom-admin.php", requerimos el archivo que crearemos más adelante:
+
+	//Peronalizar texto pie de página
+	require_once('includes/custom-footer.php');
+
+2) Creamos el archivo "custom-footer.php":
+
+	<?php
+		//Peronalizar texto pie de página
+		function apk_custom_footer() { ?>
+			
+			Gracias por crear tu sitio con <a href="http://apkestudio.com"><b>APK Estudio</b></a>. <br />Si  necesitas agregar funcionalidades o actualizar el diseño, solo debes <a href="mailto:contacto@apkestudio.com">contactarnos</a>
+			
+		<?php 
+		}
+		add_filter('admin_footer_text', 'apk_custom_footer');
+
+		//Peronalizar texto pie de página VERSIÓN
+		function apk_edit_footer_version() {
+			
+			return 'Este sitio funciona con WordPress :)';
+			
+		}
+		add_filter('update_footer', 'apk_edit_footer_version', 999);
+	?>
+
+En este caso usamos filtros para interceptar y modificar la información. De esta forma, en el admin, en el pie de pág. veran la información para contactarnos.
+_______________________________________________________
+
+	Cargar JavaScript y CSS al área admin:
+_______________________________________________________
+
+Así como podemos cargar archivos CSS y Js en nuestros temas, también podemos cargar archivos en el área de administración de WordPress para personalizar su aspecto. En este caso nos centraremos en modificar la pantalla de perfil de usuario.
+
+1) En el archivo "apk-custom-admin.php", requerimos el archivo que crearemos más adelante:
+
+	//Cargar archivos CSS y JS en el área admin
+	require_once('includes/scripts-styles.php');
+
+2) Creamos el archivo "scripts-styles.php":
+
+	<?php
+		//Cargar archivos CSS y JS en el área admin
+		
+		/* REMUEVE ESTA LÍNEA PARA HABILITAR
+
+		function apk_scripts_styles() {
+
+			wp_register_style('custom-admin-styles', plugin_dir_url(dirname(__FILE__)).'css/custom-admin-css.css', false, '1.0', 'all' );
+			wp_enqueue_style('custom-admin-styles');
+			
+			wp_register_script('custom-admin-scripts', plugin_dir_url(dirname(__FILE__)).'js/custom-admin-js.js', 'jquery', '1.0', false );
+			wp_enqueue_script('custom-admin-scripts');
+
+		}
+		add_action('admin_enqueue_scripts', 'apk_scripts_styles');
+
+		REMUEVE ESTA LÍNEA PARA HABILITAR */
+	?>
+
+La forma de cargar scripts y estilos al area de administración, es muy parecida a la forma en que cargamos estos archivos en un tema, a diferencia que aca usamos la acción "admin_enqueue_scripts", para que solo cargue en el admin.
+_______________________________________________________
+
+	Crear página adicional:
+_______________________________________________________
+
+¿Qué tal si pudieras añadir una pantalla extra al escritorio de WordPress y usar allí el contenido que quieras? Suena bien ¿cierto?.
+
+Las cosas que se podrían hacer son muchas, desde una pantalla de ayuda, la documentación del tema, cargar contenido externo con promociones, etc.
+
+Solo te limita tu imaginación.
+
+1) En el archivo "apk-custom-admin.php", requerimos el archivo que crearemos más adelante:
+
+	//Crear página nueva dentro del admin
+	require_once('includes/apk-help.php');
+
+2) Creamos el archivo "apk-help.php":
+
+	<?php
+		//Crear página nueva dentro del admin
+		function apk_add_menu_ayuda() {
+			
+			add_menu_page(
+				'¿Necesitas ayuda?',
+				'Ayuda',
+				'edit_pages',
+				'ayuda-apk',
+				'apk_ayuda_page',
+				'dashicons-editor-help',
+				'3'
+			);
+			
+		}
+
+		add_action('admin_menu', 'apk_add_menu_ayuda');
+
+		//Define HTML para la página
+
+		function apk_ayuda_page() {
+		?>
+
+			<div class="wrap">
+				
+				<h2>¿Necesitas ayuda? La tenemos</h2>
+				
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+
+					<iframe width="100%" height="400" src="//www.youtube.com/embed/yNlTjWmPy8s?list=PL65OIoU7mGjKyRBZOiance0mIeKRCGIcC" frameborder="0" allowfullscreen></iframe>
+
+			</div>
+
+		<?php
+		}
+	?>
+_______________________________________________________
+
+	Intervenir cabecera de WordPress:
+_______________________________________________________
+
+La cabecera de WordPress también puede ser intervenida y podemos hacer cosas muy interesantes gracias a esto, como por ejemplo añadir nuestro propio logo.
+
+1) En el archivo "apk-custom-admin.php", requerimos el archivo que crearemos más adelante:
+	
+	//Modificar cabecera de WordPress
+	require_once('includes/admin-header.php');
+
+2) Creamos el archivo "aadmin-header.php":
+
+	<?php
+		//Modificar cabecera de WordPress
+		/* REMUEVE ESTA LÍNEA PARA HABILITAR
+
+		function apk_custom_admin_header() {
+		?>
+			<style type="text/css" media="screen">
+				
+				#apk-admin-head {
+					background: white;
+					border-bottom: solid 1px #ddd;
+					text-align: right;
+					padding: 10px 30px 10px 0;
+					position: absolute;
+					width: 100%;
+					z-index: 1;
+					box-sizing: border-box;
+				}
+				
+				#wpbody-content {
+					padding-top: 70px;
+				}
+				
+			</style>
+			
+			<div id="apk-admin-head">
+				<img src="<?php echo plugin_dir_url(dirname(__FILE__)); ?>/img/login-logo.png" alt="AMK" />
+			</div>
+
+		<?php 	
+		}
+		add_action('admin_head', 'apk_custom_admin_header');
+
+
+		REMUEVE ESTA LÍNEA PARA HABILITAR*/
+	?>

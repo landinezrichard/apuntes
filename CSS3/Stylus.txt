@@ -1,0 +1,241 @@
+	STYLUS:
+_______________________________________________________
+
+1) Instalar Node.js
+
+2) Instalar stylus con:
+
+	npm install -g stylus
+
+3) En el directorio del proyecto, tener el archivo index.html y le agregamos el link a un archivo de estilos.css (que se creará despues).
+
+4) En el mismo directorio crear un archivo:
+
+	estilos.styl
+
+5) En el archivo de stylus (*.styl), agregamos los estilos a nuestra pág.
+	Ejemplo:
+
+		body
+			background red
+
+		.clase
+			background blue
+			color white	
+
+	Nota: en vez de usar {}, usamos en la siguiente línea una identación.
+		No necesita (:) ni el (;).
+
+	Para aprender más:
+
+		http://learnboost.github.io/stylus/	
+
+	Tambien podemos crear variables:
+		
+		gris_claro = #818181
+		gris_oscuro = #333333	
+
+	Y despues usarlas dando estilos:
+
+		body
+			color gris_claro
+
+	Si a los elementos Html, les asignamos clases por componentes, podemos dar estilos así:
+	
+		.Item
+			propiedad valor
+			
+			&-imageContainer
+				propiedad valor
+
+			&-image
+				propiedad valor
+
+	En vez de:
+
+		.Item
+			propiedad valor
+			
+			.Item-imageContainer
+				propiedad valor
+
+			.Item-image
+				propiedad valor			
+
+6) Para compilar el archivo escribimos:
+
+	stylus -c estilos.styl
+
+	Nota: al hacer esto, si revisamos la carpeta del proyecto, encontramos el archivo estilos.css, que creo stylus.
+	La opción -c significa comprimir.
+
+	Para no tener que compilar a cada rato que hacemos cambios en nuestro archivo .styl ejecutamos el comando:
+
+		stylus -c -w estilos.styl
+
+	Nota: este proceso se queda corriendo en la consola, para terminarlo usamos ctrl+c
+	La opción -w significa watch.
+
+	Si queremos que el archivo .styl y el archivo .css, esten en carpetas apartes compilamos así:
+
+		stylus -c -w -o css/ stylus/estilos.styl
+
+	En este caso estamos dentro de la carpeta: "Proyecto", en donde tenemos otras dos carpetas: "stylus" y "css"
+	
+_______________________________________________________
+
+	Extender Stylus:
+
+1) Para agregar otras funcionalidades:
+
+	npm install -g nib
+
+2) Para ejecutar las nuevas funcionalidades junto con stylus:
+
+	stylus -u nib -c -w estilos.styl
+
+3) Para usar una de las funcionalidades, como por ejemplo fondos degradados usamos en nuestro archivo .styl:
+
+	@import 'nib/gradients'
+
+	Y luego en el mismo archivo asignamos el estilo:
+		
+		.clase
+			background linear-gradient(top, white, black)
+	
+	Nota: para que la propiedad sirva hay que agregar prefijos, sin embargo si importamos:
+
+		@import 'nib/vendor'
+
+	Y luego declaramos los prefijos para todos los navegadores con:
+
+		vendor-prefixes = o ms moz webkit papitas official
+
+	Queda funcionando la propiedad. Notese que se agrego el prefijo inventado "papitas", el cual stylus lo agrega a la propiedad. esto es muy util, si por ejemplo sale un nuevo navegador con otro prefijo propietario.
+
+	Tambien se puede importar solo nib, para tener todas las funcionalidades:
+
+		@import "nib"				
+
+	Para más info ir a:
+
+		http://tj.github.io/nib/
+_______________________________________________________
+
+Para que Sublime text le de syntaxis de colores a los archivos de stylus:
+
+1) ir a google y buscar:
+
+	package control sublime
+
+	https://sublime.wbond.net/
+
+2) Ir a la opcion: Installation, click en sublime text 2, copiamos el codigo que aparece allí.
+
+3) 	Dentro de sublime text, vamos a: View --> Show Console, y pegamos el codigo copiado y Enter.
+
+Cerramos y volvemos a abrir sublime text.
+
+4) Dentro de Sublime, vamos a Preferences --> Package Control
+	
+	En la ventana escribimos: Install Package,Enter.
+
+	Esperamos Y en la otra ventana igual escribmos stylus, Enter.
+
+	Se instala la Syntaxis de colores para Stylus, luego solo cerramos y volvemos a abrir sublime.
+
+	Si aún no se ve la sintaxis, vamos a View, Syntax, y la seleccionamos.
+
+	Nota: Si queremos otro paquete para que al escribir:
+		
+		html:5 (+tecla_tab)
+
+	Se autocomplete una plantilla html 5,instalamos de la misma forma un paquete llamado: Emmet.
+
+_______________________________________________________
+
+	MIXINS STYLUS:
+
+Los mixins son como un tipo de función que podemos llamar en donde querramos para aplicar los estilos.
+
+Ejemplo 1:
+
+	animacion(parametro)
+ 		-webkit-animation parametro
+ 		-moz-animation parametro
+ 		-o-animation parametro
+ 		-ms-animation parametro
+ 		animation parametro
+
+En este caso tenemos la funcion con nombre "animacion", la cual recibe uno o varios parametros, en la variable parametro.
+
+Para usar la funcion como un estilo usamos:
+
+	.Clase_O_Selector
+		animacion( 10s NombreAnimacion infinite linear )
+
+En este caso, al elemento html con clase: "Clase_O_Selector", le estamos agregando el mixin llamado animacion para que lo ejecute.
+
+Ejemplo 2: En este caso asignaremos un borde de determinado color. Por defecto el borde sera rojo, y si se especifica otro color, llegara como parametro:
+
+	/*Definimos el mixin*/
+	b_color(color= red)
+		border 1px solid color
+		box-sizing border-box
+
+	/*Usamos el mixin en un elemento con clase "Layout"*/
+	.Layout
+	    display flex
+	    padding .5em
+	    margin .5em
+	    /*No enviamos parametro para que tome color por defecto rojo*/
+	    b_color()
+
+	    /*En el elemento con clase "Layout-status", aplicamos el mixin, y enviamos el parametro de color, para que tome el color verde*/
+
+	    &-status
+	        b_color(green)
+	        width 200px
+
+_______________________________________________________
+
+Ejemplo 3: Añadir todos los prefijos a una propiedad CSS que stylus no se los agregue.
+
+Para añadir todos los prefijos a cualquier propiedad, que no agregue stylus ni nib, podemos usar el siguiente mixin, que usa interpolación:
+
+	vendor-prefixes = o ms moz webkit official
+
+	addprefix(prop, args)
+		for vendor in vendor-prefixes
+			if vendor == official
+				{prop}: args
+			else
+				-{vendor}-{prop}: args
+
+	mask-image()
+		addprefix('mask-image', arguments)
+
+//Uso
+
+	.selector
+		mask-image linear-gradient(to bottom, rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.3) 45%,rgba(0,0,0,1) 50%,rgba(0,0,0,0.3) 55%,rgba(0,0,0,0.3) 100%)
+
+Así le añade todos los prefijos necesarios a la propiedad "mask-image" (ya que necesita que se le agregue el -webkit- para que funcione en chrome, pero stylus no le asignaba los prefijos); si se necesita otra propiedad, como por ejemplo "border-radius", la definimos como mixin así:
+
+	border-radius()
+		addprefix('border-radius',arguments)
+
+_______________________________________________________
+
+	PLUGUINS COLOR
+
+Pluguins para sublime, para que nos muestren los colores que usamos en css, o stylus:
+
+	Color Highlighter --> es para sublime text2
+	GutterColor --> es para sublime text3
+
+_______________________________________________________
+
+	Convertir de CSS a Stylus:
+
+http://css2stylus.com/	

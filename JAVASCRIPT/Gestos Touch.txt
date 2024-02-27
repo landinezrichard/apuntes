@@ -1,0 +1,32 @@
+______________________________________________________
+
+		GESTOS TOUCH:
+______________________________________________________
+
+1) Ir a:
+	http://hammerjs.github.io/
+
+	En nuestro archivo html linkeamos el archivo "hammer.min.js".
+
+
+2) En nuestro "archivo.js" encargado de mostrar u ocultar el menu o las secciones que queramos, obtenemos el elemento al que le vamos a aplicar el evento touch, en este caso el body, el cual obtenemos con vanilla JS:
+
+	var $body = document.querySelector('body');
+
+	/*
+		Si el body tiene un id, se pone '#id' y si tiene una clase '.clase'
+	*/
+
+
+	var body = new Hammer($body);
+
+	body.on('evento',funcionManejadoraEvento);
+
+	body.on('panleft',mostrarMenu);
+
+	var mostrarMenu = function(){
+		...
+	}; 
+
+
+3)	Si tenemos una animacion, como por ejemplo una transisión, para que responda bien al movimiento del dedo en movil, la transicion debe ser a 300 mili-segundos --> .3s

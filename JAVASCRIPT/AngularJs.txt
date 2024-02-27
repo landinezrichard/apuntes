@@ -1,0 +1,1350 @@
+______________________________________________________
+			
+
+			ANGULARJS:
+
+______________________________________________________			
+
+1) Crear La carpeta del proyecto, y nuestro archivo html.
+
+2) Ir a la página de Angularjs, y descargar el codigo o utilizar el cdn y linkearlo en nuestro archivo html.
+
+	https://angularjs.org/
+
+	El CDN:
+
+	https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js
+
+	Quedaria:
+
+	  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular.min.js"></script>
+
+3) Agregar la Directiva de angular en el html, esto indica que el documento html es una aplicación de angularjs:
+
+	<html ng-app>
+
+	De este modo, si usamos en el html, la notación de las plantillas como Handlebars o Mustashe, ya angularjs las interpretaria, por ejemplo:
+
+		<h1>Hello {{'cadena de texto'}}!</h1>
+
+	Existen mas directivas, algunas empiezan con: "ng-nombreDirectiva"
+	
+4) Creamos un archivo app.js, en donde, dentro de un closure crearemos el modulo de nuestra aplicación y el controlador.
+
+		(function () {
+		  var app = angular.module('pokedex', []);
+
+		  app.controller('PokemonController', function () {
+		    this.pokemon = {
+		      id: "001",
+		      name: "Bulbasaur",
+		      species: "Seed Pokémon",
+		      type: [ "Grass", "Poison" ],
+		      height: "2′4″ (0.71m)",
+		      weight: "15.2 lbs (6.9 kg)",
+		      abilities: [ "Overgrow", "Chlorophyll"]
+		    };
+		  });
+
+		})();
+		  	
+	En este caso, el modulo se llama "pokedex", el segundo parametro [], es un array donde se le indican las dependencias de nuestra aplicación, en este caso no tiene.
+	
+	Nuestro controlador se llama "PokemonController"
+
+5) Para asociar (bind) nuestro controlador con el html, primero, en la directiva "ng-app" indicamos el modulo que creamos:
+
+		<html ng-app="pokedex">
+
+	Luego linkeamos nuestro archivo js:
+	
+		<script src="js/app.js"></script>
+
+6) Para mostrar los datos que tenemos en el controlador, en el objeto pokemon, ponemos la directiva de controlador, en la sección del html donde se va a mostrar el contenido:
+
+		<div ng-controller="PokemonController as pkmCtrl">		
+
+	Aca en el html, podemos poner un "alias" al nombre del controlador, así, cuando llamemos al controlador, en vez de llamarlo con "PokemonController" lo podemos llamar con "pkmCtrl"
+	
+	Luego dentro del div donde pusimos la directiva del controlador, dentro de cada elemento html, usamos la notacion de braquets {{}} para llamar los valores de las variables dentro del objeto del controlador:
+
+		<h1>{{pkmCtrl.pokemon.name}} #{{pkmCtrl.pokemon.id}}</h1>
+
+	Nota: el simbolo "#" no tiene nada que ver con la sintaxis de angularjs, es para que se muestre el numero de pokemon, en el html se veria:
+
+		Bulbasaur #001	
+
+	En el tipo de pokemon, como es un array, para que no nos muestre la notación de arrays en el html:
+
+		[ "Grass", "Poison" ]
+
+	Podemos usar las funciones con las que cuenta JavaScript:
+		
+		<li><strong>Type</strong> 
+			{{pkmCtrl.pokemon.type.join(', ')}}
+		</li>
+
+	En este caso une los elementos del array con una coma (,) y un espacio entre ellos.
+
+	AngularJs tambien cuenta con unos filtros para no tener que usar las funciones de javascript, por ejemplo, como el nombre del pokemon lo tenemos con la primera letra con mayuscula, y necesitamos pasarla a minuscula, para llamar el src de la imagen, usamos:
+	
+		<img src="img/{{pkmCtrl.pokemon.name | lowercase}}.jpg" />
+
+	Cuando usamos filtros, antes del pipe (|) va la entrada de lo que se le pasa el filtro, en este caso obtenemos el nombre del pokemon que esta en el objeto "pokemon" del controlador, y se lo pasamos como entrada al filtro "lowercase" de angularjs, el cual lo pasa a minusculas.
+
+7) Cuando usabamos la función de JS .join para unir los datos del array del tipo de pokemon:
+
+		<strong>Type</strong> 
+			{{pkmCtrl.pokemon.type.join(', ')}}
+
+	Se esta	incluyendo logica JS en la vista, para evitar esto, y hacer que por cada tipo de pokemon, se repita un elemento html en la vista, podemos usar otra directiva:
+
+		ng-repeat
+
+	Ejemplo:
+		
+		<span ng-repeat="tipo in pkmCtrl.pokemon.type">
+            {{tipo}}
+        </span>			
+
+    Con esto indicamos que por cada tipo, en el array type, del objeto pokemon del controlador, se repita el elemento span.
+    
+    Tambien podemos usar angularjs, para asignar dinamicamente clases a los elementos html:  
+        		
+
+        <span class="type-{{type | lowercase}}" ng-repeat="tipo in pkmCtrl.pokemon.type">
+            {{tipo}}
+        </span>
+
+    Y en nuestro archivo CSS asignar los estilos para cada tipo de pokemon:
+    
+    	.type-grass {
+    	  background-color: #78c850;
+    	  border: solid 1px #4e8234;
+    	}
+
+    	.type-poison {
+    	  background-color: #a040a0;
+    	  border: solid 1px #c183c1;
+    	}	                   
+
+	Si dentro de un elemento con la directiva "ng-repeat", tenemos un elemento html, pero que queremos ocultar cuando sea el ultimo, podemos usar la directiva:	
+
+		ng-hide
+
+	Esta directiva oculta el elemento, para que oculte el ultimo le damos como valor un helper injdicando que oculte el ultimo:
+	
+		<span ng-hide="$last" >
+			En el ultimo elemento se oculta este mensaje.
+		</span>
+
+	Analogamente existe la directiva para mostrar:
+	
+		ng-show
+
+	Esta directiva la podemos usar, por ejemplo, cuando necesitamos mostrar una sección de nuestra pagina, cuando una variable tenga determinado valor:
+	
+		<div ng-show="tabs.tab === 1">
+
+	En este caso, este div se mostrara, cuando en la variable "tab", perteneciente al controlador "tabs", tenga un valor igual a 1.
+	
+	Nota: la directiva que llama al controlador tabs, debe ser padre del div con la directiva ng-show.
+
+		<div ng-controller="TabsController as tabs">
+			<div ng-show="tabs.tab === 1">...
+
+
+	Tambien podemos llamar a un metodo de nuestro controlador, en el html, como por ejemplo cuando hacemos clic en determinado enlace, y necesitamos que cambie el valor de una variable en el controlador:
+
+		<a href="#" ng-click="tabs.selectTab(2)">Stats</a>
+
+	Aquí llamamos al metodo "selectTab" del controlador "tabs", pasandole como parametro un 2.	
+
+	El codigo del controlador seria:
+	
+		app.controller('TabsController', function () {
+		  this.tab = 1;
+
+		  this.selectTab = function (tab) {
+		    this.tab = tab;
+		  };
+
+		});
+
+	Con la directiva ng-class, podemos asignarle una clase dinamicamente a un elemento html, despues de que se cumpla una condición:
+	
+		<li ng-class="{ active:tabs.tab === 3 }">
+
+	En este caso, al elemento "li" se le asigna la clase "active", siempre y cuando en el controlador, la variable tab sea igual a 3.
+
+______________________________________________________			
+
+CREANDO FILTROS:
+
+	Podemos crear nuestros propios filtros, de forma muy similar a como creamos un controlador:
+
+		app.filter('imageify', function () {
+		  return function (input) {
+		    var url = "img/pokemons/" + input.toLowerCase() + ".jpg";
+		    return url;
+		  };
+		});
+
+	En este caso el filtro se llama: "imageify", la variable "input" se refiere a la entrada del filtro.
+	
+	Su uso es el mismo que un filtro de angularjs:
+
+		<img ng-src="{{pkmCtrl.pokemon.name | imageify}}" />
+
+	Nota: se usa la directiva "ng-src" para que el navegador no tenga problemas al interpretar la ruta de la imagen, ya que con solo src, como se tienen {{}} puede tener problemas.
+	
+______________________________________________________			
+
+FORMULARIOS:
+
+	Primero debemos agregar la directiva:
+		
+		ng-model="controlador.objetoLiteralJS.variable"
+
+	Se agrega a los campos del formulario, como los input,select, textarea.
+
+	El ".variable", lo colocamos de acuerdo a los campos que tengamos en el formulario, es decir si tenemos un correo, podemos poner un ".correo" o ".email", y así esa sera nuestra variable en el objeto que creemos en nuestro controlador más adelante:
+
+		<textarea ng-model="cmtsCtrl.comment.body" placeholder="Please tell us what you think about {{pkmCtrl.pokemon.name}}"></textarea>
+
+		<input ng-model="cmtsCtrl.comment.email" type="email" placeholder="Please enter your email address" />
+
+		<label>
+		  <input ng-model="cmtsCtrl.comment.anonymous" type="checkbox" />
+		  Anonymous
+		</label>
+
+	En estos casos, el objeto JavaScript que crearemos en nuestro controlador se llamara: "comment", y dentro de este objeto tendriamos las variables: "body" para el mensaje, "email" para el correo, y "anonymous", la cual va a ser de tipo booleano, que nos indicara si la persona que escribe el mensaje quiere que salga su correo o no.	
+
+	La directiva "ng-model", sirve para hacer "two way binding", es decir, los campos del formulario se convertiran en nuestro modelo, y la directiva unira la vista con el controlador, de modo que si se actualizan los datos, automaticamente se actualizan en la vista.
+
+	_________________
+
+	Si se necesita deshabilitar un campo, como por ejemplo el campo de email, cuando se selecciona el "checkbox" Anonymous (campo para chulear), se usa la directiva: "ng-disabled"
+
+		<input ng-model="cmtsCtrl.comment.email" ng-disabled="cmtsCtrl.comment.anonymous" type="email" placeholder="Please enter your email address" />
+
+	De esta forma, cuando seleccionamos el checkbox	(cmtsCtrl.comment.anonymous == true) se deshabilita este campo, impidiendonos que escribamos en él.
+
+	_________________
+
+	En donde se van a mostrar los comentarios, necesitamos que se agregue la palabra: "Anonymous" cuando se selecciona el checkbox, o que se muestre el email, cuando esta deseleccionado, para esto usamos la directiva:
+
+		ng-if
+
+	Esta directiva es muy similar a ng-show y ng-hide, al igual que estás, evalua si se cumple la conción o no, pero a diferencia de ng-show/hide, no juega con la propiedad display, sino que remueve completamente del DOM, o cuando "muestra el elemento", agrega un clon.
+	
+	Así quedaria la zona donde se muestran los comentarios:
+
+		<blockquote ng-repeat="comment in cmtsCtrl.comments">
+		  <p>{{comment.body}}</p>
+		  <footer>
+		    Comment by 
+		    <a ng-if="!comment.anonymous" href="mailto:{{comment.email}}">{{comment.email}}</a> 
+		    <em ng-if="comment.anonymous">Anonymous</em>
+		    on <span>{{comment.date | date : 'medium'}}</span>
+		  </footer>
+		</blockquote>
+
+	Usamos la directiva: "ng-repeat", para que se repita este template, por cada comentario, en un array llamado "comments", el cual crearemos en nuestro controlador más adelante.	 	
+	_________________
+
+	Cuando se selecciona el campo de "Anonymous", tambien es necesario, si se habia escrito un email, que este se borre del input, para eso usamos en el checkbox, la propiedad: 
+
+		"ng-change"
+
+	Con esta propiedad captamos el evento change del checkbox:
+	
+		<input ng-model="cmtsCtrl.comment.anonymous" ng-change="cmtsCtrl.anonymousChanged()" type="checkbox">
+
+	Cuando se seleccione el checkbox, se ejecuta la función anonymousChanged, la cual se define en el controlador así:
+
+		app.controller('CommentsController', function () {
+		  this.comments = [];
+		  this.comment = {};
+		  this.show = false;
+
+		  this.toggle = function () {
+		    this.show = !this.show;
+		  };
+
+		  this.anonymousChanged = function () {
+		    if (this.comment.anonymous) {
+		      this.comment.email = "";
+		    }
+		  };		  
+
+		});
+
+	Nota: la variable "show", y la función "toggle", la usamos en un boton, el cual mostrara u ocultara la seccion de comentarios en la pagina.
+	
+		<div ng-controller="CommentsController as cmtsCtrl">
+			<button ng-hide="cmtsCtrl.show" ng-click="cmtsCtrl.toggle()">	Mostrar Comentarios
+			   <span>{{cmtsCtrl.comments.length}}</span>
+		  	</button>
+		  	<div ng-show="cmtsCtrl.show">
+		        <h1>Comentarios 
+		        	<button class="close pull-right" ng-click="cmtsCtrl.toggle()">
+		        		&times;
+		        	</button>
+		        </h1>
+		    	...formulario	
+
+	_________________
+	
+	Para que al usar el boton de comentar, y este funcione adecuadamente, enviando los datos al controlador, primero le agregamos el tipo submit a nuestro input o boton (funciona con ambos):
+
+		<button type="submit" >Comment</button>
+
+	Luego en nuestro controlador, agregamos la funcion encargada de añadir los comentarios a nuestro array en el controlador:
+	
+		this.addComment = function () {
+		  this.comment.date = Date.now();
+		  this.comments.push(this.comment);
+		  this.comment = {};
+		};
+
+	Y por ultimo, en nuestro formulario, agregamos la directiva:
+	
+		"ng-submit"
+
+		<form ng-submit="cmtsCtrl.addComment()" >
+
+	En nuestro controlador, al poner "Date.now()", cremos la fecha en la que se hizo el comentario, pero esta sale en el numero de segundos desde 1970, así que para formatearla correctamente en nuestro html, usamos un filtro de angularjs:
+	
+		<span>{{comment.date | date : 'medium'}}</span>
+
+______________________________________________________
+
+VALIDACIÓN FORMULARIOS:	
+
+	Para validar formularios, angular se basa en algunas de las caracteristicas de HTML5.
+
+	Por ejemplo al escribir en el input de email, si no escribimos un correo valido y le damos enter, el navegador nos muestra un mensaje indicandonos que escribamos un correo valido.
+
+	Para poder validar con angularjs, primero indicamos en la etiqueta del formulario que no se haga esta validación html5 con la propiedad novalidate:
+
+		<form ng-submit="cmtsCtrl.addComment()" novalidate>
+
+	De esta forma ya no se hace la validación html5, luego, para usar un helper de validación en angularjs, debemos agregar un nombre al formulario:
+	
+		<form name="commentsForm" ng-submit="cmtsCtrl.addComment()" novalidate>
+
+	De esta forma, podemos llamar al helper:
+	
+		commentsForm.$valid
+
+	El cual nos indicara, con true o false, si lo que se le esta escribiendo en los campos del formulario es correcto o no.
+	
+	_________________
+				
+	En este momento, así no escribamos un mensaje, el formulario seria valido, para hacer que algunos campos del formulario sean requeridos, añadimos la propiedad "required":
+
+		<textarea ng-model="cmtsCtrl.comment.body" placeholder="Please tell us what you think about {{pkmCtrl.pokemon.name}}" required></textarea>
+
+	De esta forma, el textarea del mensaje es requerido, y en el helper	"commentsForm.$valid" nos dara false, si no escribimos nada en este campo.
+
+	_________________
+
+	En nuestro caso, con el campo de correo, necesitamos que sea requerido solamente cuando no se haya chuleado o marcado el checkbox de anonimo, para hacer esto, usamos la directiva:
+
+		"ng-required"
+
+	Y le pasamos la condición que necesitamos que se cumpla, en este caso, cuando no se haya seleccionado el checkbox (!cmtsCtrl.comment.anonymous):	
+
+		<input ng-model="cmtsCtrl.comment.email" ng-disabled="cmtsCtrl.comment.anonymous" type="email" placeholder="Please enter your email address" class="form-control" ng-required="!cmtsCtrl.comment.anonymous">
+
+	_________________
+
+	Por ultimo, y para usar correctamente nuestro helper, hacemos que el comentario solo se añada al controlador cuando sea valido, usando:
+
+		ng-submit="commentsForm.$valid && cmtsCtrl.addComment()"
+
+		<form name="commentsForm" class="form-horizontal" role="form" ng-submit="commentsForm.$valid && cmtsCtrl.addComment()" novalidate>	
+	Y para mostrar visualmente, por ejemplo un borde rojo o verde en cada campo cuando es invalido o valido, angular nos provee unas clases que el agrega automaticamente a estos campos al hacer la validación, solo hay que indicar que estilo queremos que se aplique en nuestro archivo CSS:
+	
+		.ng-invalid.ng-dirty {
+		  border-color: #D9230F;
+		}
+
+		.ng-valid.ng-dirty {
+		  border-color: #468847;
+		}
+
+______________________________________________________
+
+DIRECTIVAS:
+
+	Para simplificar un poco nuestro archivo, y tener porciones de nuestro codigo que podamos reutilizar en otra parte de la pagina, creamos directivas.
+
+	Para esto, seleccionamos el codigo html que vamos a poner en otro archivo, en este caso este archivo se llama: "pokemon-data.html", y su contenido es:
+
+		<ul class="list-group">
+		  <li class="list-group-item">
+		    <strong>Type</strong>
+		    <span class="pull-right">
+		      <span class="label type type-{{type | lowercase}}" ng-repeat="type in pkmCtrl.pokemon.type">
+		        {{type}}
+		      </span>
+		    </span>
+		  </li>
+		  <li class="list-group-item">
+		    <strong>Height</strong>
+		    <span class="pull-right">{{pkmCtrl.pokemon.height}}</span>
+		  </li>
+		  <li class="list-group-item">
+		    <strong>Weight</strong>
+		    <span class="pull-right">{{pkmCtrl.pokemon.weight}}</span>
+		  </li>
+		  <li class="list-group-item">
+		    <strong>Abilities</strong>
+		    <ul>
+		      <li ng-repeat="ability in pkmCtrl.pokemon.abilities">
+		        {{ability}}
+		      </li>
+		    </ul>
+		  </li>
+		</ul>
+
+	Luego en nuestro archivo "app.js", creamos la directiva de forma muy similar a como se crean controladores o filtros:
+	
+		app.directive('pokemonData', function () {
+		  return {
+		    restrict: 'E',
+		    templateUrl: 'partials/pokemon-data.html'
+		  }
+		});
+
+	Para definir la directiva, se usa notación camelCase, pero para llamarla, se usa separación de guion (-). En este caso nuestra directiva se llama: "pokemonData".
+	
+	En "templateUrl", indicamos la ruta donde se encuentra nuestro archivo template con el codigo html que extrajimos.
+
+	Nota: el archivo ".html" que nos va a servir como template, con el codigo	que extrajimos, lo guardamos en una carpeta llamada partials.
+
+	En "restrict", indicamos de que tipo es nuestra directiva, en este caso es de tipo:
+
+		"E"
+
+	Esto indica que es de tipo elemento, es decir, que para usarla en nuestro archivo "index.html", de donde la extrajimos, la llamamos con el elemento:
+
+		<pokemon-data>
+
+	Así:
+	
+		<!-- Pokedex -->
+		<div ng-show="tabs.tab === 1">
+		  <pokemon-data></pokemon-data>
+		</div>
+
+	_________________	
+
+	Tambien	en "restrict" podemos indicar el tipo:
+
+		"A"
+
+	El cual indica atributo, y para usarlo:
+	
+		<div class="clase" pokemon-data>
+		</div>
+	_________________					
+
+	Para crear directivas de secciones que tienen su propio controlador, como es el caso de la sección de comentarios, lo que hacemos es definir el codigo del controlador y su alias dentro de la misma definición de la directiva:
+
+		app.directive('pokemonComments', function () {
+		  return {
+		    restrict: 'E',
+		    templateUrl: 'partials/pokemon-comments.html',
+		    controller: function () {
+		      this.comments = [];
+		      this.comment = {};
+		      this.show = false;
+
+		      this.toggle = function () {
+		        this.show = !this.show;
+		      };
+
+		      this.anonymousChanged = function () {
+		        if (this.comment.anonymous) {
+		          this.comment.email = "";
+		        }
+		      };
+
+		      this.addComment = function () {
+		        this.comment.date = Date.now();
+		        this.comments.push(this.comment);
+		        this.comment = {};
+		      };
+		    },
+		    controllerAs: 'cmtsCtrl'
+		  };
+		});
+
+______________________________________________________
+
+MODULOS:
+
+	Como nuestro archivo "app.js", ya contiene muchas líneas de texto, su mantenimiento empieza a hacerse complicado, para evitar esto, se empiezan a crear modulos, que consiste en tener en archivos separados los controladores, los filtros y las directivas.
+
+	Para lograr esto, primero creamos un archivo llamado;
+
+		"controllers.js"
+
+	En este archivo, al igual que hicimos con el archivo app.js, creamos el modulo dentro de un closure:
+	
+		(function () {
+
+		})();
+
+	Luego dentro del closure definimos el modulo con:
+	
+		angular.module('nombreAplicacion.controllers', []);
+
+	El nombre del modulo puede ser el nombre de nuestra aplicacion (pokedex), seguida del nombre del modulo (en este caso el modulo de controladores):
+	
+	 	(function () {
+	 		angular.module('pokedex.controllers', []);
+	 	})();
+
+	Luego regresamos a nuestro archivo "app.js", y cortamos los controladores para pegarlos en el archivo "controlers.js":
+
+		(function () {
+
+			angular.module('pokedex.controllers', []);
+
+		  	app.controller('PokemonController', function () {
+		      this.pokemon = {
+		        id: "001",
+		        name: "Bulbasaur",
+		        species: "Seed Pokémon",
+		        type: [ "Grass", "Poison" ],
+		        height: "2′4″ (0.71m)",
+		        weight: "15.2 lbs (6.9 kg)",
+		        abilities: [ "Overgrow", "Chlorophyll" ],
+		        stats: {
+		          hp: 45,
+		          attack: 49,
+		          defense: 49,
+		          "sp.atk": 65,
+		          "sp.def": 65,
+		          speed: 45,
+		          total: 318
+		        },
+		        evolution: [ "Bulbasaur", "Ivysaur", "Venusaur" ]
+		      };
+		    });
+
+		    app.controller('TabsController', function () {
+		      this.tab = 1;
+
+		      this.selectTab = function (tab) {
+		        this.tab = tab;
+		      };
+		    });
+
+		})();
+
+	Nota: Como podemos ver, a diferencia de la definicion de nuestro modulo principal, en el archivo "app.js", este modulo no lo estamos guardando en una variable, ya que en este caso vamos a usar otro metodo para llamar a los controladores llamado "Chaining metod" o metodo de cadena.
+	
+	Este metodo es el mismo que usa jQuery, que lo que hace es ejecutar una función, u obtener un elemento, y luego con ese resultado de lo que obtuvo ejecutar una o mas funciones en cadena.
+
+	Para aplicar esto en nuestro modulo, lo primero que hacemos es eliminar el punto y coma (;) al final de la definicion de nuestro modulo:
+
+		angular.module('pokedex.controllers', [])
+
+	Luego eliminamos la variable "app"	antes de cada controlador e identamos para que tenga orden:
+
+		(function () {
+
+		  angular.module('pokedex.controllers', [])
+		    .controller('PokemonController', function () {
+		      this.pokemon = {
+		        id: "001",
+		        name: "Bulbasaur",
+		        species: "Seed Pokémon",
+		        type: [ "Grass", "Poison" ],
+		        height: "2′4″ (0.71m)",
+		        weight: "15.2 lbs (6.9 kg)",
+		        abilities: [ "Overgrow", "Chlorophyll" ],
+		        stats: {
+		          hp: 45,
+		          attack: 49,
+		          defense: 49,
+		          "sp.atk": 65,
+		          "sp.def": 65,
+		          speed: 45,
+		          total: 318
+		        },
+		        evolution: [ "Bulbasaur", "Ivysaur", "Venusaur" ]
+		      };
+		    })
+
+		    .controller('TabsController', function () {
+		      this.tab = 1;
+
+		      this.selectTab = function (tab) {
+		        this.tab = tab;
+		      };
+		    });
+
+		})();
+
+	Nota: entre controlador y controlador, para poder hacer la cadena, tambien eliminamos el punto y coma (;) del final del controlador, pero al controlador final se lo dejamos para indicar que es el último. No importa si dejamos un salto de línea o espacio entre la definicion de los controladores.
+
+	Tambien en vez del metodo de cadena, podemos definir el modulo en una variable, y luego con esa variable llamar a cada controlador aparte, esto ya depende de cual metodo queramos usar. Así seria con el metodo tradicional:
+
+		(function () {
+
+		  var controlador = angular.module('pokedex.controllers', []);
+
+		  controlador.controller('PokemonController', function () {
+		      this.pokemon = {
+		        id: "001",
+		        name: "Bulbasaur",
+		        species: "Seed Pokémon",
+		        type: [ "Grass", "Poison" ],
+		        height: "2′4″ (0.71m)",
+		        weight: "15.2 lbs (6.9 kg)",
+		        abilities: [ "Overgrow", "Chlorophyll" ],
+		        stats: {
+		          hp: 45,
+		          attack: 49,
+		          defense: 49,
+		          "sp.atk": 65,
+		          "sp.def": 65,
+		          speed: 45,
+		          total: 318
+		        },
+		        evolution: [ "Bulbasaur", "Ivysaur", "Venusaur" ]
+		      };
+		    });
+
+		    controlador.controller('TabsController', function () {
+		      this.tab = 1;
+
+		      this.selectTab = function (tab) {
+		        this.tab = tab;
+		      };
+		    });
+
+		})();
+	_________________
+
+	Ahora regresamos a nuestro archivo principal "app.js", en donde definiremos que nuestro modulo principal, depende del modulo de controladores:
+
+		var app = angular.module('pokedex', [
+		  'pokedex.controllers'
+		]);
+
+	Y finalmente en nuestro archivo "index.html" linkeamos el archivo del modulo de controladores:
+	
+		<script src="js/controllers.js"></script>
+
+	Del mismo modo, cremos un modulo para los filtros y directivas, y luego los asociamos como dependencias de nuestro modulo principal:
+
+		(function () {
+
+		  var app = angular.module('pokedex', [
+		    'pokedex.controllers',
+		    'pokedex.directives',
+		    'pokedex.filters'
+		  ]);
+
+		})();
+
+______________________________________________________
+
+RUTAS:
+
+	1) Creamos una nueva carpeta llamada: "views", en donde crearemos archivos html, con vistas, que a diferencia de los partials, son páginas completas con su funcionalidad, en cambio los partials son solo porciones de codigo con funcionalidades pequeñas.
+
+	2) Creamos un archivo llamado: "pokemon.html", en donde copiaremos el codigo html de la vista que nos muestra al pokemon, sus stats y evolución.
+
+	La idea es que en index.html, tendremos el contenedor principal, que luego, dependiendo de la ruta, nos muestre la vista del pokemon, o una vista con el listado de todo el pokedex, etc.
+
+	3) En nustro archivo principal, donde vamos a renderizar las vistas "index.html", dentro del contenedor que nos mostraba el pokemon, ponemos la directiva:
+
+		"ng-view"
+
+	Esta directiva, dependiendo de la ruta, hara que nos muestre la vista adecuada, y la gregamos al contenedor de donde extarjimos el codigo de "pokemon.html"
+
+		<div class="container" >
+			<div ng-view> </div>
+		</div>
+
+	Para poder usar la directiva "ng-view" necesitamos el modulo de ngRoute, el cual se debe descargar de la pág. de angularjs.
+	
+	_________________
+
+	Para descargar el modulo ngRoute:
+
+	- Vamos a la pág. de angularjs.
+	- Le damos click en el botón de Download.
+	- Seleccionamos	la versión de AngularJS que estamos usando.
+	- Nos dirijimos al final de las opciones a "Extras" --> Browse additional modules.
+
+	- Buscamos la versión minificada de ngRoute:
+
+		angular-route.min.js
+
+	- Descargamos el modulo, y luego la linkeamos en nuestro archivo principal "index.html", despues de "angular.js" y antes de nuestro archivo "app.js"
+
+		<script src="js/lib/angular-route.min.js"></script>
+	_________________	
+
+	4) Vamos a nuestro archivo "app.js", y definimos la dependencia a nuestro nuevo modulo ngRoute:
+	
+		(function () {
+
+		  var app = angular.module('pokedex', [
+		  	'ngRoute',
+		    'pokedex.controllers',
+		    'pokedex.directives',
+		    'pokedex.filters'
+		  ]);
+
+		})();
+
+	_________________	
+
+	SERVICIOS:		
+
+	Existen 3 tipos de servicios en angularjs:
+
+	Factory: retornan un objeto JS, con sus metodos y funciones.
+
+	Servicio (service): retorna la instancia de un objeto JS, con su clase constructora (es decir el new).
+
+	Proveedor (provider): similar al de servicio, pero este requiere de una configuración inicial antes de que se devuelva el objeto, es decir que definamos algunos parametros u opciones antes de usarlo.
+
+	_________________
+
+	INYECCIÓN DE DEPENDENCIAS:
+
+	5) El modulo "ngRoute", lo vamos a usar con el servicio de tipo provider, para esto, primero definimos la configuración inicial, de la siguiente manera en nuestro archivo "app.js":
+
+		app.config([]);
+
+	Dentro del arreglo vamos a usar la inyección de dependencias, en donde como primeros elementos definimos el nombre de los servicios en cadena de texto, y el ultimo elemento del arreglo es la función a la cual le vamos a inyectar los servicios.
+
+	De esta forma quedaria:
+
+		app.config(['$routeProvider', function ($routeProvider) {
+
+		}]);
+
+	En donde: 
+
+		'$routeProvider' es el nombre del servicio de nuestro modulo "ngRoute", se debe llamar tal cual y como se llama en AngularJS, o sino no sirve.
+
+		Y la función, la cual recibe como parametro ese servicio. Dentro de la función es donde vamos a definir la configuración inicial de nuestro servicio de tipo proveedor.
+	
+	Otra forma más simple, pero que no debemos usar, para hacer inyección de dependencias es:
+	
+		app.config(function ($routeProvider) {
+
+		});
+
+	Esta forma no se debe usar, ya que si hacemos minificación de ese archivo javascript, como al hacer minificación automatica, se disminuye el nombre de las variables quedaria:
+	
+		app.config(function ($r) {
+
+		});
+
+	De esta forma, como se le cambio el nombre a nuestro servicio "$routeProvider", este ya no serviria y generaria error.
+
+	En cambio si minificamos la forma correcta de hacer inyección de dependencias quedaria:
+
+		app.config(['$routeProvider', function ($r) {
+
+		}]);
+
+	Así si serviria nuestro servicio, ya que la minificación respeta la caena de texto '$routeProvider', y la pasa en el parametro "$r", entonces no habria error.	
+	_________________
+
+	6) Definimos en "app.js" la configuracion de nuestro servicio ngRoute:
+
+		app.config(['$routeProvider', function ($routeProvider) {
+
+		  $routeProvider
+		    .when('/', {
+		      templateUrl: 'views/pokemon.html',
+		      controller: 'PokemonController',
+		      controllerAs: 'pkmCtrl'
+		    });
+
+		}]);
+
+	Aquí usamos el llamado de metodos en cadena, así en la url principal (/) nos mostrara la vista pokemon.html.
+	
+	Para agregar más vistas, creamos el archivo de template ".html", y encadenamos los metodos:
+
+		$routeProvider
+		  .when('/', {
+		    templateUrl: 'views/pokedex.html'
+		  })
+		  .when('/pokemon/:name', {
+		    templateUrl: 'views/pokemon.html',
+		    controller: 'PokemonController',
+		    controllerAs: 'pkmCtrl'
+		  })
+		  .otherwise({
+		    redirectTo: '/'
+		  });
+
+	Si se ingresa una URL inexistente, se redirige a la vista principal "pokedex.html"	  
+
+______________________________________________________
+
+$SCOPE:
+
+	Se refiere al ambito donde "viven" las variables y metodos de nuestro controlador.
+
+	Se usa como inyección de dependencia para ser usado dentro del controlador, en vez de la variable "$this". Esto sirve para evitar usar los alias de los controladores, y tener disponibles las variables de nuestro controlador; es una buena practica.
+	_________________ 
+
+	Ejemplo de uso: referenciamos al nuevo controlador que vamos a crear en  nuestro archivo "app.js":
+
+		.when('/', {
+		  templateUrl: 'views/pokedex.html',
+		  controller: 'PokedexController'
+		})
+
+	En nuestro modulo de controladores (archivo "controllers.js"), creamos el nuevo controlador:
+	
+		.controller('PokedexController', ['$scope', '$http', function ($scope, $http) {
+
+		}])
+
+	En este controlador podemos ver que estamos inyectando 2 dependencias, el "$scope", y "$http", el cual nos permitira hacer peticiones http, con unos metodos muy parecidos a ajax.
+	
+		.controller('PokedexController', ['$scope', '$http', function ($scope, $http) {
+		  $scope.pokemons = [];
+
+		  $http.get('/pokemons.json')
+		    .success(function (data) {
+		      $scope.pokemons = data;
+		    });
+		}])
+
+	Aquí en el "$scope" definimos un array llamado "pokemons", donde guardamos todos los pokemons que obtenemos de hacer una petición asincrona get, a un archivo ".json" (el archivo .json se encuentra en la misma carpeta que index.html).
+	
+	"$http" al igual que los metodos ajax, posee los metodos ".success" y ".error", para indicar las funciones que se ejecutan en caso de recibir respuesta correcta o erronea de la petición http.
+
+	Los pokemons que tiene el archivo json, son almacenados en "data", y luego los guardamos en el array.
+
+	Por ultimo, modificamos el archivo http correspondiente a la vista (pokedex.html) para mostrar los datos:
+
+		<div>
+		  <div class="page-header">
+		    <h1>Pokédex</h1>
+		  </div>
+		  <div ng-repeat="pokemon in pokemons">
+		    <h1>{{pokemon.name}} <small>{{pokemon.species}}</small></h1>
+		    <img ng-src="{{pokemon.name | imageify}}">
+		  </div>
+		</div>
+
+	_________________ 
+	
+	Ahora si visualizamos nuestra vista de pokedex, vemos que algunas imagenes no aparecen, ya que en el nombre de algunos pokemons contienen caracteres especiales (Nidoran♀, Nidoran♂, Farfetch'd, Mr. Mime).
+
+	Para evitar este error, creamos un nuevo filtro, el cual se encargara de normalizar estos textos, quitando esos caracteres especiales, y en vez de concatenar filtros:
+
+		({{pokemon.name | normalize | imageify}})
+
+	Con la inyeccion de dependencias, podemos en la definición de un filtro, llamar al otro:
+
+		.filter('normalize', function () {
+		  return function (input) {
+
+		  	  if (!input) return "";	
+
+		      input = input
+		              .replace('♀', 'f')
+		              .replace('♂', 'm')
+		              .replace(/\W+/g, "");
+		      return input.toLowerCase();
+		  };
+		})
+
+		.filter('imageify', ['$filter', function ($filter) {
+		  return function (input) {
+		    var url = "img/pokemons/" + $filter('normalize')(input) + ".jpg";
+		    return url;
+		  };
+		}]);
+
+	_________________ 
+
+	En la vista "pokedex.html", podemos utilizar las directivas ya creadas del nombre y la imagen del pokemon:
+
+		<div>
+		  <div class="page-header">
+		    <h1>Pokédex</h1>
+		  </div>
+		  <div ng-repeat="pokemon in pokemons">
+		    <pokemon-name></pokemon-name>
+		    <pokemon-image></pokemon-image>
+		  </div>
+		</div>
+
+	Sin embargo, en los "partials" de esas directivas, haciamos referencia a otro controlador con alias (pkmCtrl), para solucionar eso, y usar el scope, eliminamos ese alias, así estaria usando el nuevo controlador: 	
+
+	El archivo (partials/pokemon-name.html) era:
+
+		<h1>
+		  {{pkmCtrl.pokemon.name}}
+		  <small>{{pkmCtrl.pokemon.species}}</small>
+		  <span class="label label-primary pull-right">#{{pkmCtrl.pokemon.id}}</span>
+		</h1>	
+
+	Y ahora: 
+		
+		<h1>
+		  {{pokemon.name}}
+		  <small>{{pokemon.species}}</small>
+		  <span class="label label-primary pull-right">#{{pokemon.id}}</span>
+		</h1>		
+
+	Hacemos lo mismo con el archivo (partials/pokemon-image.html)	
+	_________________ 
+
+	NOTA: Como en otra vista (views/pokemon.html) tambien usamos las directivas que acabamos de modificar, es necesario en el archivo "controllers.js", hacer el uso de "$scope" para el controlador "PokemonController" (que era el que tenia el alias "pkmCtrl"), y eliminar los alias de todos los "partials" que hagan uso del controlador.
+
+	Ejemplo del archivo "controllers.js":
+
+		.controller('PokemonController', function () {
+		  this.pokemon = { ...
+		  };
+		})  
+
+	Lo cambiamos por:
+	
+		.controller('PokemonController', ['$scope', function ($scope) {
+		  $scope.pokemon = { ...
+		  };
+		}])  	  
+
+	Tambien en el archivo "app.js", en donde definiamos la ruta, eliminamos el alias:
+
+		.when('/pokemon/:name', {
+		  templateUrl: 'views/pokemon.html',
+		  controller: 'PokemonController',
+		  controllerAs: 'pkmCtrl'  --------------->eliminamos esta línea.
+		})
+
+______________________________________________________
+
+SERVICIOS:
+
+	Vamos a crear un servicio de tipo factory, encargado de la logica de negocio, ya que el controlador solo debe ser un intermediario entre la vista y el codigo de la aplicación, por lo tanto, las peticiones http y la logica de negocio se deben extraer en servicios. El controlador solo se encarga de entregarle los datos a la vista, nuestro servicio es el encargado de obtener los datos ya sea por http, rest, base de datos, etc.
+
+	Para esto, creamos un nuevo modulo en un archivo llamado "services.js":
+
+		angular.module('pokedex.services',[])
+			.factory('pokemonService', ['$http','$q', function($http,$q){
+
+			}]);
+
+	Con el metodo en cadena ".factory", creamos el servicio de tipo factory, el cual se llama "pokemonService". Luego, como vamos a utilizar el servicio de angularJs para hacer peticiones http, lo inyectamos, y como al usar ajax, se estan trabajando con promesas, inyectamos el servicio "$q"
+
+	_________________
+	
+	PROMESAS (PROMISE):
+
+		Si una función no puede devolver un valor o una excepción sin bloquear, puede devolver una promesa en su lugar. Una promesa es un objeto que representa el valor de retorno o la excepción lanzada que la función puede llegar a ofrecer.
+
+		Para más info ir a:
+
+			https://github.com/kriskowal/q
+
+			https://docs.angularjs.org/api/ng/service/$q
+
+	_________________
+
+	Ahora vamos a crear los metodos del objeto que vamos a retornar como servicio factory:
+
+		angular.module('pokedex.services',[])
+			.factory('pokemonService', ['$http', '$q', function($http, $q){
+
+				function all() {
+					$http.get('/pokemons.json')
+						.success(function (data){
+							return data ?????
+						});
+				}
+
+				return {
+					all: all
+				};
+
+			}]);
+
+	En el return del final estamos devolviendo dentro de la variable "all", el metodo o la función con el mismo nombre que creamos más arriba. 
+	
+	Este metodo se encargara de realizar la petición asincrona http al json, y si tuvo exito, lo que devuelva el archivo, lo recibira en la función success. 
+
+	Aquí tenemos un problema, que es devolver la lista de los pokemon (data), para que sea el resultado de la función all.
+
+	Ya que ese resultado lo esta obteniendo asincronamente, no lo podemos retornar "ya mismo", porque puede devolver vacio, o undefined y practicamente no hariamos nada, para evitar esto, es que usamos las promesas, y creamos un metodo diferido:
+
+		function all() {
+			var deferred = $q.defer();
+
+			$http.get('/pokemons.json')
+				.success(function (data){
+					deferred.resolve(data);
+				});
+
+			return deferred.promise;	
+		}
+
+	En la variable "deferred", creamos un objeto diferido, el cual se encargara de resolver la promesa (resuelve con .resolve), cuando reciba los datos. la función all, retorna la promesa, la cual contendra la lista de poquemons, cuando se resuelva.
+
+	Así ya tenemos listo el metodo "all" en nuestro servicio de tipo factory.
+
+	Para usar el servicio no olvidar:
+		- Definirlo como dependencia en "app.js"
+		- Linkear el archivo del modulo (services.js) en "index.html"
+
+	Y modificamos el controlador, quitando el servicio http, e inyectando nuestro nuevo servicio:
+	
+		.controller('PokedexController', ['$scope', 'pokemonService', function ($scope, pokemonService) {
+			
+			pokemonService.all().then(function(data){
+				$scope.pokemons = data;
+			});
+
+		}])
+
+	Nuestro servicio lo llamamos con:
+	
+		pokemonService.all()
+
+	Como nuestro servicio devuelve una promesa, si puede entregar los datos ejecuta lo que se encuentre dentro del metodo: 
+
+		.then()
+
+	Si ejecuta este metodo significa que la promesa se resolvio.
+
+	_________________
+
+	Vamos a hacer la funcionalidad en la vista "pokedex.html", para que cuando se le haga clic al pokemon, nos muestre los datos de ese pokemon, viajando a la otra vista que definimos en la ruta "/pokemon/:name", para esto simplemente agregamos un enlace indicando la ruta:
+
+		<div class="pokemon" ng-repeat="pokemon in pokemons">
+		  <a href="/#pokemon/{{pokemon.name | normalize}}">
+		    <pokemon-name></pokemon-name>
+		    <pokemon-image></pokemon-image>
+		  </a>
+		</div>
+
+	Luego, vamos a nuestro modulo de servicios, para egregar un nuevo metodo a nuestro servicio ya creado. este nuevo metodo se encargara de filtrar los pokemon por nombre en nuestro archivo json:
+	
+		.factory('pokemonService', ['$http', '$q', '$filter', function ($http, $q, $filter) {
+
+			var normalize = $filter('normalize');
+
+			function all() {...}
+
+			function byName(name){
+
+			}
+
+			return {
+					all: all,
+					byName : byName
+			};
+
+		}]);
+
+	Nuestro metodo se llama "byName", y lo retornamos con el servicio.
+	
+	Como en el archivo.json tenemos en el nombre de los pokemon caracteres especiales, y en nuestro servicio vamos a hacer una busqueda por el nombre, es necesario inyectar el filtro que ya habiamos creado (filtro normalize).
+
+		function byName(name){
+			name = normalize(name);
+
+
+			all().then(function (data){
+				var results = data.filter( function (pokemon){
+					return normalize(pokemon.name) === name 
+				});
+
+				if(results.length > 0){
+					results[0];
+				}else{
+					//No encontro el elemento
+				}
+			});
+
+		}
+
+	En este metodo "byName", recibe como parametro el nombre del pokemon a buscar y lo normaliza, luego, como lo vamos a buscar en el json, para no escribir nuevamente el codigo de la petición http, llamamos al metodo "all", que ya habiamos definido.
+	
+	En la vaiable results, ejecutamos un metodo JavaScript (no confundir con los filtros de angularjs):
+
+		filter() crea un nuevo arreglo con todos los elementos que pasan la prueba implementada por la función prevista. 
+
+		Para más info ir a:
+			https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Array/filter
+
+	Dentro de la función de "filter", normalizamos el nombre del pokemon en el archivo json, y ese resultado lo comparamos con la variable name (el nombre del pokemon que se esta buscando), si son iguales (true) filter nos retorna un array con los elementos que encontro, así en "results" tendremos los resultados de la busqueda.
+	
+	En el if, si el tamaño de ese array es mayor a 0, entonces encontro el pokemon, y sino, no encontro nada.
+
+	Como "all" sigue siendo asincrono, volvemos a utilizar las promesas para retornar el resultado:
+
+		function byName(name){
+			name = normalize(name);
+			var deferred = $q.defer();
+
+			all().then(function (data){
+				var results = data.filter( function (pokemon){
+					return normalize(pokemon.name) === name 
+				});
+
+				if(results.length > 0){
+					deferred.resolve(results[0]);
+				}else{
+					deferred.reject();
+				}
+			});
+
+			return deferred.promise;
+
+		}
+
+	En este caso, sino encuentra resultados, rechaza la promesa.
+
+	_________________
+
+	Tip: si no queremos que se vuelva a hacer la petición http en el metodo "all", podemos pasarle como parametro "cache:true": 
+
+		$http.get('/pokemons.json',{ cache: true })
+
+	Así, se hace la petición una sola vez, y en la segunda petición, busca en el archivo que tenga en cache.
+	_________________
+
+	Ahora modificamos nuestro controlador, pasando el servicio:
+
+		.controller('PokemonController', ['$scope', 'pokemonService', function ($scope, pokemonService) {
+			$scope.pokemon = {};
+
+			pokemonService.byName('pikachu')
+				.then(function(data){
+					$scope.pokemon = data;
+				});
+			
+		}])
+
+	Aquí estamos usando nuestro "pokemonService" para obtener la vista de "pikachu", pero como queremos obtener el pokemon que venga como parametro en la URL, entonces, nos vamos a apoyar en nuestro modulo "ngRoute", y más especificamente en su servicio "$routeParams":
+
+		.controller('PokemonController', ['$scope', '$routeParams', 'pokemonService', function ($scope, $routeParams, pokemonService) {
+			var name = $routeParams.name;			
+			$scope.pokemon = {};
+
+			pokemonService.byName(name)
+				.then(function(data){
+					$scope.pokemon = data;
+				});
+			
+		}])
+
+	Para usar el srvicio "$routeParams" usamos la inyección de dependencias. La variable ".name", es la misma variable que definimos en el archivo "app.js", en las rutas, es decir, si en las rutas definimos una variable llamada "pepito":
+	
+		.when('/pokemon/:pepito', { ...
+
+	En el controlador obtenemos esa variable con:
+	
+		var nombre = $routeParams.pepito;
+
+	_________________
+	
+	Para buscar por tipo, la funcionalidad es muy similar a la busqueda por nombre:
+
+		function byType(type) {
+		  type = normalize(type);
+		  var deferred = $q.defer();
+
+		  all().then(function (data) {
+		    var results = data.filter(function (pokemon) {
+		      return pokemon.type.some(function (t) {
+		        return normalize(t) === type;
+		      });
+		    });
+
+		    deferred.resolve(results);
+		  });
+
+		  return deferred.promise;
+		}
+
+	Aquí, como en el campo "type" del pokemon (en el json), es un array con más de un elemento, usamos otra funcion de JavaScript, llamada ".some", para que si en alguno de los tipos cumple con la condición del que estamos buscando, lo incluya en el array de resultados.
+	
+	No olvidemos retornar el nuevo metodo en el servicio:
+
+		return {
+		  all: all,
+		  byName: byName,
+		  byType: byType
+		};
+
+	Y crear la ruta en el archivo "app.js":
+	
+		.when('/:type', {
+		  templateUrl: 'views/pokedex.html',
+		  controller: 'PokedexController'
+		})
+
+	Como vamos a usar la misma vista del pokedex, para mostrar el listado de los pokemon que cumplen con la busqueda por tipo, modificamos nuestro controlador para que use el metodo de busqueda por tipo, si hay un tipo definido en la URL, o el metodo de listar a todos, sino se definio nada en la URL:
+
+		.controller('PokedexController', ['$scope', '$routeParams', 'pokemonService', function ($scope, $routeParams, pokemonService) {
+		  var type = $routeParams.type;
+
+		  if (type) {
+		    $scope.type = type;
+
+		    pokemonService.byType(type).then(function (data) {
+		      $scope.pokemons = data;
+		    });
+		  } else {
+		    pokemonService.all().then(function (data) {
+		      $scope.pokemons = data;
+		    });
+		  }
+
+		}])
+
+	Como estamos usando la misma vista para el listado de todos los pokemons, y para mostrar el resultado de la busqueda de pokemons por tipo, podemos usar las directivas de angularjs, para mostrar ciertas partes de la vista, dependiendo de en cual estemos:
+	
+		<h2 ng-if="type"><span class="label type-{{type | lowercase}}">{{type}}</span></h2>
+
+	En este ejemplo, mostramos un "h2" con el nombre y el color del tipo de pokemon, cuando se hizo una busqueda por tipo.
+
+______________________________________________________
+
+ALMACENAMIENTO DE DATOS EN LOCAL STORAGE:
+
+	Local Storage, es una funcionalidad de Html5, que se obtiene a traves del objeto window, podemos obtener esta funcionalidad de forma global, pero la buena practica es inyectando el servicio "$window" que provee angularjs.
+
+	En el ejercicio, vamos a añadir la funcionalidad de guardar los comentarios en la BD del navegador, para esto inyectamos el servicio "$window", en el archivo "services.js":
+
+		.factory('pokemonService', ['$http', '$q', '$filter', '$window', function ($http, $q, $filter, $window) {
+		  var normalize = $filter('normalize');
+
+		  var localStorage = $window.localStorage;
+
+	Ahora implementamos la funcion para obtener	los comentarios almacenados en el navegador:
+	
+		function getComments(pokemon) {
+			var comments = localStorage.getItem(pokemon);
+
+		    if (!comments) {
+		      comments = [];
+		    } else {
+		      comments = JSON.parse(comments);
+		    }
+
+		    return comments;
+		}
+
+	En local storage, se guardan los datos con "clave : valor", pero en cadena de texto, en este caso, la clave de los comentarios va a ser el nombre del pokemon, y con el metodo "getItem" de local storage, obtenemos un array con los comentarios.
+	
+	Luego preguntamos, si no obtuvo comentarios, inicializamos el array en blanco, y si obtuvo algun comentrario, convertimos esa cadena en un objeto json. Finalmente devolvemos el array de comentarios.
+
+	Par la funcionalidad de guardar los comentarios en local storage usamos:
+
+		function saveComment(pokemon, comment) {
+		  var comments = getComments(pokemon);
+
+		  comments.push(comment);
+		  localStorage.setItem(pokemon, JSON.stringify(comments));
+		}
+
+	Primero obtenemos los comentarios que ya tenga el pokemon, para esto usamos la función creada anteriormente, luego agregamos el nuevo comentario, despues convertimos todo a cadena de texto con ".stringify", y usamos la función "setItem" de local storage, para guardarlo en el navegador.
+	
+	No olvidar retornar las funciones de nuestro servicio:
+
+		return {
+		  all: all,
+		  byName: byName,
+		  byType: byType,
+		  saveComment: saveComment,
+		  getComments: getComments
+		};
+
+	_________________
+	
+	Ahora inyectamos el servicio en la directiva:
+
+		.directive('pokemonComments', ['pokemonService', function (pokemonService) {
+		  return {
+		    restrict: 'E',
+		    templateUrl: 'partials/pokemon-comments.html',
+		    scope: {
+		      name: '@name'
+		    },
+		    link: function (scope, element, attributes) {
+		      attributes.$observe('name', function (value) {
+		        if (value) {
+		          scope.name = value;
+		          scope.comments = pokemonService.getComments(value);
+		        }
+		      });
+		    },
+		    controller: function ($scope) {
+		      $scope.comments = pokemonService.getComments($scope.name);
+		      $scope.comment = {};
+		      $scope.show = false;
+
+		      $scope.toggle = function () {
+		        $scope.show = !$scope.show;
+		      };
+
+		      $scope.anonymousChanged = function () {
+		        if ($scope.comment.anonymous) {
+		          $scope.comment.email = "";
+		        }
+		      };
+
+		      $scope.addComment = function () {
+		        $scope.comment.date = Date.now();
+		        pokemonService.saveComment($scope.name, $scope.comment);
+		        $scope.comments = pokemonService.getComments($scope.name);
+		        $scope.comment = {};
+		      };
+
+		    }
+		  };
+		}]);		
+
+	Aquí, ademas de inyectar el servicio, estamos definiendo el scope de la directiva con:
+	
+		scope: {
+		  name: '@name'
+		}
+
+	Este scope lo estamos restringiendo al nombre del pokemon, ya que en el textarea, estabamos pidiendo que comentaran lo que pensaban sobre "nombre pokemon". Esto se llama aislar el ambito de la directiva (Isolating the Scope of a Directive).
+
+	Para más info:
+
+		https://docs.angularjs.org/guide/directive
+	
+	Con el "@name", lo que obtenemos es el atributo name del elemento que estamos creando con la directiva:
+
+		<!-- comments -->
+		<pokemon-comments name="{{pokemon.name}}"></pokemon-comments>
+		<!-- /comments -->
+
+	Con "link" enlazamos las propiedades del scope con la directiva, recibe 3 parametros:
+
+		scope --> el scope general de la directiva.
+		element --> el elemento que estamos creando.
+		attributes --< los atributos del elemento.
+
+	Dentro de link, usamos la funcion $observe, por si hay un cambio en el valor del atributo "name" (nombre del pokemon), para que cuando se seleccione otro pokemon, se llame a la funcion de obtener los comentarios.	

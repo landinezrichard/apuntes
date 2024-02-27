@@ -1,0 +1,1214 @@
+______________________________________________________
+			
+
+			BACKBONE:
+
+______________________________________________________			
+
+
+El objetivo de usar Backbone, es usar un MV* (Modelo vista y la estrella depende del framework, que en el caso de backbone es modelo, vista, router y collections), para tener más orden en la creación de la funcionalidad de la página, y hacer más facil el mantenimiento de está.
+
+La idea es tener en el backend, sin importar el lenguaje (ruby, php, etc), algo que nos sirva JSON a nuestra capa de datos (data-layer), y esta data-layer, le entregue ese JSON a la capa de vista (view-layer), y el mismo funcionamiento en sentido contrario (si en la vista se modifica algo se envia al data-layer, y esta se lo envia en JSON al servidor).
+______________________________________________________			
+
+1) Ya tenemos nuestro documento html, con su estructura y estilos creados, luego, dentro de la carpeta "js", creamos una carpeta llamada "lib" o "vendor", en donde guardaremos todas las librerias JavaScript que use nuestro proyecto y que no desarrollamos nosotros.
+
+2) Descargamos BackboneJS de la pág.
+	
+	http://backbonejs.org/
+
+3) Descargamos Underscore, que es una dependencia de Backbone:
+
+		http://underscorejs.org/
+
+	Tambien descargamos jQuery, para la manipulación del DOM.
+
+4)	Linkeamos nuestras librerias en el archivo principal "index.html":
+
+		<script src="js/lib/underscore.js"></script>
+		<script src="js/lib/jquery-1.11.0.js"></script>
+		<script src="js/lib/backbone.js"></script>
+
+	Para comprobar que se esten cargando las dependencias, en  la consola del navegador escribimos:
+	
+		Backbone (tecla Enter)
+		_  (tecla Enter)
+		$  (tecla Enter)
+
+______________________________________________________			
+
+NAME SPACES (Espacios de Trabajo):
+
+	Consiste en crear un archivo "init.js", en donde definimos los "espacios de trabajo" de nuestra aplicación.
+
+	Esto se hace, porque, en window, es donde definimos todas nuestras variables, y si por ejemplo en una parte de nuestro codigo, tenemos una variable llamada "contador", y en otra parte de nuestra aplicación se usa tambien la misma variable, se puden presentar errores, ya que no sabriamos a cual de las dos variables nos estamos refiriendo.
+
+	Para evitar esto, en nuestro objeto "window" definimos una variable con el nombre de nuestra aplicación, la cual tendra un objeto con todas las variables que usa nuestra app.
+
+	Ejemplo de archivo "init.js":
+
+		window.Puls3 = {};
+
+		//NameSpaces	
+
+		Puls3.Views = {};
+		Puls3.Collections = {};
+		Puls3.Models = {};
+		Puls3.Routers = {};
+
+		//Partes de mi aplicación
+
+		window.app = {};
+		window.routers = {};
+		window.plugs = {};
+		window.views = {};
+		window.collections = {};
+
+	Nota: no olvidar enlazar este archivo en "index.html":
+	
+		<script src="js/init.js"></script>
+
+______________________________________________________
+
+MODELOS:
+
+	Nuestro modelo sera nuestra "data layer".
+
+	Para crear nuestro modelo, dentro de nuestra carpeta "js", creamos una carpeta llamada "backbone", y dentro de está, otra carpeta llamada "models", y dentro de está carpeta, creamos nuestro modelo, en este caso con el nombre: "article.js"
+
+	Así la ruta quedaria: "/js/backbone/models/article.js"
+
+	El archivo "article.js" sera así:
+
+		Puls3.Models.ArticleModel = Backbone.Model.extend({
+
+		});
+
+		Puls3.Models.Article = Puls3.Models.ArticleModel;
+
+	Para crear un modelo:
+	
+		var m = new Puls3.Models.Article( {titulo : "Hola"} );
+
+	Los modelos tienen 3 metodos:
+	
+		m.toJSON(); --> devuelve lo que tiene nuestro modelo.
+
+		m.get("titulo"); --> devuelve el valor de una propiedad del modelo.
+
+		m.set("contenido", "esto es un mensaje"); --> le agrega al modelo un par clave-valor. Tambien sirve para actualizar un valor.
+
+		Si tiene muchos atributos usamos:
+
+			m.set({title: "March 20", content: "In his eyes she eclipses"});
+
+	Nota: no olvidar enlazar este archivo en "index.html":
+	
+		<script src="js/backbone/models/article.js"></script>
+
+	Los modelos pueden escuchar eventos custom, o pedefinidos por Backbone.
+	
+	Ejemplo de evento custom:
+
+		song.on("play", function() { cosole.log("Reproduciendo..."); });
+
+		song.trigger("play");
+
+	En este caso, tenemos un modelo llamado "song", el cual escucha un evento al que llamamos "play", y para disparar la funcionalidad del evento play, usamos "trigger"
+	
+	Para que el modelo deje de escuchar ese evento usamos:
+
+		song.off("play");
+
+	Ejemplo de evento definido por Backbone:
+	
+		song.on("change", function () { console.log("He cambiado!!!"); });
+
+	De esta forma, cada vez que se le asigne una nueva propiedad, o se le cambie un valor a una propiedad del modelo (set), se dispara este evento.
+	
+	Este evento tambien puede ser más especifico, y solo dispararse cuando determinada propiedad cambie, ejemplo:
+
+		song.on("change:author", function () { console.log("El autor a cambiado!!!"); });					
+
+______________________________________________________
+
+COLECCIONES:
+
+	Una colección es un array de modelos, su principal funcionalidad es agregar y eliminar modelos; tambien es útil por ejemplo, para buscar un dato en todos los modelos.
+
+	Para crear una colección, extendemos de Backbone, en este caso creamos un archivo llamado "articles.js", en la carpeta collections:
+
+		Puls3.Models.ArticlesCollection = Backbone.Collection.extend({
+			model : 
+		});
+
+		Puls3.Collections = ArticlesCollection
+
+	Nota: no olvidar enlazar este archivo en "index.html":
+	
+		<script src="js/backbone/collections/articles.js"></script>	  
+
+	Para agregar un modelo a una colección, usamos el metodo:
+
+		.add(modelo);
+
+	Para eliminar un modelo de una colección, usamos el metodo:
+
+		.remove(modelo);
+
+	Ejemplo:
+	
+		Tenemos un modelo llamado Libro, y una coleccion llamada LibrosCollection:
+
+			var LibrosCollection = Backbone.Collection.extend({
+				model : Libro
+			});
+
+		Ahora en consola, creamos 3 nuevos libros:
+		
+			var a = new Libro({ titulo : 'titulo 1', autor : 'autor 1' }),
+			b = new Libro({ titulo : 'titulo 2', autor : 'autor 2' }),
+			c = new Libro({ titulo : 'titulo 3', autor : 'autor 3' });
+
+		En la misma consola, podemos crear una nueva colección, a la cual le añadiremos los 2 primeros modelos:
+		
+			var libros = new LibrosCollection( [ a, b] );
+
+		Para ver el contenido de la colección, podemos usar:
+		
+			libros.toJSON();
+
+		Esto nos devuelve los 2 modelos "a" y "b".		
+
+		Usaremos el metodo "add()" para añadir a la colección el libro que no se ha añadido:
+		
+			libros.add(c);
+
+		Usamos: "libros.toJSON();" para ver el contenido de la colección.
+
+		Finalmente eliminamos el modelo "a":
+
+			libros.remove(a);
+
+		Si se quiere eliminar más de un modelo, se le pasa a "remove", un array con los modelos a eliminar:
+
+			libros.remove( [ b, c ] );
+
+	Si queremos devolver un modelo de la colección, usamos el metodo:
+	
+		get("criterio");
+
+	Aquí "criterio", puede ser un "id", un "id atribute" o "cid".
+	
+		Ejemplo de id:
+
+		Creamos un nuevo modelo:
+
+			var d = new Libro({ titulo : 'Nuevo titulo', autor : 'Desconocido', id : 6});
+
+		Añadimos el modelo a una nueva colección:
+		
+			var libros = new LibrosCollection(d);
+
+		Creamos una variable donde recibiremos el modelo devuelto por el metodo get, que cumple con el id indicado:
+		
+			var modeloDevuelto = libros.get(6);
+
+		En este ejemplo, el "id" del modelo, es el mismo "id" de la base de datos. Si por ejemplo en la base de datos la llave primaria no se llama "id", sino por ejemplo "cedula", entoces es necesario definir en backbone que ese atributo "cedula" es el "id", así tenemos nuestra segunda posibilidad de criterio para get "id atribute".
+
+		El criterio "cid", es un identificador que le asigna Backbone a cada modelo creado, por ejemplo cuando se crea el primer modelo le asigna el cid "c1", al segundo "c2"...
+
+		Ejemplo:
+
+			Creamos otro modelo:
+
+				var e = new Libro({ titulo : "Nuevo titulo", autor : "yo" });
+
+			Para ver el "cid" que le asigno backbone, en la terminal escribimos:
+
+				e;
+
+			Ahora lo añadimos a la colección:
+			
+				libros.add(e);
+
+			Y obtenemos ese modelo a traves de su "cid":
+			
+				var modelCid = libros.get("c2");
+
+				modelCid.toJSON();		
+
+______________________________________________________
+
+	En el archivo "main.js" tenemos:
+
+		$(document).on("ready",function(){
+			console.log("Aplicación iniciada!!!");
+
+			//Creamos una collección.
+
+			window.collections.articles = new Puls3.Collections.ArticlesCollection();
+
+			//Pedimos el JSON al servidor con una petición ajax
+
+			var xhr = $.get('/articles/all');
+
+			xhr.done(function(data){
+
+				//por cada item en el JSON, se crea un modelo que se añade a la colección
+
+				data.forEach(function(item){
+					window.collections.articles.add(item);
+				});
+
+			});
+
+		});
+
+______________________________________________________
+
+VISTAS:
+
+	Para generar una vista tenemos que extender de backbone, al igual que con los otros elementos; esto lo hacemos creando dentro de la carpeta "backbone", otra carpeta "views", y el archivo "article.js":
+
+	Así la ruta quedaria: "/js/backbone/views/article.js". 
+
+	Las funciones principales que se deben crear en una vista son: "initialize" y "render". La primera indica como se inicia la vista, y la segunda como se dibuja al usuario.
+
+	Los objetos principales de la vista son: "events", para definir los eventos y $el, que es el elemento DOM de la vista.
+
+		Puls3.Views.ArticleView = Backbone.View.extend({
+			events : {
+
+			},
+			className : "",
+			initialize : function(model){
+				this.model = model;
+			},
+			render : function(data){
+
+				this.$el.html("<h3>" + this.model.get("titulo") + "</h3>");
+
+				return this;
+			}
+		});
+
+	Por cada articulo (modelo), vamos a tener una vista, esto nos sirve para refrescar la vista cada vez que se cambie un dato en el modelo.
+
+	La función "render", se encarga de renderear la vista; lo que hace es tomar un elemento propio ($el), y con jQuery, cambia su contenido html, en este caso coje el modelo de la vista, y extrae el valor de la propiedad "titulo", y la muestra en una etiqueta "h3". 
+
+	Luego en siguientes pasos, con jQuery, indicamos en que parte de nuestro archivo "index.html" queremos agregar ese elemento que estamos creando dinamicamente.
+
+	Nota: esta forma de renderizar contenido es un poco inmanejable, ya que si tenemos un html extenso, es muy dificil hacerle cambios y mantenimiento, para evitar esto, debemos usar templates.
+
+	Para crear la vista, en el archivo "main.js" agregamos:
+
+		window.collections.articles.on('add', function(model){
+			var view = new Puls3.Views.ArticleView(model);
+
+			view.render();
+
+			view.$el.insertAfter('#contenido');
+		});
+
+	Aquí indicamos que cada vez que se agregue (.add) un modelo a la colección, se cree la vista, y se renderee. Luego "$el" es el elemento de la vista, y le indicamos con funciones jQuery que se inserte despues de un elemento con id "contenido".
+	
+	Luego para que la vista se renderee cada vez que el modelo cambie, en el archivo de la vista "article.js", en la función initialize colocamos:
+
+		initialize : function(model){
+			var self = this;
+
+			this.model = model;
+
+			this.model.on('change', function(){
+				self.render();
+			});
+		},
+
+	Con "self", indicamos el contexto de la vista, con esto podremos usar ese contexto dentro de la función anonima.
+	
+	La función anonima, se ejecuta cuando cambia el modelo (.change), y lo que hace es renderear la vista apenas cambia el modelo asociado a ella. esto nos sirve si por ejemplo cambiamos el "titulo" del articulo, se va a ver el cambio automaticamente en la pág.
+______________________________________________________
+
+	Para hacer lo tipico que haciamos antes de usar backbone, que es asociar eventos de tipo: "cuando el usuario haga clic en este boton, ejecute esta función...", lo que hacemos es definir en la vista, en "events", todos los eventos asociados a esa vista, a que elementos se aplican, y que funciones se ejecutan, así quedaria:
+
+		Puls3.Views.ArticleView = Backbone.View.extend({
+			events : {
+				"click .likesUp" : "upVote",
+				"click .likesDown" : "downVote"
+			},
+			upVote : function(e){
+				e.preventDefault();
+				var votos = this.model.get("votos");
+
+				this.model.set("votos", parseInt(votos, 10) + 1);
+			},
+			downVote : function(e){
+				e.preventDefault();
+				var votos = this.model.get("votos");
+
+				this.model.set("votos", parseInt(votos, 10) - 1);
+			},
+
+	En "events"	indicamos que cuando se la hace click al elemento con clase "likesUp", se ejecute la funcion "upVote".
+	
+	En la función "upVote", ejecutamos una funcion anonima, a la que le pasamos el evento, y lo que hace es obtener el valor de la propiedad "votos" del modelo, y luego cambia su valor convirtiendo lo que obtuvo en entero (con la funcion parseInt, y se le pone 10 para que sea en base decimal), le sumamos 1, para aumentar lo que tenia en votos.	
+
+	Como ya en la vista, en "initialize", indicamos que cuando se cambie el modelo, se renderize la vista, apenas se haga click en el boton, se actualiza el valor de los votos en la pág.
+
+______________________________________________________
+
+TEMPLATES:
+
+	Para usar templates, tomamos la libreria de templates (ya sea underscore, mustache, swig, handlebars, etc.) y lo agregamos en la carpeta de librerias (vendor).
+
+	Luego en la vista "article.js", referenciamos a nuestro templete:
+
+		initialize : function(model){
+			...
+			this.template = swig.compile($("#article_tpl").html());
+		},
+
+	Y en nuestro archivo index, creamos o linkeamos el script con el template.
+
+______________________________________________________
+
+ROUTERS:
+
+	Backbone, cuenta con un objeto ".history", el cual maneja todos los datos de la URL de nuestra aplicación. Este objeto nos va a servir para viajar a distintas URLs dentro de la misma página, sin recargar, y podemos renderizar diferentes vistas de acuerdo a los cambios de la URL.
+
+	Para usarla, primero iniciamos este objeto en el archivo "main.js":
+
+		xhr.done(function(data){
+
+			data.forEach(function(item){
+				window.collections.articles.add(item);
+			});
+
+			Backbone.history.start({
+				root : '/',
+				pushState : true,
+				silent : false 
+			});
+
+		});
+
+	Con "start", le indicamos al objeto "history", que empiece a escuchar las url de la página.
+	
+	Con "root", le indicamos que esta es la raiz de la pág. si nuestra aplicación no se encuentra en la raíz, debemos indicar aquí la ruta.
+
+	Con "pushState", indicamos que use esta tecnologia de Html5, que hace que cuando se viaje a otra URL, no se recargue la pág. y se use URL amigables, es decir, si por ejemplo viajamos a:
+
+		localhost:3000/articulos/gatos
+
+	La página no se recarga y la url es amigable (si estamos en www.eltiempo.com/articulos/gatos).
+	
+	Si colocamos esta opción en false, la url seria con hash (#) y tambien se recargaria.
+
+		localhost:3000/#articulos/gatos
+
+	Nota: ver la documentación de backbone para hacer que la pág. no se recargue en caso de navegadores viejos que no soportan pushState.			
+	Con "silent", si se pone en "true", le indicamos que el historial "history", no se inicie con la ruta actual, ya que el servidor renderizo toda la pág. Aquí ponemos "false", para que si se inicie el history en está ruta.
+______________________________________________________	
+
+	Ahora creamos un router, extendiendo de backbone, creando la carpeta "routers" (dentro de la carpeta "/js/backbone"), y creamos el archivo "base.js":
+
+		Puls3.Routers.BaseRouter = Backbone.Router.extend({
+			routes : {
+				"" : "root",
+				"article/:id" : "articleSingle"
+			},
+			initialize : function(){
+				var self = this;
+			},
+			root : function(){
+				$('#contenido > div').show();
+			},
+			articleSingle : function(id){
+				$('#contenido > div').hide();
+
+				$('#contenido #' + id).show();
+			}
+		});
+
+	En "routes", indicamos la ruta, y la función que inicializa esa ruta.
+
+	La función "root", lo que hace es obtener todos los divs que se encuentran dentro del elemento con id "contenido", y los mostramos.
+
+	La función "articleSingle", recibe como parametro el id del articulo que viene por la URL, oculta todos los divs, y muestra el articulo correspondiente (el elemento que tenga el mismo id del articulo). 	
+
+	Nota: en un router se puede manejar muchas URLs, sin embargo es recomendable que maneje solo 4 URLs, y si se necesitan más, se crean más routers, esto con el fin de hacer más mantenible el código.
+
+	Para crear el router volvemos a nuestro archivo "main.js" y lo creamos con:
+
+		window.routers.base = new Puls3.Routers.BaseRouter();
+
+	Para que la funcionalidad que se quiere, de hacer click en un articulo, y que cambie la URL en el navegador, y cambie a vista de un solo articulo, lo que hacemos es usar el metodo "navigate" del objeto history de backbone, para esto, nos dirigimos al archivo de vista "article.js" y añadimos la nueva funcionalidad:
+	
+		Puls3.Views.ArticleView = Backbone.View.extend({
+			events : {
+				"click .likesUp" : "upVote",
+				"click .likesDown" : "downVote",
+				"click > article" : "navigate"
+			},
+			navigate : function(){
+				Backbone.history.navigate('article/' + this.model.get('id'), { trigger : true });
+			},
+
+	Cuando se le hace click al elemento html "article", ejecuta la funcion navigate.
+
+______________________________________________________
+
+	La funcionalidad de mostrar u ocultar elementos, de acuerdo a la vista, son funcionalidades que no deberia hacer el router, sino la vista.
+
+	Para cambiar esto, nos valemos de los espacios de trabajo creados en "init.js", y más especificamente en "window.app = {};".
+
+	Ahora nuestro router "base.js" quedaria:
+
+		Puls3.Routers.BaseRouter = Backbone.Router.extend({
+			routes : {
+				"" : "root",
+				"article/:id" : "articleSingle"
+			},
+			initialize : function(){
+				var self = this;
+			},
+			root : function(){
+				window.app.state = "root";
+			},
+			articleSingle : function(id){
+				window.app.state = "articleSingle";
+				window.app.article = id;
+			}
+		});
+
+	Aquí lo que hacemos es crear en nuestro espacio de trabajo, una propiedad "state, que nos indicara el estado de la aplicación (si esta en root, o en otra ruta), y si se encuentra en el estado "articleSingle", se guarda el "id" del articulo.
+
+	Ahora en la vista "article.js", en "initialize" indicamos a la vista que escuche el router, y añadimos el nuevo template (que mostrara nueva información, como el contenido completo del artículo).
+
+		initialize : function(model){
+			var self = this;
+
+			this.model = model;
+
+			this.model.on('change', function(){
+				self.render();
+			});
+
+			window.routers.on('route:root', funtion(){
+				self.render();
+			});
+
+			window.routers.on('route:articleSingle', funtion(){
+				self.render();
+			});
+
+			this.template = swig.compile($("#article_tpl").html());
+			this.templateExtended = swig.compile($("#articleExtendes_tpl").html());
+		},
+		render : function(){
+			var self = this;
+			var locals = {
+				post : this.model.toJSON()
+			};
+
+			if(window.app.state === "articleSingle"){
+
+				if( window.app.article === this.model.get('id') ){
+					this.$el.show();
+					this.$el.html( this.templateExtended(locals) );
+				}else{
+					this.$el.hide();
+					this.$el.html('');
+				}
+
+			}else{
+				this.$el.html( this.template(locals) );
+			}
+
+			return this;
+		}
+
+______________________________________________________			
+
+	EJEMPLO SFOTIPY:
+
+1) Descargamos nuestras dependencias.
+
+2) Creamos el archivo "main.js" con:
+
+		Sfotipy = {};
+
+		Sfotipy.Song = Backbone.Model.extend({});
+
+		Sfotipy.SongView = Backbone.View.extend({
+			tagName: 'li',
+			className: 'Album-item border-bottom',
+			render: function (){
+				var song = this.model;
+				var name = song.get('name');
+				var author = song.get('author');
+
+				this.$el.html("<span>" + author + "</span> - <span>" + name + "</span>);
+			}
+		});
+
+		window.Sfotipy = Sfotipy;
+
+	Aquí, lo que hicimos fue:
+
+		//Crear el namespace
+		Sfotipy = {};
+
+		//Definir la clase(concepto POO) para crear un modelo Song
+		Sfotipy.Song = Backbone.Model.extend({});
+
+		//Definir la clase(concepto POO) para crear una vista SongView
+		Sfotipy.SongView = Backbone.View.extend({
+
+			//Por defecto la vista es un elemento "div", aquí creamos un "li"			
+			tagName: 'li',
+
+			//Definimos las clases del elemento "li", que estamos creando
+			className: 'Album-item border-bottom',
+
+			//Definimos la función render encargada de dibujar la vista
+			render: function (){
+
+				//Obtenemos el modelo
+				var song = this.model;
+
+				//Obtenemos el valor del atributo "name" del modelo
+				var name = song.get('name');
+				var author = song.get('author');
+
+
+				//Al elemento de Backbone ($el), le asignamos dos span, con la info del modelo
+				this.$el.html("<span>" + author + "</span> - <span>" + name + "</span>);
+			}
+		});
+
+		//Ponemos el objeto "Sfotipy", de forma global
+		window.Sfotipy = Sfotipy;
+
+		//POO --> Programación Orientada a Objetos.
+
+3) Linkeamos nuestro archivo despues de las dependencias:
+
+	<script src="js/main.js"></script>
+
+4) Probar que esté el objeto de forma global, en  la consola del navegador escribimos:
+	
+		Sfotipy (tecla Enter)
+
+	Tambien podemos probar creando un nuevo modelo en consola con:
+	
+		var song = new Sfotipy.Song({ name: "One", author: "Metallica"});
+
+	Creamos una nueva instancia de la vista:
+	
+		var songView = new Sfotipy.SongView({ model: song, el: $(".list")});
+
+	Nota: al crear la instancia de la vista, le pasamos como modelo "song", y en "el", pasamos el elemento "ul", donde vamos a insertar el elemento "li" que creamos en la vista. En este caso, ese elemento "ul", lo obtenemos con jQuery, gracias a que tiene una clase llamada "list".
+	
+	Ahora para que se renderize la vista usamos en consola:
+
+		songView.render();
+______________________________________________________
+TEMPLATE HANDLEBARS			
+
+5) Para evitar usar html dentro de javascript, vamos a usar templates, para esto descargamos la libreria de templates que queramos:
+	
+		http://handlebarsjs.com/
+
+	Luego lo linkeamos en "index.html" antes del "main.js"
+	
+		<script src="js/lib/handlebars.js"></script>
+
+6) Ahora antes de nuestras dependencias, creamos el template:
+
+		<script id="song-template" type="text/x-handlebars-template">
+			<span>
+				{{name}}
+			</span>
+			-
+			<span>
+				{{author}}
+			</span>
+			<a href="" class="Action icon-add gray"></a>
+		</script>
+
+7) En el archivo "main.js" agregamos el codigo para usar handlebars:
+
+		Sfotipy.SongView = Backbone.View.extend({
+			tagName: 'li',
+			className: 'Album-item border-bottom',
+
+			template: Handlebars.compile( $("#song-template").html() ),
+
+			render: function (){				
+
+				var html = this.template( this.model.toJSON() );
+
+				this.$el.html( html );
+			}
+		});
+
+	Para usar handlebars, primero usamos "Handlebars.compile", pasandole como parametro el template que habiamos creado. Luego a ese template se le pasan los datos que debe procesar en JSON, así en la variable "html" obtenemos el codigo html listo con los datos que se deben mostrar, luego al elemento de la vista "$el", le agregamos ese codigo html como contenido.
+______________________________________________________
+EVENTOS DE LA VISTA
+
+8) Para manejar los eventos, como el click en un boton, etc:
+
+		Sfotipy.SongView = Backbone.View.extend({
+			
+			events: {
+				'click .Action.icon-add' : 'add'
+			},
+
+			tagName: 'li',
+			className: 'Album-item border-bottom',
+
+			template: Handlebars.compile( $("#song-template").html() ),
+
+			render: function (){				
+
+				var html = this.template( this.model.toJSON() );
+
+				this.$el.html( html );
+			},
+
+			add : function (e){
+				console.log("Hiciste click en: " + this.model.get('name') );
+			}
+		});
+
+______________________________________________________
+COLECCIONES DE MODELOS
+
+9) Definimos la clase (concepto POO), para crear una colección "Songs", en el archivo "main.js":
+
+		Sfotipy.Songs = Backbone.Collection.extend({
+			model: Sfotipy.Song
+		});
+
+	En la consola del navegador, podemos provar creando una nueva canción:
+	
+		var song2 = new Sfotipy.Song({ name: "Fade To Black", author: "Metallica"});
+
+	Y luego instanciamos nuestra colección, pasandole un arreglo con los modelos:
+	
+		var songs = new Sfotipy.Songs( [song, song1]);
+
+	Con las colecciones podemos acceder a determinado modelo con:
+	
+		songs.at(0);  -->nos devuelve el primer elemento de la colección.
+
+		songs.at(0).toJSON(); --> para ver los datos de lo que nos devuelve.
+
+		songs.length --> nos devuelve la cantidad de elementos en la colección. 
+
+	Para recorrer la lista:
+	
+		songs.forEach( function(s){
+			console.log( s.toJSON() );
+		});
+
+	Para hacer consultas (querys):
+	
+		songs.where({ name: "One"})[0].toJSON();
+
+	Para consultar otros metodos que podemos usar en las colecciones, visitar la documentación de Backbone, ya que tiene muchos metodos útiles cortesia de Underscore.	
+______________________________________________________
+RENDER VISTA CAMBIO MODELO
+
+10) Para que la vista escuche el modelo y se renderize cada vez que cambie, en la funcion "initialize", que es la funcion de instanciación de la vista, indicamos:
+
+		Sfotipy.SongView = Backbone.View.extend({
+			
+			events: {
+				'click .Action.icon-add' : 'add'
+			},
+
+			tagName: 'li',
+			className: 'Album-item border-bottom',
+
+			template: Handlebars.compile( $("#song-template").html() ),
+
+			initialize: function (){
+				this.listenTo(this.model, "change", this.render, this);
+			},
+
+			render: function (){				
+
+				var html = this.template( this.model.toJSON() );
+
+				this.$el.html( html );
+			},
+
+			add : function (e){
+				console.log("Hiciste click en: " + this.model.get('name') );
+			}
+		});
+
+	En la funcion "listenTo": 
+	
+	1er parametro, le indicamos que escuche al modelo de la vista.
+
+	2do parametro, le indicamos que escuche el evento "change".
+
+	3er parametro, le indicamos que ejecute la funcion "render" de la vista.
+
+	4to parametro, se le indica como scope (this) la vista que tiene que renderizar, si no le pasamos este parametro, genera un error en el metodo "render".
+______________________________________________________
+ROUTER
+
+11) Para definir el enrutador, que es el que hara posible que se muestren diferentes vistas, de acuerdo al cambio de la URL, definimos en "main.js":
+
+		Sfotipy.Router = Backbone.extend({
+			routes: {
+				"": "index",
+				"album/:name": "album",
+				"profile/:username": "profile"
+			},
+
+			index: function () {
+				console.log("Estoy en el index!!!");
+			},
+
+			album: function (name) {
+				console.log("Album: " + name);
+			},
+
+			profile: function (username) {
+				console.log("Usuario: " + username);
+			}
+		});
+
+		Sfotipy.app = new Sfotipy.Router();
+		Backbone.history.start();
+
+	En "routes", definimos las URL de nuestra aplicación y que funcion se ejecuta cuando esta en esa URL.
+	
+	Con: "Sfotipy.app", instanciamos el enrutador. y con "Backbone.history.start()" empezamos a escuchar el cambio de URLs en el navegador.
+
+	Podemos probar en consola del navegador con:
+
+		Sfotipy.app.navigate("album/fade to black", { trigger: true });
+
+______________________________________________________
+OPTIMIZACIÓN CÓDIGO
+
+12) Creamos en la carpeta "js" un archivo llamado "app.js" o "init.js", que contrendra los namespaces de la aplicación:
+
+	var Sfotipy = {
+		Models: {},
+		Views: {},
+		Collections: {},
+		Routers: {}
+	};
+
+	window.Sfotipy = Sfotipy;
+
+13) En el archivo "main.js", lo unico que hacemos es instanciar el enrutador:
+
+	$(function () {
+		Sfotipy.app = new Sfotipy.Router();
+	});
+
+14) Dentro de la carpeta "js", creamos las siguientes carpetas:
+
+	"models"
+	"views"
+	"routers"
+	"collections"
+
+15) Dentro de la carpeta "models", creamos un archivo por cada modelo:
+
+	-El archivo "song.js":
+
+		Sfotipy.Models.Song = Backbone.Model.extend({});
+
+	Aquí vemos que en el namespace "Sfotipy.Models", definimos la clase (concepto POO) del modelo "Song".				
+
+	-El archivo "album.js":
+
+		Sfotipy.Models.Album = Backbone.Model.extend({});
+
+	En este modelo usamos el mismo namespace "Sfotipy.Models", pero la clase (concepto POO) del modelo, se llama "Album".
+
+16) En la carpeta "collections" creamos los archivos para la creación de colecciones:
+
+	-El archivo "albums.js":
+
+		Sfotipy.Collections.Albums = Backbone.Collection.extend({
+			model: Sfotipy.Models.Album
+		});
+
+	-El archivo "songs.js":
+
+		Sfotipy.Collections.Songs = Backbone.Collection.extend({
+			model: Sfotipy.Models.Song
+		});
+
+17) En la carpeta "views" creamos los archivos de las vistas:
+
+	-El archivo "song.js":
+
+		Sfotipy.Views.Song = Backbone.View.extend({
+			
+			events: {
+				'click .Action.icon-add' : 'select',
+				'click .Action.icon-love' : 'love',
+				'click .Action.icon-share' : 'share',
+			},
+
+			tagName: 'li',
+			className: 'Album-item border-bottom',
+
+			template: Handlebars.compile( $("#song-template").html() ),
+
+			initialize: function (){
+				this.listenTo(this.model, "change", this.render, this);
+			},
+
+			render: function (){
+
+				var song = this.model.toJSON();				
+
+				var html = this.template( song );
+
+				this.$el.html( html );
+
+				return this;
+			},
+
+			select : function (e){
+				Sfotipy.app.player.model.set( this.model.toJSON() );
+				return false;
+			},
+
+			love : function (e){
+				
+			},
+
+			share : function (e){
+				
+			}
+		});	
+
+	-El archivo "album.js":
+
+		Sfotipy.Views.Album = Backbone.View.extend({
+			
+			events: {
+				'click' : 'navigate'				
+			},
+
+			tagName: 'article',
+			className: 'Song',
+
+			template: Handlebars.compile( $("#album-template").html() ),
+
+			initialize: function (){
+				this.listenTo(this.model, "change", this.render, this);
+			},
+
+			render: function (){
+				var album = this.model.toJSON();
+				var html = this.template( album );
+				this.$el.html( html );
+				return this;
+			},
+
+			navigate : function (){
+				Sfotipy.app.navigate( "album/" + this.model.get("name"), { trigger: true } );				
+			}
+
+		});
+
+	Esta vista es la encargada de mostrar el album en pequeño, y de cuando se haga click, cambie la URL y se muestren las canciones del album en la parte superior.
+
+	-El archivo "albums.js":
+
+		Sfotipy.Views.Albums = Backbone.View.extend({
+
+			el: $('#albums'),
+			
+			template: Handlebars.compile( $("#album-template").html() ),
+
+			initialize: function (){
+				this.listenTo(this.collection, "add", this.addOne, this);
+			},
+
+			render: function (){
+				this.collection.forEach( this.addOne, this );
+			},
+
+			addOne : function ( album ){
+				var albumView = new Sfotipy.Views.Album( { model: album } );
+
+				this.$el.append( albumView.render().el );		
+			}
+
+		});
+
+	Esta es una vista de colección, al "div con id "albums", le renderiza la vista, en la funcion "initialize", se escucha el evento "add" de la colección, es dicir, apenas tenga un nuevo elemento se ejecuta la función "addOne".
+
+	La función "addOne", crea una nueva vista de album sencilla.
+
+	Nota: recordar que en la vista sencilla "album.js", en el "render", se retorna "this", es para que en la función "addOne" cuando hacemos "albumView.render().el", nos retorne esa vista, y la podamos añadir "append" al elemento de la vista de colección.
+
+	La función "render", lo que hace es ejecutar el metodo "addOne", por cada item de la colección.
+
+	-El archivo "list.js":
+
+		Sfotipy.Views.List = Backbone.View.extend({
+
+			el: $('.playlist > .list'),			
+
+			initialize: function (){
+				this.listenTo(this.collection, "add", this.addOne, this);
+				this.listenTo(this.collection, "reset", this.render, this);
+			},
+
+			render: function (){
+				this.$el.empty();
+				this.addAll();
+			},
+
+			addOne : function ( song ){
+				var songView = new Sfotipy.Views.Song( { model: song } );
+
+				this.$el.append( songView.render().el );		
+			},
+
+			addAll : function (){
+				this.collection.forEach( this.addOne, this );	
+			}
+		});
+
+	En "render", tomamos el elemento html, donde se ve el listado de las canciones y lo borramos con "this.$el.empty()", si no hacemos esto, al hacer click en otro album, se añaden esas canciones al album que ya estabamos viendo y se forma un desorden.
+	
+	Con "this.addAll()", ejecutamos "addAll", que recorre c/u de los elementos de la colección, y renderiza cada una de las canciones del album.	
+
+	-El archivo "player.js":
+
+		Sfotipy.Views.Player = Backbone.View.extend({
+		  el: $(".music"),
+
+		  template: Handlebars.compile($("#player-template").html()),
+
+		  initialize: function () {
+		    this.listenTo(this.model, "change", this.render);
+		  },
+
+		  render: function () {
+		    var song = this.model.toJSON();
+		    this.$el.html(this.template(song));
+		  }
+		});
+
+18) En la carpeta "routers" creamos el archivo "router.js":
+
+		Sfotipy.Router = Backbone.Router.extend({
+		  routes: {
+		    "": "index",
+		    "album/:name": "album"
+		  },
+
+		  initialize: function () {
+		    this.current = {};
+		    this.jsonData = {};
+		    this.albums = new Sfotipy.Collections.Albums();
+		    this.songs = new Sfotipy.Collections.Songs();
+		    this.playlist = new Sfotipy.Views.List({ collection: this.songs });
+		    this.player = new Sfotipy.Views.Player({ model: new Sfotipy.Models.Song() });
+		    this.albumlist = new Sfotipy.Views.Albums({ collection: this.albums });
+
+		    Backbone.history.start();
+		  },
+
+		  index: function () {
+		    this.fetchData();
+		  },
+
+		  album: function (name) {
+		    if (Object.keys(this.jsonData).length === 0) {
+		      var self = this;
+
+		      this.fetchData().done(function () {
+		        self.addSongs(name);
+		      });
+
+		    } else {
+		      this.addSongs(name);
+		    }
+		  },
+
+		  fetchData: function () {
+		    var self = this;
+
+		    // Load Data
+		    return $.getJSON('data.json').then(function (data) {
+		      self.jsonData = data;
+
+		      for (var name in data) {
+		        if (data.hasOwnProperty(name)) {
+		          self.addAlbum(name, data[name]);
+		        }
+		      }
+
+		    });
+		  },
+
+		  addSongs: function (name) {
+		    this.songs.reset();
+
+		    this.current.album = this.jsonData[name];
+		    this.current.album.songs.forEach(this.addSong, this);
+		  },
+
+		  addSong: function (song) {
+		    var album = this.current.album;
+
+		    this.songs.add(new Sfotipy.Models.Song({
+		      album_cover: album.cover,
+		      album_name: album.name,
+		      author: album.author,
+		      name: song.name,
+		      length: song.length
+		    }));
+		  },
+
+		  addAlbum: function (name, album) {
+		    this.albums.add(new Sfotipy.Models.Album({
+		      name: name,
+		      author: album.author,
+		      cover: album.cover,
+		      year: album.year
+		    }));
+		  }
+
+		});
+
+	Aquí en "initialize", instanciamos los objetos (concepto POO), que necesitamos para la aplicación.
+	
+		Con "this.current" y "this.jsonData" son dos objetos en donde almacenamos los datos que traemos desde el servidor.
+
+		Luego creamos las colecciones de albums y canciones.
+
+	Todas estas instancias se las asignamos al router para que se puedan acceder en cualquier parte de la aplicación.
+	
+	Al estar en la raiz o el "index" de la aplicación (URL), el enrutador ejecuta la función "index", que a su vez, ejecuta la función "fetchData".
+
+		La función "fetchData", lo que hace es a través de jQuery y Ajax, obtien el JSON del archivo "data.json", y lo guarda sin procesar en el objeto "jsonData", que habiamos instanciado en el router.
+
+		Luego en esa misma función, por cada elemento del JSON, se ejecuta la función del router "addAlbum".
+
+		La función del router "addAlbum", crea un nuevo modelo de ese album, y lo añade a la colección de albums.
+
+	Así, al estar en la URL raiz de la aplicación, obtiene los datos de los albumes, y muestra los albumes renderizados en la pantalla.
+	
+	Ahora recordemos que al hacer click sobre un album de esos que me muetra, se cambia la URL, asignandole "album/:name" album, y el nombre del album al que se le hizo click, esto ejecuta la función "album" del enrutador.
+
+	La función "album", pregunta si en el objeto del router no tiene datos:
+
+		if (Object.keys(this.jsonData).length === 0)
+
+	Esto con el fin deque si no tiene datos (porque el usuario se sabia la url y escribio en el navegador: www.sfotipy.com/album/fade to black) obtenga los datos nuevamente del servidor.
+
+	Si en "jsonData", ya se tenian los datos del album, se ejecuta "addSongs", que resetea la lista de las canciones del album, y estrae la información de las canciones del album de "jsonData".
+
+19) Los templates en el archivo index.html son:
+
+		<!-- Templates -->
+		<script id="player-template" type="text/x-handlebars-template">
+		  <figure class="image relative">
+		      <img src="{{album_cover}}" width="320" height="320" alt="{{name}} - {{author}}">
+		      <div class="actions padding right-text">
+		        <a href="#" class="action icon-add"></a>
+		        <a href="#" class="action icon-love"></a>
+		        <a href="#" class="action icon-share"></a>
+		      </div>
+		    </figure>
+		    <div class="padding">
+		      <div class="progress">
+		        <span class="min">0:45</span>
+		        <div class="total">
+		          <div class="state">
+		            <div class="circle">
+		              
+		            </div>
+		          </div>
+		        </div>
+		        <span class="max">{{length}}</span>
+		      </div>
+		      <div class="description center-text border-bottom">
+		        <p class="name">
+		          {{name}}
+		        </p>
+		        <p class="author">
+		          {{author}}
+		        </p>
+		      </div>
+		      <div class="play center-text padding-tb">
+		        <a href="" class="action gray icon-prev"></a>
+		        <a href="" class="action gray icon-play"></a>
+		        <a href="" class="action gray icon-next"></a>
+		        <a href="" class="action gray icon-random"></a>
+		        <a href="" class="action gray icon-vol"></a>
+		      </div>
+		    </div>
+		</script>
+
+		<script id="current-album-template" type="text/x-handlebars-template">
+		  <p class="name">
+		    {{name}}
+		  </p>
+		  <p class="author">
+		    {{author}}
+		  </p>
+		</script>
+
+		<script id="song-template" type="text/x-handlebars-template">
+		  <span>
+		    {{name}} - ({{length}})
+		  </span>
+		  <span class="right">
+		    <a href="" class="action icon-add gray"></a>
+		    <a href="" class="action icon-love gray"></a>
+		    <a href="" class="action icon-share gray"></a>
+		  </span>
+		</script>
+
+		<script id="album-template" type="text/x-handlebars-template">
+		  <figure class="image">
+		    <img src="{{cover}}" width="128" height="128" alt="{{name}} - {{author}}">
+		  </figure>
+		  <p class="name">
+		    {{name}}
+		  </p>
+		  <p class="author">
+		    {{author}}
+		  </p>
+		</script>
+
+20) No olvidar enlazar los scripts antes de cerrar la etiqueta body:
+
+		<script type="text/javascript" src="lib/jquery-1.11.0.js"></script>
+		<script type="text/javascript" src="lib/underscore.js"></script>
+		<script type="text/javascript" src="lib/handlebars-v1.3.0.js"></script>
+		<script type="text/javascript" src="lib/backbone.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+		<script type="text/javascript" src="js/models/song.js"></script>
+		<script type="text/javascript" src="js/models/album.js"></script>
+		<script type="text/javascript" src="js/collections/songs.js"></script>
+		<script type="text/javascript" src="js/collections/albums.js"></script>
+		<script type="text/javascript" src="js/views/player.js"></script>
+		<script type="text/javascript" src="js/views/song.js"></script>
+		<script type="text/javascript" src="js/views/list.js"></script>
+		<script type="text/javascript" src="js/views/album.js"></script>
+		<script type="text/javascript" src="js/views/albums.js"></script>
+		<script type="text/javascript" src="js/routers/router.js"></script>
+		<script type="text/javascript" src="js/main.js"></script>

@@ -1,0 +1,106 @@
+	CREACIÓN DE UNA PÁGINA WEB:
+_______________________________________________________
+
+1) Hacer El Mockup (Boceto de la pág. web).
+
+2) Pasar el MockUp por Diseño Gráfico, y Generar la imagen de la página con colores y todo ya sea en ilustrator o photoshop.
+
+______________________________________________________
+
+3) Definir La estructura Basica de una página HTML 5 (etiquetas: Doctype,html,head,title,body,etc). 
+
+4) Dependiendo del Mockup, definir la estructura HTML 5 semantica de la pagina, es decir, el header, footer, section, article, etiquetas <img> de imagenes, <a> anclas o links, <h1>, y ponerles el contenido a cada etiqueta, o si es de prueba el LOREM IPSUM. 
+
+______________________________________________________
+
+5) Resetear estilos aplicados por el navegador, para que se vea igual en todos los navegadores.
+
+Para esto podemos usar Normalize. El cual cargamos antes que nuestros estilos propios.
+
+6) En el HTML, agregar CLASES a las etiquetas, es mejor usar clases en vez de "id", ya que se pueden repetir, y un elemento puede tener muchas clases.
+
+Los nombres de las clases se deben agregar siguiendo las siguientes reglas de la convención "suitcss":
+
+	1- Dividir las partes de la pág. (header,nav, footer, section, article, etc.) en componentes.
+		Ej: .MyComponent {}
+
+	En este caso el componente es el mismo nombre de la clase y empieza en mayusculas.
+
+	2- Los componentes pueden tener estados. Un estado es una segunda clase que se le añade al elemento.
+		Ej: .MyComponent.is-animating {}
+
+	3- Los componentes pueden tener modificadores. Como por ejemplo si se tiene una imagen pequeña, y la misma imagen grande, se puede poner un modificador llamado extended (imagen extendida).
+
+	Los modificadores empiezan con --, y luego se aplica camelCase
+		Ej: .MyComponent--modifier {}
+
+	4- Los componentes pueden tener partes, como por ejemplo si se tiene "header", y dentro del header tiene un titulo y enlaces, entonces:
+		Ej: .MyComponent-part {}
+			.MyComponent-anotherPart {}
+
+			.Header-titulo{}
+			.Header-enlaces{}
+
+	5- Un componente puede ser una utilidad, una utilidad es una clase que empieza con "u", un guion "-" y despues el nombre de la utilidad:
+		Ej: .u-textTruncate{}
+
+	En las clases que son utilidades, podemos poner estilos que son comunes en varias etiquetas, pero que pertenecen a diferentes componentes.
+
+	Por ejemplo si se tiene en el header y en el footer un titulo con el mismo estilo, pero como pertenecen a diferentes modulos, entonces creamos una utilidad, y se la agregamos como clase adicional a los tags.
+
+		<header class="Header">
+			<h2 class="Header-title u-title">
+				...
+		</header>
+
+		<footer class="Footer">
+			<h2 class="Footer-title u-title">
+				...
+		</footer>
+
+	Y en el CSS ponemos:
+
+		u-title{
+			color:red;
+		}
+______________________________________________________
+
+7) Agregar Fuente o tipografia con google Fonts.
+
+Buscamos la fuente, quick use, seleccionamos si la queremos bold, italic, etc, y nos fijamos en que no sobrecargue la pagina.
+
+Nota: Fuente recomendada: Open Sans
+
+En el HTML, agregamos la etiqueta link, antes que el normalize.
+
+Dentro de normalize indicamos la fuente en los estilos del selector "html".
+
+	Ej: html {
+			/* Fuente de google fonts */
+  			font-family: 'Open Sans', sans-serif;
+  			...
+  		}
+
+Si queremos tener la fuente en local, y tambien para almacenarlas en nuestro servidor, podemos buscar la fuente en:
+	
+	http://www.fontsquirrel.com/
+
+Allí escogemos "Web Font Generator"
+
+Luego si sabemos el nombre de la fuente, podemos usar el buscador de fuentes.
+
+Y para descargarla vamos a la opción: "Webfont Kit"
+______________________________________________________
+
+8) Creamos nuestra hoja de estilos, la linkeamos despues del normalize y empezamos a añadir los estilos para cada componente.
+
+Para cada Componente revizamos y cambiamos propiedades (segun sea necesario).
+______________________________________________________
+
+Si al momento de Maquetar, tenemos el problema de posicionar varios elementos, que semanticamente no le asignamos un elemento padre que las agrupe, podemos usar etiquetas HTML no semanticas para hacer grupos de elementos:
+
+	<div> --> Sirve para agrupar en bloque.
+	<span> --> sirve para agrupar en línea.
+
+NOTA: al agregar divs o span, tambien es necesario asignarles las clases correspondientes para que sean parte de los componentes.
+______________________________________________________

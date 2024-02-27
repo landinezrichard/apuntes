@@ -1,0 +1,610 @@
+
+	Frontend NodeJS:
+_______________________________________________________
+
+INDICE:
+
+[1]. Creación Carpeta Proyecto
+[2]. Control de versiones GIT
+[3]. Crear archivo "package.json"
+[4]. Instalación automatizador Gulp
+	[4.1]. Ver paquetes Globales instalados
+	[4.2]. Estructura de carpetas(scaffolding)
+	[4.3]. Instalación de Dependencias
+		[4.3.1]. Instalar versiones específicas
+		[4.3.2]. Desintalar paquetes
+		[4.3.3]. Dependencias extra
+	[4.4]. Configuración "gulpfile.babel.js"
+[5]. Creación Archivos Proyecto
+[6]. Correr tareas
+[7]. Añadir documentación
+[8]. Enlaces de interes
+
+_______________________________________________________
+
+	[1]. Creación Carpeta Proyecto:
+_______________________________________________________
+
+Crear una carpeta para el proyecto, para el nombre del proyecto, seguimos las siguientes recomendaciones:
+
+	A) Utiliza siempre minúsculas.
+	B) No utilices espacios en el nombre. Usa guiones en su lugar.
+	C) Evita el uso de carácteres especiales, signos de puntuación, etc...
+
+En consola, ubicados donde queremos crear el proyecto:
+
+	mkdir nombre-proyecto
+_______________________________________________________
+
+	[2]. Control de versiones GIT:
+_______________________________________________________
+
+1) Para llevar el control de versiones del proyecto con "Git", en consola de comandos, nos ubicamos en la carpeta del proyecto y usamos el comando:
+
+	git init
+
+2) Luego añadimos la URL de GitHub (u otro servicio) como repositorio remoto:
+
+	git remote add origin https://github.com/landinezrichard/backend.git
+
+3) Creamos un archivo ".gitignore", para ignorar archivos y carpetas que no se deben subir a github (Como la carpeta node_modules, ya que allí van las dependencias del proyecto y no se deben subir a github, ya que estas dependencias son binarios y su compilación depende del sistema operativo):
+
+	node_modules
+	*.log
+_______________________________________________________
+
+	[3]. Crear archivo "package.json":
+_______________________________________________________
+
+En la consola, ubicados en la carpeta del proyecto, escribimos el comando "npm init", el cual va a crear el archivo "package.json":
+
+	npm init
+
+El comando "npm init", hará algunas preguntas iniciales sobre nuestro proyecto:
+
+	name: nombreproyecto
+	version: 1.0
+	description: Api RESTful para frameworks JavaScript
+	entry point: gulpfile.babel.js
+	test comand:
+	git repository:
+	keywords:
+	autor: Ricardo Landínez <landinezrichard@gmail.com>
+	license: BSD
+
+Nota 1: en licencia tambien pódemos usar MIT.
+
+Nota 2: tambien podemos usar:
+
+	npm init -y
+
+El parámetro -y de npm init omite el asistente interactivo, creando el "package.json" con los valores por defecto directamente y sin preguntarnos.
+
+IMPORTANTE: para que npm init no falle al momento del nombre del proyecto, no usar letras mayusculas, no usar espacios, evitar el uso de carácteres especiales, signos de puntuación, etc..
+_______________________________________________________
+
+	[4]. Instalación automatizador Gulp:
+_______________________________________________________
+
+Usamos una sola vez de forma global:
+
+	npm install --global gulp-cli
+_______________________________________________________
+
+	[4.1]. Ver paquetes Globales instalados:
+_______________________________________________________
+
+Para ver que paquetes tenemos instalados globalmente usamos el siguiente comando:
+
+	npm list -g --depth 0
+
+El parámetro -g o --global nos muestra los paquetes globales.
+El parámetro --depth 0 indica que no muestre dependencias, sólo el paquete principal.
+
+_______________________________________________________
+
+	[4.2]. Estructura de carpetas(scaffolding):
+_______________________________________________________
+
+Nuestro proyecto tendra una estructura de carpetas similar a la siguiente:
+
+	- frontend-project/       # Carpeta raíz del proyecto
+		- .git/               # Carpeta oculta de datos de git
+		- node_modules/       # Carpeta de paquetes de Node/NPM
+		- dist/               # Carpeta de código generado (cuando se usan preprocesadores)
+		- src/                # Carpeta de código fuente (código editable)
+			- assets/         # Carpeta de estáticos (imágenes, audio, video, fuentes...)
+			- js/             # Carpeta de Javascript
+				- index.js
+			- css/            # Carpeta de CSS
+				- index.css
+			- index.html
+		- package.json        # Archivo del proyecto NPM
+		- package-lock.json   # Histórico de versiones de dependencias
+		- .gitignore          # Ficheros y carpetas a ignorar por git
+
+En nuestro caso, la carpeta "src" tendra una estructura como la siguiente:
+
+	- src/
+		- assets/
+			-img/
+			-fonts/
+		- sass/
+
+1) Creamos "src" y subcarpetas:
+
+	mkdir -p src/{assets,sass, js}
+
+"-p" ó "–parents": crea un directorio de forma recursiva (cuando no hay un directorio encima del directorio creado).
+
+2) Dentro de la carpeta "assets" creamos las carpetas "img" y "fonts": 
+
+	mkdir img, fonts
+_______________________________________________________
+
+	[4.3]. Instalación de Dependencias:
+_______________________________________________________
+
+Dependiendo de nuestro proyecto, se instalaran paquetes que podemos encontrar en:
+
+	https://www.npmjs.com/
+
+Existen varias formas de instalar un paquete:
+
+	"npm install -D" (npm install --save-dev) --> Instala el paquete en el proyecto, como dependencia de desarrollo.
+
+	"npm install" (npm install --save-prod) --> Instala el paquete en el proyecto, como dependencia de producción.
+
+	"npm install -g" (npm install --global) --> Instala el paquete en el sistema, sin asociarlo al proyecto.
+
+Nota: Los siguientes comandos son equivalentes:
+
+	npm i === npm install === npm add
+
+1) En cada proyecto que se quiera incluir "Gulp" instalamos las siguientes dependencias de desarrollo:
+
+	npm install --save-dev gulp
+
+	npm install --save-dev @babel/core @babel/register @babel/preset-env
+
+En donde:
+
+	"gulp" --> es el automatizador JavaScript de tareas basado en pipes y flujos, se encargara de ejecutar los comandos necesarios para correr todas nuestras herramientas de desarrollo, y estara vigilando los cambios.
+	_______________________________________________________
+
+	"babel" --> modulos que nos ayudan a convertir codigo "ECMA Script" actual y moderno a "ECMA Script 5" que es el soportado por los navegadores.
+
+		https://babeljs.io/docs/en/babel-core
+
+		https://babeljs.io/docs/en/babel-register
+
+		https://babeljs.io/docs/en/babel-preset-env
+
+2) En la raiz del proyecto creamos un archivo de configuración de "babel" llamado ".babelrc":
+
+	{
+		"presets": ["@babel/preset-env"]
+	}
+
+Este es el plugin que indica como convertir de codigo nuevo a viejo.
+
+3) En nuestro proyecto instalaremos las siguientes dependencias de desarrollo:
+
+	npm install sass gulp-sass gulp-autoprefixer browser-sync gulp-plumber --save-dev
+
+En donde:
+
+	"sass" --> para poder compilar los archivos "scss". Para ver las opciones que le podemos pasar:
+
+		https://github.com/sass/node-sass#options
+	_______________________________________________________
+
+	"gulp-sass" --> plugin de SASS para Gulp, para preprocesar el CSS.
+	_______________________________________________________
+
+	"gulp-autoprefixer" --> Complemento PostCSS para analizar CSS y agregar prefijos de proveedores a las reglas de CSS utilizando valores de "Can I Use".
+
+	Para ver las opciones:
+
+		https://github.com/postcss/autoprefixer#options
+
+	Las opciones por navegador:
+
+		https://github.com/browserslist/browserslist#full-list
+	_______________________________________________________
+
+	"browser-sync" --> servidor local de desarrollo para hacer recarga de CSS en vivo y sincronización del navegador.
+	_______________________________________________________
+
+	"gulp-plumber" --> Previene rotura de tuberias (pipe breaking) causada por errores de plugins de gulp. De esta forma no se detiene la ejecución de las tares en la consola, sino que se muestra el error, y una vez corregido sigue corriendo bien.
+_______________________________________________________
+
+	[4.3.1]. Instalar versiones específicas:
+_______________________________________________________
+
+Si en algún momento necesitamos instalar una versión específica de un paquete, podemos hacerlo indicando la versión despues del nombre del paquete, separándola mediante el carácter arroba ("@"):
+
+	npm install -D nombre-paquete@1.0.3
+
+Ejemplo: El plugin "gulp-imagemin", que minifica imagenes PNG, JPEG, GIF y SVG, actualmente es un modulo ESM puro, y a pesar de usar "babel", al importarlo nos genera el siguiente error:
+
+	https://github.com/imagemin/imagemin/issues/392
+
+De momento para poder usarlo y solucionar el error, debemos instalar una version previa del plugin:
+
+	npm i -D gulp-imagemin@7.1.0
+_______________________________________________________
+
+	[4.3.2]. Desintalar paquetes:
+_______________________________________________________
+
+Si queremos desinstalar un paquete de nuestro proyecto, simplemente escribimos el siguiente comando en la terminal de texto:
+
+	npm uninstall nombre-paquete
+
+Esto se encargará de eliminar el paquete de "node_modules/" y eliminar su asociación al proyecto en el "package.json", independientemente de ser una dependencia de desarrollo o de producción.
+
+Nota: los siguientes comandos son equivalentes:
+
+	npm unlink === npm remove ===  npm rm === npm r === npm uninstall
+_______________________________________________________
+
+	[4.3.3]. Dependencias extra:
+_______________________________________________________
+
+Existen un monton de paquetes o plugins para Gulp, que nos pueden facilitar el desarrollo, entre ellas destacan:
+
+	"gulp-pug" --> para compilar plantillas Pug (HTML).
+	_______________________________________________________
+
+	"gulp-group-css-media-queries" --> para agrupar los media queries.
+	_______________________________________________________
+
+	"gulp-postcss" --> Complemento "PostCSS" para canalizar CSS a través de varios complementos, pero analiza CSS solo una vez. Estos complementos pueden filtrar su CSS, admitir variables y mixins, transpilar la sintaxis CSS futura, imágenes en línea y más.
+
+	Se puede usar con los pluguins:
+
+		"autoprefixer" --> https://github.com/postcss/autoprefixer
+
+		"cssnano" --> para minificar el CSS. https://github.com/cssnano/cssnano
+	_______________________________________________________
+
+	"gulp-clean-css" --> para minificar el CSS.
+	_______________________________________________________
+
+	"gulp-purgecss" --> Elimina los selectores no utilizados de su "css", si tenemos por ejemplo un estilo: ".red{color:red;}", pero en el "html" no usamos esa clase, entonces elimina ese codigo "CSS" no utilizado.
+	_______________________________________________________
+
+	"gulp-webp" --> para generar imagenes de extensión "webp".
+	_______________________________________________________
+
+	"gulp-concat" --> para concatenar archivos(JavaScript o CSS) uniendolos en uno solo.
+	_______________________________________________________
+
+	"gulp-babel" --> Convierte codigo es6 a es5.
+	_______________________________________________________
+
+	"gulp-terser" --> minificador de JavaScript moderno es6 (remplaza a uglify).
+	_______________________________________________________
+
+	"gulp-sourcemaps" --> un "Source Map" es un archivo relacionado con nuestro código ya tratado(minificado), el cual nos proporciona una forma de acceder al código original, ya que mantiene información de los archivos a los que hace referencia, permitiéndonos reconstruir los mismos aunque estemos en producción.
+	_______________________________________________________
+
+	"gulp-cache-bust" --> hace que los archivos "css" y "js" sean requeridos siempre por el navegador, en vez de usar los que tenga en cache.
+_______________________________________________________
+
+	[4.4]. Configuración "gulpfile.babel.js":
+_______________________________________________________
+
+1) Creamos un archivo "gulpfile.babel.js" en la raiz de nuestro proyecto, el cual tendra toda la configuración para que funcione Gulp y sus tareas:
+
+	//---------------------------------------------------------------------
+	// DEPENDENCIAS
+	//---------------------------------------------------------------------
+	import gulp from 'gulp';
+
+	//SASS
+	import dartSass from 'sass';
+	import gulpSass from 'gulp-sass';
+	const sass = gulpSass(dartSass);
+
+	//CSS
+	import prefixer from 'gulp-autoprefixer';
+
+	//Optimización imágenes
+	import imagemin from 'gulp-imagemin';
+
+	//Browser sync
+	import { init as server, stream, reload } from 'browser-sync';
+
+	//Plumber
+	import plumber from 'gulp-plumber';
+
+	//---------------------------------------------------------------------
+	//  RUTAS DE LOS ARCHIVOS
+	//---------------------------------------------------------------------
+	const paths = {
+		html:{
+			src  : './src/index.html',
+			watch : './src/*.html',
+			dest : './dist'
+		},
+		sass:{
+			src  : './src/sass/estilos.scss',
+			watch : './src/sass/**/*.scss',
+			dest  : './dist/css'
+		},
+		js:{
+			src  : './src/js/**/*.js',
+			dest  : './dist/js/'
+		},
+		images:{
+			// src  : './src/assets/img/**/*.+(png|jpg|gif)',
+			src: './src/assets/img/**/*', //así toma cualquier extensión de imagen
+			dest  : './dist/assets/img/'
+		},
+		fonts:{
+			src : [
+				'src/assets/**/*.eot',
+				'src/assets/**/*.svg',
+				'src/assets/**/*.ttf',
+				'src/assets/**/*.woff'
+			],
+			dest  : './dist/assets/fonts/'
+		},
+		server:{
+			folder : './dist'
+		}
+	};
+
+	//---------------------------------------------------------------------
+	// TAREA copy-html
+	//---------------------------------------------------------------------
+
+	gulp.task('copy-html', () => {
+		return gulp.src(paths.html.watch)
+			.pipe(plumber())
+			.pipe(gulp.dest(paths.html.dest))
+	});
+
+	//---------------------------------------------------------------------
+	// TAREA SASS
+	//---------------------------------------------------------------------
+
+	gulp.task('sass', () => {
+		return gulp.src(paths.sass.src)
+			.pipe(plumber())
+			.pipe(
+				sass({
+					outputStyle: 'expanded' //Values: nested, expanded, compact, compressed
+				}).on('error', sass.logError)
+			)
+			.pipe(prefixer('last 2 versions')) // añade prefijos CSS
+			.pipe(gulp.dest(paths.sass.dest))
+			.pipe(stream()); //auto-inyectar al navegador
+	});
+
+	//---------------------------------------------------------------------
+	// TAREA MINIFICAR Y OPTIMIZAR IMAGENES
+	//---------------------------------------------------------------------
+
+	gulp.task('img-min', () => {
+		return gulp.src(paths.images.src)
+			.pipe(plumber())
+			.pipe(imagemin([
+				imagemin.gifsicle({interlaced: true}),
+				imagemin.mozjpeg({quality: 75, progressive: true}),
+				imagemin.optipng({optimizationLevel: 5}),
+				imagemin.svgo({
+					plugins: [
+						{
+							name: 'removeViewBox',
+							active: true
+						},
+						{
+							name: 'cleanupIDs',
+							active: false
+						}
+					]
+				})
+			]))
+			.pipe(gulp.dest(paths.images.dest));
+	});
+
+	//---------------------------------------------------------------------
+	// COPIAR JS
+	//---------------------------------------------------------------------
+
+	gulp.task('copy-js', () => {
+		return gulp.src(paths.js.src)
+			.pipe(plumber())
+			.pipe(gulp.dest(paths.js.dest))
+	});
+
+	//---------------------------------------------------------------------
+	// TAREA COPIAR FUENTES
+	//---------------------------------------------------------------------
+	gulp.task('copy-fonts', () => {
+		return gulp.src(paths.fonts.src)
+			.pipe(plumber())
+			.pipe(gulp.dest(paths.fonts.dest))
+	});
+
+	//---------------------------------------------------------------------
+	// TAREA POR DEFECTO
+	//---------------------------------------------------------------------
+
+	gulp.task('default', () => {
+		// RUN STATIC SERVER
+		server({
+			server: {
+				baseDir: paths.server.folder,
+			}
+		});
+		//  WATCH + RELOAD BROWSER
+		gulp.watch(paths.html.watch, gulp.series('copy-html') ).on('change', reload);
+		gulp.watch(paths.sass.watch, gulp.series('sass') );
+		gulp.watch(paths.js.src, gulp.series('copy-js') ).on('change', reload);
+	});
+
+	// "series" ejecuta una tarea tras otra en orden.
+	// "parallel" ejecuta las tareas simultaneamente (al mismo tiempo).
+
+Con "browser-sync" podemos usar los siguientes metodos:
+
+	stream() --> inyecta al navegador los cambios nuevos de los archivos, normalmente lo usamos en las tareas de CSS y Sass, despues de ".pipe(gulp.dest())"
+
+	reload() --> lo usamos en los "watch" para recargar el navegador cuando se produzcan cambios.
+
+Nota: si estamos ubicados dentro del proyecto en consola, podemos abrir el editor de codigo "Visual studio Code" con la carpeta del proyecto, usando:
+
+	code .
+_______________________________________________________
+
+	[5]. Creación Archivos Proyecto:
+_______________________________________________________
+
+1) Creamos dentro de la carpeta "src" el archivo "index.html":
+
+	<!DOCTYPE html>
+	<html lang="es">
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Documento</title>
+		<link rel="stylesheet" href="./css/estilos.css">
+	</head>
+	<body>
+		<!-- HEADER -->
+		<header class="Header">
+			<div class="u-centrar clearfix">
+				<!-- LOGO -->
+				<a class="Header-logo"  href="index.html">
+					<!-- <img class="Header-img" src="assets/img/logo.png" alt="Logo Empresa" /> -->
+					<h1>Titulo Sitio WEB</h1>
+				</a>
+				<!-- MENU -->
+				<div class="Menu-btn">
+					<div class="bar1"></div>
+					<div class="bar2"></div>
+					<div class="bar3"></div>
+				</div>
+				<nav class="Menu">
+					<ul class="Menu-list">
+						<li><a class="active" href="index.html">Inicio</a></li>
+						<li><a href="#">Quiénes somos</a></li>
+						<li><a href="#">Nuestros productos</a></li>
+						<li><a href="#">Contáctenos</a></li>
+					</ul>
+				</nav>
+			</div>
+		</header>
+		<!-- Main -->
+		<main class="u-centrar">
+			<h1>A maquetar!!!</h1>
+		</main>
+		<!-- FOOTER -->
+		<footer class="Footer">
+			<div class="u-centrar">
+				<p class="Footer-copy">&copy; Todos los derechos reservados. Diseño y desarrollo por ...</p>
+			</div>
+		</footer>
+		<script src="./js/jquery-3.6.0.min.js"></script>
+		<script src="./js/app.js"></script>
+	</body>
+	</html>
+
+2) Creamos dentro de la carpeta "sass" el archivo "estilos.scss":
+
+	body{
+		background-color: red;
+
+		div{
+			display: grid;
+			transition: all .5s;
+			user-select: none;
+			background: linear-gradient(to bottom, white, black);
+		}
+	}
+
+Nota: esto son solo estilos de prueba, para ver que se este corriendo correctamente la tarea sass con el auto-prefixer.
+
+3) Dentro de la carpeta "sass", creamos otra carpeta llamada "modulos", en donde se gurdaran todos los modulos o archivos parciales que creemos de sass.
+
+4) Creamos dentro de la carpeta "modulos" un archivo "_normalize.scss", el cual tendra el normalizador de CSS actual de:
+
+	https://necolas.github.io/normalize.css/
+
+	https://github.com/necolas/normalize.css
+
+5) Dentro de la carpeta "js", descargamos la ultima version de jQuery:
+
+	https://jquery.com/
+
+Y tambien creamos un archivo "app.js":
+
+	$(document).ready(function(){
+		console.log("Listo");
+		/*Mostrar Menu en Movil*/
+		$('.Menu-btn').on("click",function() {
+			$('.Menu').slideToggle();
+			$( this ).toggleClass("change");
+		});
+	});
+_______________________________________________________
+
+	[6]. Correr tareas:
+_______________________________________________________
+
+Para correr las diferentes tareas del proyecto, nos ubicamos en consola dentro de la carpeta del proyecto y ejecutamos:
+
+	gulp copy-html --> para copiar el html.
+
+	gulp sass --> para compilar sass y generar el CSS.
+
+	gulp img-min --> para optimizar y minificar imagenes.
+
+	gulp copy-js --> para copiar los archivos "*.js".
+
+	gulp copy-fonts --> para copiar los archivos de fuentes.
+
+	gulp --> tarea por defecto, corre el servidor de desarrollo, y ejecuta tareas de vigilancia de cambios, las cuales ejecutaran las tareas 'copy-html', 'sass' y 'copy-js', cada vez que exista un cambio en los archivos de desarrollo.
+_______________________________________________________
+
+	[7]. Añadir documentación:
+_______________________________________________________
+
+Podemos crear un archivo "README.md" en linea:
+
+	https://pandao.github.io/editor.md/en.html
+
+Y luego añadirlo en la carpeta raiz del proyecto.
+_______________________________________________________
+
+	[8]. Enlaces de interes:
+_______________________________________________________
+
+Los siguientes enlaces nos sirven para configurar algunos plugins o tares que no se usaron.
+	
+	Minicurso de Gulp v4 desde 0, Primeros pasos + babel, HTML + CSS, PUG + SASS + purgeCSS, cache bust + imagemin + browser sync + plumber:
+	
+	https://www.youtube.com/playlist?list=PLROIqh_5RZeDf1LgliebPZ_0TAX-QA_xm
+
+	https://github.com/DorianDesings/gulp-2020
+	_______________________________________________________
+
+	Configurar Gulp 4 con Sass + Bootstrap +FontAwesone + BrowserSync:
+
+		http://appatico.com/configurar-gulp-4/
+	_______________________________________________________
+
+	Minify JavaScript with Gulp JS | Full gulp-terser plugin walkthrough:
+
+		https://www.youtube.com/watch?v=yZPfIFOxYWo
+	_______________________________________________________
+
+	Full beginner Gulp setup for SCSS, minifying Javascript, and minifying/webp images:
+
+		https://www.youtube.com/watch?v=ubHwScDfRQA&t=248s
+	_______________________________________________________

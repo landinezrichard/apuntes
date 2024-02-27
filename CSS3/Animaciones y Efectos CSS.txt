@@ -1,0 +1,205 @@
+______________________________________________________
+
+		ANIMACIONES Y EFECTOS CSS:
+______________________________________________________
+
+TRANSFORMACIONES:	
+
+La propiedad "transform", nos permite hacer varios tipos de transformaciones, entre ellas: rotar, escalar, y sesgar.
+
+Para otros valores de la propiedad transform (diferentes a rotar, escalar, y sesgar), podemos buscar la referencia en w3schools.
+
+	Rotación (rotate)--> permite rotar el elemento determinados grados. 
+		
+			transform:rotate(270deg);
+
+		También existe el valor rotateX y rotateY.
+
+	Escala (scale)--> agranda o encoge el elemento.
+	
+		transform:scale(2,2);
+
+	Sesgar (skew)--> tuerce hacia un lado el elemento.
+	
+		skew(x-angle,y-angle);
+		transform:skew(10deg,10deg);
+
+	Trasladar (translate)--> mueve de una coordenada(x1,y1) a otra(x2,y2).
+	
+		transform:translate(100px,100px);
+
+NOTA: si se tienen problemas de compatibilidad entre navegadores, se deben usar prefijos:
+	-webkit-transform:rotate(20deg);
+	-moz-transform:rotate(20deg);
+	-o-transform:rotate(20deg);		
+	-ms-transform:rotate(20deg);
+
+La propiedad Transform, se puede usar en el estado de un elemento, como hover.
+
+	.Elemento{
+		...
+	}
+
+	.Elemento:hover{
+		transform:rotate(270deg);
+	}
+
+______________________________________________________
+
+TRANSISIONES:
+
+Aunque una transformación, se haga en un estado (ej:hover), esto ocurre tan rápidamente que puede ser un cambio brusco y desagradable. Para que la animación se vea de una forma más natural y fluida (como añadiendo frames), es necesario usar la propiedad transition:
+
+	transition --> Añade un estado intermedio entre una propiedad a otra.
+
+	Es un comando shorthand de:
+		transition-property
+		transition-duration
+		transition-timing-function
+		transition-delay
+
+	"Transition", la propiedad shorthand, recibe como parámetros:
+
+	transition: property duration timing-function delay|initial|inherit;
+
+		Ej:
+			.Elemento {
+			    border: 1px solid black;
+			    background-color: lightblue;
+			    width: 270px;
+			    height: 200px;
+			    overflow: auto;
+			    transition = "all 2s";
+			}
+
+			.Elemento:hover {
+			    background-color: coral;
+			    width: 570px;
+			    height: 500px;
+			    padding: 100px;
+			    border-radius: 50px;
+			}
+			
+
+		En este caso la propiedad "transition", recibe 2 parámetros, el primero(transition-property), indica que debe cambiar todas las propiedades(all), y el segundo (transition-duration) indica que la animación dura 2 segundos en completarse.
+		
+______________________________________________________
+
+	transition-property --> especifica el nombre de la propiedad CSS a la cual se le va a hacer la transición.
+
+		Ej:
+			div {
+				width: 100px;
+				height: 100px;
+				background: red;
+    			transition-property: width;
+			}
+
+			div:hover {
+    			width: 300px;
+			}
+
+		En este caso, se ve la animación de una caja, la cual cambia de tamaño (se agranda desde 100px hasta que llega a los 300px) al tener el mouse encima.
+
+		Se pueden indicar varias propiedades separadas por coma:
+			transition-property: width, height;	
+
+	transition-duration --> especifica en segundos o milisegundos cuánto tarda la transición.
+
+		transition-duration: 5s;
+
+	transition-timing-function --> especifica la curva de velocidad que tiene el efecto de transición.
+
+		transition-timing-function: ease;
+
+		Hay más valores, como linear, etc.
+
+	transition-delay --> indica cuanto se demora en empezar la animación o transición.
+
+		transition-delay: 2s;
+
+______________________________________________________
+
+	ANIMACIONES AVANZADAS:			 
+
+Para controlar aun más cada estado de la animación (fotograma inicial y final), se usa la propiedad: "animation", la cual es una propiedad shorthand de:
+
+	animation-name, animation-duration, animation-timing-function, animation-delay, animation-iteration-count y animation-direction
+
+Por defecto tiene de valores:
+
+	animation-name: none
+	animation-duration: 0s
+	animation-timing-function: ease
+	animation-delay: 0s
+	animation-iteration-count: 1
+	animation-direction: normal
+	animation-fill-mode: none	
+
+Para más info de esta propiedad ir a:
+	
+	https://developer.mozilla.org/es/docs/Web/CSS/Usando_animaciones_CSS
+
+Ejemplo:
+
+	div{
+		width: 100px;
+	    height: 100px;
+	    background: red;
+	    position: relative;
+		animation: 10s NombreAnimacion infinite;
+	}
+
+Los parametros que recibe animation en este caso son:
+
+	10s --> Duración en segundos
+
+	NombreAnimacion -->	el nombre de la animación, la cual definimos en un @keyframes (puntos de trayectoria o fotogramas).
+
+	infinite --> indica el número de veses que se repite la animación.
+
+En los @keyframes, definimos las propiedades que se van a animar, así como el nombre de la animación, es como si esta animacion fuera una función:
+
+	@keyframes NombreAnimacion {
+	    0%   {top: 0px;}
+	    25%  {top: 200px;}
+	    75%  {top: 50px}
+	    100% {top: 100px;}
+	}
+
+En el @keyframe es obligatorio definir el fotograma inicial ("0%" ó "from") y el fotograma final ("100%" ó "to"). 
+
+En el ejemplo de arriba teniamos 4 fotogramas, pero tambien se pueden tener más o menos:
+
+	@keyframes NombreAnimacion{
+		from {
+			margin-left: 100%;
+	    	width: 300%
+	  	}
+
+		to {
+	    	margin-left: 0%;
+	    	width: 100%;
+	  	}
+	}
+
+Otro ejemplo:
+		
+	@keyframes slidein {
+		from {
+	    	margin-left:100%;
+	    	width:300%
+	  	}
+	  
+	  	75% {
+	    	font-size:300%;
+	    	margin-left:25%;
+	    	width:150%;
+	  	}
+	  
+	  	to {
+	    	margin-left:0%;
+	    	width:100%;
+	  	}
+	}	
+	

@@ -1,0 +1,532 @@
+
+	GIT
+	Iniciar Repositorio del Proyecto con GIT
+_______________________________________________________
+
+		Ver todos los comandos con:
+
+			git --help
+
+		Ver un comando en especifico:
+
+			git --help add
+_______________________________________________________	
+
+1) Crear la carpeta del proyecto, y en consola estando dentro de la carpeta iniciar el repositorio en git con:
+
+	git init
+_______________________________________________________		
+
+		Indica los nuevos cambios que tiene el repositorio:
+
+			git status
+
+		Añadir un archivo al historial de cambios(prepararlo para agregarlo al repo):
+
+			git add <NombreArchivo>
+
+		Añadir todos los archivos al historial:
+
+			git add -A
+
+		Registrando y Guardando los Cambios en el Repo:
+
+			git commit -m "Descripción de lo que se hizo"
+
+		Antes de subir cualquier commit, y si se trabaja con más personas, descargamos los nuevos cambios del repo con:
+
+			git pull	
+
+		Subir el commit a Github:
+
+			git push
+_______________________________________________________
+
+	GULP.JS
+	Automatizando Tareas del Proyecto
+_______________________________________________________
+
+NOTA: Instalar Node.	
+
+2) Instalamos Gulp.js de forma global con:
+
+	 npm install -g gulp
+
+3) Dentro de la carpeta del proyecto, creamos un archivo llamado:
+
+	gulpfile.js 
+_______________________________________________________
+
+4)En una consola, ubicarnos en la carpeta del proyecto, y crear el archivo "package.json" con el siguiente comando:
+
+	npm init
+
+El comando "npm init", hará algunas preguntas iniciales
+sobre nuestro proyecto:
+
+	name: nombreproyecto
+	version: 1.0
+	description: A real time chat server using animated gif-like videos
+	entry point: server.js
+	test comand:
+	git repository:
+	keywords:
+	autor: Ricardo Landínez <landinezrichard@gmail.com>
+	license: BSD
+
+Nota: en licencia tambien pódemos usar MIT.
+
+IMPORTANTE: para que npm init no falle al momento del nombre del proyecto, no usar letras mayusculas.
+
+Para instalar las dependencias de un proyecto que hayamos descargado y que tenga el archivo "package.json":
+
+	npm install
+_______________________________________________________
+
+5) Creamos un Archivo ".gitignore", para ignorar archivos y carpetas que no se deben subir a github (Como la carpeta node_modules, ya que allí van las dependencias del proyecto y no se deben subir a github, ya que estas dependencias son binarios y su compilación depende del sistema operativo):
+
+	node_modules
+	public
+	*.log
+_______________________________________________________
+
+6) Instalamos "gulp" como dependencia de desarrollo:
+
+	npm install --save-dev gulp
+_______________________________________________________
+
+7) Instalamos los pluguins de "gulp" y otros para nuestro proyecto:
+
+	npm i -D gulp-uglify gulp-stylus nib gulp-webserver gulp-cssnano gulp-jade gulp-debug browserify babelify jadeify vinyl-buffer vinyl-source-stream gulp-image-optimization babel-preset-es2015 gulp-util gulp-group-css-media-queries gulp-smoosher gulp-rename
+_______________________________________________________
+
+8) Configuramos las tareas automaticas en el archivo "gulpfile.js":
+
+	/*
+	* Dependencias
+	*/
+	var gulp    = require('gulp'),
+	  webserver = require('gulp-webserver'),  
+	  uglify    = require('gulp-uglify'),
+	  stylus    = require('gulp-stylus'),
+	  nib       = require('nib'),
+	  nano      = require('gulp-cssnano'),
+	  jade      = require('gulp-jade'),
+	  browserify= require('browserify'),
+	  jadeify   = require('jadeify'),
+	  babelify  = require('babelify'),
+	  buffer    = require('vinyl-buffer'),
+	  source    = require('vinyl-source-stream'),  
+	  imageop   = require('gulp-image-optimization'),
+	  gutil     = require('gulp-util'),
+	  groupQuerys= require('gulp-group-css-media-queries'),
+	  smoosher  = require('gulp-smoosher'),
+	  rename    = require('gulp-rename');
+
+	var os = require('os');  
+
+	/*
+	* Rutas de los archivos 
+	*/ 
+
+	var paths = {
+	  css:{
+	    main  : 'dev/stylus/estilos.styl',
+	    watch : 'dev/**/*.styl',
+	    dest  : 'public/css/'
+	  },
+	  html:{
+	    main  : 'dev/index.jade',
+	    watch : 'dev/**/*.jade',
+	    dest  : 'public',
+	    inline: 'public/index.html'
+	  },
+	  js:{
+	    main  : 'dev/app.js',
+	    watch : 'dev/**/*.js',
+	    dest  : 'public/js/'
+	  },
+	  images:{
+	    watch : ['dev/assets/**/*.png','dev/assets/**/*.jpg','dev/assets/**/*.gif','dev/assets/**/*.jpeg'],
+	    dest  : 'public/' //se guardan en public/img/
+	  },
+	  fonts:{
+	    watch : ['dev/assets/**/*.eot','dev/assets/**/*.svg','dev/assets/**/*.ttf','dev/assets/**/*.woff'],
+	    dest  : 'public/'//se guardan en public/fonts/
+	  }
+	};
+
+	/*
+	* Run server
+	*/
+	gulp.task('server', function(){ 
+	  var ip = getIpAddress();
+	  console.log(gutil.colors.bgGreen("Server running on:"+ip+":8081")); 
+	  return gulp.src('./public')
+	  .pipe(webserver({
+	    host:'0.0.0.0',
+	    port: '8081',
+	    livereload: true
+	  }))
+	  
+	});
+
+	/*
+	* Tarea build-css
+	*/
+
+	gulp.task('build-css', function(){
+		return gulp.src(paths.css.main)
+	  .pipe(stylus({
+	    use: nib(),
+	    'include css': true
+	  }))
+	  .on('error', gutil.log)
+	  .pipe(groupQuerys())
+	  .pipe(nano())
+	  .on('error', gutil.log)
+	  .pipe(gulp.dest(paths.css.dest))
+	});
+
+	/*
+	* Tarea build-html
+	*/
+	gulp.task('build-html', function() {
+	  return gulp.src(paths.html.main)
+	  .pipe(jade({
+	      pretty: true
+	  }))
+	  .on('error', gutil.log)
+	  .pipe(gulp.dest(paths.html.dest))
+	});
+
+	/*
+	* Tarea build-js
+	*/
+	gulp.task('build-js', function() {
+	  return browserify({
+	    entries: paths.js.main, //punto de entrada js
+	    debug: true, 
+	    transform:[["babelify",{ "presets": ['es2015'] }], jadeify] //transformaciones
+	  })
+	  .bundle()
+	  .on('error', gutil.log)
+	  .pipe(source('app.js'))//archivo destino
+	  .pipe(buffer())
+	  .pipe(uglify())//minificamos js
+	  .on('error', gutil.log)
+	  .pipe(gulp.dest(paths.js.dest))//en donde va a estar el archivo destino
+	});
+
+	/*
+	* Tarea Minificar y Optimizar imagenes
+	*/
+
+	gulp.task('image-min', function(){
+	  gulp.src(paths.images.watch)
+	  .pipe(imageop({
+	    optimizationLevel: 5,
+	    progressive: true,
+	    interlaced: true
+	  }))
+	  .pipe(gulp.dest(paths.images.dest))
+	});
+
+	/*
+	* Tarea Copiar fuentes
+	*/
+
+	gulp.task('copy-fonts', function(){
+	  return gulp.src(paths.fonts.watch)
+	    .pipe(gulp.dest(paths.fonts.dest));
+	});
+
+	/*
+	* Tarea incrustar "embebed" el CSS y JS
+	*/
+
+	gulp.task('inline', ['build'], function(){
+	  return gulp.src(paths.html.inline)
+	  .pipe(smoosher())
+	  .pipe(rename({
+	    suffix : '-min',
+	    extname: '.html' 
+	  }))
+	  .pipe(gulp.dest(paths.html.dest));
+	});
+
+
+	/*
+	* Tarea watch
+	*/
+
+	gulp.task('watch', function(){
+	  gulp.watch(paths.css.watch, ['build-css']);
+	  gulp.watch(paths.html.watch, ['build-html']);
+	  gulp.watch(paths.js.watch, ['build-js']);
+	  gulp.watch(paths.images.watch, ['image-min']);
+	  gulp.watch(paths.html.inline, ['inline']);
+	});
+
+	/*
+	* build all
+	*/
+
+	gulp.task('build', ['build-css','build-html','build-js']);
+
+	/*
+	* Preparar assets (imagenes, fonts)
+	*/
+	gulp.task('assets',['image-min','copy-fonts']);
+
+	/*
+	* Tarea por defecto
+	*/
+
+	gulp.task('default', ['server','watch','build','inline']);
+
+
+	/*
+	* Para saber la ip
+	*/
+
+	// Local ip address that we're trying to calculate
+	var address;
+
+	// Provides a few basic operating-system related utility functions (built-in)
+
+	var ifaces = os.networkInterfaces();
+
+	function getIpAddress(){  
+	  for (var dev in ifaces) {
+
+	    var iface = ifaces[dev].filter(function(details) {
+	      return details.family === 'IPv4' && details.internal === false;
+	    });
+
+	    if(iface.length > 0) address = iface[0].address;
+	  }  
+	  return address;
+	}
+_______________________________________________________
+
+9) Crear una carpeta llamada "dev", y dentro de está, las carpetas:
+
+	- components
+	- lib
+	- stylus
+	- assets
+		- img
+		- fonts
+
+Y crear los archivos:
+
+	- "index.jade"
+	- "app.js"
+_______________________________________________________	
+
+	CREANDO EL PROYECTO
+	html y Css
+_______________________________________________________
+
+10) En el archivo "index.jade", creamos la plantilla basica html:
+
+	doctype html
+	html(lang="es")
+		head
+			meta(charset="utf-8")
+			meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+			title
+				|	Pagina Web
+			link(rel="stylesheet", type="text/css", href="css/estilos.css")
+		body
+			h1 Hola Jade Templates
+			div(class="nombreClase")
+				h2 Este esta dentro del div.
+_______________________________________________________
+
+11) Creamos dentro de la carpeta "stylus" un archivo llamado "estilos.styl"
+
+Dentro de la misma carpeta descargamos el archivo "normalize.styl"		
+
+En el archivo "estilos.styl", incluimos las siguientes líneas:
+
+	@import "nib"
+	@import "normalize.styl"
+	@import url('http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700')
+
+	html
+		font-size 16px
+		font-family 'Open Sans', sans-serif /* Fuente de google fonts */
+	
+	body
+		background red
+_______________________________________________________
+
+12) Para el desarrollo de la pág. usaremos la metodologia de componentes (ver suitcss), la cual consiste en dividir las partes de la pág. (header,nav, footer, section, article, etc.) en componentes.
+
+(ver paso 6 del archivo "Creación de una PAG_WEB desde 0")
+_______________________________________________________
+
+13) En la carpeta "components", creamos una carpeta por cada componente, y la nombramos con el mismo nombre del componente. Ejemplo: "MainMenu"
+_______________________________________________________
+
+14) Dentro de la carpeta del componente creamos un archivo "template.jade", el cual contendra el código html del componente:
+
+	nav(class="MainMenu")
+		button(type="button", class="MainMenu-button")
+		ul(class="MainMenu-list")
+			li(class="MainMenu-item")
+				a(class="MainMenu-link") Opcion1
+_______________________________________________________
+
+15) Para importar o incluir este template en el template principal:"index.jade", usamos:
+
+	doctype html
+	html(lang="es")
+		head
+			meta(charset="utf-8")
+			title Pagina Web
+			link(rel="stylesheet", href="css/estilos.css")
+		body
+			h1 Hola Jade Templates
+			div(class="nombreClase")
+				h2 Este esta dentro del div.
+				include ./components/MainMenu/template.jade
+_______________________________________________________
+
+16)	Dentro de la carpeta del componente, crearemos un archivo "estilos.styl" en donde pondremos los estilos propios del componente, ejemplo:
+
+	.MainMenu
+		&-button
+			color gris_oscuro
+		&-title
+			font-size 1.1em
+_______________________________________________________
+
+17)	Este archivo "estilos.styl" del componente, lo importamos dentro del archivo "estilos.styl" principal de toda la pág. 
+
+	Ejemplo: 
+		@import "../components/MainMenu/estilos.styl"
+_______________________________________________________
+
+18) Repetir del paso (13) al (17) por cada componente.
+_______________________________________________________
+
+La carpeta del proyecto tendrá la siguiente estructura:
+
+	- dev
+		- components
+			- CarpetaNombreComponente
+				- "estilos.styl"
+				- "template.jade"
+
+		- stylus
+			- "estilos.styl"
+			- "normalize.styl"
+
+		- assets
+			- img
+			- fonts
+
+		- "index.jade"
+
+		- "app.js"
+
+	- ".gitignore"
+	- "package.json"
+	- "gulpfile.js"
+_______________________________________________________
+
+NOTA1: al ejecutar nuestro "gulpfile.js" (en consola con el cómando: gulp), se creara una carpeta "public", en donde estaran nuestros archivos "js", "html", "css" ya listos para producción.
+
+La estructura de la carpeta "public" es la siguiente:
+
+	- public
+		- css
+			- "estilos.css"
+
+		- fonts			
+		- img
+		- js
+			- "app.js"
+		- "index.html"
+
+
+Nota2: En los archivos "*.jade" y "*.styl" que se creen, debemos referenciar las rutas hacia:
+	
+	- imagenes
+	- iconos como fuentes
+	- el enlace de los scripts
+	- el enlace de css
+
+como si estubieramos hubicados dentro de la carpeta "public", así se compile desde "dev".
+
+_______________________________________________________	
+
+	JAVASCRIPT
+_______________________________________________________
+
+19) Creamos el código JavaScript para nuestra aplicación. Si lo hacemos en varios archivos mucho mejor, he intentar que la funcionalidad de cada componente este aparte.
+
+Si usamos librerias creadas por terceros y no se encuentran en npm, podemos "componentizarlos" utilizando módulos - AMD - CommonJS - UMD, y luego incluirlos en la carpeta "lib":
+
+	- dev
+		- lib
+			- "dragend.js"
+			- "otraLibreria.js"
+
+Otras librerias que se encuentren en npm, las podemos instalar como dependencia. Ejemplo jQuery con npm:
+
+	npm install jquery --save
+
+Nota:Usamos --save para que se guarde en el archivo "package.json" como dependencia.	
+_______________________________________________________
+
+Por cada componente hacemos un archivo "index.js", en el cual, si por ejemplo necesitamos de jQuery, lo requerimos tal y como se requiere o enlaza un archivo en "node" ó "iojs":
+
+	'use strict'
+
+	const $ = require('jquery')
+
+	/*
+		... 
+		Todo nuestro codigo del módulo
+		...
+	*/
+
+Nota: tambien podemos requerir muchos otros modulos de npm usados del lado del frontend.	
+
+Este archivo "index.js", estara dentro de la carpeta de su respectivo componente:
+
+	- dev
+		- components
+			- CarpetaNombreComponente
+				- "estilos.styl"
+				- "template.jade"	
+				- "index.js"
+
+Y en nuestro archivo principal de la carpeta "dev", "app.js", requerimos el módulo, o componente.
+
+Ejemplo:
+
+	'use strict'
+
+	const mainMenu = require('./components/MainMenu')
+
+Nota: se buscara el archivo "index.js" en la ruta "./components/MainMenu", si el archivo se llama diferente, indicarlo:
+
+	const mainMenu = require('./components/MainMenu/nombreArchivo.js')
+
+Así el código de cada módulo o componente es muy corto, sencillo de entender y mantenible.
+
+Si requerimos un modulo que se autoejecuta:
+
+	require('./components/MainMenu')
+
+_______________________________________________________	
+
+
+Construyendo Modulos Frontend con Browserify:
+
+https://getmango.com/blog/construyendo-modulos-de-front-end-con-browserify/			 					

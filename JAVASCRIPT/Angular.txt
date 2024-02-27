@@ -1,0 +1,5248 @@
+
+	Angular:
+_______________________________________________________
+
+INDICE:
+
+[1]. ¿Que es Angular? / Conceptos
+[2]. Instalación CLI
+	[2.1]. Crear Proyecto
+	[2.2]. Correr Proyecto
+	[2.3]. Estructura carpetas
+	[2.4]. Extensiones recomendadas
+[3]. Componentes
+	[3.1]. Crear Componentes
+		[3.1.1]. Propiedades Componentes
+		[3.1.2]. Vista separada del Componente
+		[3.1.3]. Crear Componentes por Comando
+	[3.2]. Comunicación de datos (Binding)
+		[3.2.1]. String interpolation
+		[3.2.2]. Property Binding
+		[3.2.3]. Event Binding
+		[3.2.4]. Two way binding ("ngModel")
+		[3.2.5]. Class and style binding
+	[3.3]. Hooks
+		[3.3.1]. "OnInit"
+		[3.3.2]. "DoCheck"
+		[3.3.3]. "OnDestroy"
+[4]. Directivas
+	[4.1]. Directiva "*ngIf"
+	[4.2]. Directiva "*ngFor"
+	[4.3]. Directiva "ngSwitch"
+	[4.4]. Directiva "ngStyle"
+	[4.5]. Directiva "ngClass"
+	[4.6]. Directiva "ngModel"
+	[4.7]. Crear Directiva
+		[4.7.1]. Directiva con eventos
+[5]. Input y Output
+	[5.1]. Input
+	[5.2]. Output
+[6]. Modelos
+[7]. De Maquetación a Componentes
+	[7.1]. Carga de Estilos
+	[7.2]. Crear Componente Cabecera
+[8]. Servicios
+	[8.1]. Crear Servicio con AngularCLI
+	[8.2]. Servicio con protocolo HTTP
+		[8.2.1]. Solicitud GET
+		[8.2.2]. Solicitud POST / Data Transfer Object (DTO)
+		[8.2.3]. Solicitud PUT / PATCH
+		[8.2.4]. Solicitud DELETE
+    [8.2.5]. Parámetros por URL
+[9]. Pipes / Filtros
+	[9.1]. Crear Pipes Personalizadas
+		[9.1.1]. Crear Pipes con AngularCLI
+	[9.2]. Formatear Fechas con Moment
+[10]. Reactividad Básica
+	[10.1]. Promise vs Observable
+		[10.1.1]. ¿Qué es la asincronicidad en JavaScript?
+		[10.1.2]. ¿Qué son los observables?
+		[10.1.3]. ¿Qué son las promesas?
+		[10.1.4]. Observable a Promesa
+		[10.1.5]. Promesa a Observable
+	[10.2]. Reintentar Petición
+[11]. Buenas Practicas
+	[11.1]. CORS y Proxy
+	[11.2]. Manejo de ambientes
+		[11.2.1]. Crear ambiente con Angular CLI
+	[11.3]. Manejo de errores
+		[11.3.1]. Manejo de errores desde el componente
+			[11.3.1.1]. Usando libreria de modal Sweetalert2
+			[11.3.1.2]. Usando libreria de alertas Toastr
+		[11.3.2]. Manejo de errores desde el servicio
+	[11.4]. Transformar Peticiones
+	[11.5]. Evitar Callback Hell
+		[11.5.1]. Callback Hell con dependencia
+		[11.5.2]. Observables no dependientes
+[12]. Auth
+	[12.1]. Como funciona la autenticación en la API
+	[12.2]. Servicios para autenticación
+
+[7]. Router de Angular (Routing / Rutas)
+	[7.1]. Página de error 404
+	[7.2]. Menú de Navegación
+	[7.3]. Parámetros por la URL
+		[7.3.1]. Varios Parámetros por la URL
+		[7.3.2]. Parámetros por la URL opcionales
+	[7.4]. Redirecciones
+		[7.4.1]. Redireccion con parametros
+
+[]. Modulos
+	[.1]. Crear Modulos
+	[.2]. Lazyloading
+	[.3]. Módulo compartido(shared)
+	[.4]. Path(Alias)
+	[.5]. Router Outlet
+	
+
+[10]. Formularios
+	[10.1]. Formularios basados en plantilla
+		[10.1.1]. Validar Formularios basados en plantilla
+	[10.2]. Formularios Reactivos
+		[10.2.1]. Validar Formularios Reactivos
+		[10.2.2]. FormBuilder
+
+
+
+[11]. Consumir API Blog
+	[11.1]. Obtener articulos API
+		[11.1.1]. Mostrar Listado de Articulos
+	[11.2]. Mostrar Últimos Articulos
+	[11.3]. Página de detalle de articulo
+  [11.4]. Buscador
+    [11.4.1]. Formulario de Busqueda
+	[11.5]. Crear Articulo
+		[11.5.1]. Subir imágen Articulo
+_______________________________________________________
+
+	[1]. ¿Que es Angular? / Conceptos:
+_______________________________________________________
+
+Angular es un framework desarrollado por Google, que nos permite desarrollar SPA (Single Page Aplication), las cuales a través de JavaScript, hace que la navegación por las diferentes páginas, sea totalmente instantanea(no se recarga), la interacción con el servidor (backend) es asincrona.
+
+Angular está pensado para dividir un proyecto en componentes y ser reutilizados en proyectos medianos y grandes.
+
+Framework: Es un conjunto estandarizado de conceptos, practicas y criterios que nos ayudan a resolver un problema con patrones de diseño especificos. Angular, Svelte y Vue son Frameworks.
+
+Libreria: Son un conjunto de funciones que podemos llamar dentro de nuestro codigo para realizar tareas comunes y nos ahorran el tener que escribir multiples funciones para resolver los problemas. Son flexibles y utilizan la sintasis que ya conoces. React es una libreria.
+
+Angular extiende los atributos HTML con "Directivas"(Directives) y enlaza(binds) datos a HTML con "Expresiones"(Expressions).
+
+Una aplicación de Angular, está formada por: componentes, plantillas, decoradores, metadatos, servicios, providers, directivas y modulos.
+
+- Componente: va a controlar un trozo de pantalla o de la vista. Todo lo que se puede ver en pantalla es controlado y gestionado por este tipo de elementos. Hace de mediador entre la vista, a través de la plantilla, y la lógica de la app, donde se incluirá el modelo de datos, es decir, es una especie de controlador.
+
+- Plantillas: definen la vista de los componentes. Son archivos "Html" y tienen sintaxis especial de Angular. Trabajan con el databinding y las directivas.
+
+Dentro de las clases de Angular, tenemos "Decoradores y Metadatos".
+
+- "Decoradores(patron de diseño), configuran dinamicamente atributos/metadatos de las clases y componentes.
+
+- Los "Metadatos", describen a las clases y a las relaciones, por ejemplo si tenemos un componente y una plantilla, el metadato se va a encargar de decirle a Angular que ese componente y esa plantilla van juntos.
+
+- Servicios: son clases que facilitan la reutilización de codigo y mediante la inyección de dependencias los podemos usar en otros componentes principales.
+
+- Providers: son servicios que nos proveen de datos o funcionalidades mediante sus métodos. Existen providers/servicios propios de Angular o creados por nosotros.
+
+- Directivas: son funcionalidades aplicables al DOM y a los elementos HTML en las plantillas de un componente.
+_______________________________________________________
+
+	[2]. Instalación CLI:
+_______________________________________________________
+
+Un CLI o Command Line Interface es una manera comoda, facil y rapida de inicializar un nuevo proyecto con las mejores practicas utilizando un solo comando para configuar y comenzar a crear un aplicación increible en unos segundos.
+
+Contienen toda la configuración necesaria para que puedas utilizar las ultimas funciones de JavaScript y tengas una gran experiencia de desarrollo gracias a que incluyen herramientas muy variadas como TypeScript, ESLint, PostCSS, soporte para una PWA, o lo necesario para implementar Unit Testing o End-to-end Testing.
+
+Tambien suelen incluir un par de componentes y una landing page basica para que la tomes como referencia, los unicos requerimientos para utilizarlos son tener node y npm instalado en tu computadora.
+
+Para instalar Angular CLI, que es el que nos permite generar proyectos de Angular,  primero instalamos Node y "npm":
+
+1) Para instalar Node:
+
+	https://nodejs.org/es/
+
+2) Luego en consola (windows cmd o powershell), escribimos el comando:
+
+	node -v
+
+Para ver la versión de "npm" instalada usamos:
+
+	npm -v
+
+3) Instalamos Angular CLI de forma global con el comando:
+
+	npm install -g @angular/cli
+
+Nota: nos pregunta si queremos enviar datos de uso y errores a Google, decimos que no ("n").
+_______________________________________________________
+
+	[2.1]. Crear Proyecto:
+_______________________________________________________
+
+Nota: en Windows nos puede dar problema al ajecutar los siguientes comandos del CLI, por lo que en una terminal ejecutamos lo siguiente:
+
+	Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+
+1) En consola, nos ubicamos en la carpeta donde queremos generar el proyecto de Angular y escribimos el comando:
+
+	ng new PROJECT-NAME
+
+Nos va a prenguntar si queremos crear enrutador de Angular: 
+
+- Would you like to add Angular routing?
+Respuesta: Yes
+
+- Wich stylesheet format would you like to use?
+Respuesta: Aca se escoge el tipo de preprocesador CSS que vamos a usar, para dejar los estilos normales("archivos.css"), solo damos "enter".
+
+2) Tambien podemos crear el proyecto con unos flags, para que lo genere de una vez con el router de Angular y los estilos, no hace las preguintas anteriores:
+
+	ng new PROJECT-NAME --routing --style=css
+
+_______________________________________________________
+
+	[2.2]. Correr Proyecto:
+_______________________________________________________
+
+1) Nos ubicamos dentro del proyecto generado:
+
+	cd PROJECT-NAME
+
+2) Corremos el proyecto de Angular generado con:
+
+	ng serve
+
+Este comando correra un servidor, y nos mostrara el proyecto compilado de Angular. Tambien hace un "live reload", es decir que cada vez que se hace un cambio en el código, se recompila el proyecto y recarga el navegador automaticamente.
+
+Nota 1: debemos tener ejecutado este comando en consola (corriendo en segundo plano) para trabajar en nuestro proyecto.
+
+Nota 2: el comando de forma abreviada es:
+
+	ng s
+
+3) En el navegador vamos a:
+
+	http://localhost:4200/
+
+Lanzar servidor de desarrollo y que abra el navegador automáticamente:
+
+	ng serve -o
+
+Lanzar el servidor en un puerto especifico: 
+
+	ng serve -o --port=3500
+
+Nota: para cambiar el puerto, y más info de Angular CLI:
+
+	https://www.npmjs.com/package/@angular/cli
+
+_______________________________________________________
+
+	[2.3]. Estructura carpetas:
+_______________________________________________________
+
+La estructura de carpetas en Angular parece mas compleja a primera vista sin embargo contiene mas herramientas y funcionalidades al momento de crear el proyecto con el CLI.
+
+Contamos con una carpeta "e2e" donde se incluyen todos los archivos y configuraciones necesarias para realizar End To End Testing, aparte todos los componentes se crean con un archivo .spect.ts para realizar Unit Testing.
+
+En la raiz del proyecto podemos encontrar varios archivos "json" para la configuración de TypeScript y Angular. Entre ellos podemos encontrar "angular.json" donde viene especificado el path del template html, el favicon, los assets del proyecto asi como el linter y otras configuraciones.
+
+Otra carpeta que genera el CLI es "enviroments" donde viene especificada la configuración del ambiente de desarrollo y de producción.
+
+El ultimo detalle es que hay archivos para implementar servicios como peticiones Http.
+
+En la estructura de carpetas tenemos:
+
+	- node_modules: Todo proyecto de Javascript posee este directorio donde se almacenan las librerías y dependencias que se descarguen con NPM.
+
+	- src: Directorio principal del proyecto donde encontramos:
+
+		- app: Directorio donde guardaremos todo el código fuente de Angular.
+
+		- assets: Directorio para imágenes y otros recursos que la app necesita.
+
+		- environments: Directorio de ambientes, por defecto viene con desarrollo y producción.
+
+		- favicon.ico: Ícono por defecto que tendrá la pestaña del navegador.
+
+		- index.html: Archivo HTML principal desde donde se construye toda la aplicación.
+
+		- main.ts: Archivo principal para la configuración de Angular.
+
+		- polyfills.ts: Librería para que Angular funcione en navegadores viejos y que la aplicación sea retro compatible.
+
+		- styles.scss: Archivo principal de estilos.
+
+		- test.ts: Archivo principal para lanzar el ambiente de pruebas de Angular.
+
+	- .browserslistrc: Lista de navegadores y sus versiones que permite configurar la 
+	compatibilidad de la aplicación con cada uno.
+
+	- .editorconfig: Permite autoformatear los archivos, espacios, indentación, etc. Hay que tener instalado la extensión en el editor.
+
+	- .gitignore: Indicarle a GIT qué archivos/directorios ignorar.
+
+	- angular.json: Archivo principal con toda la configuración del proyecto Angular.
+
+	- karma.conf.js: Archivo de configuración de Karma. Karma es un task runner para correr pruebas unitarias.
+
+	- package-lock.json: Describe el las dependencias exactas que se generaron en la instalación del proyecto.
+
+	- package.json: Archivo para el manejo de dependencias, scripts y metadatos relevantes para el proyecto.
+
+	- README.md: Archivo markdown para la documentación del proyecto.
+
+	- tsconfig.app.json: Archivo principal para la configuración de TypeScript.
+
+	- tsconfig.json: Extensión con más configuraciones de TypeScript.
+
+	- tsconfig.spec.json: Configuración de TypeScript pero para el ambiente de pruebas.
+
+En la raiz del proyecto, justo al lado de estos archivos podemos crear un nuevo archivo de configuracion llamado ".nvmrc", el cual le indica a nustro equipo de trabajo que versión de node usar para correr nuestro proyecto.
+
+Ejecutamos en un terminal:
+
+	node -v
+
+Copiamos la versión y la ponemos en nuestro archivo ".nvmrc", por ejemplo:
+
+	v18.16.0
+
+_______________________________________________________
+
+	[2.4]. Extensiones recomendadas:
+_______________________________________________________
+
+Podemos instalar las siguentes extensiones en nuestro editor de codigo:
+
+	editorconfig
+
+	Angular Language Service
+
+Nota: para más info de las extensiones:
+
+	https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig
+
+	https://marketplace.visualstudio.com/items?itemName=Angular.ng-template
+_______________________________________________________
+
+	[3]. Componentes:
+_______________________________________________________
+
+Las aplicaciones que vamos a desarrollar, estan orientadas a componentes. Todo lo que se muestra por pantalla es un componente.
+
+Un componente es un trozo de pantalla dentro de mi aplicación. Una aplicación se construye a base de un conjunto de componentes (por ejemplo pueden ser componentes: un menú, lista de usuarios, login, tabla de datos, calendario, formulario de búsqueda etc.)
+
+Dentro de la carpeta de nuestro proyecto, tenemos la carpeta "src", y dentro de está la carpeta "app". Dentro de estás dos carpetas se encuentran los archivos principales.
+
+	AprendiendoAngular/src/app/
+
+Angular CLI nos crea una único componente llamado 'AppComponent' que se distribuye en 4 archivos:
+
+	app.component.ts
+	app.component.html
+	app.component.css
+	app.component.spec.ts
+
+Dentro de la carpeta "app", tenemos el archivo de componente principal, llamado "app.component.ts", donde se declara la clase AppComponent:
+
+	import { Component } from '@angular/core';
+
+	@Component({
+		selector: 'app-root',
+		templateUrl: './app.component.html',
+		styleUrls: ['./app.component.css']
+	})
+	export class AppComponent {
+		title = 'AprendiendoAngular';
+	}
+
+Nota: todos los archivos de "componentes" tienen la extensión "*.ts" de "type Script".
+
+Un componente es una clase de JavaScript. En está primera línea, importamos la clase "Component", del núcleo de Angular ("@angular/core").
+
+	import { Component } from '@angular/core';
+
+"@Component" es un "decorador", el cual añade caracteristicas y propiedades al componente.
+
+	selector: 'app-root' // Acá indicamos la etiqueta del componente, en este caso "app-root".
+
+Si nos dirigimos al archivo: "AprendiendoAngular/src/index.html", veremos en el archivo que estamos usando esa etiqueta en el body:
+
+	<body>
+		<app-root></app-root>
+	</body>
+
+Ahora, volviendo al "decorador",  indicamos la vista con el codigo:
+
+	templateUrl: './app.component.html',
+
+Tambien se indican los estilos especificos para ese componente:
+
+	styleUrls: ['./app.component.css']
+
+Finalmente, exportamos la clase/componente, con el nombre "AppComponent", para poder usarlo en otros componentes.
+
+	export class AppComponent {
+		title = 'AprendiendoAngular';
+	}
+
+Dentro de la exportación, definimos la propiedad "title", a la cual tambien podemos indicar modificadores de visibilidad (public, private, protected). Ejemplo:
+
+	public title = 'AprendiendoAngular';
+
+Si nos dirigimos al archivo de la vista: "AprendiendoAngular/src/app/app.component.html", podemos ver que usamos esa propiedad:
+
+	<span>{{ title }} app is running!</span>
+
+Una vez que está el componente y la vista, se importa en el modulo "AprendiendoAngular/src/app/app.module.ts".
+
+El modulo carga las configuraciones, importa el componente y lo declara, para poder usarlo en cualquier parte, sin hacer importaciones del modulo en otros componentes.
+_______________________________________________________
+
+	[3.1]. Crear Componentes:
+_______________________________________________________
+
+(1) Dentro de la carpeta "app", creamos una carpeta llamada "components", y dentro de está, una carpeta con el nombre del componente, ejemplo "mi-componente".
+
+(2) Dentro de la carpeta "mi-componente", creamos el archivo "mi-componente.component.ts":
+
+	import { Component } from '@angular/core';
+
+	@Component({
+		selector: 'mi-componente',//nombre etiqueta html que se va a generar
+		template: `
+			<h1>Hola mundo, soy Mi COMPONENTE</h1>
+			<p>Este es mi primer componente</p>
+		`
+	})
+	export class MiComponente{
+		constructor(){
+			console.log("Componente 'mi-componente' cargado !!!");
+		}
+	}
+
+(3) Luego, para que el componente funcione, lo cargamos en el modulo "app/app.module.ts":
+
+	import { MiComponente } from './components/mi-componente/mi-componente.component';
+
+Y tambien lo declaramos:
+
+	@NgModule({
+		declarations: [
+			AppComponent, 
+			MiComponente
+	],
+
+(4) Podemos usar el componente creado en la vista: "app.component.html":
+
+	<!-- Pruebas con Componentes -->
+
+	<mi-componente></mi-componente>
+
+Nota 1: si vamos al navegador a "http://localhost:4200/", podremos ver el componente creado.
+
+Nota 2: Podemos reutilizar el componente cuantas veses se quiera, por ejemplo:
+
+	<mi-componente></mi-componente>
+	<mi-componente></mi-componente>
+
+Nota 3: podemos usar un componente dentro de otro componente.
+_______________________________________________________
+
+	[3.1.1]. Propiedades Componentes:
+_______________________________________________________
+
+Podemos definir propiedades(variables) en nuestro componente, las cuales podemos mostrar en la vista.
+
+(1) En el archivo "app/components/mi-componente/mi-componente.component.ts" definimos las propiedades:
+
+	export class MiComponente{
+
+		public titulo: string;
+		public comentario: string;
+		public year: number;
+
+		constructor(){
+			this.titulo = "Hola mundo, soy Mi COMPONENTE";
+			this.comentario = "Este es mi primer componente";
+			this.year = 2021;
+
+			console.log("Componente 'mi-componente' cargado !!!");
+			console.log(this.titulo, this.comentario, this.year);
+		}
+	}
+
+Lo interesante acá, es que las propiedades las podemos definir con tipo de dato, gracias a "typescript"; los tipos de datos los podemos consultar en el siguiente enlace:
+
+	https://www.geeksforgeeks.org/data-types-in-typescript/
+
+	https://www.w3schools.com/typescript/typescript_simple_types.php
+
+
+(2) Para mostrar el valor de las propiedades en la vista, usamos un "binding por interpolación" (string interpolation):
+
+	@Component({
+		selector: 'mi-componente',//nombre etiqueta html que se va a generar
+		template: `
+			<h1>{{titulo}}</h1>
+			<h2>{{year}}</h2>
+			<p>{{comentario}}</p>
+		`
+	})
+
+_______________________________________________________
+
+	[3.1.2]. Vista separada del Componente:
+_______________________________________________________
+
+Para tener el codigo Html aparte del codigo JavaScript, podemos separar estos.
+
+(1) Creamos el archivo "mi-componente.component.html", en la misma carpeta del componente ("app/components/mi-componente/"):
+
+	<h1>{{titulo}}</h1>
+	<h2>{{year}}</h2>
+	<p>{{comentario}}</p>
+
+(2) En el componente "mi-componente.component.ts" definimos la url del template:
+
+	@Component({
+		selector: 'mi-componente',//nombre etiqueta html que se va a generar
+		templateUrl: './mi-componente.component.html'
+	})
+
+_______________________________________________________
+
+	[3.1.3]. Crear Componentes por Comando:
+_______________________________________________________
+
+El CLI de Angular nos permite generar la estructura basica de un componente a través de comandos.
+
+Para ello, en la consola, estando ubicados dentro de la carpeta del proyecto (en este caso AprendiendoAngular), escribimos el comando:
+
+	ng g component components/peliculas
+
+En este caso, indicamos que el componente se genere en la carpeta "components", y que se va a llamar "peliculas".
+
+Los archivos que genera son el de estilos(.css), el de la vista(.html), el de la definicion del componente(.ts) y uno para pruebas(.spec.ts).
+
+El comando ademas de generar los archivos del componente, tambien actualiza el archivo "app.module.ts", importando el nuevo componente para que este listo para usar.
+
+Nota 1: la letra "g" es el alias para el comando "generate". Para ver más comandos podemos ir al siguiente enlace:
+
+	https://angular.io/cli
+
+Nota 2: tambien podemos crear el componente de forma resumida así:
+
+	ng g c components/peliculas
+
+_______________________________________________________
+
+	[3.2]. Comunicación de datos (Binding):
+_______________________________________________________
+
+En Angular podemos comunicar la capa lógica (archivo "*.ts") con la vista (archivo "*.html"). 
+
+Un "Binding" (enlace, vinculo), es lo que crea esta conexión en vivo entre estos archivos (capa lógica y vista).
+
+Esta conexión se usa para:
+
+	- Sincronizar vista con modelo.
+	- Notificar al modelo cuando se produce un evento o una acción del usuario en la vista.
+	- Ambas (las dos anteriores).
+
+Los diferentes tipos de vinculación(binding) pueden ser:
+
+	- "String interpolation".
+	- "Property Binding".
+	- "Event Binding".
+	- "Two way binding".
+_______________________________________________________
+
+	[3.2.1]. String interpolation:
+_______________________________________________________
+
+String interpolation (interpolación de texto) es la manera de enviar datos desde nuestro componente hacia la vista.
+
+Utilizando el doble símbolo de llaves {{ }}, o también conocidos como brackets, puedes imprimir el valor de una variable, realizar operaciones matemáticas o hacer el llamado a una función dentro del código HTML.
+
+Ejemplo: En nuestro archivo de vista:
+
+	<h1>{{titulo}}</h1>
+	<h2>{{ 'Hola Platzi' }}</h2>
+	<h3>1 + 1 = {{ 1 + 1 }}</h3>
+	<h4>{{ myFunction(); }}</h4>
+
+Normalmente usamos "string interpolation" para contenido dentro de etiquetas HTML.
+
+_______________________________________________________
+
+	[3.2.2]. Property Binding:
+_______________________________________________________
+
+Usamos "property binding" para controlar atributos de la etiqueta HTML desde nuestro archivo de lógica del componente "mi-componente.component.ts".
+
+Ejemplo: 
+
+(1) En nuestro archivo de lógica del componente "mi-componente.component.ts", definimos una propiedad booleana para deshabilitar en la vista un boton, y otro con la url de una imagen:
+
+	export class MiComponente{
+
+		public titulo: string;
+		public comentario: string;
+		public year: number;
+		public btnDisabled: boolean;
+		public imgSrc: string;
+
+		constructor(){
+			this.titulo = "Hola mundo, soy Mi COMPONENTE";
+			this.comentario = "Este es mi primer componente";
+			this.year = 2021;
+			this.btnDisabled = true;
+			this.imgSrc = "https://picsum.photos/200"
+
+			console.log("Componente 'mi-componente' cargado !!!");
+			console.log(this.titulo, this.comentario, this.year);
+		}
+	}
+
+(2) En nuestro archivo de vista "mi-componente.component.html", hacemos el property binding:
+
+	<h1>{{titulo}}</h1>
+	<h2>{{year}}</h2>
+	<p>{{comentario}}</p>
+	<button [disabled]="btnDisabled"></button>
+	<img [src]="imgSrc" />
+_______________________________________________________
+
+	[3.2.3]. Event Binding:
+_______________________________________________________
+
+Los eventos de JavaScript, tambien los podemos usar en Angular, por ejemplo en la vista "peliculas.component.html", podemos usar el evento "click":
+
+	<h1>{{titulo}}</h1>
+	<button (click)="cambiarTitulo()">Pulsame</button>
+
+Y en el archivo "peliculas.component.ts":
+
+	export class PeliculasComponent implements OnInit, DoCheck {
+
+		public titulo: string;
+
+		constructor() { 
+			this.titulo = "Componente Peliculas";
+			console.log("Constructor lanzado!!!");
+		}
+
+		...
+
+		cambiarTitulo(){
+			this.titulo = "El titulo ha sido cambiado!!!";
+		}
+
+	}
+
+Nota: para más info de como enlazar un evento de JavaScript:
+
+	https://angular.io/guide/event-binding
+
+Si necesitamos información del evento en nuestro archivo de lógica, podemos pasar el “objeto de evento” ($event) como parametro.
+
+Ejemplo 1: escuchar el scroll dentro de un div:
+
+	// En la vista
+	<div class="box" (scroll)="onScroll($event)"></div>
+
+	// En la capa logica
+	onScroll(event: Event) {
+		const element = event.target as HTMLElement;
+		console.log(element.scrollTop);
+	}
+
+Ejemplo 2: leer las teclas que se estan digitando a medida que estas son digitadas:
+
+	// En la vista
+	<input type="text" [value]="person.name" (keyup)="onKeyUp($event)" />
+	<p>Name {{ person.name }}</p>
+
+	// En la capa logica
+	onKeyUp(event: Event) {
+		const element = event.target as HTMLInputElement;
+		this.person.name = element.value;
+	}
+
+Nota: Las propiedades del objeto "$event" varían según el tipo de evento DOM. Por ejemplo, un evento de mouse incluye información diferente a la de un evento de un input.
+
+Ejemplo 3: capturar teclas como Ctr, Alt, Shift y sus conbinaciones
+
+	<input (keyup.control)='...respond to ctrl/control...' />
+	<input (keyup.alt)='...respond to alt/option...' />
+	<input (keyup.shift)='...respond to shift...' />
+	<input (keyup.meta)='...respond to command...' />
+	<input (keydown.control.shift.z)='...'/>
+	<input (keyup.enter)='...responds to enter...' />
+	<input (keydown.esc)='...responds to escape...' />
+	<input (keyup.shift.f)='...responds to shift+f...' />
+
+_______________________________________________________
+
+	[3.2.4]. Two way binding ("ngModel"):
+_______________________________________________________
+
+Es una fusion entre escuchar un evento (Event Binding) y escuchar una propiedad (Property Binding). De esta forma escucha el evento cuando cambia la propiedad en la vista, y tambien cambia la impresión de la vista cuando cambia su valor en el modelo.
+
+En Angular tenemos algo especial para esto, que es la directiva "ngModel", nos permite hacer un enlace de datos bidireccional(two-way data binding) a un elemento de formulario HTML.
+
+Su sintaxis es la siguiente:
+
+	[(ngModel)]= "someValue" 
+	
+"ngModel" siempre esta pendiente del estado del input, chequea si ese campo es valido o no y ademas sincroniza el valor.
+
+Para utilizar "ngModel", es necesario hacer uso e importar "Angular Forms".
+
+Ejemplo:
+
+1) En el archivo "app.module.ts", importamos la clase o modulo "FormsModule" y la y especificamos en la propiedad "imports":
+
+	import { FormsModule } from '@angular/forms';
+
+	...
+
+	imports: [
+		BrowserModule,
+		routing,
+		FormsModule
+	],
+
+En "imports", los modulos internos de Angular, los desarrollados por nosotros y de otras librerias, se deben cargar allí para que funcionen globalmente en toda la aplicacion.
+
+2) En la capa lógica "mi-componente.component.ts", creamos el objeto que va a guardar el valor del input:
+
+	public user: any;
+
+	constructor() {
+		this.titulo = "Formulario";
+
+		this.user = {
+			nombre: '',
+			apellidos: '',
+			descripcion: '',
+			genero:''
+		};
+
+3) En la vista usamos "ngModel":
+
+	<input type="text" name="nombre" id="nombre" [(ngModel)]="user.nombre" >
+	<p><strong>Nombre:</strong> {{user.nombre}}</p>
+
+Ahora al escribir en el input podemos ver como sin necesidad de vincular un evento, se actualiza la impresión del parrafo. Recordemos que es bidireccional, por lo que si ese valor se obtiene de un servicio, y lo cambian, tambien se actualizaria en el modelo y la vista.
+
+4) "ngModel" tambien nos es util para verificar la validez del campo:
+
+	<input type="text" name="nombre" id="nombre" [(ngModel)]="user.nombre" #nameInput="ngModel" required>
+	<p><strong>Nombre:</strong> {{user.nombre}}</p>
+	<p>Valido: {{nameInput.valid}}</p>
+
+En este caso usamos una "template variable" en el input que es "#nameInput". Tambien ponemos el atributo "required", que es nuestra referencia para que "ngModel" a través de la "template variable" sepa cual es el criterio de validez.
+
+En el parrafo, con "string interpolation" se imprimira "true" o "false", si el campo tiene algún valor o no.
+
+_______________________________________________________
+
+	[3.2.5]. Class and style binding:
+_______________________________________________________
+
+Angular permite agregar o quitar clases y estilos a tus elementos HTML a partir de condicionantes. 
+
+1) Para enlazar clases que Angular agregue o quite dinámicamente si se cumple una condición usamos:
+
+<div [class.active-color]="isActive"></div>
+
+En este caso, en el componente(lógica) se tiene una propiedad llamada "isActive" que agregará la clase "active-color" si esta es verdadera o quitará la clase si es falsa. 
+
+Luego ya puedes darle los estilos que más te gusten al elemento HTML en tu hoja de estilos utilizando la clase "active-color".
+
+Otro ejemplo:
+
+	<p class='simple-text' [class.nameClass]='condition goes here'>
+        Random text
+    </p>
+    <!--por ejemplo-->
+    <p class='simple-text' [class.active]=' 1 == 1 '>
+        Random text
+    </p>
+
+2) Para añadir estilos inline a los elementos HTML, enlazamos la propiedad [style] seguido de la propiedad CSS que quieres modificar dinámicamente:
+
+	<p [style.color]="isActive ? 'blue' : 'red'"></p>
+
+A partir del valor de "isActive", dependiendo si este es verdadero o falso, puedes emplear un operador ternario para cambiar el color del párrafo.
+
+Nota: para más info. de binding de clases y estilos:
+
+	https://angular.io/guide/class-binding
+
+_______________________________________________________
+
+	[3.3]. Hooks:
+_______________________________________________________
+
+Los Hooks o eventos del ciclo de vida de un componente, son eventos que se ejecutan en determinado momento, por ejemplo cuando se inicia un componente, cuando cambia o cuando se elimina.
+
+En el componente que generamos con el CLI de Angular, ya usamos el Hook "OnInit":
+
+	import { Component, OnInit } from '@angular/core';
+
+	@Component({
+		selector: 'app-peliculas',
+		templateUrl: './peliculas.component.html',
+		styleUrls: ['./peliculas.component.css']
+	})
+	export class PeliculasComponent implements OnInit {
+
+		constructor() { }
+
+		ngOnInit(): void {
+		}
+
+	}
+
+En este caso para usar el hook "OnInit", es necesario importarlo e implementarlo.
+
+Nota: para ver todos los posibles Hooks del ciclo de vida de los componentes y cuando se ejecutan:
+
+	https://angular.io/guide/lifecycle-hooks
+
+Los eventos del ciclo de vida de un componente se ejecutan en el siguiente orden:
+
+	(1) constructor --> Solo se ejecuta una vez antes del render del componente. No tiene que utilizarse para procesos asincrónicos.
+
+	(2) ngOnChanges --> se dispara cada vez que se produce un cambio de estado en el componente. Cuando una variable cambia de valor, por ejemplo o ante el cambio de valor de un Input. Se ejecuta N cantidad de veces antes y durante el render del componente. Puede emplearse para procesos asincrónicos.
+
+	(3) ngOnInit --> es ideal para cualquier solicitud de datos asincrónicos a una API para preparar el componente antes de renderizarlo. Únicamente se ejecuta una vez, antes del render del componente. Puede usarse para procesos asincrónicos.
+
+	(4) ngDoCheck --> 
+		- ngAfterContentInit
+
+		- ngAfterContentChecked
+
+		- ngAfterViewInit --> se ejecuta una vez cuando el render del componente haya finalizado. Puede serte útil para realizar acciones programáticas que requieran que todo el HTML del componente ya este preparado. Únicamente se ejecuta una vez después del render del componente.
+		
+		-ngAfterViewChecked
+
+	(5) ngOnDestroy --> se ejecutará cuando el componente es destruido, o sea, cuando ya no existe en la interfaz del navegador. Suele utilizarse para liberar espacios de memoria que el componente requiera.
+_______________________________________________________
+
+	[3.3.1]. "OnInit":
+_______________________________________________________
+
+"OnInit" se ejecuta cuando se carga la directiva del componente (cuando cargamos su etiqueta), es decir que es el primer metodo que se ejecuta despues del constructor del componente.
+
+	export class PeliculasComponent implements OnInit {
+
+		constructor() { 
+			console.log("Constructor lanzado!!!");
+		}
+
+		ngOnInit(): void {
+			console.log("Componente iniciado!!!");
+		}
+
+	}
+_______________________________________________________
+
+	[3.3.2]. "DoCheck":
+_______________________________________________________
+
+"DoCheck" se ejecuta cada vez que se produce algun tipo de cambio en el componente o en la aplicación de Angular. Es un metodo que se ejecuta muy frecuentemente.
+
+	import { Component, OnInit, DoCheck } from '@angular/core';
+
+	...
+
+	export class PeliculasComponent implements OnInit, DoCheck {
+
+		...
+
+		ngDoCheck() {
+			console.log("DoCheck Lanzado");
+		}
+	}
+
+_______________________________________________________
+
+	[3.3.3]. "OnDestroy":
+_______________________________________________________
+
+El Hook "OnDestroy", se llama inmediatamente antes de que Angular destruya la directiva o el componente.
+
+Para ver un ejemplo de este Hook:
+
+(1) Vamos a la vista del componente "mi-componente.component.html", y llamamos al componente peliculas, usando la directiva "*ngIf", que funciona como un "if" de siempre:
+
+	<h1>{{titulo}}</h1>
+	<h2>{{year}}</h2>
+	<p>{{comentario}}</p>
+	<div *ngIf="mostrarPeliculas">
+		<app-peliculas></app-peliculas>	
+	</div>
+	<button (click)="ocultarPelicula()">Ocultar Peliculas</button>
+
+(2) En el componente "mi-componente.component.ts", definimos la propiedad y el metodo para ocultar el componente "peliculas":
+
+	export class MiComponente{
+		...
+		public mostrarPeliculas: boolean;
+
+		constructor(){
+			...
+			this.mostrarPeliculas = true;
+		}
+
+		ocultarPelicula(){
+			this.mostrarPeliculas = false;
+		}
+	}
+
+(3) Mostraremos en consola un mensaje cuando se destruye el componente "peliculas" en el archivo "peliculas.component.ts":
+
+	import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
+
+	...
+
+	export class PeliculasComponent implements OnInit, DoCheck, OnDestroy {
+
+		...
+		ngOnDestroy(){
+			console.log("El Componente se va a eliminar");
+		}
+
+	}
+
+_______________________________________________________
+
+	[4]. Directivas:
+_______________________________________________________
+
+Las directivas son clases que agregan comportamiento adicional a los elementos. Nos permiten administrar formularios, listas, estilos y lo que ven los usuarios.
+
+Las directivas en Angular nos permiten por ejemplo tener logica en las plantillas (estructuras de control), y mostrar determinadas secciones si se cumple o no alguna condicion, tambien nos permiten iterar sobre los elementos y realizar algunas funciones sin usar JavaScript vainilla.
+
+_______________________________________________________
+
+	[4.1]. Directiva "*ngIf":
+_______________________________________________________
+
+La directiva "*ngIf" se usa sobre cualquier elemento HTML y nos permite mostrar su contenido o no, si se cumple una condicion.
+
+1) Creamos un array de objetos en el archivo "peliculas.component.ts":
+
+	public peliculas: Array<any>;
+
+	constructor() {
+		this.titulo = "Componente Peliculas";
+		this.peliculas = [
+			{ "title": "Spiderman No Way Home", "image": "https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/styles/hc_1440x810/public/media/image/2021/11/spider-man-no-way-home-2543495.jpg?itok=m8Oy1sxf" },
+			{ "title": "Avengers End Game", "image": "https://as01.epimg.net/us/imagenes/2019/06/19/tikitakas/1560962193_678328_1560963312_noticia_normal_recorte1.jpg" },
+			{ "title": "Volver al futuro", "image": "https://periodismodelmotor.com/wp-content/uploads/2015/10/localizacionres-regreso-al-futuro.jpg" },
+			{ "title": "Jurassic Park", "image": "https://cloudfront-us-east-1.images.arcpublishing.com/copesa/OWQ4RZPS7ZA4XNHPZD3QNBVNIA.jpg" }
+		];
+	}
+
+2) Usamos la directiva "ngIf" para mostrar un div con un parrafo, que nos indicara si hay pocas o muchas peliculas en el array:
+
+	<h3>Primera Pelicula:</h3>
+	<p>{{peliculas[0].title}}</p>
+
+	<h3>Numero de Peliculas:</h3>
+	<p>{{peliculas.length}}</p>
+
+	<div *ngIf="peliculas.length <= 3">
+		<p>Hay pocas peliculas.</p>
+	</div>
+
+	<div *ngIf="peliculas.length > 3">
+		<p>Hay muchas peliculas.</p>
+	</div>
+
+Con la directiva "*ngIf" podemos plantear un "else" con la siguiente sintaxis:
+
+	<p *ngIf="edad>=18; else menor">Es mayor de edad.</p>
+	<ng-template #menor>
+		<p>Es un menor de edad.</p>
+	</ng-template>
+
+Nota: Para mas información de la directiva "ngIf":
+
+	https://angular.io/api/common/NgIf
+
+_______________________________________________________
+
+	[4.2]. Directiva "*ngFor":
+_______________________________________________________
+
+La directiva "ngFor", nos permite generar muchos elementos HTML repetidos a partir del recorrido de un arreglo de datos.
+
+1) Usando el array de objeto creado en el componente peliculas, mostraremos el listado de todas las peliculas en el archivo "peliculas.component.html":
+
+	<h2 class="u-subtitle">Listado de Peliculas:</h2>
+	<div class="Content-list" id="articles-list" *ngIf="peliculas">
+		<!-- ARTICLE -->
+		<article class="Article clearfix" *ngFor="let pelicula of peliculas; let i = index">
+			<div class="Article-imageWrap">
+				<img src="{{pelicula.image}}" alt="{{pelicula.title}}">
+			</div>				
+			<h2>{{pelicula.title}}</h2>
+			<p>Indice en el array: {{i}}</p>
+		</article>
+	</div>
+
+Por cada elemento en "peliculas", crea un objeto "pelicula", y en este caso crea un elemento "article", en donde accedemos al titulo y la imagen, tambien imprimimos el indice de cada elemento.
+
+Nota: para mas info. de esta directiva:
+
+	https://angular.io/guide/built-in-directives#ngFor
+
+_______________________________________________________
+
+	[4.3]. Directiva "ngSwitch":
+_______________________________________________________
+
+Angular también ofrece la sentencia "ngSwitch" y *ngSwitchCase para determinar el flujo de control de tu aplicación y qué elemento mostrar entre multiples elementos HTML. Además de utilizar un elemento default con *ngSwitchDefault en caso de que ninguna condición se cumpla.
+
+Ejemplo: 
+
+	@Component({
+		selector: 'app-root',
+		templateUrl: './app.component.html',
+		styleUrls: ['./app.component.scss']
+	})
+	export class AppComponent {
+		color: string = 'verde';
+	}
+
+Ejemplo de *ngSwitchCase:
+
+	<div [ngSwitch]="color">
+		<p *ngSwitchCase="'azul'">
+			El color el Azul
+		</p>
+		<p *ngSwitchCase="'verde'">
+			El color el Verde
+		</p>
+		<p *ngSwitchCase="'rojo'">
+			El color el Rojo
+		</p>
+		<p *ngSwitchDefault>
+			No hay ningún color
+		</p>
+	</div>
+
+_______________________________________________________
+
+	[4.4]. Directiva "ngStyle":
+_______________________________________________________
+
+la directiva "ngStyle" se usa para establecer varios estilos en línea simultáneamente, según el estado del componente. Es una directiva de atributo, por lo que se usa con los corchetes[].
+
+1) Para este ejemplo, agregamos una nueva propiedad "year" al array de objetos "peliculas", en el archivo "peliculas.component.ts":
+
+	this.peliculas = [
+		{ "title": "Spiderman No Way Home", "image": "https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/styles/hc_1440x810/public/media/image/2021/11/spider-man-no-way-home-2543495.jpg?itok=m8Oy1sxf", "year": "2021" },
+		{ "title": "Avengers End Game", "image": "https://as01.epimg.net/us/imagenes/2019/06/19/tikitakas/1560962193_678328_1560963312_noticia_normal_recorte1.jpg", "year": "2019" },
+		{ "title": "Volver al futuro", "image": "https://periodismodelmotor.com/wp-content/uploads/2015/10/localizacionres-regreso-al-futuro.jpg", "year": "1985" },
+		{ "title": "Jurassic Park", "image": "https://cloudfront-us-east-1.images.arcpublishing.com/copesa/OWQ4RZPS7ZA4XNHPZD3QNBVNIA.jpg", "year": "1993" }
+	];
+
+2) En el archivo "peliculas.component.html" mostramos la nueva propiedad y usamos la directiva:
+
+	<span [style.background]="pelicula.year > 2016 ? 'green' : 'red'">{{pelicula.year}}</span>
+
+En este caso si la propiedad "pelicula.year" es mayor a "2016", le damos un valor al fondo de color verde, y si no se le da un valor rojo, para esto usamos operador ternario.
+
+Tambien se puede indicar la directiva de la siguiente forma:
+
+	<span [ngStyle]="{'background-color': pelicula.year > 2016 ? 'green' : 'red',
+					 'color': 'white', 
+					 'padding': '5px', 
+					 'display': 'block' 
+					 }">{{pelicula.year}}</span>
+_______________________________________________________
+
+	[4.5]. Directiva "ngClass":
+_______________________________________________________
+
+Como alternativa a la directiva "ngStyle", y para no poner estilos en linea, podemos usar la directiva "ngClass".
+
+1) creamos en el archivo "estilos.css" las clases que se van a usar:
+
+	.year-green, .year-red{
+		color: white;
+		padding: 5px;
+		display: block;
+		width: 121px;
+		text-align: center;
+	}
+
+	.year-green{
+		background-color: green;
+	}
+
+	.year-red{
+		background-color: red;
+	}
+
+2) En el archivo "peliculas.component.html" usamos la directiva "ngClass":
+
+	<span [ngClass]="pelicula.year > 2016 ? 'year-green' : 'year-red'">{{pelicula.year}}</span>
+
+Nota: para mas info. ir a:
+
+	https://angular.io/api/common/NgClass
+
+_______________________________________________________
+
+	[4.6]. Directiva "ngModel":
+_______________________________________________________
+
+La directiva "ngModel", nos permite hacer un enlace de datos bidireccional(two-way data binding) a un elemento de formulario HTML.
+
+Para ver un ejemplo de uso de esta directiva ir a la sección "[3.2.4]. Two way binding".
+
+_______________________________________________________
+
+	[4.7]. Crear Directiva:
+_______________________________________________________
+
+Las directivas se usan para hacer modificaciones en el DOM de forma directa y tambien para modificar atributos.
+
+Normalmente se evitan hacer estas modificaciones directas, y se debe usar el ecosistema que nos ofrece Angulara para hacerlo, sin embargo si se necesita hacer, la forma correcta de hacerlo es creando una directiva.
+
+Para crear una directiva con el CLI de Angular (por consola, ubicados dentro de nuestro proyecto) usamos el comando:
+
+	ng generate directive directives/nombreDirectiva
+	
+O en su forma corta:
+
+	ng g d directives/nombreDirectiva
+
+Esto genera dos archivos en la carpeta "directives", un archivo "nombreDirectiva.ts" con el código de tu directiva y un archivo "nombreDirectiva.spec.ts" para sus respectivas pruebas unitarias.
+
+El CLI también actualizará el archivo "app.module.ts" importando la directiva en las declarations[].
+
+Ejemplo: Creamos una directiva para cambiar el color de texto:
+
+1) Creamos la directiva llamada "changeColor":
+
+	ng g d directives/changeColor
+
+2) En nuestro archivo "directives/change-color.directive.ts":
+
+	import { Directive, ElementRef } from '@angular/core';
+
+	@Directive({
+		selector: '[appChangeColor]'
+	})
+	export class ChangeColorDirective {
+		constructor(
+			private _element: ElementRef
+		) {
+			this._element.nativeElement.style.color = 'blue';
+		}
+	}
+
+Acá importamos un servicio de Angular "ElementRef", para manipular elementos, como es un servicio usamos injección de dependencias (pasar el servicio como parametro en el constructor), y luego accedemos al elemento con JS vainilla, modificando el estilo del color.
+
+
+3) Luego en el archivo de plantilla usamos la directiva creada:
+
+  <div>
+    <p appChangeColor>Texto color azul.</p>
+	</div>
+
+Nota 1: Puede ser algo difícil imaginar un buen uso para una directiva propia. De momento, es importante saber que existen para poder implementarlas cuando llegue ese momento.
+
+Nota 2: Algunas librerias para angular hacen uso de directivas para su funcionalidad.
+
+_______________________________________________________
+
+	[4.7.1]. Directiva con eventos:
+_______________________________________________________
+
+Las directivas tambien pueden escuchar eventos. Haciendo uso del decorador @HostListener() e importado desde @angular/core puedes ejecutar una función cada vez que se produce un clic, hover, scroll o cualquier otro evento.
+
+Ejemplo: modificamos la directiva "directives/change-color.directive.ts":
+
+  import { Directive, ElementRef, HostListener } from '@angular/core';
+
+  @Directive({
+    selector: '[appChangeColor]'
+  })
+  export class ChangeColorDirective {
+
+    @HostListener('mouseenter') onMouseEnter() {
+      this._element.nativeElement.style.color = 'blue';
+    }
+    @HostListener('mouseleave') onMouseLeave() {
+      this._element.nativeElement.style.color = '';
+    }
+
+    constructor(
+      private _element: ElementRef
+    ) { }
+  }
+
+Ahora cuando hagamos "hover" sobre la etiqueta donde usemos la directiva, cambiara el color de texto.
+
+"@HostListener" es un decorator que declara un evento DOM para escuchar y proporciona un método de controlador para ejecutar cuando ocurre ese evento, es decir que este decorador lo podemos usar para escuchar eventos en window o document.
+
+Ejemplo: escuchamos el evento click en window, y cerramos un modal cuando se hace click en el area transparente del modal:
+
+	@HostListener('window:click',['$event'])
+	clickFueraModal(event: MouseEvent){
+		if(event.target == document.getElementById("myModal") ){
+			this.toggleProductDetail();
+		}
+	}
+
+Para ver que tipo de evntos existen:
+
+	https://developer.mozilla.org/en-US/docs/Web/API/UI_Events
+
+_______________________________________________________
+
+	[5]. Input y Output:
+_______________________________________________________
+
+Angular tiene unas propiedades Input y output que nos sirven para la comunicación entre componentes.
+
+_______________________________________________________
+
+	[5.1]. Input:
+_______________________________________________________
+
+Las propiedades Input, sirven para enviar datos de un componente padre a un componente hijo.
+
+Para ver su funcionamiento, cambiaremos el texto del "slider" o sección "hero" segun la página en la que estemos.
+
+1) En el componente padre "app.component.ts", creamos la propiedad con los datos que despues se van a enviar al componente hijo:
+
+	export class AppComponent {
+		title = 'AprendiendoAngular';
+		public homeText = 'Bienvenido al Curso de Angular con Ricardo Landínez';
+	}
+
+2) En la plantilla del componente padre "app.component.html", enviamos la propiedad al componente hijo mediante interpolación(doble llave "{{}}"):
+
+	<app-slider mensaje="{{homeText}}"></app-slider>
+
+3) Otra forma de enviar al componente hijo la propiedad en vez de interpolación es mediante el enlace de propiedades, también llamado "property binding":
+
+	<app-slider [mensaje]="homeText"></app-slider>
+
+4) En el archivo de componente hijo "slider.component.ts", creamos la propiedad que va a recibir datos desde el componente padre (en este caso la propiedad se llama "mensaje"):
+
+	import { Component, OnInit, Input } from '@angular/core';
+	...
+
+	export class SliderComponent implements OnInit {
+
+  		@Input() mensaje!:string;
+		
+		constructor() { }
+
+		ngOnInit(): void {
+		}
+
+	}
+
+El "@Input" es un decorador del nucleo de angular (@angular/core) por eso hay que importarlo.
+
+El signo "!" al final de la propiedad "mensaje" es para no tener que inicializar la propiedad con un string vacio en el constructor.
+
+5) En el archivo "slider.component.html" interpolamos la propiedad:
+
+	<h2>{{mensaje}}</h2>
+
+_______________________________________________________
+
+	[5.2]. Output:
+_______________________________________________________
+
+Las propiedades Output, sirven para enviar datos de un componente hijo a un componente padre.
+
+Funciona creando un evento custom en la lógica del componente hijo, y haciendo el "event binding" en la vista y lógica del componente padre.
+
+1) Creamos un nuevo componente hijo, llamado "pelicula", encargado de la plantilla de un ítem del listado de peliculas:
+
+	ng g component components/pelicula
+
+2) Hacemos la plantilla de una pelicula, en el archivo "pelicula.component.html":
+
+	<!-- ARTICLE -->
+	<article class="Article clearfix" >
+		<div class="Article-imageCard">
+			<div class="Article-imageWrap">
+				<img src="{{pelicula.image}}" alt="{{pelicula.title}}">
+			</div>
+			<div class="Article-imageDesc" [ngClass]="pelicula.year > 2016 ? 'year-green' : 'year-red'">
+				{{pelicula.year}}</div>
+		</div>
+		<h2>{{pelicula.title}}</h2>
+		<p>Indice en el array: {{indice}}</p>
+	</article>
+
+3) Desde el componente padre "peliculas.component.html", llamamos al nuevo componente y le pasamos las propiedades "input":
+
+	<div class="Content-list" id="articles-list" *ngIf="peliculas">
+		<div *ngFor="let pelicula of peliculas; let i = index">
+			<app-pelicula 
+				[pelicula]="pelicula" 
+				[indice]="i"
+			></app-pelicula>
+		</div>
+	</div>
+
+Podemos ver que toco crear otro "div" para poner la directiva "*ngFor", ya que un elemento HTML solo puede tener una directiva "*ng".
+
+4) En el modelo "pelicula.component.ts", creamos las propiedades "input":
+
+	import { Component, Input, OnInit } from '@angular/core';
+	import { Pelicula } from "../../models/pelicula";
+
+	...
+
+	@Input() pelicula!:Pelicula;
+	@Input() indice!:number;
+_______________________________________________________
+
+Ahora haremos que al presionar un boton de una pelicula, se seleccione como favorita y envie su informacion al componente padre, para mostrarse en un "div" del componente padre.
+
+5) Creamos el boton en el componente hijo "pelicula.component.html":
+
+	<button (click)="seleccionarFav($event, pelicula)" >
+        Seleccionar como favorita
+    </button>
+
+Este boton llamara el metodo "seleccionarFav()" pasandole como parametros el evento "$event" y la pelicula a la que se le hizo click.
+
+6) Creamos el metodo "seleccionarFav()" en el archivo "pelicula.component.ts":
+
+	import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
+
+	...
+
+	@Output() MarcarFavorita = new EventEmitter();
+
+	...
+
+	seleccionarFav(evento: Event, pelicula: Pelicula){
+		this.MarcarFavorita.emit({pelicula: pelicula});
+	}
+
+Tambien importamos del núcleo de Angular el decorador "Output" y el "EventEmitter".
+
+"MarcarFavorita" es un evento custom, que se dispara cuando hacemos click en el boton, y emite un objeto "pelicula", con la informacion de la pelicula favorita.
+
+7) En la plantilla del componente padre "peliculas.component.html", usamos el "Output" creado:
+
+	<app-pelicula 
+		[pelicula]="pelicula" 
+		[indice]="i" 
+		(MarcarFavorita)="mostrarFavorita($event)"
+	></app-pelicula>
+
+En este caso "MarcarFavorita" es un evento, por lo que lo ponemos entre parentesis, y cuando se dispare, llamara al metodo "mostrarFavorita()" pasandole el parametro "$event".
+
+El metodo "mostrarFavorita()" se debe crear en la clase del componente padre "peliculas.component.ts".
+
+NOTA IMPORTANTE: el "output" que usemos en la plantilla del padre, "peliculas.component.html" se debe llamar exactamente igual a como se definio en "pelicula.component.ts", o sino no muestra error, pero tampoco funciona como deberia. Ejemplo:
+
+	(MarcarFavorita)="mostrarFavorita($event)"  --> plantilla "peliculas.component.html"
+
+		!= es diferente a (letra "F" mayuscula != minuscula):
+
+	@Output() Marcarfavorita = new EventEmitter(); --> "pelicula.component.ts"
+
+8) En el componente padre "peliculas.component.ts", creamos la propiedad que va a guardar la info. de la pelicula favorita y el metodo "mostrarFavorita()":
+
+	...
+
+	public favorita!: Pelicula;
+
+	...
+
+	mostrarFavorita(event:any ){
+		this.favorita = event.pelicula;
+	}
+
+El metodo "mostrarFavorita()", recibe como parametro un objeto con la propiedad "pelicula", a la cual accedemos y asignamos su valor a la propiedad "favorita".
+
+9) Una vez que la propiedad "favorita" tiene la informacion de la pelicula, la mostramos en la plantilla "peliculas.component.html" (componente padre):
+
+	<div *ngIf="favorita">
+		<h2 class="u-subtitle">Pelicula Favorita:</h2>
+		<div class="Pelicula-favorita">                
+				<img src="{{favorita.image}}" alt="{{favorita.title}}">
+			<div class="Pelicula-favTitle">
+				<h3>
+					{{favorita.title}}
+				</h3>
+			</div>
+		</div>
+	</div>
+
+Usamos aca tambien la directiva "*ngIf", para mostrar ese "div" solo si la propiedad "favorita" existe y tiene contenido.
+
+_______________________________________________________
+
+	[6]. Modelos:
+_______________________________________________________
+
+En Angular los modelos son moldes(clases) que nos permiten crear objetos, los cuales todos tendran las mismas propiedades y metodos.
+
+1) Dentro de la carpeta "app", creamos una carpeta llamada "models".
+
+2) Dentro de la carpeta "models", creamos el archivo "pelicula.model.ts":
+
+	export class Pelicula{
+		public title: string;
+		public image: string;
+		public year: number;
+
+		constructor(title: string, image: string, year: number){
+			this.title = title;
+			this.image = image;
+			this.year = year;
+		}
+	}
+
+La palabra "export" nos permite exportar la clase creada para poder importarla luego.
+
+3) El codigo anterior lo podemos optimizar, definiendo las propiedades y asignandolas directamente en el constructor de la siguiente forma:
+
+	export class Pelicula{
+		
+		constructor(
+			public title: string,
+			public image: string,
+			public year: number
+		){}
+	}
+
+Nota 1: en vez de usar "class" podemos usar "interface", que funciona muy similar a la clase, pero es como un contrato, con reglas, que definiran, donde usemos nuestro modelo, la estructura y tipo de datos que debe cumplir. 
+
+	export interface Pelicula{
+		title: string,
+		image: string,
+		year: number
+	}
+
+Podemos fijarnos que la "interface" no necesita constructor ni modificadores de visibilidad (public, private, protected).
+
+Nota 2: Para más info. de class vs interface:
+
+	https://www.youtube.com/watch?v=j0NwW_dq1Qg
+
+4) Podemos usar el modelo importandolo y usandolo en el archivo "peliculas.component.ts":
+
+	import { Component, OnInit, DoCheck, OnDestroy } from '@angular/core';
+	import { Pelicula } from '../../models/pelicula.model';
+
+	...
+
+	public peliculas: Array<Pelicula>; //tambien lo podemos definir así: public peliculas: Pelicula[];
+
+	...
+
+	this.peliculas = [
+		new Pelicula("Spiderman No Way Home", "https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/styles/hc_1440x810/public/media/image/2021/11/spider-man-no-way-home-2543495.jpg?itok=m8Oy1sxf", 2021),
+		new Pelicula("Avengers End Game", "https://as01.epimg.net/us/imagenes/2019/06/19/tikitakas/1560962193_678328_1560963312_noticia_normal_recorte1.jpg", 2019),
+		new Pelicula("Volver al futuro", "https://periodismodelmotor.com/wp-content/uploads/2015/10/localizacionres-regreso-al-futuro.jpg", 1985),
+		new Pelicula("Jurassic Park", "https://cloudfront-us-east-1.images.arcpublishing.com/copesa/OWQ4RZPS7ZA4XNHPZD3QNBVNIA.jpg", 1993)
+	];
+
+_______________________________________________________
+
+	[7]. De Maquetación a Componentes:
+_______________________________________________________
+
+Con una maquetación previamente hecha en HTML y CSS, se van a crear diversos componentes en nuestra app de Angular.
+
+_______________________________________________________
+
+	[7.1]. Carga de Estilos:
+_______________________________________________________
+
+Dependiendo de nuestra creación inicial del proyecto de Angular (CSS o SCSS), existen diferentes consideraciones y formas de añadir estilos a nuestros componentes.
+
+- En la carpeta de cada componente, podemos añadir los estilos de dicho componente.
+
+Ejemplo: en el archivo de componente "src\app\components\product\product.component.scss"
+
+	.Product{
+		color: red;
+	}
+
+
+- Para darle estilos a un componente hijo (que se encuentra dentro de otro componente) toca directamente en el archivo de estilos del componente hijo, si dan en el componente padre, no afectan al hijo.
+
+Ejemplo:
+
+	// NO Funciona si el HTML de Hijo esta en un componente aparte
+	.padre{
+		color: red;
+
+		.hijo{
+			color: blue;
+		}
+	}
+
+- Existe el archivo "src\styles.scss", para añadir estilos generales e importar otros archivos de estilo.
+
+Ejemplo:
+
+	// Este archivo se encuentra en la carpeta "/src/styles/"
+	@import url(./styles/base.scss);
+
+	* {
+		box-sizing: border-box !important;
+		transition: ease all 0.5s;
+	}
+
+	html {
+		scroll-behavior: smooth;
+		overflow-x: hidden;
+	}
+
+	// Aca SI Funciona el estilo desde un componente padre a componente hijo
+	.padre{
+		color: red;
+
+		//Incluso podemos poener el estilo con la etiqueta de componente
+		app-hijo{
+			.hijo{
+				color: blue;
+			}
+		}
+	}
+
+- Podemos cargar archivos "CSS" directamente de la forma tradicional, en el archivo "./src/index.html":
+
+	<!-- bootstrap css -->
+	<link rel="stylesheet" type="text/css" href="./assets/css/bootstrap.min.css">
+
+- Podemos incluir los estilos modificando el archivo "angular.json" que se encuentra en la raíz de nuestro proyecto:
+
+1) Dentro de nuestra carpeta "/src", buscamos la carpeta "/assets", y dentro de esta creamos las carpetas "css" e "images".
+
+2) Dentro de la carpeta "css", ponemos nuestro archivo "estilos.css".
+
+3) En la carpeta de nuestro proyecto en nuestro archivo "./AprendiendoAngular/angular.json",  buscamos la parte de los assets y estilos, e incluimos nuestra hoja de estilos:
+
+	"assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.css",
+			  "src/assets/css/estilos.css"
+            ],
+
+Nota: si tenemos el servidor de desarrollo de Angular CLI corriendo, es necesario detenerlo (ctrl+C) y volver a correrlo (ng serve) para que se incluyan las hojas de estilo.
+_______________________________________________________
+
+	[7.2]. Crear Componente Cabecera:
+_______________________________________________________
+
+Para crear la cabecera de nuestra web (header), seguimos los siguientes pasos:
+
+1) Dentro de la carpeta del proyecto (AprendiendoAngular), escribimos el comando:
+
+	ng g component components/header
+
+2) Copiamos el código HTML del componente "header", de la maquetación previamente hecha, al archivo generado en el paso anterior "header.component.html":
+
+	<!-- HEADER -->
+	<header class="Header">
+		<div class="u-centrar">
+			<!-- LOGO -->
+			<a class="Header-logo"  href="index.html">
+				<img src="assets/images/angular.svg" alt="Angular Logo" />
+				<h1><strong>Curso</strong>Angular</h1>
+			</a>
+			<!-- MENU -->
+			<nav class="Menu">
+				<ul class="Menu-list">
+					<li><a href="index.html">Inicio</a></li>
+					<li><a href="blog.html">Blog</a></li>
+					<li><a href="formulario.html">Formulario</a></li>
+					<li><a href="#">Página 1</a></li>
+					<li><a href="#">Página 2</a></li>
+				</ul>
+			</nav>
+		</div>
+	</header>
+
+3) En el archivo "./src/app/app.component.html", incluimos el nuevo componente:
+
+	<app-header></app-header>
+
+4) Repetimos el proceso con todos los componentes de nuestra web. Recordar que podemos tener uno o varios componentes dentro de otro componente.
+_______________________________________________________
+
+Al terminar tendremos el archivo "./src/app/app.component.html" así:
+
+	<app-header></app-header>
+	<app-slider></app-slider>
+	<!-- MAIN -->
+	<div class="u-centrar">
+		<!-- Contenido -->
+		<section class="Content">
+		</section>
+		<app-aside></app-aside>
+	</div>
+	<app-footer></app-footer>
+
+_______________________________________________________
+
+	[8]. Servicios:
+_______________________________________________________
+
+Un servicio es una clase con diferentes metodos, que se encarga de separar algunas funcionalidades que se esten haciendo en los componentes, tales como las responsabilidades de acceso a datos (peticiones y envío de datos) y lógica de negocio.
+_______________________________________________________
+
+	[8.1]. Crear Servicio con AngularCLI:
+_______________________________________________________
+
+Para crear un servicio por comando, en consola nos ubicamos dentro de la carpeta del proyecto y ejecutamos:
+
+	ng generate service services/serviceName
+
+O en su manera corta:
+
+	ng g s services/serviceName
+
+Estos comandos crean dos archivos  en la carpeta "services": 
+
+	serviceName.service.ts --> servicio
+	serviceName.service.spec.ts --> se podrá usar para escribir pruebas unitarias para testear el servicio.
+_______________________________________________________
+
+Ejemplo 1: Creamos un servicio para manejar un carrito de compras:
+
+1) Creamos el nuevo servicio llamado "store":
+
+  ng g services/store
+
+2) En nuestro servicio "src\app\services\store.service.ts", importamos el modelo del producto, y creamos la propiedad que manejara un array de productos:
+
+  import { Injectable } from '@angular/core';
+
+  import { Product } from 'src/app/models/product.model';
+
+  @Injectable({
+    providedIn: 'root'
+  })
+  export class StoreService {
+    private myShoppingCart: Product[] = [];
+
+    constructor() { }
+
+    addProduct(product: Product){
+      this.myShoppingCart.push(product);
+    }
+
+    getTotal(){
+      return this.myShoppingCart.reduce((sum, item) => sum + item.price, 0);
+    }
+
+    getShoppingCart(){
+      return this.myShoppingCart;
+    }
+  }
+
+Acá tenemos lo siguiente: "@Injectable" es un decorador, los decoradores le indican a Angular como se va a comportar esa clase, y en este caso indica que es un servicio que podemos inyectar en otros componentes u otros servicios.
+
+La variable myShoppingCart sera un array de productos.El metodo "addProduct()" recibe un producto y lo añade al array de productos. El metodo "getTotal()", toma los items del array y suma su precio. Por ultimo el metodo "getShoppingCart()" nos devuelve el array con todos los productos añadidos al carrito.
+
+De está forma el servicio estara disponible para el carrito, el header y cualquier sección o componente que requiera mostrar esos datos.
+
+3) En el componente de listado de productos, importamos, inyectamos y usamos el servicio:
+
+  import { StoreService } from "src/app/services/store.service";
+
+  ...
+
+  export class ProductsComponent implements OnInit {
+    public shoppingCart: Product[] = [];
+    public total = 0;
+
+    constructor(
+      private _storeService: StoreService
+    ){
+      this.shoppingCart = this._storeService.getShoppingCart();
+    }
+
+    addProductToCart(producto: Product): void {
+      // this.shoppingCart.push(producto);
+      this._storeService.addProduct(producto);
+      this.total = this._storeService.getTotal();
+    }
+  }
+
+La inyección de dependencias es pasar el servicio como parametro en el constructor.
+
+4) En la vista del listado de productos, mostramos el total de productos añadidos al carro y el total a pagar:
+
+  <div>
+    <h3>Cantidad: {{ shoppingCart.length }}</h3>
+    <h3>Total a pagar: {{ total }}</h3>
+  </div>
+_______________________________________________________
+
+Ejemplo 2: El servicio que crearemos, tendra en memoria(un array) la lista de peliculas. 
+
+1) Dentro de la carpeta "app" creamos una nueva carpeta llamada "services".
+
+2) Dentro de la nueva carpeta "services" creamos un archivo "pelicula.service.ts":
+
+	import { Injectable } from "@angular/core";
+	import { Pelicula } from "../models/pelicula";
+
+	@Injectable()
+	export class PeliculaService{
+
+		public peliculas: Array<Pelicula>;
+
+		constructor(){
+			this.peliculas = [
+				new Pelicula("Spiderman No Way Home", "https://cdn.hobbyconsolas.com/sites/navi.axelspringer.es/public/styles/hc_1440x810/public/media/image/2021/11/spider-man-no-way-home-2543495.jpg?itok=m8Oy1sxf", 2021),
+				new Pelicula("Avengers End Game", "https://as01.epimg.net/us/imagenes/2019/06/19/tikitakas/1560962193_678328_1560963312_noticia_normal_recorte1.jpg", 2019),
+				new Pelicula("Volver al futuro", "https://periodismodelmotor.com/wp-content/uploads/2015/10/localizacionres-regreso-al-futuro.jpg", 1985),
+				new Pelicula("Jurassic Park", "https://cloudfront-us-east-1.images.arcpublishing.com/copesa/OWQ4RZPS7ZA4XNHPZD3QNBVNIA.jpg", 1993)
+			];
+		}
+
+		getPeliculas(){
+			return this.peliculas;
+		}
+	}
+
+Primero importamos el objeto "Injectable", que permite inyectar el decorador "@Injectable() " a la clase, para poder acceder a esta clase desde el componente.
+
+Tambien importamos el modelo "Pelicula", ya que ahora en el servicio nos encargaremos de usarlo para crear los objetos(items) de este tipo.
+
+El metodo "getPeliculas()" nos devolvera el array con todas las peliculas.
+
+Nota: en este ejemplo el decorador "@Injectable", no tiene "scope" (donde indicamos desde donde va a stera disponible para inyectarse) como en el ejemplo anterior (providedIn: 'root'), por lo que en el componente donde lo usemos es necesario declararlo como "provider".
+
+3) Importamos el servicio en el archivo "peliculas.component.ts":
+
+	import { PeliculaService } from "../../services/pelicula.service";
+
+	@Component({
+		selector: 'app-peliculas',
+		templateUrl: './peliculas.component.html',
+		styleUrls: ['./peliculas.component.css'],
+		providers: [PeliculaService]
+	})
+
+	...
+
+	constructor(
+		private _peliculaService: PeliculaService
+	) {
+		this.titulo = "Componente Peliculas";
+		this.peliculas = this._peliculaService.getPeliculas();
+		this.fecha = new Date(1987, 4, 18);
+	}
+
+En el decorador de "@Component" utilizamos la propiedad "providers" para poder inyectar y usar el servicio.
+
+Nota: El "_"(guión bajo) se usa en el nombre de propiedades que estan vinculadas a un servicio.
+
+En el constructor usamos el servicio que hemos creado, llamando a su metodo "getPeliculas()".
+
+_______________________________________________________
+
+	[8.2]. Servicio con protocolo HTTP:
+_______________________________________________________
+
+Se creara un servicio que tendra la responsabilidad de recuperar los datos de un servidor web, es decir obtendra datos desde una API.
+
+_______________________________________________________
+
+	[8.2.1]. Solicitud GET:
+_______________________________________________________
+
+Ejemplo: Consumimos la API de "https://fakestoreapi.com" para mostrar productos.
+
+1) En nuestro modulo de aplicación "src\app\app.module.ts", importamos el modulo del ecosistema de Angulara para hacer peticiones HTTP:
+
+  import { HttpClientModule } from "@angular/common/http";
+
+  ...
+
+  imports: [
+    BrowserModule,
+    HttpClientModule
+  ],
+
+2) Creamos un nuevo servicio encargado de hacer la petición a la API, obteniendo todos los productos:
+
+  ng g s services/products
+
+3) En nuestro servicio "src\app\services\products.service.ts" importamos un servicio "http", gracias a la anterior importación del modulo de Angular:
+
+  import { Injectable } from '@angular/core';
+  import { HttpClient } from "@angular/common/http";
+
+  @Injectable({
+    providedIn: 'root'
+  })
+
+  export class ProductsService {
+
+    constructor(
+      private _http:HttpClient
+    ) { }
+
+    getAllProducts(){
+      return this._http.get('https://fakestoreapi.com/products');
+    }
+  }
+
+Inyectamos la dependencia al servicio (parametro en el constructor). Luego hacemos la petición de tipo "get" a la API.
+
+4) En nuestro componente de listado de productos importamos y usamos el servicio:
+
+  import { ProductsService } from "src/app/services/products.service";
+
+  export class ProductsComponent implements OnInit {
+    public shoppingCart: Product[] = [];
+    public total = 0;
+    public products: Product[] = [];
+
+    constructor(
+      private _storeService: StoreService,
+      private _productsService: ProductsService
+    ){
+      this.shoppingCart = this._storeService.getShoppingCart();
+    }
+
+    ngOnInit(): void {
+      this._productsService.getAllProducts()
+      .subscribe(data =>{
+        console.log(data);
+      });
+    }
+
+    addProductToCart(producto: Product): void {
+      // this.shoppingCart.push(producto);
+      this._storeService.addProduct(producto);
+      this.total = this._storeService.getTotal();
+    }
+  }
+
+El método "ngOnInit()" es el lugar apropiado para los llamados asincrónicos, recuerda que no es buena práctica hacerlo en el constructor.
+
+Todo el cliente HTTP de Angular está basado en Observables, por lo tanto, es recomendable suscribirse al método del servicio para obtener los datos cuando la API responda.
+
+TIP: No es necesario que hagas un .unsubscribe() luego del llamado a la API. Angular ya lo hace por ti, cuando usas su cliente HTTP.
+
+Podremos ver en la consola del navegador, la respuesta del API backend, con el listado de productos.
+
+5) Modificamos el metodo "ngOnInit" para poder mostrar en la vista los productos:
+
+  ngOnInit(): void {
+      this._productsService.getAllProducts()
+      .subscribe(data =>{
+        console.log(data);
+        this.products = data;
+      });
+  }
+
+Acá esto nos saca un error, ya que la API nos retorna una "data" de tipo "object", pero nosotros necesitamos que sea un array de tipo "Product", como en nuestro modelo, por lo que en nuestro servicio,  la petición "get" podemos tiparla con <Product[]>:
+
+  import { Product } from "src/app/models/product.model";
+
+  ...
+
+  getAllProducts(){
+    return this._http.get<Product[]>('https://fakestoreapi.com/products');
+  }
+
+Nota: recordar que nuestro modelo, en este caso "product.model", debe tener una estructura con los mismos nombres y tipos que los devueltos por nuestra API.
+
+_______________________________________________________
+
+	[8.2.2]. Solicitud POST / Data Transfer Object (DTO):
+_______________________________________________________
+
+Las solicitudes POST a la API nos sirven para crear nuevos elementos, muchas veses para crear un elemento necesitamos crear una nueva interfaz(modelo) llamada "Data Transfer Object" (DTO), ya que no se envian todos los datos de nuestro modelo creado con anterioridad, sino que la API crea dinamicamente datos como el "id" del nuevo elemento creado.
+
+1) Creamos el DTO en el modelo creado anteriormente "src\app\models\product.model.ts":
+
+  export interface Category {
+    idCategory: number;
+    name: string;
+  }
+
+  export interface Product {
+    id: number;
+    title: string;
+    price: number;
+    images: string[];
+    category: Category;
+    description: string;
+  }
+
+  export interface CreateProductDTO extends Omit<Product, 'id' | 'category'> {
+    categoryId: number;
+  }
+
+En este caso tenemos la interfaz de producto, donde la categoria es otro objeto compuesto de un "id" y un "nombre de categoria", por eso se creó una nueva interfaz.
+
+Para el DTO, en este caso extendemos la interfaz del producto y usamos una caracteristica de typescript para omitir "id" y "category", y añadimos una nueva propiedad que es "categoryId", para pasarle ese id de categoria al API.
+
+2) En nuestro componente de listado de productos, importamos la nueva interfaz, y creamos el metodo para crear un nuevo producto:
+
+  import { Product, CreateProductDTO } from 'src/app/models/product.model';
+  import { ProductsService } from "src/app/services/products.service";
+
+  export class ProductsComponent implements OnInit {
+
+    createNewProduct(){
+      const product: CreateProductDTO = {
+        title: 'Pelota de futbol',
+        price: 300,
+        description: 'Balón de futbol oficial de la selección.'
+        images: ['https://media.istockphoto.com/photos/soccer-ball-isolated-3d-rendering-picture-id1257575611?k=20&m=1257575611&s=612x612&w=0&h=g530fFJspT42xFGY7HycLvpBKLXpJ2XAkKCRyY-SK80='],
+        categoryId: 2,
+      }
+
+      this._productsService.create(product)
+      .subscribe(data =>{
+        console.log('Producto creado: ',data);
+        // Guardamos el nuevo producto, en el Array de productos junto con los otros.
+        this.products.unshift(data);
+      });
+
+    }
+  }
+
+3) Creamos el nuevo metodo "create" en el servicio "src\app\services\products.service.ts":
+
+  import { Product, CreateProductDTO } from "src/app/models/product.model";
+  ...
+  export class ProductsService {
+    private api:string = 'https://young-sands-07814.herokuapp.com/api/products';
+
+    constructor(
+      private _http:HttpClient
+    ) { }
+
+    getAllProducts(){
+      return this._http.get<Product[]>(this.api);
+    }
+
+    getProduct(id: string){
+      return this._http.get<Product>(`${this.api}/${id}`);
+    }
+
+    create(dto:CreateProductDTO){
+      return this._http.post<Product>(this.api, dto);
+    }
+  }
+
+El metodo "create", recibe como parametro el DTO, por lo que importamos el modelo(interfaz) en el servicio, a la API envia el DTO, pero obtenemos un "Product", con el id creado y la categoria compuesta (objeto con id y nombre de categoria).
+
+Nota: en la variable "api" estamos usando la url para la API, en este caso:
+
+  https://young-sands-07814.herokuapp.com/api/products
+
+Para más info. del API:
+
+  https://young-sands-07814.herokuapp.com/docs/
+
+Tambien podemos usar la siguiente API:
+
+  https://api.escuelajs.co/docs/
+
+4) Finalmente en nuestra plantilla de listado de productos, podemos crear el boton para añadir el nuevo producto
+
+  <button (click)="createNewProduct()" >Crear Producto</button>
+
+Nota: recordar que el nuevo producto que se esta creando esta quemado, lo ideal es traer los datos de un formulario y enviarlos a la API.
+_______________________________________________________
+
+	[8.2.3]. Solicitud PUT / PATCH:
+_______________________________________________________
+
+Los metodos PUT y PATCH se usan para actualizar la información, el metodo PUT se envian todos los campos, y se sobre escriben todos, en cambio con PATCH se envia un solo campo a actualizar. El metodo que usemos depende de como lo implemente Backend.
+
+1) Creamos el DTO en el modelo creado anteriormente "src\app\models\product.model.ts":
+
+  export interface UpdateProductDTO {
+    title?: string;
+    price?: number;
+    image?: string;
+    description?: string;
+    categoryId?: number;
+  }
+
+En este caso colocamos el signo pregunta "?" despues del nombre del campo, para indicar que es un campo opcional, es decir, si queremos solo actualizar la descripción, no le enviamos los demas campos, y nuestro modelo no es tan estricto de pedirnos todos los campos.
+
+El código anterior lo podemos optimizar aún más extendiendo nuestro modelo anterior y usando la caracteristica de typescript "Partial" para indicar que los campos son opcionales:
+
+  export interface UpdateProductDTO extends Partial<CreateProductDTO> {}
+
+2) En nuestro componente de listado de productos, importamos la nueva interfaz, y creamos el metodo para actualizar un producto:
+
+  import { Product, CreateProductDTO, UpdateProductDTO } from 'src/app/models/product.model';
+  import { ProductsService } from "src/app/services/products.service";
+
+  export class ProductsComponent implements OnInit {
+
+    updateProduct(){
+      const id: string = '3';
+      const changes: UpdateProductDTO = {
+        title: 'Nuevo titulo',
+      }
+
+      this._productsService.update(id, changes)
+      .subscribe(data =>{
+        console.log('Producto actualizado: ',data);
+        // Actualizamos el producto en nuestro array
+        const productIndex = this.products.findIndex(item => item.id === id);
+        this.products[productIndex] = data;
+      });
+
+    }
+  }
+
+3) Creamos el nuevo metodo "update" en el servicio "src\app\services\products.service.ts":
+
+  import { Product, CreateProductDTO, UpdateProductDTO } from 'src/app/models/product.model';
+
+  update(id: string, dto:UpdateProductDTO){
+    return this._http.put<Product>(`${this.api}/${id}`, dto);
+  }
+
+_______________________________________________________
+
+	[8.2.4]. Solicitud DELETE:
+_______________________________________________________
+
+El metodo DELETE se usa para borrar información.
+
+1) Creamos el nuevo metodo en nuestro servicio "src\app\services\products.service.ts":
+
+  delete(id: string){
+    return this._http.delete<Product>(`${this.api}/${id}`);
+  }
+
+2) En nuestro componente de listado de productos, creamos el metodo de borrado:
+
+  deleteProduct(){
+    const id: string = '4';
+
+    this._productsService.delete(id)
+    .subscribe(data =>{
+      console.log('Producto eliminado: ',data);
+      // Actualizamos el producto en nuestro array
+      const productIndex = this.products.findIndex(item => item.id === id;
+      // Eliminamos del array
+      this.products.splice(productIndex, 1);
+    });
+  }
+_______________________________________________________
+
+	[8.2.5]. Parámetros por URL:
+_______________________________________________________
+
+Algunas vese podemos enviar parametros por la URL, para hacer por ejemplo filtrado de datos o paginación.
+
+Para hacer una paginación, tenemos el concepto de "Limit" y "Offset"
+
+	"Limit" --> indica un maximo de ítems que queremos obtener.
+
+	"Offfset" --> (a veces también llamado “skip”) indica el número de elementos que queremos omitir en la consulta.
+
+1) En nuestro servicio de obtención de productos "src\app\services\products.service.ts", importamos el modulo para usar parametros, y modificamos el metodo que obtiene todos los productos, para enviarle de forma opcional los parametros:
+
+  import { HttpClient, HttpParams } from "@angular/common/http";
+
+  getAllProducts(limit?: number, offset?: number){
+    let params = new HttpParams();
+    if(limit != undefined && offset != undefined){
+      params = params.set('limit', limit);
+      params = params.set('offset', offset);
+    }
+    return this._http.get<Product[]>(this.api, { params });
+  }
+
+2) En nuestro componente de listado de productos, definimos el limit y el offset, y creamos una nueva función que nos servira para cargar más elementos cada vez que hacemos click en un boton:
+
+  ...
+
+  export class ProductsComponent implements OnInit {
+    public limit: number = 10;
+    public offset: number = 0;
+
+    loadMore(){
+      this._productsService.getAllProducts(this.limit, this.offset)
+      .subscribe(data =>{
+        this.products = this.products.concat(data);
+        this.offset += this.limit;
+      });
+    }
+  }
+
+Acá el limite lo definimos como 10 productos, cuando recibimos el resultado de la petición, añadimos al array de productos los nuevos productos obtenidos, y aumentamos el offset sumandole la cantidad de productos nuevos obtenidos.
+
+3) En nuestra plantilla creamos el boton:
+
+  <button type="button" class="btn btn-primary" (click)="loadMore()">Cargar más Productos</button>
+
+Ahora cada vez que hagamos click, pasara como un scroll infinito, cargando de a 10 productos nuevos cada vez.
+
+_______________________________________________________
+
+	[9]. Pipes / Filtros:
+_______________________________________________________
+
+Las tuberías(pipes) sirven para transformar cadenas(strings), montos de moneda, fechas y otros datos para su visualización. 
+
+Las tuberias son funciones simples para usar en expresiones de plantilla para aceptar un valor de entrada y devolver un valor transformado. Las tuberías son útiles porque puede usarlas en toda su aplicación, mientras solo declara cada tubería una vez.
+
+Ejemplo 1: en la plantilla "peliculas.component.html" transformamos el titulo a mayusculas:
+
+	<h3>
+		{{favorita.title | uppercase}}
+	</h3>
+
+Nota: para mas info. de las tuberias ir a:
+
+	https://angular.io/guide/pipes
+
+Ejemplo 2: vamos a dar formato a un dato de tipo fecha; en el archivo "peliculas.component.ts", creamos en el constructor el nuevo tipo de dato:
+
+	public fecha: any;
+	
+	constructor() {
+		...
+		this.fecha = new Date(1987, 4, 18);
+	}
+	
+Nota: los meses empiezan igual que los indices de los array, Enero = 0.
+
+Ahora usamos la tuberia dando formato a la fecha, en el archivo "peliculas.component.html":
+
+	<p>{{this.fecha}}</p> --> Mon May 18 1987 00:00:00 GMT-0500 (hora estándar de Colombia)
+
+	<p>{{this.fecha | date}}</p> --> May 18, 1987
+
+	<p>{{this.fecha | date: 'short'}}</p> --> 5/18/87, 12:00 AM
+
+	<p>{{this.fecha | date: 'fullDate'}}</p> --> Monday, May 18, 1987
+
+	<p>{{this.fecha | date: 'dd/MM/yy'}}</p> --> 18/05/87
+
+	<p>{{this.fecha | date: 'dd/MM/yyyy'}}</p> --> 18/05/1987
+_______________________________________________________
+
+	[9.1]. Crear Pipes Personalizadas:
+_______________________________________________________
+
+Podemos crear nuestras propias tuberias de la siguiente forma:
+
+1) Creamos dentro de la carpeta "app" una carpeta llamada "pipes".
+
+2) Dentro de la carpeta "pipes", creamos el archivo de nuestra nueva tuberia "espar.pipe.ts":
+
+	import { Pipe, PipeTransform } from '@angular/core';
+
+	@Pipe({
+		name: 'espar'
+	})
+	export class EsParPipe implements PipeTransform{
+		transform(value: any){
+			let espar = "no es par";
+			if(value % 2 == 0){
+				espar = "es un numero par";
+			}
+
+			return "El año es: "+ value +" y "+espar;
+		}
+	}
+
+En este caso la tuberia recibe el año de la pelicula y nos imprime si es par o no.
+
+3) Importamos nuestra tuberia custom, y la incluimos en al array de declaraciones en el archivo "app.module.ts":
+
+	import { EsParPipe } from './pipes/espar.pipe';
+
+	@NgModule({
+		declarations: [
+			AppComponent,
+			MiComponente,
+			PeliculasComponent,
+			...
+			EsParPipe
+		],
+
+4) Usamos la tuberia custom en nuestro archivo "peliculas.component.html":
+
+	<p> {{favorita.year | espar}}</p>
+
+_______________________________________________________
+
+	[9.1.1]. Crear Pipes con AngularCLI:
+_______________________________________________________
+
+Para crear Pipes con el CLI de Angular (por consola, dentro de la carpeta del proyecto) usamos el comando:
+
+	ng generate pipe pipes/nombrePipe
+	
+O en su forma corta con:
+
+	ng g p pipes/nombrePipe.
+
+_______________________________________________________
+
+	[9.2]. Formatear Fechas con Moment:
+_______________________________________________________
+
+Moment es una libreria que nos permite analizar, validar, manipular y mostrar fechas y horas.
+
+Nota 1: Para mas info. de esta libreria:
+
+	https://momentjs.com/
+
+Nota 2: tambien podemos usar otra libreria para fechas llamada "date-fns":
+
+	https://date-fns.org/
+
+En Angular usamos una variante de esta libreria llamada "angular2-moment", la cual añade "pipes" de Moment.js para ser usados con Angular.
+
+Nota: Para mas info. de esta libreria:
+
+	https://www.npmjs.com/package/angular2-moment
+
+1) Instalamos la libreria en nuestro proyecto:
+
+	npm install --save angular2-moment
+
+Nota 1: si nos da un error al instalar, podemos revizar el error en consola y re intentar con el siguiente comando:
+
+	npm i --save angular2-moment --force
+
+Nota 2: para usar una librería diferente de "angular2-moment":
+
+	https://www.npmjs.com/package/ngx-moment
+
+2) Importamos el nuevo modulo instalado en el archivo "app.module.ts":
+
+	import { MomentModule } from 'angular2-moment';
+
+	@NgModule({
+		imports: [
+			MomentModule
+		]
+	})
+
+Esto hace que todas las tuberías de "angular2-moment", estén disponibles para su uso en todos los componentes.
+
+3) Usamos los nuevos "pipes" en la plantilla:
+
+	<span class="date">{{article.date | amLocale:'es' | amTimeAgo}}</span>
+
+Con el pipe "amLocale:'es'" indicamos que la fecha tenga un formato en idioma español, y con "amTimeAgo", indicamos que en la fecha salga: "hace x tiempo".
+
+_______________________________________________________
+
+	[10]. Reactividad Básica:
+_______________________________________________________
+
+El concepto de reactividad básica es muy importante en el desarrollo front-end. Se trata del estado de la aplicación con respecto al valor de los datos en cada componente, cómo estos cambian a medida que el usuario interactúa y cómo se actualiza la interfaz.
+
+Recordemos que nuestro HTML funciona como una estructura jerarquica de arbol, en donde tenemos unos elementos que contienen otros elementos, y así hasta llegar al nodo más simple o atomico de contenido (nodo de texto).
+
+Cuando pensamos en cómo comunicar un componente padre con su hijo y viceversa, solemos utilizar los decoradores @Input() y @Output().
+
+Pero muchas veces, en aplicaciones grandes, la comunicación de componentes se vuelve mucho más compleja y estas herramientas no alcanzan cuando se necesita enviar información de un componente "hijo" a un ancestro en un nivel muy superior.
+
+Para solucionar este inconveniente se usa un "store", que es donde se comparten los estados de la aplicación que se quieran compartir entre componentes, como por ejemplo el carrito de compras, que el componente Header requiere de su estado para mostrar la información.
+
+Luego los componentes que requieran conocer ese estado compartido, se suscriben para recibir dicha información.
+_______________________________________________________
+
+Ejemplo:
+
+1) En nuestro archivo de servicio "store.service.ts" importamos la clase "BehaviorSubject" de la libreria "rxjs", encargada de implementar todos los patrones de observables dentro de Angular:
+
+  import { BehaviorSubject } from "rxjs";
+
+  export class StoreService {
+
+    private shoppingCart: Product[] = [];
+    private myCart = new BehaviorSubject<Product[]>([]);
+
+    myCart$ = this.myCart.asObservable();
+
+    constructor() { }
+
+    addProduct(producto: Product){
+      this.shoppingCart.push(producto);
+      // El observable emitirá un nuevo valor con cada producto que se agregue al carrito.
+      this.myCart.next(this.shoppingCart);
+    }
+  }
+
+Nota: para mas info. de la libreria "rxjs":
+
+	https://rxjs.dev/
+
+2) Suscribimos el componente que necesita entererase cada vez que se añade un producto nuevo al carrito, en este caso el "header" "src\app\components\header\header.component.ts":
+
+  import { Component, OnInit } from '@angular/core';
+
+  import { StoreService } from "src/app/services/store.service";
+  import { Subscription } from 'rxjs';
+
+  @Component({
+    selector: 'app-header',
+    templateUrl: './header.component.html',
+    styleUrls: ['./header.component.scss']
+  })
+  export class HeaderComponent {
+    activeMenu = false;
+    productCounter = 0;
+    private sub$!: Subscription;
+
+    constructor(
+      private _storeService: StoreService
+    ){}
+
+    ngOnInit(): void {
+      this._storeService.myCart$.subscribe(products => {
+        // Cada vez que el observable emita un valor, se ejecutará este código
+        this.productCounter = products.length;
+      })
+    }
+
+    ngOnDestroy(): void {
+      this.sub$.unsubscribe();
+    }
+
+    toggleMenu(){
+      this.activeMenu = !this.activeMenu;
+    }
+
+  }
+
+Primero importamos el servicio, hacemos la inyección de dependencias, y en el evento "ngOnInit()" lo suscribimos al observable.
+
+El observable se guarda en una propiedad del tipo "Subscription" para hacer un "unsubscribe()" cuando el componente sea destruido.
+
+Nota: Por convención, las propiedades que guardan observables suelen tener un “$” al final del nombre para indicar que se trata de un observable.
+
+_______________________________________________________
+
+	[10.1]. Promise vs Observable:
+_______________________________________________________
+
+JavaScript posee dos maneras de manejar la asincronicidad, a través de: Observables y Promesas, que comparten el mismo objetivo, pero con características y comportamientos diferentes.
+
+_______________________________________________________
+
+	[10.1.1]. ¿Qué es la asincronicidad en JavaScript?:
+_______________________________________________________
+
+La asincronicidad se refiere a cuando Javascript utiliza procesos asíncronos para realizar muchas tareas a la vez, tareas que pueden tomar determinado tiempo o nunca finalizar. Es decir, este lenguaje de programación es un monohilo y esto significa que solo puede hacer una cosa a la vez y la ejecución de un proceso demorará a los que vengan posteriormente hasta que este termine.
+
+Es así como la lectura de archivos o las peticiones HTTP son procesos asíncronos y se requiere de un método para manipular este tipo de procesos como los observables y promesas.
+
+_______________________________________________________
+
+	[10.1.2]. ¿Qué son los observables?:
+_______________________________________________________
+
+Gran parte del ecosistema Angular está basado en observables y la librería RxJS es tu mejor aliado a la hora de manipularlos. El patrón de diseño “observador” centraliza la tarea de informar un cambio de estado de un determinado dato o la finalización de un proceso, notificando a múltiples interesados cuando esto sucede sin necesidad de que tengan que consultar cambios activamente.
+
+Características de los Observables en Javascript:
+
+	- Emiten múltiples valores (stream de datos).
+	- Permiten escuchar cualquier tipo de proceso, (peticiones a una API, lectura de archivos, etc.).
+	- Notifican a múltiples interesados.
+	- Pueden cancelarse.
+	- Manipulan otros datos (transformar, filtrar, etc.) con RxJS.
+	- Son propensos al callback hell.
+
+Ejemplos con Observables: podemos crear un archivo en la raiz de nuestro proyecto, llamado "obs-promises.js" con el siguiente código:
+
+	import { Observable } from 'rxjs';
+	import { filter } from 'rxjs/operators';
+	
+	const doSomething$ = () => {
+		return new Observable(observer => {
+			// emitimos múltiples valores
+			observer.next('Valor 1 desde observable');
+			observer.next('Valor 2 desde observable');
+			observer.next(null);
+			setTimeout(() => {
+				observer.next('Valor 3 desde observable');
+			}, 3000);
+			setTimeout(() => {
+				observer.next(null);
+			}, 5000);
+			setTimeout(() => {
+				observer.next('Valor 4 desde observable');
+			}, 8000);
+		});
+	};
+
+	// Función auto-ejecutable
+	( () => {
+		const obs$ = doSomething$();
+
+		obs$
+		.pipe(
+			// Manipulación de resultados con RxJS
+			filter(value => value !=== null)
+		)
+		.subscribe(res => {
+			console.log(res);
+		});
+	})
+
+Primero importamos la libreria "rxjs" para implementar los observables. Al momento de crear el observable, con el objeto "observer" podemos emitir valores con el metodo "next()".
+
+En la función auto ejecutable usamos nuestro observable, no necesita de contexto "async", como las promesas.
+
+A diferencia de las promesas, podemos emitir varios valores, el "Valor 3" se recibira 3 segundos despues de haber recibido los primeros valores.
+
+Con el filtro, podemos manipular datos, en este caso quitamos los valores nulos que vayamos recibiendo, incluso antes de recibir todos los datos.
+
+_______________________________________________________
+
+	[10.1.3]. ¿Qué son las promesas?:
+_______________________________________________________
+
+Las promesas son un método algo más sencillo y directo para manipular procesos asincrónicos en Javascript. Además, estos objetos tienen dos posibles estados:
+
+	- Resuelto
+	- Rechazado
+
+Dependiendo si el proceso asincrónico se ejecutó correctamente o hubo algún error.
+
+Desde el año 2017 se especificó en el estandar de EcmaScript la posibilidad de manipular promesas de una manera mucho más fácil con async/await. Async para especificar que una función es asíncrona y Await para esperar por el resultado sin bloquear el hilo de ejecución.
+
+Características de las Promesas:
+
+	- Ofrecen mayor simplicidad.
+	- Emiten un único valor.
+	- Evitan el callback hell.
+	- No se puede cancelar.
+	- Proveen una robusta API nativa de Javascript disponible desde ES 2017.
+	- Constituyen librerías populares como AXIOS o Fetch.
+
+Ejemplos con Promesas:
+
+// Promesas con .then() y .catch():
+
+	const p = new Promise((resolve, reject) => {
+		setTimeout(function(){
+			resolve("¡Hola Promesa!");
+		}, 1000);
+	});
+
+	p.then((result: string) => {
+		console.log(result); // impime: ¡Hola Promesa!
+	}).catch(err => {
+		console.log(err); // En caso de error
+	});
+
+
+// Promesas con async/await:
+
+	(async () => {
+		const p = await new Promise((resolve, reject) => {
+			setTimeout(function(){
+				resolve("¡Hola Promesa!");
+			}, 1000);
+		}).catch(err => {
+			console.log(err); // En caso de error
+		});;
+		console.log(p); // imprime: ¡Hola Promesa!
+	});
+
+Así quedaria nuestro ejemplo de observables con promesas:
+
+	const doSomething = () =>{
+		return new Promise((resolve) =>{
+			// solo emite un valor
+			resolve('valor 1 desde promesa');
+			// este "valor 2" no lo emite
+			resolve('valor 2 desde promesa');
+		});
+	}
+
+	// Función auto-ejecutable en contexto asincrono (async/await)
+	(async () =>{
+		const rta = await doSomething();
+		console.log(rta);
+	})();
+
+_______________________________________________________
+
+	[10.1.4]. Observable a Promesa:
+_______________________________________________________
+
+Una característica más de "RxJS" es la posibilidad de convertir fácilmente un Observable a Promesa:
+
+	import { of, firstValueFrom, lastValueFrom } from 'rxjs';
+
+	observableToPromise(): Promise<string> {
+		return lastValueFrom(of('¡Soy una promesa!'));
+	}
+
+La función "of" devuelve en forma de observable lo que sea que le coloques dentro. La función "firstValueFrom" o "lastValueFrom" devuelve el primer (o último) valor que el observable emita en forma de promesa.
+_______________________________________________________
+
+	[10.1.5]. Promesa a Observable:
+_______________________________________________________
+
+De manera muy similar, puedes convertir una Promesa en un Observable:
+
+	import { from } from 'rxjs';
+
+	PromiseToObservable(): Promise<Observable<any>> {
+		return from(new Promise((resolve, reject) => { console.log('¡Soy un observable!') }));
+	}
+
+La función "from" de "RxJS" convertirá una promesa en observable para que puedas manipular y suscribirte a la emisión de sus datos.
+
+_______________________________________________________
+
+	[10.2]. Reintentar Petición:
+_______________________________________________________
+
+Para reintentar peticiones HTTP, puedes hacer que automáticamente vuelva a realizar otro intento si este llegara a fallar. Sería muy complejo su desarrollo con promesas, ya que hay que recurrir a la recursividad y asincronicidad al mismo tiempo.
+
+Ejemplo: modificamos la url de nuestra API en el servicio de productos "src\app\services\products.service.ts", poniendo una API incorrecta:
+
+Primero importamos el operador "retry" de la libreria "rxjs":
+
+	import { retry } from "rxjs/operators";
+
+
+	export class ProductsService {
+		private api:string = 'https://young-sands-07814.herokuappuPPPp.com/api/products';
+
+		getAllProducts(limit?: number, offset?: number){
+			let params = new HttpParams();
+			if(limit != undefined && offset != undefined){
+				params = params.set('limit', limit);
+				params = params.set('offset', offset);
+			}
+			return this._http.get<Product[]>(this.api, { params })
+			.pipe(
+				retry(3)
+			);
+		}
+
+	}
+
+Gracias a los observables, podemos manipular la petición, y en este caso en caso de error, con "retry" le indicamos el número de veses que vuelva a hacer la solicitud. Es muy util para conexiones inestables, tambien se puede colocar un delay entre peticiones.
+
+_______________________________________________________
+
+	[11]. Buenas Practicas:
+_______________________________________________________
+
+En esta sección se trataran conceptos para tener buenas practicas en nuestro codigo y solucionar algunos problemas.
+
+_______________________________________________________
+
+	[11.1]. CORS y Proxy:
+_______________________________________________________
+
+Las peticiones que no son desde el mismo origen nos pueden dar inconvenientes al momento de consumir la API, para solucionar el inconveniente de CORS, desde el backend deben configurar los dominios desde los cuales se pueden hacer las peticiones.
+
+Para solucionar en modo de desarrollo el inconveniente de CORS, podemos configurar un proxy, que lo que hace es indicarle al backend que la petición se hizo desde el mismo dominio.
+
+1) En la raíz del proyecto creamos el archivo de proxy "proxy.config.json":
+
+	{
+		"/api/*": {
+			"target": "https://young-sands-07814.herokuapp.com",
+			"secure": true,
+			"logLevel": "debug",
+			"changeOrigin": true
+		}
+	}
+
+Acá indicamos que cualquier opetición que tenga "/api/*", simule que se hizo desde el "target".
+
+2) En nuestro archivo de servicio donde consumimos la API "src\app\services\products.service.ts", hacemos la petición directamente al endpoint:
+
+	...
+	export class ProductsService {
+		private api:string = '/api/products';
+	}
+
+3) Para correr el proyecto con proxy, añadimos un nuevo comando en el archivo "package.json":
+
+	...
+	"scripts": {
+		"ng": "ng",
+		"start": "ng serve",
+		"start:proxy": "ng serve --proxy-config ./proxy.config.json"
+		"build": "ng build",
+		"watch": "ng build --watch --configuration development",
+		"test": "ng test"
+	},
+
+4) Ahora en consola, dentro de la carpeta del proyecto ejecutamos el comando:
+
+	npm run start:proxy
+
+_______________________________________________________
+
+	[11.2]. Manejo de ambientes:
+_______________________________________________________
+
+Podemos definir en archivos de ambientes, variables que se usen cuando estamos en desarrollo, y otras para usar cuando se esta en producción, para hacer esto debemos crear los ambientes.
+
+1) Dentro de la carpeta "/src/" creamos una nueva carpeta llamada "environments".
+
+2) Dentro de la carpeta "/src/environments/", creamos nuestros ambientes, inicialmente se utilizan dos: desarrollo y producción. Como el de desarrollo es el ambiente por defecto, se puede nombrar "environment.ts":
+
+	exportconst environment = {
+		production: false,
+		API_URL: '',
+	};
+
+En este caso la variable "API_URL", es la creada por nosotros, para usar una en blanco, para que funcione el proxy en desarrollo, y otra con la API en producción.
+
+3)  Para tener un ambiente de producción creamos otro archivo llamado "environment.prod.ts":
+
+	exportconst environment = {
+		production: true,
+		API_URL: 'https://young-sands-07814.herokuapp.com',
+	};
+
+Nota: Se pueden crear más ambientes, por ejemplo, un ambiente staging y se nombraría: "environment.staging.ts".
+
+4) En la raíz del proyecto el archivo "angular.json", buscamos un objeto llamado "configurations", dentro de "build" para configurar los ambientes:
+
+	...
+	"configurations": {
+		"production": {
+			"budgets": [
+				{
+					"type": "initial",
+					"maximumWarning": "500kb",
+					"maximumError": "1mb"
+				},
+				{
+					"type": "anyComponentStyle",
+					"maximumWarning": "2kb",
+					"maximumError": "4kb"
+				}
+			],
+			"outputHashing": "all"
+		},
+		"development": {
+			"buildOptimizer": false,
+			"optimization": false,
+			"vendorChunk": true,
+			"extractLicenses": false,
+			"sourceMap": true,
+			"namedChunks": true
+		}
+	},
+	"defaultConfiguration": "production"
+
+
+Por defecto se tiene "development" y "production", pero se pueden agregar más.
+
+Ahora dentro de "configurations", creamos nuestro ambiente:
+
+	...
+	"configurations": {
+		"production": {
+			"budgets": [
+				{
+					"type": "initial",
+					"maximumWarning": "500kb",
+					"maximumError": "1mb"
+				},
+				{
+					"type": "anyComponentStyle",
+					"maximumWarning": "2kb",
+					"maximumError": "4kb"
+				}
+			],
+			"outputHashing": "all",
+			"fileReplacements": [{
+				"replace": "src/environments/environment.ts",
+				"with": "src/environments/environment.prod.ts"
+			}]
+		},
+		"development": {
+			"buildOptimizer": false,
+			"optimization": false,
+			"vendorChunk": true,
+			"extractLicenses": false,
+			"sourceMap": true,
+			"namedChunks": true
+		},
+		"qa": {
+			"buildOptimizer": false,
+			"optimization": false,
+			"vendorChunk": true,
+			"extractLicenses": false,
+			"sourceMap": true,
+			"namedChunks": true,
+			"fileReplacements": [{
+				"replace": "src/environments/environment.ts",
+				"with": "src/environments/environment.qa.ts"
+			}]
+		},		
+	},
+	"defaultConfiguration": "production"
+
+En este caso creamos un ambiente adicional para "qa".
+
+"fileReplacements" hace lo que dice su nombre, toma el archivo "environment.ts" y lo reemplaza por el archivo que le indiques, por ejemplo, "environment.qa.ts".
+
+5) En el mismo archivo "angular.json", en "serve" añadimos los ambientes creados:
+
+	...
+	"serve": {
+		"builder": "@angular-devkit/build-angular:dev-server",
+		"configurations": {
+			"production": {
+				"browserTarget": "my-store:build:production"
+			},
+			"development": {
+				"browserTarget": "my-store:build:development"
+			},
+			"qa": {
+				"browserTarget": "my-store:build:build:qa"
+			}
+		},
+		"defaultConfiguration": "development"
+	},
+
+6) Ahora se puede usar el comando build o serve con la configuración que se desee, en consola ejecutamos el comando:
+
+	ng build --configuration qa
+
+O el comando corto:
+
+	ng build -c qa
+
+7) Para terminar la configuración de los ambientes con la API URL para producción y el proxy de desarrollo, en el archivo "src\app\services\products.service.ts" usamos la nueva variable creada:
+
+	import { environment } from './../enviroments/environment';
+
+	...
+	export class ProductsService {
+		private api:string = `${environment.API_URL}/api/products`;
+
+De este modo en desarrollo, llega la variable vacia y se usa el proxy, y en producción, llega la variable con el dominio de la API.
+
+_______________________________________________________
+
+	[11.2.1]. Crear ambiente con Angular CLI:
+_______________________________________________________
+
+Podemos crear un ambiente por consola con Angular CLI, ubicados dentro de la carpeta del proyecto ejecutamos:
+
+	ng g environments
+
+_______________________________________________________
+
+	[11.3]. Manejo de errores:
+_______________________________________________________
+
+Las peticiones HTTP que tu aplicación realiza pueden fallar por una u otra razón. Recuerda que una aplicación profesional tiene que contemplar estos escenarios y estar preparada para cuando esto suceda.
+_______________________________________________________
+
+	[11.3.1]. Manejo de errores desde el componente:
+_______________________________________________________
+
+En este caso vamos a manejar el error de cuando se solicita el detalle de un producto, enviando un "id" de un producto que no existe.
+
+Se manejara el error desde el componente.
+
+1) En nuestro componente de listado de productos, creamos una variable "statusDetail", para manejar los estados de la petición http del detalle de un producto:
+
+	public statusDetail: 'loading' | 'success' | 'error' | 'init' = 'init';
+	
+	...
+	showProductDetail(id: string){
+		this.statusDetail = 'loading';
+		this._productsService.getProduct(id)
+		.subscribe(data =>{
+			// console.log("Producto: ",data);
+			this.toggleProductDetail();
+			this.productChosen = data;
+			this.statusDetail = 'success';
+		}, errorMsg => {
+			console.log(errorMsg.error.message);
+			this.statusDetail = 'error';
+		});
+	}
+
+Aca lo curioso es que typescript nos permite indicar en el tipado de la variable los posibles valores permitidos para la misma, así como su valor inicial.
+
+En el metodo encargado de mostrar el detalle del producto, manejamos el cambio de la variable de estado que creamos, nos serviria por ejemplo para renderizar un "loader", o algún mensaje de alerta según su estado.
+
+Tambien manejamos el mensaje de error(errorMsg), que en este caso es un objeto, en donde accedemos al "error" y al "message", pero esto depende a lo que nos envia el backend.
+
+2) Esta forma de manejar el error y el success en el observable esta obsoleta, ahora con la libreria RxJS usamos:
+
+	observable.subscribe({
+		next: (resp) =>{},
+		error: (err) =>{},
+		complete: () =>{}
+	});
+
+Por lo que el metodo de mostrar detalle lo podemos reemplazar por:
+
+	showProductDetail(id: string){
+		this.statusDetail = 'loading';
+		this._productsService.getProduct(id)
+		.subscribe({
+			next: (data) => {
+				// console.log("Producto: ",data);
+				this.toggleProductDetail();
+				this.productChosen = data;
+				this.statusDetail = 'success';
+			},
+			error: (errorMsg) => {
+				console.log(errorMsg.error.message);
+				this.statusDetail = 'error';
+			}
+		});
+	}
+
+_______________________________________________________
+
+	[11.3.1.1]. Usando libreria de modal Sweetalert2:
+_______________________________________________________
+
+Podemos utilizar la libreria "Sweetalert2" para mostrar el mensaje de error en algún modal.
+
+  https://sweetalert2.github.io/#examples
+
+1) Instalamos la libreria para Angular:
+
+  npm install sweetalert2 @sweetalert2/ngx-sweetalert2
+
+2) Importar "sweetalert2" en el archivo "app.module.ts":
+
+  import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+
+  @NgModule({
+
+    imports: [
+      SweetAlert2Module
+    ],
+  })
+
+3) Importamos la libreria desde el componente:
+
+  import Swal from 'sweetalert2';
+
+4) Usamos la librería desde el metodo del componente:
+
+  showProductDetail(id: string){
+		this.statusDetail = 'loading';
+		this._productsService.getProduct(id)
+		.subscribe({
+			next: (data) => {
+				// console.log("Producto: ",data);
+				this.toggleProductDetail();
+				this.productChosen = data;
+				this.statusDetail = 'success';
+			},
+			error: (errorMsg) => {
+				console.log(errorMsg.error.message);
+				this.statusDetail = 'error';
+        SweetAlert2Module.fire({
+          title: 'Error!',
+          text: 'errorMsg',
+          icon: 'error',
+          confirmButtonText: 'Ok'
+        })
+			}
+		});
+	}
+
+_______________________________________________________
+
+	[11.3.1.2]. Usando libreria de alertas Toastr:
+_______________________________________________________
+
+Podemos utilizar la libreria "Toastr" para mostrar el mensaje de error en unas alertas.
+
+  https://codeseven.github.io/toastr/
+
+1) Instalamos la libreria para Angular:
+
+  npm install ngx-toastr --save
+
+2) Importar "Toastr" en el archivo "app.module.ts":
+
+  import { ToastrModule } from 'ngx-toastr';
+  // ....
+  @NgModule({
+    imports: [
+      BrowserModule,
+      FormsModule,
+      ToastrModule.forRoot()
+    ],
+  })
+  export class AppModule { }
+
+3) Importamos y usamos en el componente:
+
+  import { ToastrService } from 'ngx-toastr';
+  export class MyComponent {
+    constructor(private toastr: ToastrService) {}
+
+    showSuccess() {
+      this.toastr.success('Operación exitosa', '¡Genial!');
+    }
+  }
+
+_______________________________________________________
+
+	[11.3.2]. Manejo de errores desde el servicio:
+_______________________________________________________
+
+Ahora manejaremos el error desde el servicio, para controlar el mensaje que mostraremos en el frontend.
+
+1) Vamos a manejar errores desde el servicio "src\app\services\products.service.ts":
+
+  import { HttpClient, HttpParams, HttpErrorResponse } from "@angular/common/http";
+  import { throwError } from 'rxjs';
+  import { retry, catchError } from "rxjs/operators";
+
+  ...
+  getProduct(id: string){
+    return this._http.get<Product>(`${this.api}/${id}`)
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        if(error.status === 404){
+          return throwError(() => new Error('El producto no existe.'));
+        }
+        if(error.status === 500){
+          return throwError(() => new Error('Error en el servidor.'));
+        }
+        return throwError(() => new Error('Ups algo salio mal'));
+      })
+    )
+  }
+
+Primero importamos "throwError" desde la libreria RxJS, el operador "catchError" tambien desde "rxjs/operators" y "HttpErrorResponse" de "@angular/common/http".
+
+Luego desde el metodo "getProduct", agregamos un ".pipe()" para manipular los datos que el observable emita antes de enviarlos al componente.
+
+Usamos "catchError" para capturar el error, desde Angular usamos "HttpErrorResponse", para indicar que la función de captura "catchError", recibe como parametro en error de tipo "HttpErrorResponse", que Angular nos provee para tipar errores HTTP.
+
+Luego en nuestra función manejadora del error, manejamos el codigo de error e imprimimos un mensaje según el código.
+
+2) Angular tambien nos provee "HttpStatusCode", para manejar estos codigos de error, en el servicio lo importamos y usamos de la siguiente manera:
+
+  import { HttpClient, HttpParams, HttpErrorResponse, HttpStatusCode } from "@angular/common/http";
+
+  ...
+  getProduct(id: string){
+    return this._http.get<Product>(`${this.api}/${id}`)
+    .pipe(
+      catchError((error: HttpErrorResponse) => {
+        if(error.status === HttpStatusCode.NotFound){
+          return throwError(() => new Error('El producto no existe.'));
+        }
+        if(error.status === HttpStatusCode.InternalServerError){
+          return throwError(() => new Error('Error en el servidor.'));
+        }
+        return throwError(() => new Error('Ups algo salio mal'));
+      })
+    )
+  }
+
+Nota: podemos ver un listado de los errores HTTP y entenderlos mejor en la siguiente página:
+
+  https://http.cat
+
+_______________________________________________________
+
+	[11.4]. Transformar Peticiones:
+_______________________________________________________
+
+A veses del lado Front, se necesitan algunos datos adicionales, que el Backend no nos esta enviando, en estos casos podemos transformar la petición.
+
+Nota: Estas transformaciones de peticiones normalmente las hacemos desde el servicio(logica de negocio) y no desde el componente.
+
+Ejemplo: en este caso vamos a imprimir en cada producto un campo adicional de impuestos, el cual calcularemos desde el Front:
+
+1) En nuestra interfaz de producto "src\app\models\product.model.ts", creamos un nuevo atributo llamado "taxes":
+
+	export interface Product {
+		id: string;
+		title: string;
+		price: number;
+		images: string[];
+		category: Category;
+		description: string;
+		taxes?: number;
+	}
+
+En este caso usamos "?" para hacer que el atributo "taxes" sea opcional.
+
+2) En nuestro servicio "src\app\services\products.service.ts", agregamos un nuevo operador "map":
+
+	...
+	import { retry, catchError, map } from "rxjs/operators";
+	...
+	getAllProducts(limit?: number, offset?: number){
+		let params = new HttpParams();
+		if(limit != undefined && offset != undefined){
+			params = params.set('limit', limit);
+			params = params.set('offset', offset);
+		}
+		return this._http.get<Product[]>(this.api, { params })
+		.pipe(
+			retry(3),
+			map(products => products.map(item => {
+				return {
+				...item,
+				taxes: .19 * item.price
+				}
+			}))
+		);
+	}
+
+El primer "map" es el operador de transformación de la libreria RxJS, nos permite transformar c/u de los valores emitidos por el observable, aplicando una función a cada item.
+
+En este caso recibe el array de productos "products", y en la función de transformación, usamos el segundo "map", que corresponde al metodo de arrays de JavaScript, el cual calcula el impuesto del 19%(iva) con respecto al precio del producto.
+
+Nota: para más info de los operadores de RxJS:
+
+	https://angular.io/guide/rx-library
+
+3) En nuestra plantilla de componente "src\app\components\product\product.component.html", imprimimos el impuesto del producto:
+
+	<p class="price_text">Iva <span style="color: #262626;">{{product.taxes ?? ''}}</span></p>
+
+Hay que tener cuidado de no imprimirlo de forma directa, ya que si no viene el atributo generaria un error, para evitar la impresión directa, usamos "?? ''" para que no imprima nada si viene null, y la otra forma seria usar la directiva "ngIf" en la etiqueta del parrafo.
+_______________________________________________________
+
+	[11.5]. Evitar Callback Hell:
+_______________________________________________________
+
+Esto se da cuando tenemos varias peticiones donde cada una de ellas depende de la otra. Por lo que empezamos a anidar varias veces haciendo que el código sea dificil de leer y de mantener.
+
+Los observables tambien sufren de este problema.
+
+_______________________________________________________
+
+	[11.5.1]. Callback Hell con dependencia:
+_______________________________________________________
+
+Ejemplo de callback hell: se está realizando una petición para la lectura de un producto e inmediatamente se está actualizando el mismo. Necesitamos del primer resultado para poder ejecutar la segunda operacion, generando un "subscribe" dentro de otro.
+
+	readAndUpdate(id: string){
+		//Lectura del producto
+		this.productsService.getProduct(id)
+			//primer subscribe
+			.subscribe(data => {
+
+				//Actualizacion
+				this.productsService.updateProduct(data.id, { title: 'Nuevo nombre del producto' })
+					//segundo subscribe
+					.subscribe(updateResponse => {
+        				console.log(updateResponse)
+					});
+			});
+	}
+
+- Solucionando con Promesas:
+
+Utilizando promesas se puede resolver facilmente este problema con async/await, pero con observables debemos usar la libreria RxJS.
+
+	readAndUpdate(id: string){
+		this.productsService.getProduct(id)
+		//Lectura del producto
+		.then(
+			//Primera accion
+		)
+		.then(
+			//Segunda accion
+		)
+	} 
+
+- Solucionar con Observables:
+
+Para solucionar le callback hell, usamos el operador "switchMap":
+
+	import { switchMap } from 'rxjs/operators';
+	...
+	readAndUpdate(id: string){
+		this.productsService.getProduct(id)
+			.pipe(
+				switchMap(product => {
+					return this.productsService.update(product.id, {title: 'change'})
+				}),
+				switchMap(updateResponse => {
+					//another action with the update response
+					return updateResponse.title
+				})
+			)
+			.subscribe(res => {
+				// Respuesta final luego de los switchMaps
+				// En este caso recibe el titulo del producto actualizado
+			});
+	}
+
+Lo que hace "switchMap" es recibir el dato que emite un observable, y utilizarlo como input para el segundo. De esta manera, el código queda más limpio y profesional.
+_______________________________________________________
+
+	[11.5.2]. Observables no dependientes:
+_______________________________________________________
+
+Por ejemplo, cuando queremos ejecutar dos peticiones, que no dependen la una de la otra, y al mismo tiempo.
+
+- Solucionar con promesas:
+
+Con las promesas, puedes hacer uso de Promise.all([]) para realizar N procesamientos asincrónicos en paralelo y obtener sus resultados al mismo tiempo:
+
+	Promise.all(promesa_1(), promesa_2())
+
+- Solucionar con Observables:
+
+Para manipular varios observables al mismo tiempo, usamos "zip" de la libreria RxJS:
+
+	import { zip } from 'rxjs';
+	...
+	readAndUpdate(): void {
+		// Agrupando observables en un mismo subscribe
+		zip(
+			this.productsService.getProduct(id),
+      		this.productsService.update(id, {title: 'nuevo nombre'})
+    )
+		)
+		.subscribe(response => {
+			// zip nos devuelve ambos resultados en forma de array.
+			// El orden depende exclusivamente de como lo ubicamos en el zip
+			const product = response [0];
+			const update = response [1];
+		});
+	}
+
+En el "subscribe", recibimos la respuesta en un array, podemos diferenciar la respuesta de cada petición por el indice, el índice 0 posee el resultado de la lectura y el índice 1 el del update.
+
+Nota: está logica la usamos en nuestro servicio "src\app\services\products.service.ts":
+
+	fetchReadAndUpdate(id: string, dto:UpdateProductDTO) {
+		return zip(
+			this.getProduct(id),
+			this.update(id, dto)
+		);
+	}
+
+	getProductAndupdate(id: string, dto:UpdateProductDTO){
+		return this.getProduct(id)
+			.pipe(
+				switchMap((product) => this.update(product.id, dto))
+			)
+	}
+
+Y luego lo usamos en el componente "src\app\components\product\product.component.spec.ts":
+
+	readAndUpdate(id: string){
+		this.productsService.getProductAndupdate(id, {title: 'change'})
+			.subscribe(data => {
+				console.log(data);
+			});
+
+		this.productsService.fetchReadAndUpdate(id, {title: 'change'})
+			.subscribe(response => {
+				const product = response[0];
+				const update = response[1];
+			})
+	}
+
+Nota: Es importante tener en cuenta que toda la logica de las peticiones debemos ubicarlas en los servicios, y utilizar los componentes solamente para lo que realmente son: mostrar la informacion y manipular la interaccion con el usuario.
+
+_______________________________________________________
+
+	[12]. Auth:
+_______________________________________________________
+
+Haremos un Login y manejo de autenticación con la API, y mantendremos la sesión iniciada.
+
+La API utilizada maneja la autenticación con JWT (JSON Web Tokens).
+
+Nota: para más info de JWT:
+
+	https://jwt.io
+_______________________________________________________
+
+	[12.1]. Como funciona la autenticación en la API:
+_______________________________________________________
+
+Usaremos la siguiente API:
+
+	https://fakeapi.platzi.com
+
+1) En la API, ya existen unos usuarios que podemos usar o podemos crear un nuevo usuario.
+
+Para ver todos los usuarios:
+
+	[GET] https://api.escuelajs.co/api/v1/users
+
+2) Nuestra aplicación(front) hace el login al API(backend) a través del endpoint "/auth/login/".
+
+Para el "login" enviamos al endpoint el nombre de usuario y el password.
+
+	[POST] https://api.escuelajs.co/api/v1/auth/login
+
+3) Si el usuario y password enviados al endpoint, son correctos, el backend nos devuelve un "access_token" (JWT).
+
+Si es incorrecto, el backend deberia enviarnos un mensaje y codigo de error, por ejemplo:
+
+	{
+		"statusCode": 401,
+		"message": "Unauthorized"
+	}
+
+4) El token lo debemos almacenar en el front, para hacer nuevas peticiones al backend que esten protegidas, por ejemplo para consultar el perfil, el usuario debe estar logueado.
+
+	[GET] https://api.escuelajs.co/api/v1/auth/profile
+
+_______________________________________________________
+
+	[12.2]. Servicios para autenticación:
+_______________________________________________________
+
+Crearemos tres servicios:
+
+- auth: se encarga del la autenticacion del login y la autenticacion para ver los datos del perfil.
+
+- users: se encarga de la creacion y lectura de usuarios.
+
+- token: se encarga de guardar y obtener el token de donde sea que lo hayamos guardado.
+
+1) Creamos los servicios:
+
+	ng g s services/auth
+
+	ng g s services/users
+
+	ng g s services/token
+
+2) Creamos las nuevas interfaces(modelos):
+
+- "src\app\models\user.model.ts":
+
+	export interface User {
+		id: string;
+		name: string;
+		email: string;
+		password: string;
+	}
+
+	export interface CreateUserDTO extends Omit<User, 'id' > {}
+
+Nota: el Backend, por seguridad no deberia devolvernos el password, pero esta es una API de pueba.
+
+- "src\app\models\auth.model.ts":
+
+	export interface Auth {
+  		access_token: string;
+	}
+
+3) En el servicio "src\app\services\users.service.ts":
+
+	import { Injectable } from '@angular/core';
+	import { HttpClient } from "@angular/common/http";
+
+	import { User, CreateUserDTO } from "src/app/models/user.model";
+
+	@Injectable({
+		providedIn: 'root'
+	})
+	export class UsersService {
+
+		private apiUrl:string = 'https://api.escuelajs.co/api/v1/users';
+
+		constructor(
+			private _http:HttpClient
+		) { }
+
+		create(dto: CreateUserDTO){
+			return this._http.post<User>(this.apiUrl, dto);
+		}
+
+		getAll(){
+			return this._http.get<User[]>(this.apiUrl);
+		}
+	}
+
+4) En el servicio "src\app\services\auth.service.ts":
+
+	import { Injectable } from '@angular/core';
+	import { HttpClient } from "@angular/common/http";
+
+	import { Auth } from 'src/app/models/auth.model';
+
+	@Injectable({
+		providedIn: 'root'
+	})
+	export class AuthService {
+
+		private apiUrl:string = 'https://api.escuelajs.co/api/v1//auth';
+
+		constructor(
+			private _http:HttpClient
+		) { }
+
+		login(email: string, password: string){
+			return this._http.post<Auth>(`${this.apiUrl}/login`, {email, password});
+		}
+
+		profile(){
+			return this._http.get(`${this.apiUrl}/profile`);
+		}
+	}
+
+Nota, en este caso no creamos modelo, ya que solo necesita dos datos email y password.
+
+5) En nuestro componente de login:
+
+	import { AuthService } from 'src/app/services/auth.service';
+	import { UsersService } from 'src/app/services/users.service';
+
+	export class LoginComponent {
+		constructor(
+			private _authService: AuthService,
+			private _usersService: UsersService,
+		) { }
+
+		createUser(){
+			this._usersService.create({
+				name: 'Ricardo',
+				email: 'ricardo@mail.com',
+				password: '123456'
+			})
+			.subscribe(rta =>{
+				console.log(rta);
+			})
+		}
+
+		login(){
+			this._authService.login('ricardo@mail.com', '123456')
+			.subscribe(rta =>{
+				console.log(rta.access_token);
+			})
+		}
+	}
+
+6) En nuestra plantilla de componente:
+
+
+
+_______________________________________________________
+
+	[7]. Router de Angular (Routing / Rutas):
+_______________________________________________________
+
+Vamos a configurar el router de Angular, el cual nos va a permitir tener varias URLs, pero solo se cargara contenido dinamicamente en una zona de la página, sin necesidad de recargar todo el navegador.
+
+Las URLs o páginas que vamos a configurar son:
+
+	http://localhost:4200/
+
+	http://localhost:4200/home
+
+	http://localhost:4200/blog
+
+	http://localhost:4200/formulario
+
+	http://localhost:4200/pagina
+
+	http://localhost:4200/
+
+1) Creamos un componente por cada url que vamos a usar:
+
+	ng g component components/home
+	ng g component components/blog
+	ng g component components/formulario
+	ng g component components/pagina
+
+2) Configuramos el router, dentro de la carpeta "app" creamos el archivo "app.routing.ts":
+
+	// importar los modulos del router de Angular
+	import { ModuleWithProviders } from '@angular/core';
+	import { Routes, RouterModule } from '@angular/router';
+
+	// importar componentes que van a tener página exclusiva
+	import { HomeComponent } from './components/home/home.component';
+	import { BlogComponent } from './components/blog/blog.component';
+	import { FormularioComponent } from './components/formulario/formulario.component';
+	import { PeliculasComponent } from './components/peliculas/peliculas.component';
+	import { PaginaComponent } from './components/pagina/pagina.component';
+
+	// Array de rutas
+	const appRoutes: Routes = [
+		{path: '', component: HomeComponent},
+		{path: 'home', component: HomeComponent},
+		{path: 'blog', component: BlogComponent},
+		{path: 'formulario', component: FormularioComponent},
+		{path: 'peliculas', component: PeliculasComponent},
+		{path: 'pagina-de-pruebas', component: PaginaComponent}
+	];
+
+	// Exportar el modulo de rutas
+	export const appRoutingProviders: any[] = [];
+	export const routing: ModuleWithProviders<any> = RouterModule.forRoot(appRoutes);
+
+3) Cargamos la configuración del router dentro del archivo "app.module.ts":
+
+	import { NgModule } from '@angular/core';
+	import { BrowserModule } from '@angular/platform-browser';
+	import { routing, appRoutingProviders } from './app.routing';
+
+	...
+
+	imports: [
+		BrowserModule,
+		routing //carga como modulo, modificando el funcionamiento global del framework
+	],
+	providers: [appRoutingProviders], //carga como servicio
+
+4) En el archivo "app.component.html", dentro de la sección con clase "Content", definimos la directiva del router, encargada de cargar ese contenido dinamicamente segun la URL:
+
+	<!-- Contenido -->
+	<section class="Content">
+		<router-outlet></router-outlet>
+	</section>
+
+Finalmente podemos probar en el navegador las rutas creadas, nos daremos cuenta que en la sección con clase "Content", se carga dinamicamente el contenido de un componente segun la URL indicada.
+_______________________________________________________
+
+	[7.1]. Página de error 404:
+_______________________________________________________
+
+Para hacer una página de error 404 que se muestre cuando el usuario ingresa a una URL que no existe hacemos lo siguiente:
+
+1) Generamos el componente que mostrara el mensaje de error:
+
+	ng g component components/error
+
+2) Escribimos el mensaje de error en el template del componente (archivo "error.component.html"):
+
+	<h2 class="u-subtitle">Página no encontrada</h2>
+	<p>La página que buscas no existe, intentalo más tarde</p>
+
+3) Añadimos el componente y la ruta, en el archivo "app.routing.ts":
+
+	import { ErrorComponent } from './components/error/error.component';
+
+	...
+
+		{path: 'pagina-de-pruebas', component: PaginaComponent},
+		{path: '**', component: ErrorComponent}
+	];
+
+NOTA IMPORTANTE: El path de error 404 debe ser el último en el router, porque sino, no funcionarian las demas rutas.
+
+Finalmente podemos probar con:
+
+	http://localhost:4200/fdfd
+
+_______________________________________________________
+
+	[7.2]. Menú de Navegación:
+_______________________________________________________
+
+Para que el menú de navegación principal funcione correctamente con el router, hacemos lo siguiente:
+
+1) Quitamos el atributo "href" de los enlaces del menú, en el componente que tenga el menú, en este caso el archivo "header.component.html":
+
+	<!-- MENU -->
+	<nav class="Menu">
+		<ul class="Menu-list">
+			<li><a [routerLink]="['/home']">Inicio</a></li>
+			<li><a [routerLink]="['/blog']">Blog</a></li>
+			<li><a [routerLink]="['/formulario']">Formulario</a></li>
+			<li><a [routerLink]="['/peliculas']">Peliculas</a></li>
+			<li><a [routerLink]="['/pagina-de-pruebas']">Página</a></li>
+		</ul>
+	</nav>
+
+En este caso "routerLink" es la directiva que nos permite hacer la navegación hacia nuestras rutas. Al probar los enlaces podemos ver como se cambia la URL y el contenido de nuestra página de manera inmediata sin necesidad de recargar todo.
+
+Nota: la sintaxis usada con "[]":
+
+	<a [routerLink]="['/home']">Inicio</a>
+
+Es para enviar codigo JavaScript, lo anterior lo podemos reemplazar con:
+
+	<a routerLink="home">Inicio</a>
+
+2) Para que se muestre resaltado el enlace activo, usamos la siguiente directiva:
+
+	<!-- MENU -->
+	<nav class="Menu">
+		<ul class="Menu-list">
+			<li><a [routerLink]="['/home']" [routerLinkActive]="['active']">Inicio</a></li>
+			<li><a [routerLink]="['/blog']" [routerLinkActive]="['active']">Blog</a></li>
+			<li><a [routerLink]="['/formulario']" [routerLinkActive]="['active']">Formulario</a></li>
+			<li><a [routerLink]="['/peliculas']" [routerLinkActive]="['active']">Peliculas</a></li>
+			<li><a [routerLink]="['/pagina-de-pruebas']" [routerLinkActive]="['active']">Página</a></li>
+		</ul>
+	</nav>
+
+En este caso, se le agrega la clase "active" al enlace activo, podemos en los estilos indicar los estilos de resaltado de ese enlace:
+
+	.Menu-list a.active {
+		color: #C62828;
+		font-weight: 700;
+	}
+
+Nota: la sintaxis usada con "[]", es para enviar codigo JavaScript:
+
+	[routerLinkActive]="['active']"
+
+Lo anterior lo podemos reemplazar con:
+
+	routerLinkActive="active"
+
+_______________________________________________________
+
+	[7.3]. Parámetros por la URL:
+_______________________________________________________
+
+Para pasar parámetros por la URL, es necesario crear la ruta que leera esos parámetros.
+
+1) Creamos la ruta en el archivo "app.routing.ts":
+
+	{path: 'pagina-de-pruebas/:nombre', component: PaginaComponent},
+
+En este caso el parámetro que se le va a pasar por la URL es obligatorio, por lo que si vamos a la siguiente URL:
+
+	http://localhost:4200/pagina-de-pruebas
+
+Se nos va a redireccionar a la pág. 404 no encontrada.
+
+2) En el archivo "pagina.component.ts", cargamos las clases de Angular para recuperar los parametros de la URL:
+
+	import { ActivatedRoute, Params } from '@angular/router';
+
+	...
+
+	public titulo: string;
+	public nombre: string;
+
+	constructor(
+		private _route: ActivatedRoute
+	) {
+		this.titulo = "Página de pruebas";
+
+		this.nombre = "";
+	}
+
+	ngOnInit(): void {
+		// recogemos los parametros de la URL
+		this._route.params.subscribe( (params: Params) => {
+			this.nombre = params['nombre'];
+			console.log(params);
+		});
+	}
+
+"subscribe" es un observable, el cual esta siempre mirando por una respuesta de un servicio, ya sea asincrono o no.
+
+Nota: si no queremos incializar la variable " this.nombre = "" " en el constructor, podemos ahorrarnos esa linea de código desde la declaración con (!):
+
+	public nombre!: string;
+
+3) Mostramos el parametro obtenido en el archivo "pagina.component.html":
+
+	<p>El nombre es: {{nombre}}</p>
+
+4) Probamos en el navegador:
+
+	http://localhost:4200/pagina-de-pruebas/ricardo
+
+_______________________________________________________
+
+	[7.3.1]. Varios Parámetros por la URL:
+_______________________________________________________
+
+Para pasar mas de un parámetro por la URL, cambiamos la ruta creada anteriormente, por la siguiente ruta en el archivo "app.routing.ts":
+
+	{path: 'pagina-de-pruebas/:nombre/:apellido', component: PaginaComponent},
+
+Podemos probar en el navegador con:
+
+	http://localhost:4200/pagina-de-pruebas/ricardo/Landinez
+
+Nota 1: no olvidar obtener el valor del parametro "apellido" en el archivo "pagina.component.ts", y mostrarlo en el archivo "pagina.component.html".
+
+Nota 2: Ahora tanto el parametro "nombre", como el parametro "apellido" son obligatorios en la URL, si solo indicamos el "nombre", nos redirige a la pág. 404. Si se quiere recibir solo el "nombre", y en otra URL "nombre" y "apellido", debemos crear las dos rutas:
+
+	{path: 'pagina-de-pruebas/:nombre', component: PaginaComponent},
+    {path: 'pagina-de-pruebas/:nombre/:apellido', component: PaginaComponent},
+
+_______________________________________________________
+
+	[7.3.2]. Parámetros por la URL opcionales:
+_______________________________________________________
+
+Para hacer que los parametros "nombre" y "apellido" sean opcionales, definimos dos rutas en el archivo "app.routing.ts":
+
+	{path: 'pagina-de-pruebas', component: PaginaComponent},
+    {path: 'pagina-de-pruebas/:nombre/:apellido'', component: PaginaComponent},
+
+De esta forma si ingresamos a la siguiente URL, ya no va a redirigirnos a la pág. 404:
+
+	http://localhost:4200/pagina-de-pruebas
+
+Sin embargo en el template, nos seguira mostrando "El nombre es: , y el apellido es:", para solucionar esto, usamos una directiva condicional en el archivo "pagina.component.html":
+
+	<h2 class="u-subtitle">{{titulo}}</h2>
+	<div *ngIf="nombre && apellido">
+		<p>El nombre es: {{nombre}}, y el apellido es: {{apellido}}</p>
+		<p>pagina works!</p>
+	</div>
+
+	<div *ngIf="!nombre || !apellido">
+		<p>No hay <strong>parámetros</strong> pasados por URL.</p>
+		<p>pagina works!</p>
+	</div>
+
+_______________________________________________________
+
+	[7.4]. Redirecciones:
+_______________________________________________________
+
+Para hacer redirecciones, por ejemplo al presionar un boton y nos lleve a otra URL, primero importamos la funcionalidad del Router, y creamos el metodo en el componente, encargado de hacer la redireccion.
+
+1) En el archivo "pagina.component.ts" importamos la funcionalidad del Router y hacemos el metodo:
+
+	import { Router, ActivatedRoute, Params } from '@angular/router';
+
+	...
+
+	constructor(
+		private _route: ActivatedRoute,
+		private _router: Router
+	) {
+
+	...
+
+	redireccion(){
+		this._router.navigate(['/formulario']);
+	}
+
+2) Creamos el boton con el evento "click" que va a disparar el redireccionamiento, en el archivo "pagina.component.html": 
+
+	<button (click)="redireccion">Ir hacia el formulario</button>
+_______________________________________________________
+
+	[7.4.1]. Redireccion con parametros:
+_______________________________________________________
+
+Si por ejemplo queremos redireccionar a la misma página en donde estamos, pero enviando parametros a través de la URL:
+
+	redireccion(){
+		this._router.navigate(['/pagina-de-pruebas', 'Ricardo', 'Landinez']);
+	}
+
+En este ejemplo, se envian 2 parametros, cada parametro enviado por la URL, se envia en la redirección separado por comas.
+
+_______________________________________________________
+
+	[10]. Formularios:
+_______________________________________________________
+
+En Angular existen dos formas de hacer y validar formularios:
+
+- Formularios basados en plantilla.
+- Formularios reactivos.
+
+Los "Formularios basados en plantilla" se usa cuando el formularios es sencillo y tiene pocos campos.
+
+Los "Formularios reactivos", los usamos cuando manejamos formularios muy complejos y con gran cantidad de campos.
+_______________________________________________________
+
+	[10.1]. Formularios basados en plantilla:
+_______________________________________________________
+
+Los formularios se vinculan a un modelo de datos(objeto) y se usa un binding bidireccional(two way data binding), que hace que se llenen los campos de ese objeto a medida que se va llenando el formulario, y si los imprimimos en la plantilla, se van mostrando al mismo tiempo.
+
+1) En el archivo "app.module.ts", importamos la clase o modulo "FormsModule" y la y especificamos en la propiedad "imports":
+
+	import { FormsModule } from '@angular/forms';
+
+	...
+
+	imports: [
+		BrowserModule,
+		routing,
+		FormsModule
+	],
+
+En "imports", los modulos internos de Angular, los desarrollados por nosotros y de otras librerias, se deben cargar allí para que funcionen globalmente en toda la aplicacion.
+
+2) Creamos el componente del formulario, y en la plantilla "formulario.component.html", ponemos el formulario segun maquetacion:
+
+	<section class="Content">
+
+		<h2 class="u-subtitle">{{titulo}}</h2>
+		
+		<form action="" class="Form-mid">
+			<div class="Form-group">
+				<label for="nombre">Nombre</label>
+				<input type="text" name="nombre" id="nombre">
+			</div>
+			<div class="Form-group">
+				<label for="apellidos">Apellidos</label>
+				<input type="text" name="apellidos" id="apellidos">
+			</div>
+			<div class="Form-group">
+				<label for="descrip">Descripción</label>
+				<textarea name="descrip" id="descrip" cols="30" rows="10"></textarea>
+			</div>
+			<div class="Form-group">
+				<p class="Form-radiolabel">Seleccione Genero</p>
+				<div class="Form-radiobtns">
+					<input type="radio" name="genero" id="hombre" value="hombre">
+					<label for="hombre">Hombre</label>
+					<input type="radio" name="genero" id="mujer" value="mujer">
+					<label for="mujer">Mujer</label>
+					<input type="radio" name="genero" id="otro" value="otro">
+					<label for="otro">Otro</label>
+				</div>					
+			</div>
+			<input type="submit" value="Enviar" class="btn btn-success">
+		</form>
+
+	</section>
+
+3) En el archivo "formulario.component.ts" creamos el objeto que va a guardar los valores que se ingresen en el formulario:
+
+	public user: any;
+
+	constructor() {
+		this.titulo = "Formulario";
+
+		this.user = {
+			nombre: '',
+			apellidos: '',
+			descripcion: '',
+			genero:''
+		};
+	}
+
+	onSubmit(){
+		alert("formulario enviado");
+		console.log(this.user);
+	}
+
+Tambien creamos el metodo "onSubmit()" (este metodo le podemos poner cualquier nombre), el cual imprime la alerta y por consola nos muestra el contenido del objeto "user".
+
+4) En el formulario vinculamos el evento "ngSubmit", que llamara el metodo "onSubmit()":
+
+	<form action="" class="Form-mid" (ngSubmit)="onSubmit()">
+
+Nota: al usar el modulo "FormsModule" y la directiva "ngModel", se desahabilita el envio normal del formulario.
+_______________________________________________________
+
+5) Usamos la directiva "ngModel", que es la encargada del hacer el enlace de datos bidireccional(two-way data binding) a un elemento de formulario HTML:
+
+	<input type="text" name="nombre" id="nombre" [(ngModel)]="user.nombre" >
+
+	<input type="text" name="apellidos" id="apellidos" [(ngModel)]="user.apellidos">
+
+	<textarea name="descrip" id="descrip" cols="30" rows="10" [(ngModel)]="user.descripcion"></textarea>
+
+	<input type="radio" name="genero" id="hombre" value="hombre" [(ngModel)]="user.genero">
+	<input type="radio" name="genero" id="mujer" value="mujer" [(ngModel)]="user.genero">
+	<input type="radio" name="genero" id="otro" value="otro" [(ngModel)]="user.genero">
+
+Podemos ver que en campos de tipo "radio" se usa el mismo valor para la directiva, ya que es un solo campo.
+
+6) En el archivo "formulario.component.html" creamos un div que solo se mostrara si el objeto "user" tiene algun campo:
+
+	<div *ngIf="user.nombre || user.apellidos || user.genero || user.descripcion">
+		<h2 class="u-subtitle">Datos ingresados:</h2>
+		<p *ngIf="user.nombre"><strong>Nombre:</strong> {{user.nombre}}</p>
+		<p *ngIf="user.apellidos"><strong>Apellidos:</strong> {{user.apellidos}}</p>
+		<p *ngIf="user.genero"><strong>Genero:</strong> {{user.genero}}</p>
+		<p *ngIf="user.descripcion"><strong>Descripción:</strong> {{user.descripcion}}</p>
+	</div>
+
+De esta forma al probar en el navegador, podremos ver lo potente que es la "two-way data binding", al escribir en el "input", automaticamente se estara mostrando el dato en el "div", y al mismo tiempo se guardara ese valor en el objeto "user".
+
+Nota: para ver como se guardan los valores en el objeto "user" a medida que escibimos, podemos usar el hook "DoCheck" en el archivo "formulario.component.ts":
+
+	ngDoCheck() {
+		console.log(this.user);
+	}
+_______________________________________________________
+
+	[10.1.1]. Validar Formularios basados en plantilla:
+_______________________________________________________
+
+Usamos la validación de formularios basados en plantilla, cuando el formulario es muy pequeño, como un "suscribete", donde solo tenemos un campo de correo, o solo dos campos.
+
+Para validar formularios en Angular, usamos el atributo "required" y otros atributos de HTML 5 como "pattern", "min", "max", etc.
+
+Nota: Para mas info. de los atributos de validacion HTML 5:
+
+	https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Constraint_validation
+
+1) Creamos en el elemento del formulario una variable local asignandole "ngModel", y asignamos los atributos Html5 para validar:
+
+	<textarea name="descrip" id="descrip" cols="30" rows="10" [(ngModel)]="user.descripcion" #descripcion="ngModel" required></textarea>
+	<div *ngIf="descripcion.invalid && descripcion.touched">
+		<small >La descripción es requerida.</small>
+	</div>
+
+Nota: Las variables locales se declaran en las etiquetas html con "#".
+
+En este caso la variable local es "#descripcion". Las validacion es "required".
+
+Luego tenemos un "div" opcional que nos mostrara un mensaje de error de la validación. Con "nombre.touched" nos aseguramos que se muestre el "div" si el usuario hace focus en el textarea y selecciona otro campo sin escribir nada.
+
+Tambien podemos ocultar o mostrar el "div" con la alerta de validación, sin usar "*ngIf", verificando los estados de control y vinculandolos a la propiedad "hidden" del "div":
+
+	<div [hidden]="descripcion.valid || descripcion.pristine">
+		<small >La descripción es requerida.</small>
+	</div>
+
+Nota: para más info de los estados de control:
+
+	https://angular.io/guide/forms#track-control-states
+
+	https://angular.io/guide/forms#show-and-hide-validation-error-messages
+
+2) Para tener un mensaje personalizado de acuerdo al error de validación:
+
+	<input type="text" name="nombre" id="nombre" #nombre="ngModel" [(ngModel)]="user.nombre" required pattern="^[A-Za-z\s]+">
+	
+	<div *ngIf="nombre.invalid && nombre.touched">
+		<small *ngIf="nombre.errors?.['required']">El nombre es requerido.</small>
+		<small *ngIf="nombre.errors?.['pattern']">Solo se permiten caracteres(A-Z).</small>
+		<small *ngIf="nombre.errors?.['invalid']">El nombre no es válido.</small>
+	</div>
+
+En este caso las validaciones son "required", y con "pattern" definimos un patron o expresion regular, en este caso que el nombre sean solo letras y espacios.
+
+En la siguiente línea:
+
+	"nombre.errors?.['required']"
+
+Verificamos que en el array de errores "errors", exista un indice de "required", el signo pregunta "?" es para que si no existe ese indice, no nos genere error, e igual no mostraria la validación.
+
+3) En el formulario asignamos una variable local, para identificar el formulario y le asignamos "ngForm", que nos permitira saber el estado valido o invalido de todo el formulario:
+
+	<form class="Form-mid" #userForm="ngForm" (ngSubmit)="onSubmit()">
+
+4) En el boton para enviar el formulario, lo deshabilitamos en caso de que los campos no sean validos:
+
+	<input type="submit" value="Enviar" class="btn btn-success" [disabled]="userForm.invalid">
+
+Aca usamos la variable local creada en la etiqueta "form", y accedemos a su estado de validación.
+
+Nota 1: para mas info. de la validación de formularios:
+
+	https://angular.io/guide/form-validation
+
+	https://angular.io/guide/forms
+
+	https://angular.io/api/forms/FormControl
+
+Nota 2: podemos dar estilos(algun color especial) a los campos que se validen, ya que Angular asigna unas clases especiales al validar los campos. para mas info.:
+
+	https://angular.io/guide/form-validation#control-status-css-classes
+
+_______________________________________________________
+
+	[10.2]. Formularios Reactivos:
+_______________________________________________________
+
+Usamos los formularios reactivos, cuando tenemos formularios muy complejos.
+
+1) En nuestro modulo principal, archivo "app.module.ts", importamos la clase o modulo "ReactiveFormsModule" y la y especificamos en la propiedad "imports":
+
+	import { ReactiveFormsModule } from '@angular/forms';
+
+	...
+
+	imports: [
+		BrowserModule,
+		routing,
+		ReactiveFormsModule
+	],
+
+Nota: al escribir "ReactiveFormsModule", en el array "imports", se importa automaticamente el modulo en la parte superior de nuestro archivo (esto ocurre si tenemos la extensión Angular Language Service instalado en el editor).
+
+2) En nuestro componente de formulario hacemos uso de "FromControl" para el formulario reactivo:
+
+	import { Component } from '@angular/core';
+	import { FormControl } from '@angular/forms';
+
+	@Component({
+		selector: 'app-formulario',
+		templateUrl: './formulario.component.html',
+		styleUrls: ['./formulario.component.scss']
+	})
+
+	export class FormularioComponent {
+		name = new FromControl('');
+		email = new FromControl('');
+	}
+
+Nota: Si necesitamos imprimir un valor previamente definido en el campo(valor por defecto), en la lógica del componente(archivo.ts) usamos:
+
+	name = new FromControl('Ricardo');
+
+3) Luego en la plantilla de nuestro componente usamos:
+
+	<form>
+		<div>
+			<label class="form-label">
+				Nombre
+			</label>
+
+			<input type="text" class="form-control" placeholder="Ingrese su nombre" [formControl]="name">
+		</div>
+
+		<div>
+			<label class="form-label">
+				Email
+			</label>
+
+			<input type="email" class="form-control" placeholder="Ingrese su correo" [formControl]="email">
+		</div>
+
+		<button type="submit" class="btn btn-primary">
+			Enviar Formulario
+		</button>
+	</form>
+
+Aca en "[formControl]" igualamos con el nombre de las propiedades definidas en la logica del componente (property binding).
+
+De esta forma ya tenemos el formulario reactivo, de forma similar a como se usaba la directiva "ngModel", si queremos imprimir en la plantilla, el valor de lo que escribimos en el campo usamos "string interpolation":
+
+	<p> {{ name.value }} {{ email.value }} </p>
+_______________________________________________________
+
+	[10.2.1]. Validar Formularios Reactivos:
+_______________________________________________________
+
+Para añadir validaciones en el formulario reactivo, se añaden desde la logica del componmente (archivo "*.ts").
+
+4) En nuestro componente de formulario importamos y usamos "Validators":
+
+	import { Component } from '@angular/core';
+	import { FormControl, Validators } from '@angular/forms';
+
+	@Component({
+		selector: 'app-formulario',
+		templateUrl: './formulario.component.html',
+		styleUrls: ['./formulario.component.scss']
+	})
+
+	export class FormularioComponent {
+		name = new FormControl('', Validators.required);
+		email = new FormControl('', [Validators.required, Validators.email]);
+	}
+
+Para añadir más de una validación lo hacemos en un array, como en el campo email.
+
+5) Añadimos en la plantilla la alerta de validación de forma similar a las validaciones basadas en plantilla:
+
+	<form>
+		<div>
+			<label class="form-label">
+				Nombre
+			</label>
+
+			<input type="text" class="form-control" placeholder="Ingrese su nombre" [formControl]="name">
+
+			<div class="alert alert-danger mt-2" [hidden]="name.valid || name.pristine">
+				El nombre es obligatorio.
+			</div>
+
+		</div>
+
+		<div>
+			<label class="form-label">
+				Email
+			</label>
+
+			<input type="email" class="form-control" placeholder="Ingrese su correo" [formControl]="email">
+
+			<div class="alert alert-danger mt-2" [hidden]="email.valid || email.pristine">
+				<span *ngIf="email.errors?.['required']">
+					El email es obligatorio.
+				</span>
+
+				<span *ngIf="email.errors?.['email']">
+					El email debe ser valido.
+				</span>
+			</div>
+
+		</div>
+
+		<button type="submit" class="btn btn-primary">
+			Enviar Formulario
+		</button>
+	</form>
+_______________________________________________________
+
+6) Para acceder al estado de validación de todo el formulario reactivo y poder deshabilitar el boton de submit, importamos y creamos una nueva instancia de "FromGroup":
+
+	import { Component } from '@angular/core';
+	import { FormGroup, FormControl, Validators } from '@angular/forms';
+
+	@Component({
+		selector: 'app-formulario',
+		templateUrl: './formulario.component.html',
+		styleUrls: ['./formulario.component.scss']
+	})
+
+	export class FormularioComponent {
+
+		formUser = new FormGroup({
+			'name': new FormControl('', Validators.required),
+			'email': new FormControl('', [Validators.required, Validators.email]);
+		});
+	}
+
+La nueva instancia de FromGroup necesita que se le pase como objeto los campos del formulario que se van a validar, que ahora son instancias de "FormControl".
+
+7) Ahora en la plantilla, en la etiqueta "form", hacemos un "property binding" de "formUser", y cambiamos el "property binding" a las instancias de "FromControl" previemente hechas:
+
+	<form [formGroup]="formUser">
+		<div>
+			<label class="form-label">
+				Nombre
+			</label>
+
+			<input type="text" class="form-control" placeholder="Ingrese su nombre" formControlName="name">
+		</div>
+
+		<div>
+			<label class="form-label">
+				Email
+			</label>
+
+			<input type="email" class="form-control" placeholder="Ingrese su correo" formControlName="email">
+		</div>
+
+		<button type="submit" class="btn btn-primary">
+			Enviar Formulario
+		</button>
+	</form>
+
+	<!-- Imprimir valores -->
+	{{ formUser.value | json}}
+
+	{{ formUser.get('name')?.value }}
+
+Ahora Angular, a través de "formControlName" verifica a que grupo pertenece el campo, recorriendo el DOM hasta la etiqueta "form", revisando "[formGroup]".
+
+En la impresión de valores, usamos "string interpolation" con un "pipe" para que lo imprima en JSON, o si no saldria: "[object Object]".
+
+Si necesitamos acceder al valor de un campo individual, suamos "get()".
+
+8) Para mostrar la alerta de validación, usamos nuevamente "get()":
+
+	<div class="alert alert-danger mt-2" [hidden]="formUser.get('name')?.valid || formUser.get('name')?.pristine">
+		El nombre es obligatorio.
+	</div>
+
+9) Usando esa sintaxis ensucia mucho la plantilla, por lo que usamos "getters" en la lógica:
+
+	export class FormularioComponent {
+
+		formUser = new FormGroup({
+			'name': new FormControl('', Validators.required),
+			'email': new FormControl('', [Validators.required, Validators.email]);
+		});
+
+		get name(){
+			return this.formUser.get('name');
+		}
+
+		get email(){
+			return this.formUser.get('email');
+		}
+	}
+
+10) Ahora en la plantilla, hacemos referencia al getter:
+
+	<div class="alert alert-danger mt-2" [hidden]="name?.valid || name?.pristine">
+		El nombre es obligatorio.
+	</div>
+
+11) Para evitar colocar el signo pregunta "?" en la plantilla, que usamos porque prodria llegar el valor vacio, y que si lo quitamos genera un error, retornamos en los "getters" como instancias de "FormControl":
+
+	get name(){
+		return this.formUser.get('name') as FormControl;
+	}
+
+- Y en la plantilla:
+
+	<div class="alert alert-danger mt-2" [hidden]="name.valid || name.pristine">
+		El nombre es obligatorio.
+	</div>
+
+12) Finalmente, deshabilitamos el boton de submit, accediendo al estado de validación de todo el formulario:
+
+	<button type="submit" class="btn btn-primary" [disabled]="formUser.invalid">
+		Enviar Formulario
+	</button>	
+_______________________________________________________
+
+	[10.2.2]. FormBuilder:
+_______________________________________________________
+
+Para dejar nuestro código aún más limpio y optimizado,y no tener que estar creando por cada campo una instancia de "FormControl", importamos e implementamos como dependencia "FormBuilder":
+
+	import { Component } from '@angular/core';
+	import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
+
+	@Component({
+		selector: 'app-formulario',
+		templateUrl: './formulario.component.html',
+		styleUrls: ['./formulario.component.scss']
+	})
+
+	export class FormularioComponent {
+
+		constructor(
+			private fb:FormBuilder
+		) { }
+
+		formUser = this.fb.group({
+			'name': ['', Validators.required],
+			'email': ['', [Validators.required, Validators.email] ]
+		});
+
+		get name(){
+			return this.formUser.get('name');
+		}
+
+		get email(){
+			return this.formUser.get('email');
+		}
+	}
+
+Aquí al inyectar la dependencia, le damos el nombre de "fb" (por FormBuilder), pero puede ser cualquier nombre, luego agrupamos el formulario, y como parametro le pasamos un objeto, con los campos, en donde le pasamos un array, en donde el primer elemento hacemos referencia a su valor por defecto(en este caso vacio ""), y segundo elemento las validaciones, que pueden ser en array cuando es más de una.
+
+_______________________________________________________
+
+	[]. Modulos:
+_______________________________________________________
+
+Los modulos nos permiten encapsular partes de nuestra aplicación, son muy utiles, por ejemplo para no ensuciar nuestro modulo principal "app.module.ts", importando todos los componentes en él.
+
+Los modulos se usan para importar librerias y otros modulos y declarar componentes y directivas.
+
+Tambien nos sirve para crear diferentes carpetas, por ejemplo por páginas de nuestra aplicación, y asignarle una página a diferentes desarrolladores, y esté solo tenga que crear las rutas y sus componentes dentro de su carpeta, sin estar importando sus componentes y rutas en el modulo principal.
+
+Ejemplo: Se quiere llegar a tener la siguiente estructura:
+
+	/src/
+		/app/
+			app-routing.module.ts
+			app.component.css
+			app.component.html
+			app.component.ts
+			app.module.ts
+			/core/
+			/modules/
+				/Auth/
+					auth-routing.module.ts
+					auth.module.ts
+					/components/
+					/services/
+					/pages/
+						/auth-page/
+					/pipes/
+				/Tracks/
+				/History/
+				/Home/
+			/shared/
+
+En esta estructura se tiene lo siguiente:
+
+- Un modulo principal "app.module.ts".
+
+- Un modulo de rutas principal "app-routing.module.ts".
+
+- En la carpeta "modules", tenemos un modulo por cada maestra(interna). Estos modulos a su vez, tienen sus enrutadores,  componentes, servicios, pipes, etc.
+
+- Cuatro carpetas(modulos) "Auth", "Tracks", "History" y "Home".
+
+- En c/u de las carpetas, tendremos definido su modulo principal para importar sus componentes("auth.module.ts"), y un modulo de rutas("auth-routing.module.ts").
+
+- En c/u de las carpetas, tiene su propia carpeta para componentes, y una de "page", para el componente de toda la página.
+
+- La carpeta "shared", corresponde a un modulo compartido, donde iran componentes que usamos en toda la aplicación, como por ejemplo el "header" y el "footer".
+
+_______________________________________________________
+
+	[.1]. Crear Modulos:
+_______________________________________________________
+
+Para lograr la anterior estructura hacemos:
+
+1) Para crear modulos con enrutadores usamos:
+
+	ng g m modules/Auth --routing
+
+Repetimos por cada maestra(interna) que tenga nuestra aplicación.
+
+2) Para crear un componente dentro de nuestro modulo, lo generamos así:
+
+	ng g c modules/home/pages/HomePage
+
+En este caso creamos el componente de toda la página "Home".
+
+De esta forma la importación de ese componente, se encuentra en el modulo principal de su carpeta. lo podemos verificar eb el archivo "home.module.ts":
+
+	import { HomePageComponent } from './pages/home-page/home-page.component';
+
+	@NgModule({
+		// Se declaran: componentes, directivas, pipes
+		declarations: [
+			HomePageComponent
+		],
+		// Solo se importan otros modulos
+		imports: [
+			CommonModule,
+			HomeRoutingModule
+		]
+
+Se podria importar cada modulo en el modulo principal "app.module.ts", sin embargo se debe hacer con Lazyloading, para que no cargue todos los modulos y componentes apenas entra en el sitio, ya que no se necesita que todos carguen al tiempo y que haga nuestra aplicación lenta.
+_______________________________________________________
+
+	[.2]. Lazyloading:
+_______________________________________________________
+
+3) Creamos la ruta de nuestro modulo "Home", en su modulo de rutas "home-routing.module.ts":
+
+	import { NgModule } from '@angular/core';
+	import { RouterModule, Routes } from '@angular/router';
+	import { HomePageComponent } from './pages/home-page/home-page.component';
+
+	const routes: Routes = [
+		{
+			path: '',
+			component: HomePageComponent
+		}
+	];
+
+	@NgModule({
+		imports: [RouterModule.forChild(routes)],
+		exports: [RouterModule]
+	})
+	export class HomeRoutingModule { }
+
+4) Ahora hacemos uso de Lazyloading en el modulo de rutas pricipal "app-routing.module.ts":
+
+	import { NgModule } from '@angular/core';
+	import { RouterModule, Routes } from '@angular/router';
+
+	const routes: Routes = [
+		{
+			path: '',
+			loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
+		}
+	];
+
+	@NgModule({
+		declarations: [],
+		imports: [
+			RouterModule.forRoot(routes)
+		],
+		exports: [RouterModule]
+	})
+	export class AppRoutingModule { }
+
+En este caso se crea una ruta raíz(/), y en vez de cargar un componente en la ruta, cargamos un modulo hijo con importación dinámica, a travéz de promesas.
+
+En la promesa, la "m" es de modulo.
+
+Repetimos el proceso por cada modulo o ruta que se tenga.
+
+5) En nuestro modulo principal "app.module.ts" importar el modulo de rutas:
+
+	import { AppRoutingModule } from './app-routing.module';
+
+	@NgModule({
+		declarations: [
+			AppComponent
+		],
+		imports: [
+			BrowserModule,
+			AppRoutingModule
+		],
+
+_______________________________________________________
+
+	[.3]. Módulo compartido(shared):
+_______________________________________________________
+
+1) Para crear la carpeta junto con su archivo de modulo y sin enrutador:
+
+	ng g m shared
+
+Si queremos que NO se cree la carpeta "shared", porque ya la habiamos creado anteriormente, le pasamos el flag "--flat":
+
+	ng g m shared --flat
+
+2) Ahora creamos nuestro componente que va a ser global y compartido:
+
+	ng g c shared/components/Header
+
+Repetimos el procedimiento con los componentes que queremos compartir.
+
+3) Para poder usar un componente del modulo "shared" en otro modulo, primero hay que exportar ese componente, en el archivo "shared.module.ts":
+
+	@NgModule({
+		declarations: [
+			SideBarComponent,
+			MediaPlayerComponent,
+			HeaderUserComponent
+		],
+		imports: [
+			CommonModule
+		],
+		exports: [
+			SideBarComponent
+		]
+	})
+
+En este caso el componente es el "SideBarComponent".
+
+4) Creamos conexión entre el modulo "shared" y el modulo que va a usar sus componentes, en este caso "home.module.ts":
+
+	import { SharedModule } from '@shared/shared.module';
+
+	@NgModule({
+		declarations: [
+			HomePageComponent
+		],
+		imports: [
+			CommonModule,
+			HomeRoutingModule,
+			SharedModule
+		]
+	})
+
+Aquí vemos que ya estamos haciendo uso del "Path Alias".
+
+5) Para usar un componente "shared" dentro de otro, hacemos uso de su etiqueta, por ejemplo en "home-page.component.html" usamos:
+
+	<app-side-bar></app-side-bar>
+
+_______________________________________________________
+
+	[.4]. Path(Alias):
+_______________________________________________________
+
+Los "Path Alias", nos sirven para acortar las rutas hacia los archivos en el momento de importarlos.
+
+Por ejemplo, si estamos en el "home-routing.module.ts", y necesitamos importar el componente compartido "SideBarComponent", la importación quedaria así:
+
+	import { SideBarComponent } from 'src/app/shared/components/side-bar/side-bar.component';
+
+O tambien puede quedar así:
+
+	import { SideBarComponent } from './../../shared/components/side-bar/side-bar.component';
+
+Para evitar esto, creamos "Path Alias" de la siguiente manera:
+
+1) En el archivo "tsconfig.json", ubicado en la raíz del proyecto, definimos dentro de "compilerOptions":
+
+	"compilerOptions": {
+		...
+		"paths": {
+			"@core/*":[
+				"src/app/core/*"
+			],
+			"@modules/*":[
+				"src/app/modules/*"
+			],
+			"@shared/*":[
+				"src/app/shared/*"
+			]
+		}
+	}
+
+2) Ahora volviendo donde importabamos el modulo, ahora se veria así:
+
+	import { SideBarComponent } from '@shared/components/side-bar/side-bar.component';
+
+De esta forma queda mucho más limpio el código y la ruta de importación.
+
+_______________________________________________________
+
+	[.5]. Router Outlet:
+_______________________________________________________
+
+El Router Outlet nos permite cargar contenido en un area del componente donde lo usemos, sin necesidad de estar recargando toda la página. Así como tenemos diferentes modulos, podemos tener "Routers Outlets" hijos, que cargaran contenido un su interior de acuerdo a la ruta del modulo.
+
+En el siguiente ejemplo, tenemos el componente "home-page.component.ts", que es un componente de página, y se encuentra dentro de su modulo de "Home".
+
+Imaginemos que en su interior tiene un "Header", un "SideBar", un "Footer" y una sección de contenido principal, que ira cambiando segun nuestra navegación.
+
+Recordemos que tenemos un router principal "app-routing.module.ts", en este enrutador, podriamos generar más rutas, hacia las demás páginas(modulos) de nuestra aplicación, por ejemplo:
+
+	const routes: Routes = [
+		{
+			path: '',
+			loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
+		},
+		{
+			path: 'tracks',
+			loadChildren: () => import('./modules/tracks/tracks.module').then(m => m.TracksModule)
+		}
+	];
+
+Pero acá tendriamos el inconveniente, que al navegar hacia otra ruta, en este ejemplo "/tracks', se recargaria todo el "Router Outlet" principal (el que tenemos en el archivo "app.component.html"), destruyendo los componentes "Header", "SideBar" y "Footer", que queremos que se mantengan en toda nuestra applicación.
+
+Para solucionar esto, creamos un "Router Outlet" hijo, en nuestra página de home, que cargara dinamicamente en su interior, el contenido principal que cambia, sin destruir estos componentes.
+
+Y en nuestro "Router Outlet" padre o principal, solo crearemos rutas que cambien y destruyan esos componentes si es  necesario, como por ejemplo si antes de llegar al home o a visualizar  el contenido principal, debe cargar una página de autenticación(login).
+
+1) En el router principal, creamos las rutas para login y home:
+
+	import { HomePageComponent } from '@modules/home/pages/home-page/home-page.component';
+
+	const routes: Routes = [
+		{
+			path: 'auth',
+			loadChildren: () => import('./modules/auth/auth.module').then(m => m.AuthModule)
+		},
+		{
+			path: '',
+			component: HomePageComponent,
+			loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule)
+		}
+	];
+
+Ahora llamamos al componente de "HomePageComponent", a la vez que cargamos su modulo, es decir que en esa ruta cargaria por Lazyloading el modulo y mostraria ese componente.
+
+2) En la plantilla del "home-page.component.html", creamos el router outlet hijo, y le asignamos un nombre:
+
+	<app-side-bar></app-side-bar>
+	<router-outlet name="child"></router-outlet>
+
+3) En el router del modulo de home "home-routing.module.ts", eliminamos la ruta creada anteriormente y ahora creamos rutas llamando a los demas modulos:
+
+	const routes: Routes = [
+		{
+			path: 'tracks',
+			loadChildren: () => import('@modules/tracks/tracks.module').then(m => m.TracksModule) 
+		},
+		{
+			path: 'favorites',
+			loadChildren: () => import('@modules/favorites/favorites.module').then(m => m.FavoritesModule) 
+		},
+		{
+			path: 'history',
+			loadChildren: () => import('@modules/history/history.module').then(m => m.HistoryModule) 
+		}
+	];
+
+4) En el router de cada modulo, creamos la ruta, ejemplo "tracks-routing.module.ts":
+
+	import { NgModule } from '@angular/core';
+	import { RouterModule, Routes } from '@angular/router';
+	import { TracksPageComponent } from './pages/tracks-page/tracks-page.component';
+
+	const routes: Routes = [
+		{
+			path: '',
+			component: TracksPageComponent,
+			outlet: 'child'
+		}
+	];
+
+Acá en "outlet" indicamos el nombre asignado al "router outlet" hijo, para que se renderice en esa zona.
+
+_______________________________________________________
+
+	[.6]. Consumir Data por JSON:
+_______________________________________________________
+
+Para consumir data de prueba en un archivo JSON, mientras se implementaa el consuma del API, hacemos lo siguiente:
+
+1) En el; archivo "tsconfig.json", ubicado en la raíz de nuestro proyecto:
+
+	  "compilerOptions": {
+		"resolveJsonModule": true
+
+2) En el mismo archivo, podemos hacer uso de "Path alias":
+
+	"@data/*": [
+        "src/app/data/*"
+    ]
+
+3) En la logica del componente donde necesitemos la data lo importamos y usamos:
+
+	import { Component, OnInit } from '@angular/core';
+	import * as dataRaw from '@data/tracks.json';
+	import { TrackModel } from '@core/models/tracks.model';
+
+	@Component({
+		selector: 'app-tracks-page',
+		templateUrl: './tracks-page.component.html',
+		styleUrls: ['./tracks-page.component.css']
+	})
+	export class TracksPageComponent implements OnInit {
+
+		mockTracksList: Array<TrackModel> = [];
+
+		ngOnInit(): void {
+			const { data }:any = (dataRaw as any).default;
+			// console.log(data);
+			this.mockTracksList = data;
+		}
+
+	}
+_______________________________________________________
+
+	[11]. Consumir API Blog:
+_______________________________________________________
+
+Vamos a consumir los servicios de la API Backend para un Blog.
+_______________________________________________________
+
+	[11.1]. Obtener articulos API:
+_______________________________________________________
+
+Crearemos un servicio encargado de pedir los datos de los articulos al API Backend, y mostrar dichos articulos en el componente de "blog.
+
+1) Dentro de la carpeta "models", creamos un nuevo modelo "article.ts":
+
+	export class Article{
+		constructor(
+			public _id: string,
+			public title: string,
+			public content: string,
+			public image: string,
+			public date: any
+		){}
+	}
+
+	// Modelo de la API Backend
+
+	//	title: String,
+	// 	content: String,
+	// 	date: { type: Date, default: Date.now },
+	// 	image: String
+
+Para crear sus propiedades nos basamos en la API Backend, y el "_id" es por la BD de MongoDB.
+
+2) Se importa la clase "HttpClientModule", en el archivo "app.module.ts":
+
+	import { HttpClientModule } from "@angular/common/http";
+
+	...
+
+	imports: [
+		BrowserModule,
+		routing, //carga como modulo, modificando el funcionamiento global del framework
+		FormsModule,
+		HttpClientModule
+	],
+
+Este modulo nos permitira realizar peticiones AJAX.
+
+3) Dentro de la carpeta"services", creamos un archivo "global.ts" con una variable global, que tendra la URL para conectarnos al API:
+
+	export let Global = {
+		url: 'http://localhost:3900/api/'
+	};
+
+De este modo podremos usar la variable en cualquier parte sin necesidad de estar escribiendo toda la URL.
+
+Nota: esta URL es la del API Backend.
+
+4) Dentro de la carpeta "services", creamos el nuevo servicio "article.service.ts":
+
+	import { Injectable } from "@angular/core";
+	import { HttpClient, HttpHeaders } from "@angular/common/http";
+	import { Observable } from "rxjs";
+	import { Global } from "./global";
+
+	@Injectable()
+	export class ArticleService{
+
+		public url: string;
+
+		constructor(
+			private _http: HttpClient
+		){
+			this.url = Global.url;
+		}
+
+		pruebas(){
+			return "Servicio del Articulo";
+		}
+
+		getArticles(): Observable<any>{
+			return this._http.get(this.url+'articles');
+		}
+	}
+
+Importamos "HttpClient" para el protocolo Http y "HttpHeaders" para manipular de forma mas facil las peticiones AJAX. El "Observable" es para recoger los datos devueltos por el API.
+
+"rxjs" Es una libreria de JavaScript; para mas info:
+
+	https://rxjs.dev/
+
+En el metodo "getArticles", se indica el tipo de dato que va a devolver este metodo o función, en este caso devuelve un "Observable" de tipo "any".
+
+"_http" es el servicio de Angular que nos permite hacer las peticiones Http, usamos su metodo "get", el cual recibe como parametro la url a la que se le va a hacer la petición AJAX; en este caso se le concatena el metodo "articles" (de la ruta "/articles" del API backend).
+
+5) Usamos nuestro servicio en el archivo "blog.component.ts":
+
+	import { ArticleService } from "../../services/article.service";
+
+	@Component({
+		selector: 'app-blog',
+		templateUrl: './blog.component.html',
+		styleUrls: ['./blog.component.css'],
+		providers: [ArticleService]
+	})
+
+	constructor(
+		private _articleService: ArticleService
+	){
+		this.titulo = "Blog";
+	}
+
+	ngOnInit(): void {
+		this._articleService.getArticles().subscribe({
+			next: response => console.log(response),
+			error: error => console.log("error", error)
+		
+		});
+	}
+
+Importamos y consumimos el servicio creado, el observable tiene un metodo "subscribe()", que es el que permite recoger los datos devueltos por la petición Http. En "next" recibimos la respuesta, y en "error" el error.
+
+Si ahora vamos al navegador a:
+
+	http://localhost:4200/blog
+
+Podremos ver en la consola del navegador, la respuesta del API backend, con el listado de articulos.
+
+Nota: recordar tener en ejecucion la BD "mongod.exe" y el backend(API) creado "npm start".
+
+_______________________________________________________
+
+	[11.1.1]. Mostrar Listado de Articulos:
+_______________________________________________________
+
+Vamos a mostrar el listado de articulos en el componente de "blog".
+
+1) En el archivo "blog.component.ts" importamos el model de "Article":
+
+	import { Article } from 'src/app/models/article';
+	import { Global } from "../../services/global";
+
+	...
+
+	public titulo: string;
+	public articles!: Article[];
+	public url: string;
+
+	constructor(
+		private _articleService: ArticleService
+	){
+		this.titulo = "Blog";
+		this.url = Global.url;
+	}
+	...
+
+	this._articleService.getArticles().subscribe({
+		next: response => {
+			if(response.articles){
+			this.articles = response.articles;
+			}
+		},
+
+Importamos la variable "Global", ya que las imagenes de cada articulo se guardan en el servidor API backend, y para mostrarlas necesitamos esa url.
+
+2) En la plantilla "blog.component.html" mostramos los datos segun maquetación y usando las directivas de Angular:
+
+	<div class="Content-list" id="articles-list" >
+		<!-- ARTICLE -->
+		<article class="Article clearfix" *ngFor="let article of articles">
+			<div class="Article-imageCard">
+				<div class="Article-imageWrap">
+					<img src="{{url + 'get-image/' + article.image}}" alt="{{article.title}}" *ngIf="article.image">
+					<img src="../../../assets/images/pexels-burak-kebapci-187023.jpg" alt="{{article.title}}" *ngIf="!article.image">
+				</div>
+			</div>				
+			<h2>{{article.title}}</h2>
+			<span class="date">{{article.date}}</span>
+			<a href="#">Leer más</a>
+		</article>
+	</div>
+
+Para mostrar la imagen usamos la url de "Global", y le concatenamos la ruta "get-image/" que se habia creado para obtener la imagen en el API Backend.
+
+En el caso que el articulo no tenga imagen, mostramos una imagen por defecto que guardamos en "./AprendiendoAngular\src\assets\images".
+
+3) para poder reutilizar codigo y hacerlo mas optimo, podemos crear un componente para los articulos:
+
+	ng g component components/articles
+
+4) En en nuevo componente "articles.component.ts", importamos la url Global, el modelo de "Articles", y el decorador "Input" para que el componente padre "blog" pueda pasarle el array de articulos:
+
+	import { Component, OnInit, Input } from '@angular/core';
+	import { Article } from 'src/app/models/article';
+	import { Global } from "../../services/global";
+
+	...
+
+	@Input() articles!: Article[];
+
+	public url: string;
+
+	constructor() {
+		this.url = Global.url;
+	}
+
+5) En la plantilla "articles.component.html", ponemos el codigo que teniamos en la plantilla "blog.component.html", y en está ultima llamamos al nuevo componente, pasandole la propiedad "[Input]":
+
+	<app-articles [articles]="articles"></app-articles>
+
+De esta forma podremos usar el componente "app-articles" en otras partes, por ejemplo, para mostrar solo los primeros 5 articulos, etc.
+_______________________________________________________
+
+	[11.2]. Mostrar Últimos Articulos:
+_______________________________________________________
+
+En la pág. del Home, se mostraran los últimos articulos.
+
+1) Como en el API Backend la ruta para mostrar los últimos articulos es la misma que para mostrar todos los articulos, pero pasandole un parametro opcional, entonces modificamos el metodo "getArticles()", del archivo "article.service.ts":
+
+	getArticles(last: any = null): Observable<any>{
+		let totalArticles = "articles";
+		if(last != null){
+			totalArticles = "articles/5";
+		}
+		return this._http.get(this.url+totalArticles);
+	}
+
+2) En el archivo "home.component.ts" importamos y reutilizamos el servicio, tal y como se hizo en el archivo "blog.component.ts":
+
+	import { Article } from 'src/app/models/article';
+	import { ArticleService } from "../../services/article.service";
+
+	...
+		providers: [ArticleService]
+	})
+
+	...
+	public titulo: string;
+	public articles!: Article[];
+
+	constructor(
+		private _articleService: ArticleService
+	) {
+		...
+	ngOnInit(): void {
+		this._articleService.getArticles(true).subscribe({
+		next: response => {
+			if(response.articles){
+				this.articles = response.articles;
+			}
+		},
+		error: error => console.log("error", error)
+		
+		});
+	}
+
+Podemos ver que ahora al llamar el metodo "getArticles()" le pasamos el parametro opcional con valor "true".
+
+3) En la plantilla "home.component.html" usamos el componente:
+
+	<app-articles [articles]="articles"></app-articles>
+_______________________________________________________
+
+	[11.3]. Página de detalle de articulo:
+_______________________________________________________
+
+Para mostrar la pagina de detalle de un articulo, creamos un nuevo componente y una nueva ruta que mostrara esa pagina.
+
+1) Creamos el componente de articulo:
+
+	ng g component components/article
+
+2) Importamos el nuevo componente y creamos la ruta en el archivo "app.routing.ts":
+
+	import { ArticleComponent } from "./components/article/article.component";
+
+	...
+
+	{path: 'blog', component: BlogComponent},
+    {path: 'blog/articulo/:id', component: ArticleComponent},
+
+3) En el archivo de plantilla "articles.component.html", actualizamos el enlace que lleva a ver el detalle de cada articulo, usando el "routerLink":
+
+	<a [routerLink]="['/blog/articulo', article._id]">Leer más</a>
+
+Acá en el "routerLink", redireccionamos a la ruta creada anteriormente pasandole como parametro el "_id" del articulo.
+
+4) En el servicio "article.service.ts" creamos el metodo encargado de obtener la informacion del articulo a mostrar:
+
+	getArticle(articleId: string): Observable<any>{
+		return this._http.get(this.url+'article/'+articleId);
+	}
+
+Este metodo recibe el id del articulo, y obtiene su informacion desde la ruta definida en el API backend.
+
+5) En el archivo "article.component.ts" importamos e implementamos el servicio:
+
+	import { ArticleService } from "../../services/article.service";
+	import { Article } from "../../models/article";
+	import { Router, ActivatedRoute, Params } from '@angular/router';
+	import { Global } from "../../services/global";
+
+	@Component({
+		...
+		providers: [ArticleService]
+	})
+
+	...
+	public article!: Article;
+	public url: string;
+
+	constructor(
+		private _articleService: ArticleService,
+		private _route: ActivatedRoute,
+		private _router: Router
+	) {
+		this.url = Global.url;
+	}
+
+	ngOnInit(): void {
+		this._route.params.subscribe( (params: Params) => {
+			let articleId = params['id'];
+
+			this._articleService.getArticle(articleId).subscribe({
+				next: response => {
+					if(response.article){
+						this.article = response.article;
+					}else{
+						this._router.navigate(['/home']);
+					}
+				},
+				error: error => {
+					console.log("error", error);
+					this._router.navigate(['/home']);
+				}
+			});
+
+		});
+	}
+
+Tambien importamos el modulo del "Router", y cuando se inicializa el componente, obtenemos el "articleId" desde la url en la que estamos.
+
+Luego usamos el servicio, llamando al metodo "getArticle()" y pasandole el "articleId" previamente obtenido.
+
+Si obtenemos respuesta positiva, verificamos que nos llegue la informacion del articulo, y se asigna al parametro del componente. Si se obtiene respuesta negativa o de error, usamos el "_router" para redireccionar al "home". Podemos probar tambien esta redireccion si en la url del navegador cambiamos el "id" del articulo por uno incorrecto.
+
+Importamos "Global" para poder obtener la imagen en la vista.
+
+6) En nuestro archivo de plantilla "article.component.html" mostramos los datos del articulo segun maquetacion:
+
+	<section class="Content" *ngIf="article">
+		<article class="Article Article-detail clearfix">
+			<div class="Article-imageWrap">
+				<img src="{{url + 'get-image/' + article.image}}" alt="{{article.title}}" *ngIf="article.image">
+				<img src="../../../assets/images/pexels-büşra-yaman-8627841.jpg" alt="{{article.title}}" *ngIf="!article.image">
+			</div>				
+			<h2 class="u-subtitle">{{article.title}}</h2>
+			<span class="date">{{article.date | amLocale:'es' | amTimeAgo}}</span>
+			<div class="Article-content">
+				<p>
+					{{article.content}}
+				</p>
+			</div>
+		</article>
+	</section>
+
+Nota: la directiva del "section" "*ngIf="article"" es importante, ya que hace que se muestre la sección una vez se cargan todos los datos, sino saldria en consola del navegador un error:
+
+	ERROR TypeError: Cannot read properties of undefined (reading 'image')
+
+Indica que no puede obtener "article.image".
+
+_______________________________________________________
+
+	[11.4]. Buscador:
+_______________________________________________________
+
+Vamos a hacer un buscador de articulos que funcione en todas las paginas.
+
+1) En el archivo "article.service.ts" creamos el metodo nuevo:
+
+	search(searchString: string): Observable<any>{
+		return this._http.get(this.url+'search/'+searchString);
+	}
+
+La ruta "search/" depende de la creada en el API backend.
+
+2) Creamos un nuevo componente que mostrara los resultados de busqueda:
+
+	ng g component components/search
+
+3) Creamos una nueva ruta en el archivo "app.routing.ts":
+
+	import { SearchComponent } from './components/search/search.component';
+
+	...
+
+	{path: 'blog/articulo/:id', component: ArticleComponent},
+    {path: 'buscar/:search', component: SearchComponent},
+
+
+Esta ruta nos mostrara los resultados de la busqueda.
+
+4) En el nuevo componente "search.component.ts", obtenemos los parametros de busqueda de la url del navegador, y se los pasamos al metodo "search()" creado en el servicio:
+
+	import { ArticleService } from "../../services/article.service";
+	import { Article } from "../../models/article";
+	import { ActivatedRoute, Params } from "@angular/router";
+
+	@Component({
+		...
+		providers: [ArticleService]
+	})
+	...
+
+	public articles!: Article[];
+	public search!: string;
+
+	constructor(
+		private _articleService: ArticleService,
+		private _route: ActivatedRoute
+	) { }
+
+	ngOnInit(): void {
+		this._route.params.subscribe( (params:Params) => {
+			let search = params['search'];
+			this.search = search;
+
+			this._articleService.search(search).subscribe({
+				next: response => {
+					if(response.articles){
+						this.articles = response.articles;
+					}else{
+						this.articles = [];
+					}
+				},
+				error: error => {
+					console.log("error", error);
+					this.articles = [];
+				}
+			});
+		});
+	}
+
+En caso de que no encuentre nada que corresponda con la busqueda, al parametro "articles" le asignamos un array vacio.
+
+El parametro "search" lo usamos para enviar a la vista el "string" de lo que se esta buscando e imprimirlo.
+
+5) En el archivo de plantilla "search.component.html" mostramos los resultados de busqueda, usando el componente "app-articles":
+
+	<app-slider 
+		[mensaje]="'Busqueda: '+search"
+		[size]="'small'"
+	></app-slider>
+	<!-- MAIN -->
+	<div class="u-centrar">
+		<!-- Contenido -->
+		<section class="Content">
+
+			<h2 class="u-subtitle">Articulos encontrados</h2>
+			<app-articles [articles]="articles"></app-articles>
+
+		</section>
+		<app-aside></app-aside>
+	</div>
+
+Podemos ver que en el "slider" enviamos el parametro de busqueda, para imprimir lo que se esta buscando.
+
+6) Modificamos un poco el archivo "articles.component.html", en el cual, usando las directivas de Angular, mostraremos un mensaje en caso de que nos llegue la variable "articles" como un array vacio:
+
+	<div *ngIf="!articles">
+		Cargando...
+	</div>
+
+	<div *ngIf="articles && articles.length == 0">
+		<p>No hay articulos par mostrar, intentelo más tarde.</p>
+	</div>
+
+	<div class="Content-list" id="articles-list" *ngIf="articles">
+		<!-- ARTICLE -->
+		...
+
+Podemos probar en el navegador:
+
+	http://localhost:4200/buscar/articulo
+
+En este caso buscara "articulo".
+_______________________________________________________
+
+	[11.4.1]. Formulario de Busqueda:
+_______________________________________________________
+
+El formulario de busqueda que se tiene en el componente "aside.component.html" debe redireccionar a la ruta anteriormente creada, enviando el valor escrito en el input del formulario.
+
+1) Creamos una variable local, declarando el formulario de Angular en el archivo "aside.component.html":
+
+	<form #searchForm="ngForm" (ngSubmit)="goSearch()">
+		<input type="text" name="search" id="search" [(ngModel)]="searchString">
+		<input type="submit" value="Buscar" class="btn">
+	</form>
+
+Tambien usamos la directiva "ngModel" para hacer un "two way databinding" y enviar el valor que se escribe en el input del formulario, hacia la propiedad "searchString" en el controlador "aside.component.ts"
+
+2) En el componente "aside.component.ts" creamos el metodo "goSearch()", el cual va a hacer la redirección hacia la ruta que nos muestra los resultados de busqueda:
+
+	import { Router } from "@angular/router";
+
+	...
+
+	public searchString!: string;
+
+	constructor(
+		private _router: Router
+	) { }
+
+	goSearch(){
+		this._router.navigate(['/buscar', this.searchString]);
+	}
+
+En la redirección hacia "/buscar" envia como parametro de la url "this.searchString", osea el valor del input del formulario.
+_______________________________________________________
+
+	[11.5]. Crear Articulo:
+_______________________________________________________
+
+Se creara una página nueva con un formulario para crear un articulo.
+
+1) Creamos un nuevo componente:
+
+	ng g component components/article-new
+
+2) Creamos una ruta nueva para mostrar la nueva pág. en el archivo "app.routing.ts":
+
+	import { ArticleNewComponent } from "./components/article-new/article-new.component";
+
+	...
+
+	{path: 'blog/articulo/:id', component: ArticleComponent},
+    {path: 'blog/crear', component: ArticleNewComponent},
+
+3) En la vista "aside.component.html", hacemos un redireccionamiento hacia la nueva ruta cuando se da click en el boton de "Crear Articulo":
+
+	<a [routerLink]="['/blog/crear']" class="btn btn-success">Crear Articulo</a>
+
+4) En el archivo "article-new.component.ts" creamos el objeto que va a guardar los valores que se ingresen en el formulario:
+
+	import { Article } from "../../models/article";
+	...
+
+	public article!: Article;
+
+	constructor() {
+		this.article = new Article('', '', '', '', null);
+	}
+
+	onSubmit(){
+		alert("formulario enviado");
+		console.log(this.article);
+	}
+
+En este caso el objeto es de tipo "Article", por lo que importamos su modelo.
+
+Al crear el objeto en el constructor, enviamos parametros vacios, correspondientes al modelo: 
+
+	new Article('', '', '', '', null);
+	new Article(_id: string, title: string, content: string, image: string, date: any);
+
+El metodo "onSubmit()" lo usamos para imprimir una alerta y mostrar en consola los datos del articulo.
+
+5) En la plantilla "article-new.component.html" creamos el formulario:
+
+	<form class="Form-mid" #articleForm="ngForm" (ngSubmit)="onSubmit()">
+		<div class="Form-group">
+			<label for="title">Titulo</label>
+			<input type="text" name="title" id="title" #title="ngModel" [(ngModel)]="article.title" required >
+			
+			<div *ngIf="title.invalid && title.touched">
+				<small *ngIf="title.errors?.['required']">El titulo es requerido.</small>
+				<small *ngIf="title.errors?.['invalid']">El titulo no es válido.</small>
+			</div>
+
+		</div>            
+		<div class="Form-group">
+			<label for="contenido">Contenido</label>
+			<textarea name="contenido" id="contenido" cols="30" rows="8" #content="ngModel" [(ngModel)]="article.content" required></textarea>
+			
+			<div *ngIf="content.invalid && content.touched">
+				<small >El contenido no es válido.</small>
+			</div>
+
+		</div>
+		<div class="Form-group">
+			<label for="imagen">Imagen</label>
+			<input type="file" name="imagen" id="imagen" accept="image/*, image/png, image/jpeg" >
+			
+		</div>          
+		<input type="submit" value="Crear" class="btn btn-success" [disabled]="articleForm.invalid">
+	</form>
+
+En la etiqueta "form", definimos el atributo  #articleForm="ngForm" para crear el formulario de Angular. Tambien llamamos al metodo "onSubmit()".
+
+Usamos el enlace de datos bidireccional con la directiva "ngModel" para enviar los datos al controlador y crear el objeto "article".
+
+Creamos variables locales en los campos del formulario para la validacion.
+
+Nota: hasta el momento la funcionalidad de enviar la imagen al servidor no se ha implementado.
+
+6) Creamos el servicio encargado de enviar los datos al API backend, en el archivo "article.service.ts":
+
+	create(article: Article): Observable<any>{
+		let params = JSON.stringify(article);
+		let headers = new HttpHeaders().set('Content-Type', 'application/json');
+		return this._http.post(this.url+'save/', params, { headers: headers } );
+	}
+
+Para enviar el objeto "article", es necesario convertirlo a JSON(string).
+
+La variable "headers" es para configurar las cabeceras http, en este caso configuramos el "Content-Type" como "application/json".
+
+Luego se envia la petición por metodo "post", a la url del API backend ("save/"), encargada de crear el articulo, se le envia el "body" (params), y un objeto con las cabeceras ("headers").
+
+Nota: para mas info. de la cabeceras http:
+
+	https://developer.mozilla.org/es/docs/Web/HTTP/Headers
+
+	https://developer.mozilla.org/es/docs/Web/HTTP/Headers/Content-Type
+
+	https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types
+
+7) Volvemos al archivo "article-new.component.ts", y cargamos e implementamos el servicio creado:
+
+	import { ArticleService } from "../../services/article.service";
+	import { Router } from "@angular/router";
+
+	@Component({
+		providers: [ArticleService]
+	})
+	...
+
+	public article!: Article;
+	public status!: string;
+
+	constructor(
+		private _articleService: ArticleService,
+		private _router: Router
+	...
+
+	onSubmit(){
+		this._articleService.create(this.article).subscribe({
+			next: response => {
+				if(response.status == 'success'){
+					this.status = "success";
+					this.article = response.article;
+					this._router.navigate(['/blog']);
+				}else{
+					this.status = "error";
+				}
+				console.log(response);
+			},
+			error: error => {
+				console.log("error", error);
+				this.status = "error";
+			}
+		});
+	}
+
+Al servicio "create()" le pasamos el objeto "this.article", que tiene los datos ingresados en el formulario.
+
+Si recibimos del API backend una respuesta correcta (response.status == 'success'), actualizamos la propiedad "status", y la propiedad "this.article" con el articulo devuelto por el API backend.
+
+Usamos el "_router" para redireccionar al "/blog" cuando se crea con exito el articulo.
+_______________________________________________________
+
+	[11.5.1]. Subir imágen Articulo:
+_______________________________________________________
+
+1) Para subir una imagen de un articulo, instalamos como dependencia del proyecto el paquete "angular-file-uploader":
+
+	npm i --save angular-file-uploader --force
+
+Usamos "--force", ya que nos puede dar error en la intalación, por usar dependencias legacy.
+
+Nota: para mas info del modulo:
+
+	https://www.npmjs.com/package/angular-file-uploader
+
+2) Llamamos el modulo en el archivo "app.module.ts":
+
+	import { AngularFileUploaderModule } from "angular-file-uploader";
+
+	...
+
+	@NgModule({
+		imports: [
+			...,
+			AngularFileUploaderModule,
+			...
+		]
+	})
+
+3) Usamos el nuevo componente en el archivo de plantilla "article-new.component.html":
+
+	<div class="Form-group">
+		<label for="imagen">Imagen</label>
+		<angular-file-uploader
+			[config]="afuConfig">
+		</angular-file-uploader>
+	</div>
+
+4) La configuración del nuevo componente la ponemos en ela rchivo "article-new.component.ts":
+
+En donde:

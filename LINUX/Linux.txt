@@ -1,0 +1,119 @@
+
+	LINUX:
+_______________________________________________________
+
+INDICE:
+
+[1]. Comandos Rápidos
+    [1.1]. Listar
+    [1.2]. Mostrar contenido ficheros(archivos)
+	[1.3]. Cambiarnos de lugar
+	[1.4]. Manejo de Archivos y Directorios
+	[1.5]. Comodines - Wildcards
+	[1.6]. Permisos
+[2]. Selectores
+
+_______________________________________________________
+
+	[1]. Comandos Rápidos:
+_______________________________________________________
+
+Resumen de comandos para uso rápido.
+
+_______________________________________________________
+
+	[1.1]. Listar:
+_______________________________________________________
+
+ls --> Listar
+
+ls -l --> Propiedades y Atributos
+
+ls -la --> lista ficheros incluidos los ocultos
+_______________________________________________________
+
+	[1.2]. Mostrar contenido ficheros(archivos):
+_______________________________________________________
+
+cat -n fichero --> -n lo numera
+
+more archivo --> lo muestra paginado
+
+less --> paginado pero nos podemos devolver
+
+head --> muestra las primeras líneas de archivo
+	
+	head 5 archivo --> muestra solo las primeras 5 líneas
+
+tail --> muestra las últimas líneas
+_______________________________________________________
+
+	[1.3]. Cambiarnos de lugar:
+_______________________________________________________
+
+cd --> cambiar de directorio, si se usa solo, nos devuelve al directorio personal.
+
+cd .. --> atras.
+
+cd /NombreDirectorio --> nos pasa a esa carpeta.
+
+cd .mozilla --> ir al dir. de Mozilla por la puerta grande.
+
+cd ./.mozilla --> ir al dir. de Mozilla indicando la ruta relativa.
+
+cd /home/ricardo/.mozilla --> se va al directorio de Mozilla indicando la ruta completa.
+_______________________________________________________
+
+	[1.4]. Manejo de Archivos y Directorios:
+_______________________________________________________
+
+mkdir NombreCarpeta --> crea un directorio.
+
+rmdir /Ruta/.../NombreCarpeta --> borra un directorio (tiene que estar vacio).
+
+cp --> copiar archivos o directorios.
+
+	cp -r origen destino --> copia directorio.
+	
+	cp -r dir1 ../otroDirectorio
+
+	cp -r archivo1 ruta archivo2 --> copia el archivo1 a la ruta cambiandole el nombre.
+
+	cp -r * ../otroDirectorio --> copia todos los directorios.
+
+mv origen destino --> mueve y/o renombra archivos o directorios.
+
+rm archivo --> remueve o elimina archivos.
+_______________________________________________________
+
+	[1.5]. Comodines - Wildcards:
+_______________________________________________________
+
+* --> 0 o más.
+
+	ls t* --> muestra los archivos que empiezan con "t".
+
+? --> uno cualquiera.
+
+	ls -d ?a* --> muestra los archivos que en el 2do caracter tenga una "a".
+
+[aeiou] --> uno de estos.
+
+	ls -d ?[aeiou]*
+
+[0-9] --> rango.
+
+	ls -d *[A-Z]*
+_______________________________________________________
+
+	[1.6]. Permisos:
+_______________________________________________________
+
+ls -alt --> ver permisos.
+
+ls -l
+_______________________________________________________
+
+- --- --- ---
+
+(-)tipo

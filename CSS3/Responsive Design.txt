@@ -1,0 +1,53 @@
+______________________________________________________
+
+		RESPONSIVE DESIGN:
+______________________________________________________		
+
+Para hacer algo con "Responsive Design", es necesario tener en cuenta:
+
+1) Pensar en la metodología: "Mobile First", que consiste en diseñar un sitio desde un principio (diseño gráfico), pensando en la versión para móviles. Esto servirá para darnos cuenta del contenido esencial que debe tener nuestra página, y también para simplificar su diseño, pensando en algo claro e intuitivo.
+
+2) Crear nuestra página web desde cero, estructurándola semánticamente, y luego añadiendo los estilos (usando metodología de componentes suit css), pensando en un diseño elástico.
+
+3) Una vez testeada la página, mirando que el diseño elástico funcione en diversos tamaños (es decir que no se sobrepongan o solapen elementos, o se oculte contenido al cambiar el tamaño del navegador), agregamos: 
+
+	<meta name="viewport" content="width:device-width, minimum-scale=1, maximum-scale=1"/>
+
+En donde tenemos las propiedades:
+	"width:device-width" --> hace que nuestra página tome el ancho de la pantalla del dispositivo donde se abra.
+
+	"minimum-scale=1, maximum-scale=1" --> hace que el tamaño máximo y el mínimo de la pantalla sean del 100%.
+
+4) Luego, en nuestra hoja de estilos aplicamos los: "Media Queries"
+
+	@media screen and (min-width:800px){
+		body{
+			background: red;
+		}
+	}
+
+En este caso, este "Media Querie" hace que en un dispositivo que tenga un ancho de pantalla inferior a los 800px, tome los estilos que definimos en el archivo .css, y para un dispositivo con ancho de pantalla igual a los 800px o superior, tomaran los estilos aplicados en el media query, en este caso aplicándoles un fondo rojo.
+
+De esta forma, en un media query, también podemos cambiar el diseño a nuestra página, aplicándoles a los elementos nuevas posiciones, tamaños, colores, fondos, e incluso contenido nuevo que en un dispositivo móvil no se verán (display:none para el dispositivo móvil).
+
+Podemos tener varios "Media Queries": 
+
+	@media screen and (min-width:800px){
+		...
+	}
+
+	@media screen and (min-width:1280px){
+		...
+	}
+
+En el último media querie (el de 1280px), se aplicaran los estilos definidos sin los media queries (dispositivo móvil), los estilos definidos en el media querie de 800px, y finalmente los estilos para pantallas con ancho igual o superior a los 1280px.
+
+______________________________________________________		
+
+	MEDIA QUERIES JAVASCRIPT:
+
+Para ejecutar determinada funcionalidad, dependiendo del tamaño se la panmtalla usamos:
+
+	if(window.matchMedia("(min-width: 481px)").matches) {
+	  console.log("Dispositivo movil!!!");
+	}

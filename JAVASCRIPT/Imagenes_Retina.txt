@@ -1,0 +1,27 @@
+﻿______________________________________________________
+			
+
+			IMAGENES RETINA:
+
+______________________________________________________
+
+1) Descargar el script de:
+
+	http://imulus.github.io/retinajs/
+
+2) Una vez descargado retina.js lo traemos a nuestro HTML:
+<script type="text/javascript" src="/scripts/retina.js"></script>
+
+3) Debemos tener dos imágenes diferentes:
+	- No Retina (nombre_de_la_imagen.jpg).
+	- Retina (nombre_de_la_imagen@2x.jpg).
+
+	Usamos como referencia @2x para indicar que esa imagen será la que se mostrara en dispositivos retina.
+
+4) Ahora simplemente lo que tenemos que hacer es poner la ruta a nuestra imagen.
+
+	<img src="/images/nombre_de_la_imagen.jpg" />
+
+	Lo que hace retina.js es que en dispositivos retina va mostrar la imagen que tengamos con el @2x.
+
+		"/images/nombre_de_la_imagen@2x.png"	

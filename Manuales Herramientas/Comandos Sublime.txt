@@ -1,0 +1,16 @@
+Quitar Identado:
+
+	ctrl + Ç 
+		ó
+	ctrl + ?
+_______________________________________________________
+
+Ordenar Alfabeticamente:
+
+	F9
+_______________________________________________________	
+
+Autocompletado Etiqueta Meta Responsive:
+
+	escribimos:	meta:vp 
+						+ tab

@@ -1,0 +1,3382 @@
+	WORDPRESS TEMAS PRO:
+_______________________________________________________
+
+INDICE:
+
+[1]. CONSTANTES
+[2]. DEFINIENDO CARACTERÍSTICAS DEL TEMA
+[3]. TAMAÑOS DE IMAGEN PERSONALIZADOS
+[4]. Cargar Estilos y Scripts en un archivo externo
+[5]. PINGBACKS
+[6]. SCRIPTS PARA COMENTARIOS
+[7]. Menu dinamico con clases propias y las de Bootstrap
+[8]. Formulario de búsqueda personalizado
+[9]. the_title_attribute();
+[10]. Etiqueta MORE (ver más)
+[11]. Detectando Formatos de Entrada
+[12]. Archivos de plantilla parciales
+[13]. Identificando artículos (CLASS y ID)
+[14]. Paginación entradas Antiguas y recientes
+[15]. Títulos condicionales
+[16]. PERSONALIZADOR DE TEMAS
+[17]. Completando el "SINGLE.php"
+	[17.1]. Link y Nombre de Autor
+	[17.2]. Link hacia los comentarios
+	[17.3]. Etiquetas (tags)
+	[17.4]. Imagen destacada como background
+	[17.5]. Compartir redes sociales
+	[17.6]. Enlaces a la entrada anterior y siguiente
+	[17.7]. COMENTARIOS
+[18]. AÑADIENDO ELEMENTOS ADICIONALES AL EDITOR
+[19]. APLICANDO ESTILOS AL EDITOR
+[20]. ENTRADAS PAGINADAS
+[21]. PÁGINA DE ARCHIVO
+[22]. PLANTILLA DE PÁGINA DE INICIO
+	[22.1]. Usando el plugin "Advanced Custom Fields"
+	[22.2]. CAMPOS ADICIONALES EN LA PANTALLA DE EDICIÓN (con programación)
+	[22.3]. GUARDANDO CAMPOS ADICIONALES
+[23]. CREACIÓN DE PLUGIN Y CUSTOM POST TYPE
+[24]. CREACIÓN DE TAXONOMÍA SERVICIOS
+[25]. Campos adicionales para Custom Post Type "Proyectos"
+	[25.1]. Campo adicional WYSIWYG
+[26]. Plantilla para Custom Post Type "Proyectos" (Parte 1)
+[27]. Plantilla para Custom Post Type "Proyectos" (Parte 2) (Loop interior)
+	[27.1]. OBTENIENDO CUSTOM POST TYPE CON AJAX
+[28]. Plantilla de Detalle para Custom Post Type "Proyectos"
+[29]. Completando la Plantilla "template-home.php"
+[30]. CREANDO UN WIDGET
+[31]. PERSONALIZAR PANTALLA DE INGRESO
+[32]. REVISANDO LA CALIDAD DEL TEMA
+[33]. PREPARANDO EL TEMA PARA TRADUCCIÓN
+[34]. Haciendo la TRADUCCIÓN
+[35]. TRADUCIENDO UN PLUGUIN
+[36]. ERRORES COMUNES WORDPRESS
+_______________________________________________________
+
+	[1]. CONSTANTES:
+_______________________________________________________
+
+1) Podemos crear constantes en Wordpress, de la misma forma que lo hacemos en php. Por ejemplo, en el archivo "functions.php":
+
+	<?php
+		/* Definicion Constantes*/
+
+		// Ruta de la carpeta del tema
+		define('THEMEROOT', get_stylesheet_directory_uri() );
+
+		//Ruta de la carpeta de imagenes
+		define('IMAGES', THEMEROOT.'/img');
+
+		//elimina la opcion de editar
+		define('DISALLOW_FILE_EDIT', true);
+	?>
+
+En "define", promero pasamos el nombre de la constante, y despues su valor.
+
+Para más info de la definicion de constantes en php:
+
+	http://php.net/manual/es/language.constants.php
+
+Con 'DISALLOW_FILE_EDIT', eliminamos una opción que se encuentra en el admin de wordpress, la cual nos permite editar los archivos "functions.php", "style.css" y las plantillas "*.php", de nuestro tema.
+
+La opcion de editar, la vemos en el admin de wordpress, en:
+
+	"Apariencia"
+				--> "Temas"
+				--> "Personalizar"
+				--> "Editor"
+
+Al usar el codigo, desapareceria la opcion "Editor". esta opcion, es bueno quitarla cuando estamos desarrollando un tema propio, o para un cliente en especifico, pero no deberiamos usarla cuando desarrollemos un tema premium para vender.
+
+2) Con "THEMEROOT", podriamos, en el "index.php", llamar a la hoja de estilos así:
+
+	<link rel="stylesheet" href="<?php echo THEMEROOT; ?>/style.css" >
+_______________________________________________________
+
+	[2]. DEFINIENDO CARACTERÍSTICAS DEL TEMA:
+_______________________________________________________
+
+Para definir algunas características del tema, utilizaremos una excelente herramienta llamada GenerateWP.
+
+	https://generatewp.com/
+
+Esta herramienta nos permite generar codigo en línea, que luego usaremos en el archivo "functions.php".
+
+1) En la herramienta "GenerateWP", vamos a:
+
+	Tools and Generators
+		--> Pestaña "Design"
+			--> Theme Support Generator
+
+2) Aqui aparecen diferentes pestañas:
+
+	- En la pestaña "General", ponemos el nombre a la funcion que nos dara la nueva funcionalidad, en este caso usamos: "apk_custom_theme_features". Tambien escogemos si queremos que la funcionalidad de soporte a temas hijos.
+
+	- En la pestaña "Content Width", definimos cual sera el ancho maximo de un elemento que insertemos(por ejemplo una imagen), este ancho lo definimos como 980px, que es le ancho que tiene nuestro tema en fullwidth.
+
+	- En "Feed Links", escogemos si queremos habilitar los enlaces para RSS.
+
+	- En "Formats", escogemos si habilitamos los diferentes tipos de formatos de entrada (estatus, galleria, link, imagen, etc.)
+
+	- En "Thumbnails", podemos añadir soporte a imagenes destacadas para las entradas, paginas u otra parte de nuestro tema.
+
+	- "Background", añadimos soporte, para que desde el admin, se pueda cambiar el color de fondo del sitio.
+
+	- En "Header", se puede habilitar para que en el admin. se pueda cambiar el header, como por ejemplo con una imagen de fondo.
+
+	- En "Markup", escogemos si queremos que wordpress use elementos html semanticos, para el contenido autogenerado por él.
+
+	- "Translation", le indicamos a wordpress, si vamos a incluir un archivo para traducir nuestro tema.
+
+	- "Editor Style", indicamos si queremos tener una hoja de estilos css especial para dar estilos al editor (el que aparece donde escribimos el contenido de una entrada).
+
+3) Al hacer click en "Update Code", se nos generara un codigo como el siguiente:
+
+	// Set content width value based on the theme's design
+	if ( ! isset( $content_width ) )
+		$content_width = 980;
+
+	if ( ! function_exists('apk_custom_theme_features') ) {
+
+	// Register Theme Features
+	function apk_custom_theme_features()  {
+
+		// Add theme support for Automatic Feed Links
+		add_theme_support( 'automatic-feed-links' );
+
+		// Add theme support for Post Formats
+		add_theme_support( 'post-formats', array( 'video', 'audio' ) );
+
+		// Add theme support for Featured Images
+		add_theme_support( 'post-thumbnails', array( 'post', 'page' ) );
+
+		// Add theme support for Custom Background
+		$background_args = array(
+			'default-color'          => 'd9d9d9',
+			'default-image'          => '',
+			'default-repeat'         => '',
+			'default-position-x'     => '',
+			'wp-head-callback'       => '',
+			'admin-head-callback'    => '',
+			'admin-preview-callback' => '',
+		);
+		add_theme_support( 'custom-background', $background_args );
+
+		// Add theme support for HTML5 Semantic Markup
+		add_theme_support( 'html5', array( 'search-form', 'comment-form', 'comment-list', 'gallery', 'caption' ) );
+
+		// Add theme support for custom CSS in the TinyMCE visual editor
+		add_editor_style( 'editor-style.css' );
+
+		// Add theme support for Translation
+		load_theme_textdomain( 'apk', get_template_directory() . '/language' );
+	}
+	add_action( 'after_setup_theme', 'apk_custom_theme_features' );
+
+	}
+
+Ahora en el admin de wordpress, en "Apariencia", aparecera una nueva opción "Fondo", que nos permite cambiar el color de fondo, así como agregar una imagen de fondo.
+
+Nota1: para que podamos probar esta caracteristica es necesario cambiar:
+
+	'wp-head-callback' => '',
+
+Por:
+
+	'wp-head-callback' => '_custom_background_cb',
+
+Definir este callback es necesario para que no nos de ningun error.
+
+Nota2: Tambien deberiamos usar "wp_head();" y "wp_footer();", para ver la funcionalidad del cambio de color.
+
+Y en la etiqueta de apertura del body:
+
+	<body <?php body_class(); ?>>
+
+Para la traduccion, usamos el "Text Domain" (que definimos en "style.css"), y al acabar nuestro tema, deberemos crear la carpeta "language", así como el archivo para la traduccion.
+_______________________________________________________
+
+	[3]. TAMAÑOS DE IMAGEN PERSONALIZADOS:
+_______________________________________________________
+
+Podemos crear diferentes tamaños de imagen, los cuales los definimos en "functions.php":
+
+	//Añadir tamaños de imagen personalizados
+	add_image_size('page-head', 1200, 400, true);
+	add_image_size('blog-image', 640, 480, true);
+
+Aquí indicamos el nombre del nuevo tamaño "page-head", luego el ancho "1200px", y el alto "400px", por ultimo con "true", indicamos que se debe recortar y ajustar la imagen al tamaño indicado.
+
+Para traer la imagen en el tamaño personalizado usamos:
+
+	<div>
+		<?php the_post_thumbnail('blog-image'); ?>
+	</div>
+_______________________________________________________
+
+	[4]. Cargar Estilos y Scripts en un archivo externo:
+_______________________________________________________
+
+Para tener el archivo "functions.php" más organizado y pequeño, podemos cargar las hojas de estilos y scripts en un archivo aparte.
+
+1) En "functions.php", llamamos al archivo que vamos a crear:
+
+	/*Archivos CSS y JS*/
+
+		require_once('/functions/scripts-stylesheets.php');
+
+2) Creamos la carpeta "functions", y dentro de está un archivo llamado "scripts-stylesheets.php":
+
+	<?php
+	/*Hojas de estilos y scripts*/
+
+		/*Cargando los estilos del tema*/
+
+		function apk_theme_styles() { 
+
+			//Registramos estilos
+			wp_register_style( 'normalize', THEMEROOT . '/css/normalize.css', '', '6.0.0', 'all' );
+			wp_register_style( 'font-sans', 'http://fonts.googleapis.com/css?family=Lato:400,700,900,400italic,700italic,900italic', '', '', 'all' );
+			wp_register_style( 'font-serif', 'http://fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic', '', '', 'all' );
+			wp_register_style( 'font-awesome', THEMEROOT . '/css/font-awesome.min.css', '', '3.2.1', 'all' );
+			wp_register_style( 'theme-style', get_stylesheet_uri(), array('normalize', 'font-sans', 'font-serif', 'font-awesome'), '1.0.0', 'all' );
+
+			//Cargar estilos
+			wp_enqueue_style( 'theme-style' );
+		}
+
+		add_action('wp_enqueue_scripts', 'apk_theme_styles');
+
+		/*Scripts del Tema*/
+
+		function apk_theme_scripts() { 
+
+			//Registramos scripts
+			wp_register_script( 'fitvids', THEMEROOT . '/js/jquery.fitvids.js', array('jquery'), '1.0', true );
+			wp_register_script( 'flexslider', THEMEROOT . '/js/jquery.flexslider-min.js', array('jquery'), '2.1', true );
+			wp_register_script( 'theme-functions', THEMEROOT . '/js/functions.js', array('jquery','fitvids'), '1.0', true );
+
+			//Cargar scripts
+			wp_enqueue_script( 'theme-functions' );
+		}
+
+		add_action('wp_enqueue_scripts', 'apk_theme_scripts');
+
+	?>
+
+Aca con los scripts, vemos como definimos el nombre del script, luego la ruta donde se encuentra, con el array definimos si tiene dependencias, luego la versión del script, y por ultimo con "true", o "false", indicamos si queremos que cargue antes del cierre del body (true), o en el head (false).
+
+Jquery no es necesario cargarlo ni incluirlo, ya que Wordpress lo incluye automaticamente.
+_______________________________________________________
+
+	[5]. PINGBACKS:
+_______________________________________________________
+
+En el "head", debemos insertar un link, que enlazara los pingbacks de nuestro sitio, esto sirve si por ejemplo en otro sitio o blog, hacen referencia al nuestro, se conectaran a traves de este enlace:
+
+	<head>
+		<link rel="pingback" href="<?php bloginfo('pingback_url'); ?>">
+
+		<?php wp_head(); ?>
+	</head>
+
+Nota: esta funcionalidad es mejor cargarla antes de "wp_head();".
+
+Explicación de un pingback:
+
+	Imagina lo siguiente, hay dos amigos que están en facebook. Uno de ellos decide escribir una actualización de estado y dentro de ese texto menciona a su amigo. El amigo mencionado verá una notificación cuando entre a facebook y sabrá que fue mencionado. Este sistema funciona, por supuesto, sólo si el amigo etiquetado, tiene las notificaciones activadas, de lo contrario no se enteraría que fue mencionado.
+
+	Ahora piensa en esta situación aplicada a blogs, una persona (Juanito) escribe en su blog un artículo muy interesante el cual otra persona (Pepito) lee y le resulta interesante, pero cree que faltaron algunos puntos que agregar, entonces decide escribir en su propio blog un artículo complementario del primer artículo. En su contenido, pone un enlace al post de Juanito, y tal como en el sistema de notificaciones de Facebook, al momento de publicar el artículo, el WordPress de Pepito intenta comunicarse con el de Juanito para avisarle que fue linkeado/mencionado.
+
+	Eso es un pingback, la comunicación interna que se da entre 2 sitios que funcionan con WordPress.
+
+	Esto habitualmente está bien pero, si tu sitio publica varios artículos por día, cada uno con un montón de enlaces puedes hacer que el proceso de publicación se haga algo lento, ya que por cada post WordPress tratará de contactar a los otros sitios.
+
+	Para evitar esto puedes desactivar la posibilidad de enviar pingbacks desde Ajustes > comentarios. Desde allí también podrás deshabilitar la posibilidad de que tu sitio reciba notificaciones de enlaces externos, esta misma opción se puede modificar en cada post y página de manera individual también.
+
+	Cuando recibes un pingback, estos quedan visibles desde la página de comentarios del administrador de WordPress, y como el link del autor del comentario, verás la URL desde donde te enlazaron.
+_______________________________________________________
+
+	[6]. SCRIPTS PARA COMENTARIOS:
+_______________________________________________________
+
+Para cargar los scripts necesarios para los comentarios, pero que estos solo se carguen en las paginas de detalle de una entrada (single), usamos:
+
+	<head>
+		<?php
+			if( is_single() && comments_open() ){
+				wp_enqueue_script('comment-reply');
+			}
+		?>
+
+		<?php wp_head(); ?>
+	</head>
+
+Aquí nos aseguramos que el script solo cargue cuando estamos en un "single", y cuando esten los comentarios habilitados o abiertos.
+
+Este script lo que hace es que se cargue el formulario para responder un comentario, justo debajo del comentario.
+
+Nota: esta funcionalidad es mejor cargarla antes de "wp_head();".
+_______________________________________________________
+
+	[7]. Menu dinamico con clases propias y las de Bootstrap:
+_______________________________________________________
+
+Como bootstrap aplica clases a elementos ul, li de submenus, hay que añadir un "walker":
+
+	<?php
+	/**
+	 * Carga el menú de WordPress 'main-menu' 
+	 * agregando al elemento ul las clases 'nav navbar-nav navbar-right'.
+	 * Usando en Walker 'wp_bootstrap_navwalker'
+	 *
+	 * Para que este código funcione debes decargar el archivo wp_bootstrap_navwalker.php
+	 * de autoría de Edward McIntyre [https://twitter.com/twittem] desde GitHub
+	 * [https://github.com/twittem/wp-bootstrap-navwalker] e incluír este archivo en tu tema
+	 * llamándolo desde tu archvo de funciones.
+	 * Ejemplo: require_once('functions/wp_bootstrap_navwalker.php');
+	 *
+	 */
+
+	//Poner esto en header.php en el lugar donde quieres cargar tu menú
+
+	wp_nav_menu(array(
+	    'theme_location' => 'main-menu',
+	    'depth'             => 2,
+	    'container'         => 'div',
+	    'container_class'   => 'collapse navbar-collapse',
+	    'container_id'      => 'bs-example-navbar-collapse-1',
+	    'menu_class'        => 'nav navbar-nav navbar-right',
+	    'fallback_cb'       => 'wp_bootstrap_navwalker::fallback',
+	    'walker'            => new wp_bootstrap_navwalker()
+	)); ?>
+
+El "walker" lo podemos descargar de:
+
+	https://github.com/wp-bootstrap/wp-bootstrap-navwalker
+
+Para más info de las clases personalizadas para los elementos del menu:
+
+	https://developer.wordpress.org/reference/functions/wp_nav_menu/
+_______________________________________________________
+
+	[8]. Formulario de búsqueda personalizado:
+_______________________________________________________
+
+Wordpress nos entrega un formulario de busqueda predeterminado, el cual accedemos con:
+
+	<div>
+		<?php get_search_form(); ?>
+	</div>
+
+Este formulario aplica sus propios estilos, así como un label, y un placeholder para el input.Si nosotros queremos modificar los estilos y apariencia del formulario de busqueda, ya que por ejemplo, en la maquetación usamos:
+
+	<form method="get" class="search-form" action="">
+		<input type="text" value="" name="s" id="s" />
+		<input type="submit" value="Buscar" />
+	</form>
+
+Lo que debemos hacer, es crear un archivo llamado "searchform.php":
+
+	<?php
+		/*Formulario de busqueda*/
+	?>
+
+	<form method="get" class="search-form" action="<?php echo home_url(); ?>">
+		<input type="text" value="<?php the_search_query(); ?>" name="s" id="s" />
+		<input type="submit" value="<?php _e('Buscar', 'apk'); ?>" />
+	</form>
+	
+Este archivo sobre escribe el formulario original(predeterminado) de wordpress.
+
+Debe cumplir con los siguientes requisitos:
+
+	- El metodo de envio debe ser "get".
+
+	- La clase, es de acuerdo a nuestros estilos(no es obligatoria).
+
+	- La accion, debe redireccionar al home, para eso usamos "echo home_url();".
+
+	- El input, debe tener como nombre (name="s") y como id (id="s"). En el valor, obtendra el termino a buscar con "the_search_query();".
+
+	- En el input para enviar, usamos "_e('Buscar', 'apk');", para traducir e imprimir el texto del boton.
+
+Para probar la busqueda, buscaremos el termino "gatos", y en la url deberemos ver:
+
+	http://localhost/amkfolio/?s=gatos
+_______________________________________________________
+
+	[9]. the_title_attribute();
+_______________________________________________________
+
+Esta funcion la utilizamos para obtener el titulo de una entrada, pero sin caracteres especiales. Se usa como por ejemplo en el atributo "title" de un enlace:
+
+	<h2><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+_______________________________________________________
+
+	[10]. Etiqueta MORE (ver más):
+_______________________________________________________
+
+Cuando escribimos una entrada, en cualquier parte de está, podemos utilizar el botón que añade la etiqueta "MORE", la cual nos mostrara un enlace de ver más así:
+
+	(MÁS...)
+
+Esto se mostrara justo en donde insertemos la etiqueta "MORE", en el listado de todas las entradas.
+
+Para cambiar el texto de esta etiqueta usamos:
+
+	the_content( __('Ver más', 'apk') );
+
+Otra forma de poner este enlace, sin necesidad de que el usuario admin. coloque la etiqueta "MORE" al escribir una entrada, es usando "the_excerpt();":
+
+	<?php the_excerpt(); ?>
+	
+	<p> <a href="<?php the_permalink(); ?>" class="more-link" title="<?php the_title_attribute(); ?>"><?php _e('Ver más', 'apk'); ?></a></p>
+
+De esta forma limitamos el texto a mostrar de cada entrada, y añadimos uh enlace para ver la entrada completa.
+
+Nota: existen otras formas de personalizar estos enlaces:
+
+	https://codex.wordpress.org/Excerpt
+
+	https://codex.wordpress.org/Customizing_the_Read_More
+_______________________________________________________
+
+	[11]. Detectando Formatos de Entrada:
+_______________________________________________________
+
+Como en nuestro tema damos soporte para los formatos de entrada de "audio" y "video", vamos a cambiar en el loop, la forma qen que estos se muestran:
+
+	<?php
+		if( !has_post_format('video') && !has_post_format('audio') ){
+			if( has_post_thumbnail() ){
+				the_post_thumbnail('blog-image');
+			}
+		}
+	?>
+	
+	<?php the_content( __('Ver más', 'apk') ); ?>
+
+Aquí lo que hacemos es que si la entrada no tiene definido el formato "video" ni "audio", me mostrara la imagen destacada, de lo contrario me mostrara el contenido de la entrada (si le hemos insertado un video, se mostrara el video).
+_______________________________________________________
+
+	[12]. Archivos de plantilla parciales:
+_______________________________________________________
+
+Vamos a mostrar un mensaje con un formulario de busqueda cuando no hay entradas que mostrar, pero las mostraresmos en un archivo aparte.
+
+1) En el loop de wordpress, usamos la función "get_template_part()":
+
+	<?php endwhile; else: ?>
+
+		<?php get_template_part('content', 'noposts'); ?>
+
+	<?php endif; ?>
+
+Esta función buscara el archivo con el nombre "content-noposts.php":
+
+	<article class="article resume">
+		
+		<div class="blog-entry-header">
+			<h2><?php _e('No hay contenidos disponibles', 'apk'); ?></h2>
+		</div>
+
+		<p><?php _e('Lo siento, no hay contenidos para mostrar en esta página, por favor realiza una nueva búsqueda', 'apk'); ?></p>
+
+		<?php get_search_form(); ?>
+		
+	</article>
+
+"get_template_part" es muy similar a include, con una tremenda diferencia: que busca opciones adicionales y funciona en temas hijo.
+
+En este ejemplo "get_template_part('content', 'imagen');" puesto en un tema hijo lo que hará wordpress será:
+
+	1. Buscar el archivo content-imagen.php en el tema hijo
+	2. Buscar el archivo content-imagen.php en el tema padre
+	3. Buscar el archivo content.php en el tema hijo
+	4. Buscar el archivo content.php en el tema padre
+
+Nota: para más info:
+
+	https://konstantin.blog/2013/get_template_part/
+_______________________________________________________
+
+	[13]. Identificando artículos (CLASS y ID):
+_______________________________________________________
+
+Nustras entradas les estamos poniendo las clases "article" y "resume", en nuestro loop:
+
+	<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+
+		<article class="article resume">
+
+Pero si queremos, por ejemplo darle un estilo en especifico a una entrada que sea de formato "video", o a un articulo fijo(sticky), podremos hacerlo, ayudandonos de las clases que coloca wordpress.
+
+1) Para hacer esto, en el loop usamos la funcion "post_class();":
+
+	<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+
+		<article <?php post_class('article resume'); ?> >
+
+Para que no pierda nustras clases personalizadas, se las pasamos a la función "post_class();"
+
+2) Tambien podemos identificar cada post con un id, usando la función "the_ID();":
+
+	<article <?php post_class('article resume'); ?> id="post-<?php the_ID();?>">
+_______________________________________________________
+
+	[14]. Paginación entradas Antiguas y recientes:
+_______________________________________________________
+
+Pra tener una paginación a entradas antiguas y recientes usamos:
+
+	<?php if( get_next_posts_link() || get_previous_posts_link() ){ ?>
+		<div class="posts-navigation cf">
+			<nav>
+				<div class="link-container previous fl">
+					<?php next_posts_link( __('&larr; Posts antiguos', 'apk') ); ?>
+				</div>
+				<div class="link-container next fr">
+					<?php previous_posts_link( __('Posts recientes &rarr;', 'apk') ); ?>
+				</div>
+			</nav>
+		</div> <!-- /.posts-navigation -->
+	<?php } ?>
+
+Pero si queremos tener paginación numerada, usamos el siguiente codigo:
+
+	<?php
+		global $wp_query;
+
+		$big = 999999999; // need an unlikely integer
+		
+		echo paginate_links( array(
+			'base' => str_replace( $big, '%#%', esc_url( get_pagenum_link( $big ) ) ),
+			'format' => '?paged=%#%',
+			'current' => max( 1, get_query_var('paged') ),
+			'total' => $wp_query->max_num_pages
+		) );
+	?>
+
+Pra más info:
+
+	https://codex.wordpress.org/Function_Reference/paginate_links
+_______________________________________________________
+
+	[15]. Títulos condicionales:
+_______________________________________________________
+
+Para no crear varios archivos, segun la jerarquia de wordpress, utilizaremos el "index.php", y haremos unas comprobaciones para cambiar el titulo de la página, segun sea el caso.
+
+	<?php if( is_category() ) { ?>
+
+		<h1><?php _e('Categoría', 'apk'); ?>: <?php single_cat_title(); ?></h1>
+
+	<?php }elseif ( is_tag() ) { ?>
+
+		<h1><?php _e('Etiqueta', 'apk'); ?>: <?php single_tag_title(); ?></h1>
+
+	<?php }elseif ( is_search() ) { ?>
+
+		<h1><?php _e('Resultados para', 'apk'); ?>: <?php the_search_query(); ?></h1>
+
+	<?php }elseif ( is_day() ) { ?>
+
+		<h1><?php _e('Archivo', 'apk'); ?>: <?php the_time( get_option('date_format') ); ?></h1>
+
+	<?php }elseif ( is_month() ) { ?>
+
+		<h1><?php _e('Archivo', 'apk'); ?>: <?php the_time('F Y'); ?></h1>
+
+	<?php }elseif ( is_year() ) { ?>
+
+		<h1><?php _e('Archivo', 'apk'); ?>: <?php the_time('Y'); ?></h1>
+
+	<?php }elseif ( is_author() ) { ?>
+
+		<h1><?php _e('Artículos por', 'apk'); ?>: <?php $curauth = (isset($_GET['author_name'])) ? get_user_by('slug', $author_name) : get_userdata(intval($author)); echo $curauth->display_name; ?></h1>
+
+	<?php }elseif ( is_404() ) { ?>
+
+		<h1><?php _e('Página no encontrada', 'apk'); ?></h1>
+
+	<?php }elseif ( is_home() ) { ?>
+
+		<h1><?php _e('Blog', 'apk'); ?></h1>
+
+	<?php }else { ?>
+
+		<h1><?php wp_title(' ', true, 'right'); ?></h1>
+
+	<?php } ?>
+
+Ahora para probar c/u podemos indicar las siguientes urls:
+
+	Categoria --> http://localhost/amkfolio/category/sin-categoria/
+
+	Etiqueta --> http://localhost/amkfolio/tag/lego/
+
+	Busqueda --> http://localhost/amkfolio/?s=perros
+
+	Archivos por Día --> http://localhost/amkfolio/2017/04/10/
+
+	Archivos por Mes --> http://localhost/amkfolio/2017/04/
+
+	Archivos por Año --> http://localhost/amkfolio/2017/
+
+	Autor --> http://localhost/amkfolio/author/ricardo/
+
+	404 --> http://localhost/amkfolio/asasa
+
+	Home --> http://localhost/amkfolio/
+
+	Titulo Entrada --> http://localhost/amkfolio/lego-worlds-creando-mundo/
+
+Para más info. sobre funciones condicionales:
+
+	https://codex.wordpress.org/Conditional_Tags
+_______________________________________________________
+
+	[16]. PERSONALIZADOR DE TEMAS:
+_______________________________________________________
+
+Podemos crear diferentes opciones para que el administrador del sitio personalise el tema, como hicimos con el color de fondo. Tambien podemos crear la opción para que suba una imagen como logo, etc.
+
+Estas opciones las pueden cambiar desde "Apariencia" --> "Personalizar".
+
+Allí, cada desplegable corresponde a una sección, cada sección, puede tener varias opciones (settings), y cada "setting", tiene un control.
+
+1) Llamamos a un nuevo archivo desde "functions.php":
+
+	/*Customizer*/
+
+		require_once('/functions/theme-customizer.php');
+
+2) Creamos el archivo "theme-customizer.php", dentro de la carpeta "functions":
+
+	<?php
+		/*Customizer (Personalizador temas)*/
+
+		function apk_customize_register($wp_customize){
+		//---------------------------------
+		//CABECERA
+		//---------------------------------
+			$wp_customize->add_section('apk_header', array(
+				'title' => __('Cabecera', 'apk'),
+				'description' => __('Opciones de la cabecera', 'apk'),
+				'priority' => 35
+			));
+
+			//logo
+			$wp_customize->add_setting('apk_custom_settings[logo]', array(
+				'default' => '',
+				'type' => 'theme_mod'
+			));
+
+			$wp_customize->add_control( new WP_Customize_Image_Control(
+				$wp_customize, 'logo', array(
+					'label' => __('Subir logo', 'apk'),
+					'section' => 'apk_header',
+					'settings' => 'apk_custom_settings[logo]'
+				)
+			));
+
+			//imagen cabecera
+			$wp_customize->add_setting('apk_custom_settings[imagen-cabecera]', array(
+				'default' => '',
+				'type' => 'theme_mod'
+			));
+
+			$wp_customize->add_control( new WP_Customize_Image_Control(
+				$wp_customize, 'imagen-cabecera', array(
+					'label' => __('Subir imagen fondo cabecera', 'apk'),
+					'section' => 'apk_header',
+					'settings' => 'apk_custom_settings[imagen-cabecera]'
+				)
+			));
+
+		}
+
+		add_action('customize_register', 'apk_customize_register');
+	?>
+
+Aca recibimos el objeto de php "$wp_customize", luego lo extendemos, añadiendo una nueva sección llamada "apk_header". A esta seccion le damos un nombre, una descripción y una prioridad.
+
+Luego creamos un setting llamado 'apk_custom_settings[logo]', con "default", indicamos si queremos alguna imagen por defecto, y con "type", indicamos si esta personalización es del tema (theme_mod), o del sitio.
+
+Luego para esa opción de la imagen del logo, añadimos un control, que es el que nos permite escoger los valores que va a tener esta opción. Como en este caso necesitamos el formulario para subir una nueva imagen, o escoger las que ya se han subido a multimedia, creamos una nueva intancia de un control de Wordpress con "new WP_Customize_Image_Control()".
+
+A este control le indicamos el id (logo), y un array con las diferentes argumentos, como el texto a mostrar (label), a que seccion pertenece, y el setting.
+
+Luego, como vamos a cambiar una imagen de fondo de la cabecera, creamos un nuevo setting y control, que tambien pertenece a la seccion que ya habiamos creado.
+
+Por ultimo añadimos la función, al hook (o acción) llamado "customize_register".
+
+Para más info:
+
+	https://codex.wordpress.org/Theme_Customization_API
+
+3) Ahora en "header.php", ponemos una condición, para que se muestre la imagen que subamos al logo:
+
+		<?php 
+			$options = get_theme_mod('apk_custom_settings');
+			if( !empty($options['logo']) ){
+				$logo = $options['logo'];
+			}			
+		?>
+	</head>
+	<body <?php body_class(); ?> >
+		
+		<header id="main-header">
+				
+			<div id="header-logo">
+
+				<?php if( isset($logo) ){ ?>
+					<a href="<?php echo home_url(); ?>">
+						<img src="<?php echo $logo; ?>" alt="<?php bloginfo('name'); ?>"/>
+					</a>
+				<?php }else{ ?>
+					
+					<h1><a href="<?php echo home_url(); ?>"><?php bloginfo('name'); ?></a></h1>
+					<h2><a href="<?php echo home_url(); ?>"><?php bloginfo('description'); ?></a></h2>
+				<?php } ?>
+			
+			</div><!-- /#header-logo -->
+
+Aca, en el "head", obtenemos los settings y los almacenamos en "$options", luego, como en el id de nuestros settings, usamos un array, obtenemos solo el valor correspondiente para "logo"; esto nos dara la url a la imagen de logo que suba el usuario admin.
+
+Por ultimo hacemos una comprobación, para mostrar el titulo y la descripción del sitio, cuando no hay una imagen de logo.
+
+4) En "index.php", obtenemos la url de la imagen para la cabecera:
+
+	<?php
+		$options = get_theme_mod('apk_custom_settings');
+		if( !empty($options['imagen-cabecera']) ){
+			$imagen_cabecera = $options['imagen-cabecera'];
+		}
+		if( !isset($imagen_cabecera) ){
+			$imagen_cabecera = IMAGES . '/default-heading-bg.jpg';
+		}
+	?>
+	<div class="image-cover" style="background-image: url('<?php echo $imagen_cabecera; ?>');"></div>
+
+Si no llegan a subir una imagen para la cabecera, asignamos la imagen por defecto (guardada en la carpeta "img").
+
+5) Para añadir al personalizador, una sección que nos permita editar los enlaces hacia las redes sociales, lo hacemos en la misma función "apk_customize_register", añadiendo una nueva sección, y por cada red social, añadiremos un "setting" y un "control":
+
+	//---------------------------------
+	//	LINKS REDES SOCIALES
+	//---------------------------------
+		$wp_customize->add_section('apk_social_links', array(
+			'title' => __('Enlaces Sociales', 'apk'),
+			'description' => __('Enlaces a las redes sociales', 'apk'),
+			'priority' => 36
+		));
+
+		//Twitter
+		$wp_customize->add_setting('apk_custom_settings[twitter]', array(
+			'default' => '',
+			'type' => 'theme_mod'
+		));
+
+		$wp_customize->add_control( 'apk_custom_settings[twitter]', array(
+				'label' => __('Enlace hacia Twitter', 'apk'),
+				'section' => 'apk_social_links',
+				'settings' => 'apk_custom_settings[twitter]'
+			)
+		);
+
+		//RSS
+		$wp_customize->add_setting('apk_custom_settings[rss]', array(
+			'default' => '',
+			'type' => 'theme_mod'
+		));
+
+		$wp_customize->add_control( 'apk_custom_settings[rss]', array(
+				'label' => __('RSS', 'apk'),
+				'section' => 'apk_social_links',
+				'settings' => 'apk_custom_settings[rss]'
+			)
+		);
+
+Podemos ver, que al añadir el control, como no necesitamos añadir una imagen, llamamos al setting, y esto nos llamara un "input" en el admin, en el cual ingresaremos el texto del enlace.
+
+6) Ahora, segun el diseño de nuestro tema, obtendremos y mostraremos los enlaces donde corresponda (en este caso en el "footer.php"):
+
+	<?php 
+		$options = get_theme_mod('apk_custom_settings');
+		
+		if( !empty( $options['facebook'] ) ){
+			$facebook = $options['facebook'];
+		}
+		if( !empty( $options['twitter'] ) ){
+			$twitter = $options['twitter'];
+		}
+	?>
+
+	<p class="fr footer-social">
+		<?php if( isset($facebook) ){ ?>
+			<a href="<?php echo esc_url($facebook); ?>" title="facebook"><i class="icon-facebook-sign"></i></a>
+		<?php } ?>
+		<?php if( isset($twitter) ){ ?>
+			<a href="<?php echo esc_url($twitter); ?>" title="twitter"><i class="icon-twitter"></i></a>
+		<?php } ?>
+
+Con la función "empty()", verificamos si el campo está vacio, ya que podemos no colocar ningun valor en la url de la red social para que no se muestre.
+
+Sino esta vacio, se crea la variable. Luego al momento de mostrar el código html, verificamos si se definio la variable con "isset()". Si no esta definida no muestra el html.
+
+7) Si queremos que algun campo tenga un valor por defecto, lo podemos definir de la siguiente forma (ejemplo texto copyright footer):
+
+	//---------------------------------
+	//	PIE DE PÁGINA
+	//---------------------------------
+		$wp_customize->add_section('apk_footer', array(
+			'title' => __('Pie de página', 'apk'),
+			'description' => __('Opciones del pie de página', 'apk'),
+			'priority' => 37
+		));
+
+		//Texto Copyright
+		$wp_customize->add_setting('apk_custom_settings[copyrigth_text]', array(
+			'default' => date('Y') . ' &copy; ' . get_bloginfo('name') . ' / Desarrollo por <a href="http://landinezweb.tk" target="_blank">Ricardo Landínez</a>',
+			'type' => 'theme_mod'
+		));
+
+		$wp_customize->add_control( 'apk_custom_settings[copyrigth_text]', array(
+				'label' => __('Texto del pie de página (copyright)', 'apk'),
+				'section' => 'apk_footer',
+				'settings' => 'apk_custom_settings[copyrigth_text]'
+			)
+		);
+
+El valor por defecto tiene la función de pre-rellenar el campo la primera vez que el usuario abre el customizer (personalizador en el admin.). No hay forma de que ese valor por defecto aparezca antes de que la persona guarde, porque no está en la base de datos, solo en un archivo php.
+
+Por este motivo, en "footer.php", debemos hacer la comprobación de si se asigno algo en ese valor, o mostrar un valor por defecto:
+
+	<?php
+		if( !empty( $options['copyrigth_text'] ) ){
+			$copyrigth_text = $options['copyrigth_text'];
+		}	
+		else{
+			$copyrigth_text = ''. date('Y') . ' &copy; ' . get_bloginfo('name') . ' / Desarrollo por <a href="http://landinezweb.tk" target="_blank">Ricardo Landínez</a>';
+		}
+	?>
+
+	<div id="footer-bottom-area" class="global-padding cf">
+		<p class="fl">
+			<?php
+				if(isset($copyrigth_text))
+				echo $copyrigth_text;
+			?>
+		</p>
+
+8) Tambien podemos crear un controlador propio, por ejemplo, crearemos un textarea para definir un area en donde el admin. definira un custom CSS:
+
+	//---------------------------------
+	//	Miscelaneo (CSS custom)
+	//---------------------------------
+
+		//creamos el control del textarea
+		class APK_Customize_Textarea_Control extends WP_Customize_Control{
+			
+			public $type = 'textarea';
+		
+			public function render_content() {
+				?>
+				<label for="">
+					<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
+					<textarea rows="5" style="width:100%;" <?php $this->link(); ?> ><?php echo esc_textarea( $this->value() ); ?></textarea>
+				</label>
+				<?php
+			}
+		}
+
+
+		$wp_customize->add_section('apk_miscelaneous', array(
+			'title' => __('Miscelaneo', 'apk'),
+			'description' => __('Opciones misceláneas', 'apk'),
+			'priority' => 38
+		));
+
+		//Custom CSS
+		$wp_customize->add_setting('apk_custom_settings[custom_css]', array(
+			'default' => '',
+			'type' => 'theme_mod'
+		));
+
+		$wp_customize->add_control( new APK_Customize_Textarea_Control( $wp_customize, 'apk_custom_settings[custom_css]', array(
+				'label' => __('CSS personalizado', 'apk'),
+				'section' => 'apk_miscelaneous',
+				'settings' => 'apk_custom_settings[custom_css]'
+			)
+		));
+
+Para usar este custom CSS, lo hacemos en "header.php":
+
+		<?php 
+			$options = get_theme_mod('apk_custom_settings');
+
+			if( !empty($options['logo']) ){
+				$logo = $options['logo'];
+			}
+
+			if( !empty($options['custom_css']) ){ 
+				$custom_css = $options['custom_css'];
+				?>
+				<style type="text/css" medis="screen">
+					<?php echo $custom_css ?>
+				</style>
+				<?php
+			}
+		?>
+	</head>
+
+Para más info de crear un contolador:
+
+	http://ottopress.com/2012/making-a-custom-control-for-the-theme-customizer/
+
+Actualmente, ya se puede crear un "textarea" como controlador de la siguiente forma:
+
+	$wp_customize->add_control( 'apk_custom_settings[custom_css]', array(
+			'label' => __('CSS personalizado', 'apk'),
+			'section' => 'apk_miscelaneous',
+			'settings' => 'apk_custom_settings[custom_css]',
+			'type' => 'textarea'
+		)
+	);
+
+En este caso no hay que crear ninguna clase.
+
+9) Para que el admin. tambien pueda cambiar además del color de fondo, el color de los enlaces, y del fondo del header, creamos unos settings y controladores, pero no una sección, ya que vamos a añadir estas opciones a una sección ya existente llamada "colors". Añadimos esto al archivo "theme-customizer.php":
+
+	//---------------------------------
+	//	COLORES
+	//---------------------------------
+
+		//Color destacado
+		$wp_customize->add_setting('apk_custom_settings[color_link]', array(
+			'default' => '#c4331c',
+			'type' => 'theme_mod'
+		));
+
+		$wp_customize->add_control( new WP_Customize_Color_Control(
+			$wp_customize, 'color_link', array(
+				'label' => __('Color destacado', 'apk'),
+				'section' => 'colors',
+				'settings' => 'apk_custom_settings[color_link]'
+			)
+		));
+
+		//Color Header
+		$wp_customize->add_setting('apk_custom_settings[color_dark]', array(
+			'default' => '#000000',
+			'type' => 'theme_mod'
+		));
+
+		$wp_customize->add_control( new WP_Customize_Color_Control(
+			$wp_customize, 'color_dark', array(
+				'label' => __('Color header (oscuro)', 'apk'),
+				'section' => 'colors',
+				'settings' => 'apk_custom_settings[color_dark]'
+			)
+		));
+
+Y en el mismo archivo, creamos una función encargada de aplicar el css a los elementos respectivos:
+
+	//Aplicando colores del selector de colores a los estilos
+
+	function apk_customize_colors_css(){
+		$options = get_theme_mod('apk_custom_settings');
+		?>
+			<style type="text/css">
+				a,
+				#header-logo a:hover,
+				#main-content .article ul li::before,
+				#main-content .article .share-post a:hover,
+				#comments h3,
+				#main-content .portfolio-filter li a:hover,
+				#main-content .portfolio-filter li.current-cat,
+				#main-content .portfolio-filter li.current-cat a,
+				#main-content .article.type-portfolio .project-details h3,
+				.widget ul li::before,
+				#footer-widgets-area .widget_twitter a,
+				#footer-widgets-area .widget_text a,
+				#footer-bottom-area .footer-social a:hover{
+					color: <?php echo $options['color_link']; ?>;
+				}
+				 
+				#main-nav ul li a:hover,
+				#main-nav ul li > ul li a:hover,
+				#main-nav ul li > ul li.current > a,
+				#main-nav ul li > ul li.current-menu-item > a,
+				#main-nav ul li > ul li.current-page-item > a,
+				#main-nav #open-search:hover,
+				#main-nav #open-search.open,
+				#page-head,
+				#home-page-head,
+				#comments #comments-list .reply a:hover,
+				.portfolio-archive .portfolio-item-resume,
+				.widget_apk_recent_projects article,
+				.widget_apk_recent_projects .flex-riection-nav li.flex-prev:hover,
+				.widget_apk_recent_projects .flex-riection-nav li.flex-next:hover,
+				input[type="submit"],
+				input[type="button"],
+				a.btn{
+					background-color: <?php echo $options['color_link']; ?>;
+				}
+		 
+				#header-search,
+				#main-content .blog-entry-header,
+				input:focus,
+				textarea:focus,
+				input[type="submit"],
+				input[tye="button"],
+				a.btn{
+					border-color: <?php echo $options['color_link']; ?>;;
+				}
+		 
+				#header-logo a{
+					color: <?php echo $options['color_dark']; ?>;
+				}
+		 
+				#main-nav,
+				#header-search,
+				#main-footer{
+					background-color: <?php echo $options['color_dark']; ?>; 
+				}
+			</style>
+		<?php
+	}
+
+	add_action('wp_head', 'apk_customize_colors_css');
+
+_______________________________________________________
+
+	[17]. Completando el "SINGLE.php":
+_______________________________________________________
+
+--> [17.1]. Link y Nombre de Autor:
+
+	Para mostrar el autor de una entrada, en un enlace que redireccionara a mostrar un listado de todas las entradas creadas por ese autor, usamos "the_author_posts_link()":
+
+		<div class="author">
+			<i class="icon-user"></i> <?php _e('Por', 'apk'); ?> <?php the_author_posts_link(); ?>
+		</div>
+
+--> [17.2]. Link hacia los comentarios:
+
+	Para hacer un link en una entrada, que lleve directamente al area de comentarios usamos "comments_link()":
+
+		<?php if( comments_open() || have_comments() ){ ?>
+
+			<div class="comments-counter">
+				<i class="icon-comment"></i> <a href="<?php comments_link(); ?>"><?php
+					comments_number(
+						__('Sé el primero en comentar', 'apk'),
+						__('1 comentario disponible', 'apk'),
+						__('% comentarios', 'apk')
+					);
+				?></a>
+			</div>
+
+		<?php } ?>
+
+	Nota: para que este link funcione correctamente, debemos llamar al archivo "comments.php", dentro de un div con el "id" igual a "comments":
+
+		<div id="comments">
+		
+			<?php comments_template(); ?>
+
+		</div>
+
+--> [17.3]. Etiquetas (tags):
+
+	Para mostrar las etiquetas, y hacer un enlace para ver un listado de todas las entradas con determinada etiqueta usamos la función "the_tags()":
+
+		<?php if( has_tag() ){ ?>
+			<div class="tags">
+				<i class="icon-tag"></i> <?php the_tags('', ', ', ''); ?>
+			</div>
+		<?php } ?>
+
+	Esta función hace una lista de enlaces con cada etiqueta/tag relacionada a la entrada; es muy similar a la función "the_category()".
+
+	Recibe 3 parametros, el primero, puede ser un html o texto que se mostrara antes de la etiqueta, el segundo, es la separación de cada etiqueta/tag (en este caso se separaran con una coma y un espacio). Y el tercer parametro, puede ser el html de cierre, o texto, que se mostrara despues del link de la etiqueta/tag.
+
+	Con la funcion "has_tag()", nos aseguramos que solo se muestre este bloque si la entrada tiene etiquetas.
+
+--> [17.4]. Imagen destacada como background:
+
+	Para usar la imagen destacada como background, en vez de obtener toda la imagen destacada, necesitamos obtener solo la url de la imagen.
+
+	Esto lo logramos con las siguientes funciones:
+
+		"wp_get_attachment_image_src()" obtiene un array con los datos de cualquier imagen de la biblioteca multimedia de wordpress, entre los datos del array estan: url, width, height.
+
+		"get_post_thumbnail_id()" obtiene el id de la imagen.
+
+	Ahora usamos las funciones dentro del loop así:
+
+		<?php
+			if( has_post_thumbnail() ) {
+
+				$imagen_cabecera = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID), 'page-head' );
+				
+				$imagen_cabecera = $imagen_cabecera[0];
+
+			}else{
+
+				$options = get_theme_mod('apk_custom_settings');
+				if( !empty($options['imagen-cabecera']) ){
+					$imagen_cabecera = $options['imagen-cabecera'];
+				}
+				if( !isset($imagen_cabecera) ){
+					$imagen_cabecera = IMAGES . '/default-heading-bg.jpg';
+				}
+			}
+		?>
+		
+		<div class="image-cover" style="background-image: url('<?php echo $imagen_cabecera; ?>');"></div>
+
+	Primero preguntamos si el post tiene una imagen destacada ( "has_post_thumbnail()" ).
+
+	Si tiene imagen destacada, creamos la variable "$imagen_cabecera", que recibira el array que nos retorna "wp_get_attachment_image_src()".
+
+	A "wp_get_attachment_image_src()", le pasamos como parametros el id de la imagen, y el tamaño que necesitamos (en este caso 'page-head').
+
+	Como el id de la imagen no lo conocemos, allí usamos la función "get_post_thumbnail_id()", la cual recibe como parametro el id del post actual, que obtenemos al acceder al objeto $post (este objeto esta disponible porque estamos dentro del loop).
+
+	Ahora, en la variable "$imagen_cabecera", tenemos un array con (url, width, height, is_intermediate), y como lo que necesitamos es la url, entonces accedemos a ese dato con $imagen_cabecera[0].
+
+	Si no hay una imagen destacada para la entrada, obtenemos los datos de personalizacion del tema, y mostramos la imagen definida en el header.
+
+	Para más info. de las funciones "wp_get_attachment_image_src()", "get_post_thumbnail_id()" y el objeto $post:
+
+		https://developer.wordpress.org/reference/functions/wp_get_attachment_image_src/
+
+		https://codex.wordpress.org/Function_Reference/get_post_thumbnail_id
+
+		https://wordpress.org/support/topic/the-post-object/
+
+--> [17.5]. Compartir redes sociales:
+
+	Para compartir el enlace de una entrada, junto con su titulo, usamos:
+
+			<article <?php post_class('article'); ?> id="post-<?php the_ID(); ?>">
+				
+				<?php the_content(); ?>
+			
+				<div class="share-post">
+					Compartir:
+					<!-- facebook -->
+					<a class="share-facebook" href="http://www.facebook.com/share.php?u=<?php the_permalink(); ?>" target="blank"><span class="facebook-logo"><i class="icon-facebook-sign"></i></span> Facebook</a>
+					
+					<!-- twitter -->
+					<a class="share-twitter" href="http://twitter.com/home?status=<?php echo str_replace(' ', '%20', get_the_title()); ?>%20-%20<?php the_permalink(); ?>" target="blank"> <span class="twitter-logo"><i class="icon-twitter-sign"></i></span> Twitter</a>
+
+					<!-- google plus -->
+					<a class="share-google" href="https://plus.google.com/share?url=<?php the_permalink(); ?>" target="blank"><span class="googleplus-logo"><i class="icon-google-plus-sign"></i></span> Google+</a>
+				</div><!-- end .share-post -->
+			
+			</article>	<!-- /.page -->
+			
+		<?php endwhile; endif; ?>
+
+	Usamos la funcion "the_permalink()", para obtener el enlace del articulo.
+
+	Para el caso de twitter, ademas del enlace, compartimos el titulo del articulo, usando "get_the_title()", que obtiene el titulo de la entrada. Luego con "str_replace()", remplazamos los espacios (' ') por ('%20'), que es un espacio, pero para mostrarlo en una url, ya que si no lo transformamos, puede darnos un error.
+
+--> [17.6]. Enlaces a la entrada anterior y siguiente:
+
+	En el detalle de un articulo o entrada (single.php), podemos insertar unos enlaces que nos llevan a ver la entrada anterior, o entrada reciente. Son enlaces muy parecidos a los que usabamos para paginar el listado de todas las entradas, pero estos llevan al detalle de cada entrada (individual) anterior y siguiente, en vez de a una pagina con N listado de entradas.
+
+	1) Queremos generar dinamicamente el siguiente html:
+
+		<div class="posts-navigation">
+			<strong class="prev">Post anterior:</strong> <a href="">Nombre del post</a> <br />
+			<strong class="next">Post siguiente:</strong> <a href="">Nombre del post</a> <br />
+		</div>
+
+	2) Lo generamos de la siguiente forma:
+
+		<?php if( get_next_post() || get_previous_post() ){ ?>	
+			<div class="posts-navigation">
+				<?php next_post_link('<strong class="prev">' . __('Post anterior:', 'apk') . '</strong> %link <br />', '%title'); ?>
+				<?php previous_post_link('<strong class="next">' . __('Post siguiente:', 'apk') . '</strong> %link <br />', '%title'); ?>
+			</div>
+		<?php } ?>
+
+	Primero nos aseguramos que exista una entrada anterior con "get_next_post()", o una entrada siguiente "get_previous_post()".
+
+	Luego usamos la funcion "next_post_link()", para mostrar el enlace a la entrada anterior.
+
+	Este enlace lo formateamos de la siguiente manera:
+
+		'<strong class="prev">' . __('Post anterior:', 'apk') . '</strong> %link <br />', '%title'
+
+	Primero inserta una etiqueta "strong", luego el texto traducible "Post anterior:", luego cierra la etiqueta "strong", imprime el enlace(%link) y pone una etiqueta "br".
+
+	Con el parametro "%title", le indicamos que el enlace debe mostrar el titulo de la entrada anterior, es decir, en donde este el "%link", sera un enlace con el titulo a la entrada anterior.
+
+--> [17.7]. COMENTARIOS:
+
+	Al archivo "comments.php", debemos indicarle el codigo necesario para que no accedan a el directamente:
+
+		//Seguridad para que no ingresen directamente a este archivo
+
+		if( !empty($_SERVER['SCRIPT_FILENAME']) && basename($_SERVER['SCRIPT_FILENAME']) == 'comments.php' ){
+			die( __('Sabes que no puedes cargar este archivo', 'apk') );
+		}
+
+	Tambien debemos hacer las comprobaciones si la entrada esta protegida por contraseña:
+
+		//comprobación si la entrada tiene contraseña
+
+		if( post_password_required() ){ ?>
+			<p>
+				<?php 
+					_e('Este artículo requiere contraseña', 'apk');
+					return;
+				?>
+			</p>
+		<?php
+		}
+		?>
+
+	Si los comentarios van a estar paginados (esta opción de paginación la podemos activar en: Ajustes-->Comentarios), podemos compribar si tienen esta paginación y crear los enlaces a las anteriores paginas de comentarios:
+
+		//paginacion para comentarios
+
+		if( get_comment_pages_count() > 1 && get_option('page_comments') ){ ?>
+			<div class="comments-nav-section clearfix">
+				<p class="alignleft">
+					<?php previous_comments_link( __('&larr; Comentarios antiguos', 'apk') ); ?>
+				</p>
+				<p class="alignright">
+					<?php next_comments_link( __('Comentarios recientes &rarr;', 'apk') ); ?>
+				</p>
+				<hr />
+			</div>
+			<?php
+		}
+
+	Haciendo todas las comprobaciones necesarias, el archivo "comments.php" quedaria así:
+
+		<?php
+			//Seguridad para que no ingresen directamente a este archivo
+
+			if( !empty($_SERVER['SCRIPT_FILENAME']) && basename($_SERVER['SCRIPT_FILENAME']) == 'comments.php' ){
+				die( __('Sabes que no puedes cargar este archivo', 'apk') );
+			}
+
+			//comprobación si la entrada tiene contraseña
+
+			if( post_password_required() ){ ?>
+				<p>
+					<?php 
+						_e('Este artículo requiere contraseña', 'apk'); 
+						return;
+					?>
+
+				</p>
+				<?php
+			}
+
+			//si hay comentarios o estan permitidos
+
+			if( have_comments() || comments_open() ){ ?>
+				<?php //este enlace con "href=#respond", es porque algunos scripts y pluguins viejos lo necesitan ?>
+				<a href="#respond"></a>
+				<h3 class="comments-title">
+					<?php
+						comments_number(
+							__('No hay comentarios aún', 'apk'),
+							__('Hay un comentario', 'apk'),
+							__('Hay % comentarios', 'apk')
+						);
+					?>
+				</h3>
+
+				<ol id="comments-list">
+					<?php
+						//como en el diseño usamos la imagen de avatar de tamaño 40 pixeles, lo podemos indicar al llamar los comentarios
+						//para más info de los parametros de opciones que podemos pasar:
+						//	https://codex.wordpress.org/Function_Reference/wp_list_comments
+
+						wp_list_comments('avatar_size=40');
+					?>
+				</ol><!-- /#comments-list -->
+				<?php
+
+				//paginacion para comentarios
+
+				if( get_comment_pages_count() > 1 && get_option('page_comments') ){ ?>
+					<div class="comments-nav-section clearfix">
+						<p class="alignleft">
+							<?php previous_comments_link( __('&larr; Comentarios antiguos', 'apk') ); ?>
+						</p>
+						<p class="alignright">
+							<?php next_comments_link( __('Comentarios recientes &rarr;', 'apk') ); ?>
+						</p>
+						<hr />
+					</div>
+					<?php
+				}
+			}elseif( !is_page() && post_type_supports( get_post_type(), 'comments' ) ){ ?>
+				<p><?php _e('Los comentarios están cerrrados', 'apk'); ?></p>
+				<?php
+			}
+
+			//mostrar formulario de comentarios
+			comment_form();
+		?>
+
+	Si necesitamos modificar el formulario por defecto que nos entrega wordpress:
+
+		https://franciscoamk.com/personalizar-formulario-de-comentarios-wordpress/
+
+		https://codex.wordpress.org/Function_Reference/comment_form
+_______________________________________________________
+
+	[18]. AÑADIENDO ELEMENTOS ADICIONALES AL EDITOR:
+_______________________________________________________
+
+Tanto en el detalle como en el listado de cada entrada o articulo, tenemos un "div" con la clase "article-intro", pero en el momento de hacer nuestro contenido dinamico, no pudimos hacer este maquetado, ya que extraemos todo el contenido con la función "the_content()".
+
+En el maquetado tenemos:
+
+	<article class="article resume">
+		
+		<div class="blog-entry-header">
+			<small class="entry-date">Enero 7, 2014</small>
+			<h2><a href="">Un post con una imagen destacada</a></h2>
+		</div><!-- /.blog-entry-header -->
+		
+
+		<img width="640" height="480" src="http://placekitten.com/640/350" alt="saul-bass">
+		
+		<div class="article-intro">
+			<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae leo laoreet, vulputate augue non, tempor velit. Praesent accumsan tincidunt scelerisque. Donec turpis metus, aliquet eu cursus bibendum.</p>
+		</div><!-- /.article-intro -->
+		
+		<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae leo laoreet, vulputate augue non, tempor velit. Praesent accumsan tincidunt scelerisque. Donec turpis metus, aliquet eu cursus bibendum, placerat rutrum nunc. Donec ut molestie purus. Quisque aliquam velit metus. Nullam tristique pulvinar diam a malesuada. Donec volutpat blandit libero, ac posuere augue scelerisque vel. Nam eros nunc, tempor id velit eu, ultricies mattis lorem.</p>
+
+		<p> <a href="" class="more-link">Ver más</a></p>
+
+	</article>	<!-- /.resume -->
+
+Pero al hacerlo dinamico en worpress tenemos:
+
+	<article <?php post_class('article resume'); ?> id="post-<?php the_ID(); ?>">
+		
+		<div class="blog-entry-header">
+			<small class="entry-date"><?php the_time( get_option('date_format') ); ?></small>
+			<h2><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+		</div><!-- /.blog-entry-header -->
+		
+
+		<?php
+			if( !has_post_format('video') && !has_post_format('audio') ){
+				if( has_post_thumbnail() ){
+					the_post_thumbnail('blog-image');
+				}
+			}
+		?>
+		
+		<?php the_content( __('Ver más', 'apk') ); ?>
+		
+	</article>
+
+Para que este div se muestre, tendriamos que, en el admin de worpress, irnos a la entrada, luego en el editor, seleccionar la pestaña "HTML" (que esta al lado de "Visual"), y allí asignar el codigo html.
+
+Pero esto es muy incomodo para la persona que ingresa los contenidos en wordpress, por lo que modificaremos ese editor, añadiendo una nueva opción, para que el usuario seleccione el texto que quiere que este dentro del <div class="article-intro">, y le aplique esa codificación html, como si estuviera, por ejemplo, colocandole negrilla al texto.
+
+Para hacer esto:
+
+1) Dentro de "functions.php", llamamos a nuestro archivo con los ajustes:
+
+	/*Editor elements*/
+
+		require_once('/functions/editor-elements.php');
+
+2) Creamos el archivo "editor-elements.php":
+
+	<?php
+		/*Editor elements*/
+
+		//añadimos un boton al editor
+		function apk_mce_editor_buttons( $buttons ){
+			array_unshift( $buttons, 'styleselect');
+			return $buttons;
+		}
+
+		add_filter('mce_buttons_2', 'apk_mce_editor_buttons');
+
+	?>
+
+Aca, en vez de añadir una acción, lo que hacemos es añadir un "filtro" (add_filter() ). Esto es muy similar a añadir una acción, pero el filtro, lo que hace, es obtener la información de determinado proceso de wordpress, luego nosotros tomamos esa información, la modificamos y luego la retornamos al flujo normal.
+
+En este caso, tomamos la información de "$buttons", correspndientes a 'mce_buttons_2' (la segunda hilera de botones, por eso el número 2).
+
+Luego, añadimos un nuevo botón, para aplicar estilos al texto, y retornamos "$buttons".
+
+Para más info:
+
+	https://codex.wordpress.org/TinyMCE_Custom_Styles
+
+Ahora si vamos al editor, en el admin, veremos una nueva opción al principio de la segunda hilera de botones, llamado "Formatos".
+
+Este boton nos mostrara unas opciones, para titulo, negrita, alineación, etc. pero lo que necesitamos es añadir nuestras propias opciones a este botón.
+
+3) Para esto, seguimos en el archivo "editor-elements.php":
+
+	//añadimos las opciones para el boton creado
+	function apk_mce_before_init( $settings ){
+
+		$style_formats = array(
+			array(
+				'title' => 'Intro del articulo',
+				'block' => 'div',
+				'classes' => 'article-intro',
+				'wrapper' => true
+			)
+		);
+
+		$settings['style_formats'] = json_encode( $style_formats );
+
+		return $settings;
+	}
+
+	add_filter('tiny_mce_before_init', 'apk_mce_before_init');
+
+Aca usamos otro filtro, llamado "tiny_mce_before_init", en nuestra función "apk_mce_before_init()", interceptamos los datos "$settings".
+
+Luego creamos la variable "$style_formats", que contendra un array de arrays, en donde cada array sera un valor de opcion para nuestro boton.
+
+En este caso, solo tenemos una opción, por lo tanto un solo array, en donde:
+
+	'title' --> es el titulo a mostrar para la opción.
+	
+	'block' --> indicamos que etiquetas crear, enm este caso un 'div'
+
+	'classes' --> indicamos las clases para la etiqueta div, en este caso, la clase es 'article-intro'
+
+	'wrapper' --> indicamos con "true" que el elemento "block", va a encerrar el contenido.
+
+Luego codificamos este array en JSON, y lo pasamos a "$settings['style_formats'] ", por ultimo retornamos "$settings".
+
+4) Ahora si vamos al editor de la entrada, y seleccionamos el texto que queremos que este dentro del div con clase "article-intro", solo hacemos click en nuestra nueva opción. Visualmente no notaremos la diferencia (esto lo arreglaremos más adelante), pero si hacemos click en la pestaña HTML, veremos que el texto seleccionado se encuentra dentro del div con la clase que le indicamos.
+_______________________________________________________
+
+	[19]. APLICANDO ESTILOS AL EDITOR:
+_______________________________________________________
+
+Para que en el editor veamos el cambio al agregar la opción de "Intro del articulo", ademas, de que podamos ver en este editor los estilos de como va a quedar una vez publicada la entrada, podemos crear una hoja de estilos para este editor.
+
+El soporte para esto, ya lo indicamos en "functions.php":
+
+	// Add theme support for custom CSS in the TinyMCE visual editor
+	add_editor_style( 'editor-style.css' );
+
+Ahora, simplemente creamos el archivo "editor-style.css", y lo colocamos al mismo nivel que "style.css".
+
+	@import url('http://fonts.googleapis.com/css?family=Lato:400,700,900,400italic,700italic,900italic');
+
+	#tinymce{
+		max-width: 640px;
+		margin: 5px auto;
+		font-family: 'Lato',Helvetica,Arial,sans-serif;
+		color: #666;
+	}
+
+	.wpview.wpview-wrap{
+		position:relative;
+		padding-bottom:56.25%;
+		padding-top:30px;
+		height:0;
+		overflow:hidden;
+	}
+
+	.wpview.wpview-wrap	iframe, .wpview.wpview-wrap object, .wpview.wpview-wrap embed {
+		position:absolute;
+		top:0;
+		left:0;
+		width:100%;
+		height:100%;
+	}
+
+	.article-intro {
+		font-size: 19px;
+		line-height: 28px;
+		font-weight: 300;
+		border-top: solid 1px #d9d9d9;
+		border-bottom: solid 1px #d9d9d9;
+		margin-bottom: 25px;
+		margin-top: 25px;
+	}
+
+En este caso, solo use la fuente, y como se estan insertando videos de youtube, use el codigo para hacerlo responsive, y le indique al body del editor el tamaño que tendra una vez publicado, esto para ver la distribución de contenidos.
+_______________________________________________________
+
+	[20]. ENTRADAS PAGINADAS:
+_______________________________________________________
+
+Las entradas las podemos paginar, usando en el editor HTML la etiqueta (<!--nextpage-->)
+
+Lo usamos así:
+
+	Contenido entrada Pagina 1
+
+	<!--nextpage-->
+
+	Contenido entrada Pagina 2
+
+	<!--nextpage-->
+
+	Contenido entrada Pagina 3
+
+Para mostrar los enlaces de la paginación de la entrada, debemos usar la funcion "wp_link_pages()", en el archivo "single.php", despues de llamar a "the_content()":
+
+	<?php the_content(); ?>
+
+	<?php 
+		wp_link_pages(
+			array(
+					'before'           => '<div class="posts-navigation">' . __( 'Páginas:','apk' ),
+					'after'            => '</div>',
+					'link_before'      => '',
+					'link_after'       => '',
+					'next_or_number'   => 'number',
+					'separator'        => ' ',
+					'nextpagelink'     => __( 'Next page' ),
+					'previouspagelink' => __( 'Previous page' ),
+					'pagelink'         => '%',
+					'echo'             => 1
+				)
+		);
+	?>
+
+Estos enlaces solo se mostraran en entradas paginadas.
+
+Para más info de la función "wp_link_pages()":
+
+	https://codex.wordpress.org/Function_Reference/wp_link_pages
+
+Para añadir un boton al editor, que inserta la etiquta <!--nextpage-->
+
+	https://wordpress.org/plugins/tinymce-page-break-button/
+
+	https://shellcreeper.com/how-to-add-next-page-or-page-break-button-in-wordpress-editor/
+_______________________________________________________
+
+	[21]. PÁGINA DE ARCHIVO:
+_______________________________________________________
+
+La pagina de archivo usara unas funciones para mostrar enlaces a las entradas por año, dia, mes, los 10 post más recientes, entradas por cada autor, etc.
+
+	<div class="cols">
+		<div class="col3">
+			<div class="archive-block">
+				<h3><?php _e('Archivo por año', 'apk'); ?></h3>
+				<ul>
+					<?php wp_get_archives( array('type' => 'yearly') ); ?>
+				</ul>
+			</div>
+			
+			<div class="archive-block">
+				<h3><?php _e('Archivo por mes', 'apk'); ?></h3>
+				<ul>
+					<?php wp_get_archives( array('type' => 'monthly') ); ?>
+				</ul>
+			</div>
+			
+		</div>
+		<div class="col3">
+			<div class="archive-block">
+				<h3><?php _e('Los últimos 10 posts', 'apk'); ?></h3>
+				<ul>
+					<?php
+						$recent_posts = wp_get_recent_posts( array('numberposts' => 10) );
+						foreach( $recent_posts as $recent ){ ?>
+								<li><a href="<?php echo get_permalink( $recent['ID']); ?>" title="<?php echo esc_attr( $recent['post_title'] ); ?>"><?php echo $recent['post_title']; ?></a></li>
+							<?php
+						}
+					?>
+				</ul>
+
+			</div>
+			
+			<div class="archive-block">
+				<h3><?php _e('Archivo por autor', 'apk'); ?></h3>
+				<ul>
+					<?php wp_list_authors(); ?>
+				</ul>
+
+			</div>
+		</div>
+		<div class="col3">
+			<div class="archive-block">
+				<h3><?php _e('Archivo por día', 'apk'); ?></h3>
+				<ul>
+					<?php wp_get_archives( array('type' => 'daily') ); ?>
+				</ul>
+
+			</div>
+			
+			<div class="archive-block">
+				<h3><?php _e('Archivo por categorías', 'apk'); ?></h3>
+				<ul>
+					<?php wp_list_categories('title_li='); ?>
+				</ul>
+
+			</div>
+		</div>
+	</div>
+_______________________________________________________
+
+	[22]. PLANTILLA DE PÁGINA DE INICIO:
+_______________________________________________________
+
+Si creamos un archivo llamado "front-page.php", se cargara al acceder a nuestro sitio siempre, sin importar que queramos mostrar al inicio de nuestro sitio un listado de entradas, o una página estatica.
+
+Para evitar esto, y dar la posibilidad al cliente que escoja que quiere mostrar al inicio, crearemos un template, que podra escoger al crear una página.
+
+Nuestra plantilla de página de inicio es diferente al resto de las plantillas y requiere algunos campos adicionales en el área de edición para mostrarse adecuadamente.
+
+Tenemos 2 opciones para desarrollar esos campos adicionales:
+
+	Mediante el plugin "Advanced Custom Fields": Esto es ideal si el sitio lo administraremos nosotros mismos o un cliente.
+
+	Mediante la programación desde "functions.php": Esto es ideal si pretendes ofrecer el tema de manera pública y no tendrás control sobre la administración de los sitios que usen el tema.
+
+--> [22.1]. Usando el plugin "Advanced Custom Fields":
+
+	1) Instalamos el pluguin, buscandolo desde wordpress, o descargandolo desde el sitio oficial:
+
+		https://www.advancedcustomfields.com/
+
+	2) En el menu de la izq. encontraremos una nueva opción llamada "Custom Fields", hacemos click, y en donde aparece "Field Groups" hacemos click en "Añadir nuevo".
+
+	3) Al grupo de campos personalizados le damos el nombre de "Opciones de página de inicio".
+
+	4) Hacemos click en "Añadir campo".
+
+	Allí escribimos lo que necesitemos, en este caso se creara la opción para el campo "slogan":
+
+		Label: Slogan
+
+		Nombre del campo: slogan
+
+		Tipo de campo: Text Area
+
+		Instrucciones del campo: Ingresa el texto a destacar en la página de inicio.
+
+		Requerido: Yes
+
+		Rows: 3
+
+		Formato: Convert new lines into <br /> tags
+
+	El "Nombre del campo" es importante, ya que es como el id, que nos sirve posteriormente para obtener el valor que escribamos como "Slogan" de la pág.
+
+	Luego hacemos click en "close field", y añadimos otro campo:
+
+		Label: Texto del botón
+
+		Nombre del campo: btn_text
+
+		Tipo de campo: Texto
+
+		Instrucciones del Campo: Ingresa el texto del botón (call to action)
+
+		Requerido: No
+
+		Formato: No formatting
+
+	Aquí se repite el proceso, dependiendo de los campos que necesitemos:
+
+		Label: Link del botón
+		Nombre del campo: btn_link
+		Tipo de campo: Texto
+		Instrucciones del Campo: Ingrese la página de destino del botón (URL)
+		Requerido: No
+		Formato: No formatting
+
+		Label: Título proyectos recientes
+		Nombre del campo: proyectos_title
+		Tipo de campo: Texto
+		Instrucciones del Campo: Ingrese el título para el área de "proyectos recientes"
+		Requerido: No
+		Formato: Convert new lines into <br /> tags
+
+		Label: Cantidad de proyectos
+		Nombre del campo: proyectos_count
+		Tipo de campo: Number
+		Instrucciones del Campo: ¿Cuantos proyectos quieres mostrar?
+		Requerido: No
+		Valor por defecto: 6
+		Maximum Value: 12
+		Step Size: 3
+
+	El valor "Step Size", nos indica que los proyectos que vamos a mostrar son 3, 6, 9 o 12, que es el valor maximo.
+
+	5) Ahora en "Location", escogemos las Reglas, es decir, escogemos en que template estaran habilitados estos nuevos campos.
+
+		Show this field group if: Page Template
+
+		is equal to: Homepage
+
+	En este caso "Homepage", corresponde a la plantilla que creamos, llamada "template-home.php", que en el nombre de la plantilla tiene "Homepage":
+
+		<?php
+
+			/*
+				Template name: Homepage
+			*/
+
+	6) En "Opciones", escogemos el orden, y en que parte del editor vamos a mostrar los nuevos campos.
+
+		Numero de orden: 0
+		Posición: Normal (after content)
+		Estilo: Standard (WP metabox)
+
+	Luego hacemos click en "Publicar".
+
+	Ahora podemos, en nuestro archivo de plantilla "template-home.php", obtener la información de los campos creados con:
+
+		<?php the_field('custom_title'); ?>
+
+	Esta función, obtiene el valor para el campo "custom_title", y lo imprime en pantalla.
+
+		<?php get_field('custom_title'); ?>
+
+	Esta función nos permite obtener el valor para el campo indicado, y guardarlo en una variable, es decir no lo imprime.
+
+	8) En nuestro archivo de plantilla "template-home.php" requerimos y mostramos los nuevos campos:
+
+		<?php
+			//obtenemos los custom fields
+
+			$slogan = get_field('slogan');
+			$btn_text = get_field('btn_text');
+			$btn_link = get_field('btn_link');
+
+			$proyectos_title = get_field('proyectos_title');
+			$proyectos_count = get_field('proyectos_count');
+
+			//verificamos que tengan un valor, sino, le asignamos una por defecto
+
+			if(!$slogan){
+				$slogan = get_bloginfo('name');
+			}
+
+			if(!$btn_text){
+				$btn_text = __('Contacto', 'apk');
+			}
+
+			if(!$proyectos_title){
+				$proyectos_title = __('Mira mis últimos proyectos', 'apk');
+			}
+		?>
+		
+		<div id="home-page-head" class="global-padding">
+			
+			<h2><?php echo $slogan; ?></h2>
+			
+			<?php
+				//mostramos el boton solo si se definio el enlace
+				if($btn_link){ ?>
+					<a href="<?php echo esc_url($btn_link); ?>" class="btn btn-big"><?php echo $btn_text; ?></a>
+			<?php } ?>
+
+
+			<?php if( $proyectos_count && $proyectos_count != 0 && post_type_exists('proyectos') ){ ?>
+
+			<div id="home-recent-projects" class="portfolio-archive global-padding">
+				
+				<h3><?php echo $proyectos_title; ?></h3>
+
+	En la ultima verificación, mostramos solo los proyectos, si en el numero para mostrar se indico algun valor, es mayor que 0, y ademas si el tipo de post "proyectos" existe (este tipo de post aún no lo hemos creado).
+
+--> [22.2]. CAMPOS ADICIONALES EN LA PANTALLA DE EDICIÓN (con programación):
+
+	Cuando entramos a editar una página, o entrada en wordpress, cada desplegable (Publicar, Atributos de página, Imagen destacada, etc.), es un metabox.
+
+	Vamos a crear un nuevo metabox para los campos personalizados.
+
+	1) Vamos a "functions.php", y requerimos el archivo:
+
+		/*Home Metaboxes*/
+
+			require_once('/functions/home-metaboxes.php');
+
+	2) Creamos el archivo "home-metaboxes.php":
+
+		<?php
+		//Metaboxes del home
+		//para los campos personalizados
+
+
+			//creamos el metabox
+			function apk_home_metabox_add(){
+
+				add_meta_box('home-details', __('Opciones de página de inicio', 'apk'), 'apk_home_metabox', 'page', 'normal', 'high', '');
+
+			}
+
+			add_action('add_meta_boxes', 'apk_home_metabox_add');
+
+			//Crear campos del metabox
+
+			//Listado de los campos
+			$custom_home_meta_fields = array(
+				array(
+					'label' => __('Slogan', 'apk'),
+					'desc' => __('Ingresa el texto a destacar en la página de inicio.', 'apk'),
+					'id' => 'slogan',
+					'type' => 'textarea'
+				),
+				array(
+					'label' => __('Texto del botón', 'apk'),
+					'desc' => __('Ingresa el texto del botón (call to action)', 'apk'),
+					'id' => 'btn_text',
+					'type' => 'text'
+				),
+				array(
+					'label' => __('Link del botón', 'apk'),
+					'desc' => __('Ingrese la página de destino del botón (URL)', 'apk'),
+					'id' => 'btn_link',
+					'type' => 'url'
+				),
+				array(
+					'label' => __('Título proyectos recientes', 'apk'),
+					'desc' => __('Ingrese el título para el área de "proyectos recientes"', 'apk'),
+					'id' => 'proyectos_title',
+					'type' => 'text'
+				),
+				array(
+					'label' => __('Cantidad de proyectos', 'apk'),
+					'desc' => __('¿Cuantos proyectos quieres mostrar?', 'apk'),
+					'id' => 'proyectos_count',
+					'type' => 'number'
+				)
+			);
+
+
+			function apk_home_metabox(){
+				//obtenemos variables globales
+				global $custom_home_meta_fields, $post;
+
+				//Crear campo nonce (oculto)
+				wp_nonce_field('apk_home_meta_box_nonce', 'meta_box_nonce');
+
+				foreach ($custom_home_meta_fields as $field) {
+					//Obtener el valor del campo
+					$meta = get_post_meta( $post->ID, $field['id'], true );
+
+					switch ( $field['type'] ) {
+						case 'textarea':{ ?>
+							<p>
+								<label for="<?php echo $field['id']; ?>"><?php echo $field['label']; ?></label>
+								<br />
+								<textarea id="<?php echo $field['id']; ?>" name="<?php echo $field['id']; ?>" class="widefat" rows="3"><?php echo $meta; ?></textarea>
+								<span class="howto"><?php echo $field['desc']; ?></span>
+							</p>
+							<hr style="width:100%; height: 1px; border: none; border-bottom: 1px solid white; margin: 15px 0; background-color: #dbdcdd" />
+							<?php
+							break;
+						}
+
+						case 'text':{ ?>
+							<p>
+								<label for="<?php echo $field['id']; ?>"><?php echo $field['label']; ?></label>
+								<br />
+								<input type="text" id="<?php echo $field['id']; ?>" name="<?php echo $field['id']; ?>" class="widefat" value="<?php echo $meta; ?>" />
+								<span class="howto"><?php echo $field['desc']; ?></span>
+							</p>
+							<hr style="width:100%; height: 1px; border: none; border-bottom: 1px solid white; margin: 15px 0; background-color: #dbdcdd" />
+							<?php
+							break;
+						}
+
+						case 'number':{ ?>
+							<p>
+								<label for="<?php echo $field['id']; ?>"><?php echo $field['label']; ?></label>
+								<br />
+								<input type="number" id="<?php echo $field['id']; ?>" name="<?php echo $field['id']; ?>" class="widefat" value="<?php echo $meta; ?>" />
+								<span class="howto"><?php echo $field['desc']; ?></span>
+							</p>
+							<?php
+							break;
+						}
+
+						case 'url':{ ?>
+							<p>
+								<label for="<?php echo $field['id']; ?>"><?php echo $field['label']; ?></label>
+								<br />
+								<input type="text" id="<?php echo $field['id']; ?>" name="<?php echo $field['id']; ?>" class="widefat" value="<?php echo esc_url($meta); ?>" />
+								<span class="howto"><?php echo $field['desc']; ?></span>
+							</p>
+							<hr style="width:100%; height: 1px; border: none; border-bottom: 1px solid white; margin: 15px 0; background-color: #dbdcdd" />
+							<?php
+							break;
+						}
+
+					}
+				}
+			}
+		?>
+
+	Primero creamos el metabox, con la función "apk_home_metabox_add()", la cual añadimos a la acción "add_meta_boxes".
+
+	Dentro de la función "apk_home_metabox_add()", usamos la función "add_meta_box()", que recibe los siguientes parametros:
+
+		'id' --> el identificador de nuestro metabox.
+
+		'title' --> el titulo del metabox, que se mostrara en el area de admin.
+
+		'callback' --> la función que creara los campos del metabox.
+
+		'screen' --> a que tipo de contenido se va a aplicar el metabox, en este caso a las paginas ("page").
+
+		'context' --> lugar en donde se va a mostrar el metabox (con "normal", indicamos que debajo del contenido).
+
+		'priority' --> La prioridad para mostrarse, es decir, teniendo varios metaboxes, este tendra una prioridad alta ("high"), y se mostrara de primeras, justo debajo del contenido.
+
+	Ahora definimos la variable "$custom_home_meta_fields", que sera un listado de los campos a crear.
+
+	En la función "apk_home_metabox()", creamos los campos del metabox.
+
+	Con la función "wp_nonce_field()", creamos un campo oculto, necesario para indicar que los valores que vamos a obtener, provienen del sitio de wordpress y no de otra parte (necesario por seguridad).
+
+	Lugo hacemos un ciclo por cada campo, en donde usamos la función "get_post_meta()" para obtener los valores guardados del campo. Esta función recibe los parametros: "Id del post", "El meta key a obtener" (normalmente obtiene todas las keys, pero con el tercer parametro "true", le indicamos que saque un solo valor).
+
+	Luego dependiendo del tipo (type), que se haya definido, imprimimos el "input", "textarea", o lo que requiramos. En el tipo url, no usamos en el imput el type="url", ya uqe si lo hacemos, no nos dejaria escribir valores como "#", que es valido, entonces lo que hacemos es escapara el valor guardado en este campo con "esc_url()", así, si por ejemplo escribimos: "algo", al recuperar el valor en ese campo nos mostrara: "http://algo".
+
+	[22.3]. GUARDANDO CAMPOS ADICIONALES:
+
+	Actualmente, solo estamos obteniendo los valores guardados en la base de datos, pero si cambiamos un valor del campo, como por ejemplo la url del boton, y guardamos, seguira obteniendo el valor viejo y no guardara el cambio.
+
+	3) Para guardar los nuevos valores, agregaremos una nuevas funciones a "home-metaboxes.php":
+
+		//Guardar valores de los campos al momento de guardar la página
+
+		function apk_save_home_custom_meta( $post_id ){
+
+			global $custom_home_meta_fields;
+
+			//verificamos que el nonce haya sido enviado
+			if( !isset( $_POST['meta_box_nonce'] ) || !wp_verify_nonce( $_POST['meta_box_nonce'], 'apk_home_meta_box_nonce') ){
+				return;
+			}
+
+			//si es un autosave no hacemos nada
+			if( defined('DOING_AUTOSAVE') && DOING_AUTOSAFE ){
+				return;
+			}
+
+			//verificamos los permisos del usuario
+			//Si el tipo de post es una pagina
+			if( 'page' == $_POST['post_type'] ){
+
+				if( !current_user_can('edit_page', $post_id) ){
+					return;
+				}elseif( !current_user_can('edit_post', $post_id) ){
+					return;
+				}
+			}
+
+			//hacemos un ciclo por los campos
+			foreach ($custom_home_meta_fields as $field) {
+				
+				//capturamos los datos antiguos
+				$old = get_post_meta($post_id, $field['id'], true);
+
+				//capturamos los datos nuevos
+				$new = $_POST[ $field['id'] ];
+
+				if( $new && $new != $old){
+					//actualizamos el post meta
+					if($field['type'] == 'url'){
+						update_post_meta($post_id, $field['id'], esc_url($new) );
+					}else{
+						update_post_meta($post_id, $field['id'], $new);
+					}
+				}elseif( '' == $new && $old ){
+					//borramos el post meta
+					delete_post_meta($post_id, $field['id'], $old);
+				}
+			}
+		}
+
+		add_action('save_post', 'apk_save_home_custom_meta');
+
+	Primero añadimos la funcion "apk_save_home_custom_meta", a la acción "save_post".
+
+	Verificamos el campo "nonce", por seguridad, para saber si la información que se intenta guardar viene desde wordpress y no de otra parte.
+
+	Luego comprobamos los permisos del usuario, al editar la pagina, y editar post.
+
+	Finalmente en un ciclo, tomamos cada campo, obtenemos la información guardada y la almacenamos en "$old", la información nueva, la obtenemos a traves del metodo "$_POST". Se verifica si se asigno algo nuevo, y que eso nuevo no sea igual a lo que ya teniamos, si cumple, se guarda el nuevo valor. Si el valor nuevo, es igual a nada, borramos el valor viejo.
+
+	Ahora, si estamos obteniendo y guardando los valores para los nuevos campos, sin embargo, estamos mostrando el metabox, para todas las páginas, y solo debemos mostrarla para la "Homepage".
+
+	4) Para evitar esto, vamos a inyectar CSS y JavaScript en el admin. Ocultamos la caja con CSS, y con JavaScript, obtenemos el valor de la plantilla seleccionada, para mostrar u ocultar el metabox.
+
+		//ocultamos el metabox cuando no este seleccionada la plantilla "Homepage"
+
+		function apk_home_metabox_css(){
+			?>
+			<style type="text/css">
+				#home-details {
+					display:none;
+				}
+			</style>
+
+			<script type="text/javascript">
+				jQuery('document').ready(function($){
+
+					//esta función detecta el atributo del selector de plantillas
+
+					//si esta seleccionado "template-home.php" mostrara el metabox, sino lo oculta
+					slider_box = function(){
+						if( $('#page_template').attr('value') == 'template-home.php' ){
+							$('#home-details').slideDown();
+						}else{
+							$('#home-details').hide();
+						}
+					}
+
+					slider_box();
+
+					//cada vez que el selector de template cambie, se ejecutara
+					$('#page_template').change(slider_box);
+
+					$('label[for="home-details-hide"]').remove();
+				});
+			</script>
+			<?php
+		}
+
+		add_action('admin_head', 'apk_home_metabox_css');
+
+	Para inyectar el CSS y Javascript en el admin, lo añadimos a la acción "admin_head". El metabox lo obtenemos a traves de id con "#home-details", ya que fue el id que se le dio al momento de crear el metabox. "#page_template" corresponde al id del selector de plantillas en el admin.
+
+	El codigo:
+
+		$('label[for="home-details-hide"]').remove();
+
+	Sirve para remover un checkbox, que aparece en "Opciones de pantalla", ya que si no lo quitamos, al estar en otra plantilla, por ejemplo "Plantilla predeterminada", e ir a este checkbox, podremos hacer que se muestre el metabox creado unicamente para la página de inicio.
+
+	5) Ahora, para mostrar estos campos, debemos modificar el archivo "template-home.php", ya que la función "get_field()" servia solo con el pluguin "Advanced Custom Fields":
+
+		//obtenemos los custom fields
+
+		$slogan = get_post_meta( $post->ID, 'slogan', true);
+		$btn_text = get_post_meta( $post->ID, 'btn_text', true);
+		$btn_link = get_post_meta( $post->ID, 'btn_link', true);
+
+		$proyectos_title = get_post_meta( $post->ID, 'proyectos_title', true);
+		$proyectos_count = get_post_meta( $post->ID, 'proyectos_count', true);
+
+		...
+
+		<h2><?php echo nl2br( $slogan ); ?></h2>
+
+	Aca vemos que solo hicimos el cambio de la función "get_field()" por "get_post_meta()", y donde imprimimos el slogan usamos la función "nl2br()", para que respete el formateado que le damos en el admin, e imprima los saltos de línea, si por ejemplo el slogan es así:
+
+		Este es el Slogan 
+		del sitio web!!!
+		Cool :D
+_______________________________________________________
+
+	[23]. CREACIÓN DE PLUGIN Y CUSTOM POST TYPE:
+_______________________________________________________
+
+Para crear la funcionalidad del portafolio creativo en este sitio vamos a desarrollar un plugin específico que realice las siguientes labores:
+
+	- Crear el custom post type (tipo de contenido personalizado): Proyectos.
+
+	- Asociar los proyectos a la taxonomía Servicios
+
+	- Editar el área de edición de los proyectos para añadir campos adicionales
+
+	- Crear un widget para mostrar proyectos recientes
+
+Primero crearemos el pluguin que creara los custom post type. El custom post type "Proyectos", lo creamos en un pluguin, ya que corresponde a una funcionalidad (pluguin) y no a la apariencia (temas).
+
+Si creamos esta funcionalidad con el tema, se corre el riesgo de que si cambia de tema no podrá ver más el contenido que haya creado hasta entonces.
+
+1) Para crear el pluguin, en la carpeta "\wp-content\plugins", creamos una carpeta con el nombre "apk-proyectos-post-type", y dentro un archivo con el mismo nombre "apk-proyectos-post-type.php":
+
+	<?php
+		/*
+		Plugin Name: AMK Proyectos post type
+		Plugin URI:  https://franciscoamk.com/
+		Description: Este pluguin genera el custom post type "proyectos" para crear un portafolio creativo. Funciona correctamente con los temas de Francisco AMK. No se asegura compatibilidad con temas de otros autores.
+		Version:     1.0
+		Author:      Francisco Aguilera G.
+		Author URI:  https://franciscoamk.com/
+		License:     GPL2
+		License URI: https://www.gnu.org/licenses/gpl-2.0.html
+		Text Domain: apk
+		Domain Path: /languages
+		*/
+
+	?>
+
+Con estas líneas, ya podremos ver el pluguin en el admin. de wordpress.
+
+Para mas info de la creación de pluguins:
+
+	https://codex.wordpress.org/Writing_a_Plugin
+
+	https://developer.wordpress.org/plugins/the-basics/header-requirements/
+
+2) Ahora requerimos el archivo en donde crearemos el custom post type:
+
+	//Post type: proyectos
+
+	require_once('includes/proyectos-post-type.php');
+
+3) Creamos la carpeta "includes", y dentro de está el archivo "proyectos-post-type.php".
+
+En este archivo, crearemos el custom post type proyectos, para hacerlo, usaremos el generador de código GenerateWP
+
+	https://generatewp.com/
+
+Allí escogemos "Content" --> "Post Type Generator", en donde pondremos las siguientes opciones:
+
+	General:
+
+		Function Name: apk_proyectos_post_type
+		Child Themes: Yes
+		Text Domain: apk
+
+	Post Type:
+
+		Post Type Key: proyectos
+		Name(Singular): Proyecto
+		Description: Diferentes proyectos de un portafolio
+		Name(Plural): Proyectos
+		Hierarchical: No (like posts)
+
+	Aquí el Key, es el identificador de nuestro post type, con "Hierarchical", indicamos que no, para que un proyecto no sea hijo de otro proyecto.
+
+	Labels:
+
+		Aca escribimos las etiquetas que se mostraran en el admin.
+
+		Ejemplo:
+		New Item: Agregar nuevo proyecto
+		Update Item: Actualizar proyecto
+
+	Options:
+
+		Supports:
+
+		Seleccionamos lo que vamos a usar en el custom post type:
+
+		- Title
+		- Content(editor)
+		- Featured Image
+		- Revisions
+
+		Exclude from search: No
+		Enable export: Yes
+		Enable Archives: Yes
+
+	Visibility:
+
+		Public: Yes
+		Show UI: Yes
+		Show in Admin Sidebar: Yes / 20 -below Pages
+		Admin Sidebar Icon: dashicons-portfolio
+		Show in Admin Bar: Yes
+		Show in Navigation Menus: Yes
+
+		Aca indicamos que se muestre en el admin, como en la interfaz de usuario. Con "20 -below Pages", indicamos que se muestre en la barra lateralk del admin, debajo de "Páginas".
+
+		En "Admin Sidebar Icon", usamos los iconos dashicons:
+
+			https://developer.wordpress.org/resource/dashicons/#networking
+	Query:
+
+		Query: Default (post type key)
+		Publicly Queryable: Yes
+		Custom Query: post_type
+
+	Permalinks:
+		Permalink Rewrite: Default permalink (post type key)
+		URL Slug: post_type
+		Use URL Slug: Yes
+		Pagination: Yes
+		Feeds: Yes
+
+	Capabilities:
+		Capabilities: Base_capabilities
+		Base Capability Type: Pages
+
+4) El código generado, lo pegaremos en el archivo "proyectos-post-type.php":
+
+	if ( ! function_exists('apk_proyectos_post_type') ) {
+
+	// Register Custom Post Type
+	function apk_proyectos_post_type() {
+
+		$labels = array(
+			'name'                  => _x( 'Proyectos', 'Post Type General Name', 'apk' ),
+			'singular_name'         => _x( 'Proyecto', 'Post Type Singular Name', 'apk' ),
+			'menu_name'             => __( 'Proyectos', 'apk' ),
+			'name_admin_bar'        => __( 'Proyectos', 'apk' ),
+			'archives'              => __( 'Archivos de proyecto', 'apk' ),
+			'attributes'            => __( 'Atributos de proyecto', 'apk' ),
+			'parent_item_colon'     => __( 'Proyecto superior:', 'apk' ),
+			'all_items'             => __( 'Todos los proyectos', 'apk' ),
+			'add_new_item'          => __( 'Agregar nuevo proyecto', 'apk' ),
+			'add_new'               => __( 'Agregar nuevo', 'apk' ),
+			'new_item'              => __( 'Agregar nuevo proyecto', 'apk' ),
+			'edit_item'             => __( 'Editar proyecto', 'apk' ),
+			'update_item'           => __( 'Actualizar proyecto', 'apk' ),
+			'view_item'             => __( 'Ver proyecto', 'apk' ),
+			'view_items'            => __( 'Ver proyectos', 'apk' ),
+			'search_items'          => __( 'Buscar proyectos', 'apk' ),
+			'not_found'             => __( 'No se han encontrado resultados', 'apk' ),
+			'not_found_in_trash'    => __( 'No hay nada en la papelera', 'apk' ),
+			'featured_image'        => __( 'Imagen destacada', 'apk' ),
+			'set_featured_image'    => __( 'Añadir imagen destacada', 'apk' ),
+			'remove_featured_image' => __( 'Remover imagen destacada', 'apk' ),
+			'use_featured_image'    => __( 'Usar como imagen destacada', 'apk' ),
+			'insert_into_item'      => __( 'Insertar en proyecto', 'apk' ),
+			'uploaded_to_this_item' => __( 'Subir a este proyecto', 'apk' ),
+			'items_list'            => __( 'Listado de proyectos', 'apk' ),
+			'items_list_navigation' => __( 'Navegación de la lista de proyectos', 'apk' ),
+			'filter_items_list'     => __( 'Filtrar listado de proyectos', 'apk' ),
+		);
+		$args = array(
+			'label'                 => __( 'Proyecto', 'apk' ),
+			'description'           => __( 'Diferentes proyectos de un portafolio', 'apk' ),
+			'labels'                => $labels,
+			'supports'              => array( 'title', 'editor', 'thumbnail', 'revisions', ),
+			'hierarchical'          => false,
+			'public'                => true,
+			'show_ui'               => true,
+			'show_in_menu'          => true,
+			'menu_position'         => 20,
+			'menu_icon'             => 'dashicons-portfolio',
+			'show_in_admin_bar'     => true,
+			'show_in_nav_menus'     => true,
+			'can_export'            => true,
+			'has_archive'           => true,		
+			'exclude_from_search'   => false,
+			'publicly_queryable'    => true,
+			'capability_type'       => 'page',
+		);
+		register_post_type( 'proyectos', $args );
+
+	}
+	add_action( 'init', 'apk_proyectos_post_type', 0 );
+
+	}
+
+Ahora si vamos al admin de wordpress, podremos activar el pluguin, y veremos debajo de "Páginas", la nueva opción de "Proyectos", con el icono que definimos. esta nueva opción nos permitira crear proyectos, de la misma forma que creamos una entrada.
+
+Nota1: Si queremos ver el codigo generado por Francisco en GenerateWP:
+
+	https://generatewp.com/snippet/1WO0Wq4/
+
+Nota2: Si al hacer click en "Agregar nuevo proyecto", y ver el editor donde escribimos el contenido de ese proyecto, si no vemos habilitada la opción de "Imagen Destacada", vamos a "functions.php", y cambiamos la siguiente línea:
+
+	add_theme_support( 'post-thumbnails', array( 'post', 'page' ) );
+
+Por esta:
+
+	add_theme_support( 'post-thumbnails' );
+
+Ya que en la primera línea, limitabamos la caracteristica de subir una imagen destacada, solamente a los post estandard (post) y a las páginas (page).
+_______________________________________________________
+
+	[24]. CREACIÓN DE TAXONOMÍA SERVICIOS:
+_______________________________________________________
+
+Una taxonomia es lo que nos permite clasificar un post, por ejemplo en las entradas, tienen la taxonomia "Categorias", entonces por ejemplo, podemos clasificar unas entradas en "Futbol", otras en "bascketball", etc.
+
+Al momento de crear el custom post type "Proyectos", tambien podemos crearle una taxonomia, por ejemplo para clasificarlos en proyectos de "Diseño", "Desarrollo", "Gestión", Ilustración, etc.
+
+1) Requerimos el archivo que vamos a crear en "apk-proyectos-post-type.php":
+
+	//Taxonomy: servicios
+
+	require_once('includes/servicios-taxonomy.php');
+
+2) Creamos el archivo "servicios-taxonomy.php":
+
+	<?php
+		//Creación de la taxonomia "Servicios"
+
+		if ( ! function_exists( 'apk_servicios_taxonomy' ) ) {
+
+		// Register Custom Taxonomy
+		function apk_servicios_taxonomy() {
+
+			$labels = array(
+				'name'                       => _x( 'Servicios', 'Taxonomy General Name', 'apk' ),
+				'singular_name'              => _x( 'Servicio', 'Taxonomy Singular Name', 'apk' ),
+				'menu_name'                  => __( 'Servicios', 'apk' ),
+				'all_items'                  => __( 'Ver todos', 'apk' ),
+				'parent_item'                => __( 'Superior', 'apk' ),
+				'parent_item_colon'          => __( 'Servicio superior:', 'apk' ),
+				'new_item_name'              => __( 'Nombre del nuevo servicio:', 'apk' ),
+				'add_new_item'               => __( 'Agregar nuevo servicio', 'apk' ),
+				'edit_item'                  => __( 'Editar servicio', 'apk' ),
+				'update_item'                => __( 'Actualizar servicio', 'apk' ),
+				'separate_items_with_commas' => __( 'Separar servicios con coma', 'apk' ),
+				'search_items'               => __( 'Buscar servicios', 'apk' ),
+				'add_or_remove_items'        => __( 'Agregar o eliminar servicios', 'apk' ),
+				'choose_from_most_used'      => __( 'Escoje entre los más usados', 'apk' ),
+				'not_found'                  => __( 'No encontrado', 'apk' ),
+			);
+			$args = array(
+				'labels'                     => $labels,
+				'hierarchical'               => true,
+				'public'                     => true,
+				'show_ui'                    => true,
+				'show_admin_column'          => true,
+				'show_in_nav_menus'          => true,
+				'show_tagcloud'              => false,
+			);
+			register_taxonomy( 'servicios', array( 'proyectos' ), $args );
+
+		}
+
+		// Hook into the 'init' action
+		add_action( 'init', 'apk_servicios_taxonomy', 0 );
+
+		}
+	?>
+
+Nota: el contenido de este archivo lo generamos con GenerateWP, para ver el de Francisco:
+
+	https://generatewp.com/snippet/2VOKVqy/
+
+Ahora si vamos al admin, en "Proyectos", encontraremos que en el medio donde se muestra el listado, dice servicios, y al crear un nuevo proyecto, tambien podremos crear un nuevo "servicio" (como haciamos con las categorias).
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Nota Importante: Si al momento de crear un nuevo proyecto, y le damos click en "Ver entrada", y nos lleva a la interfaz de usuario (vista single), y vemos como titulo "PÁGINA NO ENCONTRADA", debemos actualizar los permalinks que se encuentran en el archivo "htaccess". Para hacer esto, debemos ir al admin de Wordpress, "Ajustes" --> "Enlaces permanentes", y allí, sin hacer nada, le damos en "Guardar cambios", esto actualizara los permalinks en "htaccess", y al actualizar:
+
+	http://localhost/amkfolio/proyectos/proyecto-de-prueba/
+
+Veremos el titulo del proyecto.
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Ahora tambien debemos probar las siguientes url:
+
+	http://localhost/amkfolio/proyectos/
+
+Esta url, deberia cargar el listado de proyectos.
+
+Ahora probamos:	
+
+	http://localhost/amkfolio/servicios/diseno/
+
+En este caso "Diseño", es el servicio que creamos, y que asociamos al proyecto de prueba. En la vista veremos un titulo como: "DISEÑO SERVICIOS", pero deberia mostrarse: "SERVICIOS: DISEÑO", para arreglar esto, debemos agregar un nuevo "titulo condicional" en el archivo "index.php":
+
+	<?php }elseif ( is_home() ) { ?>
+
+		<h1><?php _e('Blog', 'apk'); ?></h1>
+
+	<?php }elseif ( is_tax() ) { ?>
+
+		<?php $term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var('taxonomy') ); ?>
+
+		<h1><?php echo $term->taxonomy;?>: <?php echo $term->name; ?></h1>
+
+	<?php }elseif ( is_post_type_archive() ) { ?>
+
+		<h1><?php echo post_type_archive_title(); ?></h1>
+
+	<?php }else { ?>
+
+		<h1><?php wp_title(' ', true, 'right'); ?></h1>
+
+	<?php } ?>
+
+Aqui ponemos un nuevo titulo condicional para una taxonomia custom, y adicionalmente hacemos u titulo condicional para el caso de "archivo".
+_______________________________________________________
+
+	[25]. Campos adicionales para Custom Post Type "Proyectos":
+_______________________________________________________
+
+1) Requerimos el archivo en "apk-proyectos-post-type.php":
+
+	//metaboxes para proyectos
+
+	require_once('includes/proyectos-metaboxes.php');
+
+2) Creamos el archivo "proyectos-metaboxes.php", de forma muy similar a como creamos "home-metaboxes.php", con unas diferencias:
+
+	//creamos el metabox
+	function apk_proyectos_metabox_add(){
+
+		add_meta_box('proyectos-details', __('Detalles del proyecto', 'apk'), 'apk_proyectos_metabox', 'proyectos', 'normal', 'high', '');
+
+	}
+
+Aquí al momento de crear el metabox, le indicamos que este disponible para el post type 'proyectos', que es el identificador del custom post type, que le dimos en "proyectos-post-type.php", usando la función "register_post_type()". De esta forma, ya no es necesario crear la función que inyectaba estilos (CSS) y JavaScript al admin para ocultar el metabox.
+
+_______________________________________________________
+
+	[25.1]. Campo adicional WYSIWYG:
+_______________________________________________________
+
+Otro cambio importante, es al momento de definir los campos:
+
+	//Crear campos del metabox
+
+		//Listado de los campos
+		$custom_proyectos_meta_fields = array(
+
+			...
+
+			array(
+				'label' => __('Multimedia', 'apk'),
+				'desc' => __('Incluye aquí imágenes, videos, audios o cualquier contenido necesario para mostrar el proyecto.', 'apk'),
+				'id' => 'multimedia',
+				'type' => 'wysiwyg'
+			)
+		);
+
+Aquí vamos a crear un campo de tipo "wysiwyg" (What You See Is What You Get) ("Lo que ves es lo que obtienes"), ayudandonos de la función "wp_editor()" que creara, en vez de un simple "input" o "textarea", un campo con todas las opciones del editor de Wordpress, permitiendonos dar formato a lo que escribimos, e insertar elementos multimedia.
+
+	case 'wysiwyg':{ ?>
+		<p>
+			<label for="<?php echo $field['id']; ?>"><?php echo $field['label']; ?></label>
+			<br />
+			
+			<span class="howto"><?php echo $field['desc']; ?></span>
+
+			<?php wp_editor($meta, $field['id']); ?>
+		</p>
+		
+		<?php
+		break;
+	}
+
+La función "wp_editor()", recibe dos parametros, el primero es el valor a mostrar en el editor, en este caso "$meta" obtiene el contenido que habiamos guardado en la DB para este campo. El segundo parametro, es el id del campo, en este caso es "multimedia".
+
+Recurso: Para crear un custom_field de imagen, entre muchos otros:
+
+	https://code.tutsplus.com/articles/reusable-custom-meta-boxes-part-3-extra-fields--wp-23821
+
+	https://tutsplus.com/authors/tammy-hart
+_______________________________________________________
+
+	[26]. Plantilla para Custom Post Type "Proyectos" (Parte 1):
+_______________________________________________________
+
+
+Actualmente el listado de los proyectos se muestran en el archivo "index.php" con la siguiente url:
+
+	http://localhost/amkfolio/proyectos/
+
+Pero segun nuestro diseño, debemos mostrarlo de forma diferente.
+
+Para crear el archivo correctamente, debemos analizar un poco la jerarquia de archivos de wordpress:
+
+	https://wphierarchy.com/
+
+1) Segun esto, para mostrar el listado de proyectos, deberemos crear un archivo llamado "archive-proyectos.php", que , como cosas nuevas tiene:
+
+	<div id="page-head" class="global-padding">
+		<h1><?php echo post_type_archive_title(); ?></h1>
+
+		....
+
+	<div class="portfolio-filter">
+		<strong><?php _e('Filtrar por:', 'apk'); ?></strong>
+		<ul>
+			<li class="current-cat">
+				<a href=""><?php _e('Todo', 'apk'); ?></a>
+			</li>
+			<?php
+				wp_list_categories(array(
+					'title_li'	=> '',
+					'style'		=> 'list',
+					'taxonomy'	=> 'servicios'
+				));
+			?>
+		</ul>
+	</div><!-- /.portfolio-filter -->
+
+	<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+	
+	<article class="portfolio-item-resume col3" data-link="<?php the_permalink(); ?>">
+		
+		<div class="text">
+			<h2><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+			<div class="services">
+				 <?php echo get_the_term_list( $post->ID, 'servicios', '', ', ', '' ); ?> 
+			</div> 
+		</div>
+
+Para llamar al titulo, como estamos mostrando el titulo del custom post tipe "Proyectos", usamos:
+
+	echo post_type_archive_title();
+
+Luego en el div con class="portfolio-filter", creamos una mini navegación, para filtrar los proyectos segun su taxonomia (clasificación), es decir, si son de Diseño, Desarrollo, Ilustración, etc.
+
+Para imprimir los enlaces a cada una de estas clasificaciones, usamos:
+
+	wp_list_categories(array(
+		'title_li'	=> '',
+		'style'		=> 'list',
+		'taxonomy'	=> 'servicios'
+	));
+
+Esto obtiene las categorias, pero en este caso, como necesitamos la clasificación (taxonomia) que definimos para el custom post type "Proyectos", le indicamos alli el parametro "taxonomy" => "servicios".
+
+Con "title_li" igual a nada, le indicamos que no nos imprima el titulo, si se lo dejamos por defecto, nos mostraria "Categorias".
+
+Con "style", le indicamos que queremos que imprima todo como elementos de lista no ordenada.
+
+Nota: Para más info de los parametros y valores por defecto:
+
+	https://developer.wordpress.org/reference/functions/wp_list_categories/
+
+Luego, dentro del "loop", queremos que cada proyecto muestre a que taxonomia pertenece (si es de diseño y desarrollo, etc), para hacer esto, dentro del "loop" usamos la función "get_the_term_list()":
+
+	echo get_the_term_list( $post->ID, 'servicios', '', ', ', '' );
+
+Aca indicamos el id del post, la taxonomia, que imprimir antes, el separador, y que imprimir despues:
+
+	get_the_term_list( $id, $taxonomy, $before, $sep, $after );
+
+Nota: para más info de esta función:
+
+	https://codex.wordpress.org/Function_Reference/get_the_term_list
+
+2) Al hacer click en los enlaces del filtro de los proyectos (si son de Diseño, Desarrollo, Ilustración, etc.) (Ejemplo: http://localhost/amkfolio/servicios/ilustracion/), nos lleva a mostrarnos un listado de los proyectos, segun la opción escogida, pero nuevamente formateado segun el "index.php", para que tenga un diseño similar a "archive-proyectos.php", y siguiendo la jeraquia de wodpress, debemos crear el archivo "taxonomy-servicios.php".
+
+Este archivo, tendra el mismo codigo que "archive-proyectos.php", con las siguientes diferencias:
+
+	<div id="page-head" class="global-padding">
+		<?php $term = get_term_by( 'slug', get_query_var( 'term' ), get_query_var('taxonomy') );
+		?>
+		<h1><?php _e('Proyectos', 'apk'); ?>: <?php echo $term->name; ?></h1>
+
+Aca en el titulo, imprimimos "PROYECTOS: ILUSTRACIÓN".
+
+3) Como el contenido del "loop", lo estamos repitiendo, lo vamos a extraer en otro archivo llamado "content-proyecto-resumen.php":
+
+	<?php //Contenido del lop de los archivos:  
+			//"taxonomy-servicios.php"
+			//"archive-proyectos.php"
+			
+	?>
+
+	<article class="portfolio-item-resume col3" data-link="<?php the_permalink(); ?>">
+		
+		<div class="text">
+			<h2><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a></h2>
+			<div class="services">
+				 <?php echo get_the_term_list( $post->ID, 'servicios', '', ', ', '' ); ?> 
+			</div> 
+		</div>
+		
+		<a href="<?php the_permalink(); ?>">
+			<?php
+				if ( has_post_thumbnail() ) {
+					the_post_thumbnail('blog-image');
+				}
+			?>
+		</a>
+							
+	</article>	<!-- /.col3 -->
+
+4) Y en los archivos "taxonomy-servicios.php" y "archive-proyectos.php", lo llamamos así:
+
+	<div class="cols">
+
+		<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); 
+
+			get_template_part('content', 'proyecto-resumen');
+
+			endwhile; else: 
+
+			get_template_part('content', 'noposts'); 
+
+			endif; 
+		?>
+	
+	</div> <!-- /.cols -->
+
+5) Hacemos lo mismo con el filtro de taxonomias de los proyectos, creando el archivo "content-proyectos-filter.php":
+
+	<?php //Filtro de taxonomias para los Proyectos, usado en los archivos:  
+			//"taxonomy-servicios.php"
+			//"archive-proyectos.php"
+			
+	?>
+
+	<div class="portfolio-filter">
+		<strong><?php _e('Filtrar por:', 'apk'); ?></strong>
+		<ul>
+			<?php if( is_post_type_archive('proyectos') ){ ?>
+				<li class="current-cat">
+			<?php }else{ ?>
+				<li>
+			<?php } ?>
+
+				<a href="<?php echo get_post_type_archive_link('proyectos'); ?>"><?php _e('Todo', 'apk'); ?></a>
+			</li>
+			<?php
+				wp_list_categories(array(
+					'title_li'	=> '',
+					'style'		=> 'list',
+					'taxonomy'	=> 'servicios'
+				));
+			?>
+		</ul>
+	</div><!-- /.portfolio-filter -->
+
+Aca si estamos mostrando el listado de los proyectos, le ponemos la clase activa al "li" "Todo", sino, imprimimos el "li" sin la clase.
+
+6) En los archivos "taxonomy-servicios.php" y "archive-proyectos.php", lo llamamos así:
+
+	<?php
+		get_template_part('content', 'proyectos-filter');
+	?>
+	
+	<div id="portfolio-list">
+_______________________________________________________
+
+	[27]. Plantilla para Custom Post Type "Proyectos" (Parte 2) (Loop interior):
+_______________________________________________________
+
+La plantilla que va a mostrar el listado de los proyectos, contiene tambien un texto, de contenido adicional, así que, crearemos otra plantilla llamada "template-portfolio.php", y luego en el admin. una página llamada "Portafolio", que tendra de contenido este texto, y usara está plantilla.
+
+Con la creación de esta plantilla, se dejaran de usar las plantillas "taxonomy-servicios.php" y "archive-proyectos.php", que serviran de comodin, y cargaran cuando no este disponible la pág. Portafolio, o cuando el usuario ingrese directamente a las siguientes url:
+
+	http://localhost/amkfolio/proyectos/
+
+	http://localhost/amkfolio/servicios/ilustracion/
+
+La razón por la que no creamos esta página con el nombre "Proyectos", es porque puede generar conflicto en wordpress, con el custom post type del mismo nombre.
+
+1) Creamos el archivo "template-portfolio.php":
+
+	<?php 
+		/*
+			Template name: Portafolio
+		*/
+
+		get_header(); 
+
+	?>
+
+			<section id="main-content-area" class="global-padding cols">
+				
+				<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+				
+				<div id="page-head" class="global-padding">
+					<h1><?php the_title(); ?></h1>
+
+					<?php
+						if( has_post_thumbnail() ) {
+
+							$imagen_cabecera = wp_get_attachment_image_src( get_post_thumbnail_id( $post->ID), 'page-head' );
+							
+							$imagen_cabecera = $imagen_cabecera[0];
+
+						}else{
+
+							$options = get_theme_mod('apk_custom_settings');
+							if( !empty($options['imagen-cabecera']) ){
+								$imagen_cabecera = $options['imagen-cabecera'];
+							}
+							if( !isset($imagen_cabecera) ){
+								$imagen_cabecera = IMAGES . '/default-heading-bg.jpg';
+							}
+						}
+					?>
+
+					<div class="image-cover" style="background-image: url('<?php echo $imagen_cabecera; ?>');"></div>
+
+				</div><!-- /#page-head -->
+				
+				<div id="main-content" class="full-width portfolio-archive">
+				
+					<article class="page">
+						
+						<?php the_content(); ?>
+
+				<?php endwhile; endif; ?>
+						
+						<?php
+							get_template_part('content', 'proyectos-filter');
+						?>
+						
+						<div id="portfolio-list">
+							
+							<div class="cols">
+
+								<?php
+
+									$paged = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+
+									$proyectos_query = new WP_Query(array(
+										'post_type' => 'proyectos',
+										'paged'		=> $paged
+									));
+
+									if ( $proyectos_query->have_posts() ) : while ( $proyectos_query->have_posts() ) : $proyectos_query->the_post(); 
+
+										get_template_part('content', 'proyecto-resumen');
+
+									endwhile; else: 
+
+									get_template_part('content', 'noposts'); 
+
+									endif;
+
+									wp_reset_postdata();
+								?>
+							
+							</div> <!-- /.cols -->
+
+							<?php if( get_next_posts_link('', $proyectos_query->max_num_pages) || get_previous_posts_link('', $proyectos_query->max_num_pages) ){ ?>
+								<div class="posts-navigation cf">
+									<nav>
+										<div class="link-container previous fl">
+											<?php next_posts_link( __('&larr; Proyectos anteriores', 'apk'), $proyectos_query->max_num_pages ); ?>
+										</div>
+										<div class="link-container next fr">
+											<?php previous_posts_link( __('Proyectos siguientes &rarr;', 'apk'), $proyectos_query->max_num_pages ); ?>
+										</div>
+									</nav>
+								</div> <!-- /.posts-navigation -->
+							<?php } ?>
+						
+						</div><!-- /#portfolio-list -->
+											
+					</article>	<!-- /.page -->
+				
+				</div> <!-- end #main-content -->
+				
+
+			</section><!-- end #main-content-area -->
+			
+	<?php get_footer(); ?>
+
+Aca lo interesante es que tenemos dos "loops", el primero saca la imagen destacada, el titulo y el contenido de la pagina "Portafolio".
+
+En el segundo "loop", vamos a obtener los custom post type "Proyectos", y para esto, debemos usar un nuevo query:
+
+	$proyectos_query = new WP_Query(array(
+		'post_type' => 'proyectos',
+		'paged'		=> $paged
+	));
+
+Aquí, los parametros "post_type", corresponden al custom post type "proyectos". Con "paged", indicamos la paginación para estos post, que creamos con:
+
+	$paged = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+
+Si no hacemos el nuevo query, seguiriamos en el "loop", y la paginación superior (la de la pág. "Portafolio").
+
+Para más info de "WP_Query" y la paginación:
+
+	https://codex.wordpress.org/Class_Reference/WP_Query
+
+Ahora, en el "loop" interior, usamos el nuevo query:
+
+	if ( $proyectos_query->have_posts() ) : while ( $proyectos_query->have_posts() ) : $proyectos_query->the_post();
+
+Al finalizar el segundo "loop", reseteamos el query con:
+
+	wp_reset_postdata();
+
+Ya que si no hacemos esto, al retornar al loop superior, en vez de obtener los datos de este, obtendriamos los del loop interior.
+
+Ahora en la paginación, usamos el query creado:
+
+	get_next_posts_link('', $proyectos_query->max_num_pages) || get_previous_posts_link('', $proyectos_query->max_num_pages)
+
+Y en:
+
+	next_posts_link( __('&larr; Proyectos anteriores', 'apk'), $proyectos_query->max_num_pages );
+
+	previous_posts_link( __('Proyectos siguientes &rarr;', 'apk'), $proyectos_query->max_num_pages );
+
+--> [27.1]. OBTENIENDO CUSTOM POST TYPE CON AJAX:
+
+Vamos a tener una funcionalidad, que nos permita que al hacer click en cada enlace del filtro de proyectos por taxonomia (Diseño, desarrollo, ilustración, etc.), en vez de recargar la pagina e ir a otra url, cambie con AJAX el listado de proyectos, mostrandonos los proyectos ya filtrados.
+
+1) Creamos el elemento ".gif", que se mostrara al hacer click en c/u de los enlaces, esto lo ponemos en el archivo "content-proyectos-filter.php":
+
+	<?php
+		wp_list_categories(array(
+			'title_li'	=> '',
+			'style'		=> 'list',
+			'taxonomy'	=> 'servicios'
+		));
+	?>
+	<li class="loading">
+		<img src="<?php echo IMAGES; ?>/ajax-loader.gif" alt="Loading" />
+	</li>
+
+2) En el archivo "footer.php", verificamos en que template estamos, e inyectamos el codigo JavaScript:
+
+	<?php
+		if( is_page_template('template-portfolio.php') ){
+			?>
+			<script type="text/javascript">
+				jQuery('document').ready(function($){
+
+					$('article.page').on('click', '.portfolio-filter a, #portfolio-list .posts-navigation a', function(e){
+
+							e.preventDefault();
+
+							var filterLink = $(this).attr('href');
+
+							$(this)
+								.parent()
+								.addClass('current-cat')
+									.siblings()
+									.removeClass('current-cat');
+
+							$('.portfolio-filter .loading').animate({opacity: 1}, 200);
+
+							$('#portfolio-list').animate({opacity: 0.3}, 200);
+
+							
+
+							$('#portfolio-list').load( filterLink + ' #portfolio-list', function(){
+
+								$('.portfolio-filter .loading').animate({opacity: 0}, 200);
+
+								$('#portfolio-list').animate({opacity: 1}, 200);
+							});
+					});
+
+				});
+			</script>
+
+			<?php
+		}
+	?>
+
+Aca obtenemos todos los enlaces del filtro, y los enlaces de paginación(si llega a estar paginado) y prevenimos su comportamiento por defecto (el redireccionamiento al enlace).
+
+Luego obtenemos el atributo "href" del enlace al que se le hizo click. En cada enlace, obtenemos el elemento padre (li) y le asignamos la clase activa (para mostrale un color al enlace activo), y lo removemos de los "li" hermanos.
+
+Luego obtenemos el ".gif", y animamos su opacidad mostrandolo.
+
+Para el listado de proyectos, tambien animamos su opacidad, haciendolo un poco transparente.
+
+Luego con el metodo "load" de jQuery, obtenemos con AJAX, el contenido del elemento "#portfolio-list", pero de la otra página, es decir, si por ejemplo hicimos click en "Ilustración", busca la siguiente página:
+
+	http://localhost/amkfolio/servicios/ilustracion/
+
+Allí busca el elemento con id "#portfolio-list", y obtiene todo su contenido, luego lo inserta donde estamos, en el elemento con id "#portfolio-list".
+
+De esta forma obtenemos con AJAX, porciones de código html de otras páginas, y lo insertamos donde queramos.
+
+Luego animamos nuevamente el ".gif" ocultandolo, y le quitamos la transparencia al listado de proyectos.
+_______________________________________________________
+
+	[28]. Plantilla de Detalle para Custom Post Type "Proyectos":
+_______________________________________________________
+
+1) Segun la jerarquia de plantillas de Wordpress, para mostrar el detalle de los proyectos, debemos crear la plantilla "single-proyectos.php"
+
+	<?php
+
+		$cliente = get_post_meta( $post->ID, 'cliente', true);
+		$fecha = get_post_meta( $post->ID, 'fecha', true);
+		$website = get_post_meta( $post->ID, 'website', true);
+		$btn_text = get_post_meta( $post->ID, 'btn_text', true);
+		if( !$btn_text ){
+			$btn_text = __('Contacto', 'apk');
+		}
+		$btn_link = get_post_meta( $post->ID, 'btn_link', true);
+		$multimedia = get_post_meta( $post->ID, 'multimedia', true);
+
+		$servicios = get_the_term_list( $post->ID, 'servicios', '', ', ', '' );
+	?>
+
+Los custom metaboxes que creamos, los obtenemos igual que hicimos antes, lo interesante, en este caso, el el metabox "multimedia" de tipo "wysiwyg", ya que si en el admin de wordpress, insertamos, por ejemplo video de youtube, al obtener el campo e imprimirlo con:
+
+	<?php echo $multimedia; ?>
+
+Al ver el proyecto, veremos la url del video de youtube, y no el video, para evitar esto, y mostrar el video correctamente, debemos formatear este valor, para que se muestre igual que con la función "the_content();", esto lo hacemos con:
+
+	<?php echo apply_filters('the_content', $multimedia); ?>
+_______________________________________________________
+
+	[29]. Completando la Plantilla "template-home.php":
+_______________________________________________________
+
+Para completar esta plantilla, mostrando la cantidad de proyectos definidos en el custom metabox, usaremos nuevamente "WP_Query", es decir con un loop interior, con un query especial definido por nosotros:
+
+	<?php
+		$proyectos_query = new WP_Query(array(
+			'post_type' 	=> 'proyectos',
+			'posts_per_page' => $proyectos_count
+		));
+
+		if ( $proyectos_query->have_posts() ) : while ( $proyectos_query->have_posts() ) : $proyectos_query->the_post();
+
+			get_template_part('content', 'proyecto-resumen');
+
+			endwhile; else: 
+			?>
+				<p><?php _e('No hay Proyectos disponibles', 'apk'); ?></p>
+			<?php
+
+		endif;
+
+		wp_reset_postdata();
+
+	?>
+
+Aca con "posts_per_page", indicamos el numero de proyectos (entradas) a mostrar. Así podriamos mostrar por ejemplo solo 3 entradas, sin necesidad de limitarlas en el admin.
+_______________________________________________________
+
+	[30]. CREANDO UN WIDGET:
+_______________________________________________________
+
+Vamos a comenzar a crear un widget personalizado, para mostrar los proyectos más recientes.
+
+Para desarrollar un Widget vamos a extender la clase WP_Widget, y haremos uso de 4 funciones para crear esta funcionalidad:
+
+	__construct(): Para construir, inicializar y permitir que WordPress identifique nuestro widget y lo muestre en el área de administración.
+
+	form(): Para definir el formulario que se mostrará en el área de administración.
+
+	update(): Para procesar y guardar la información del widget.
+
+	widget(): Para definir lo que presentará este widget en el area frontal del sitio.
+
+Para más indo de la creación de widgets:
+
+	https://codex.wordpress.org/Widgets_API
+
+1) Requerimos el archivo en "functions.php":
+
+	/*Widget Proyectos*/
+
+		require_once('/functions/proyectos-widget.php');
+
+2) Creamos el archivo "proyectos-widget.php":
+
+	<?php
+		//Widgey de Proyectos
+		//mostrara los proyectos más recientes.
+
+		class apk_recent_projects_widget extends WP_Widget {
+
+			// (1) Inicializamos el widget
+
+			public function __construct(){
+				parent::__construct(
+					'apk_recent_projects', //id base del widget
+					__('Proyectos recientes', 'apk'), //Titulo que se muestra en el admin
+					array(
+						'description' => __('Muestra tus proyectos recientes en un widget.', 'apk')
+					)
+				);
+			}
+		}
+
+		//Registramos el widget
+		function apk_register_recent_projects_widget(){
+			register_widget('apk_recent_projects_widget');
+		}
+
+		add_action('widgets_init','apk_register_recent_projects_widget');
+	?>
+
+Con este pequeño codigo, si vamos al admin. "Apariencia" --> "Widgets", encontraremos la opción "Proyectos recientes", con la descripción indicada, al darle click, nos mostrara las opciones para mostrarlo, si lo añadimos al "Sidebar principal", allí nos mostrara el mensaje "No hay opciones para este widget".
+
+3) Añadimos las opciones a mostrar en el admin, esta función la definimos denbtro de la clase "apk_recent_projects_widget":
+
+	// (2) Definimos el HTML del admin.
+
+		public function form($instance){
+
+			//valores por defecto
+			$defaults = array(
+				'title' => __('Proyectos recientes', 'apk'),
+				'projects_to_display' => 4
+			);
+
+			// si $instance está vacio usa los datos por defecto
+			$instance = wp_parse_args($instance, $defaults);
+
+			?>
+				<p>
+					<label for="<?php echo $this-> get_field_id('title'); ?>"><?php _e('Título', 'apk'); ?></label>
+					<input type="text" id="<?php echo esc_attr( $this-> get_field_id('title') ); ?>" name="<?php echo esc_attr( $this-> get_field_name('title') ); ?>" class="widefat" value="<?php echo esc_attr( $instance['title'] ); ?>" />
+				</p>
+
+				<p>
+					<label for="<?php echo $this-> get_field_id('projects_to_display'); ?>"><?php _e('Cuántos proyectos mostrar', 'apk'); ?></label>
+					<input type="number" id="<?php echo $this-> get_field_id('projects_to_display'); ?>" name="<?php echo $this-> get_field_name('projects_to_display'); ?>" class="widefat" value="<?php echo esc_attr( $instance['projects_to_display'] ); ?>" />
+				</p>
+			<?php
+		}
+
+Esta función recibe como parametro $instance, que es una variable que interceptamos para modificar su contenido, si esta vacio, le asigna los valores por defecto que definimos aca.
+
+Luego mostramos esos valores por defecto, en su correspondiente input, para poder editarlos en el admin.
+
+Si vamos al admin, veremos las opciones creadas, pero aún no estamos guardadon los valores.
+
+4) Procesamos y guardamos la información del widget:
+
+	// (3) Procesar y guardar la información del widget
+
+	public function update($new_instance, $old_instance){
+
+		//seteamos $instance como los valores previamente guardados
+		$instance = $old_instance;
+
+		//actualizamos el título
+		$instance['title'] = strip_tags( $new_instance['title'] );
+
+		//actualizamos el numero de la cantidad de proyectos a mostrar
+		$instance['projects_to_display'] = $new_instance['projects_to_display'];
+
+		//devolvemos $instance
+		return $instance;
+	}
+
+La función "strip_tags()" es de php, y elimina las etiquetas html, retornando solo el texto.
+
+5) Definimos como se va a mostrar el widget en el Frontend:
+
+	// (4) Definimos como se va a mostrar el widget en el Frontend
+
+	public function widget($args, $instance){
+
+		if(! empty( $instance['projects_to_display'] ) ){
+			$projects_to_display = $instance['projects_to_display'];
+		}
+
+		echo $args['before_widget'];
+
+		if(! empty( $instance['title'] ) ){
+			$title = apply_filters('widget_title', $instance['title']);
+			echo $args['before_title'] . $title . $args['after_title'];
+		}
+
+		echo $args['after_widget'];
+	}
+
+Si vamos al frontend, a una plantilla que nos muestre el "sidebar", veremos que se muestra el titulo que hayamos guardado para este widget.
+
+Con $args['before_widget']; obtenemos las etiquetas HTML que se insertan antes del widget (esto lo definimos en "sidebars.php").
+
+6) Hasta el momento, solo estamos mostrando el titulo del widget, para mostrar el contenido, que en este caso sera un slider con las imagenes de los proyectos recientes, primero debemos verificar si existe el custom post type "proyectos":
+
+	//el contenido del widget
+		if( post_type_exists('proyectos') ){ ?>
+			
+			...
+
+		<?php else{
+			_e('Por favor habilita el tipo de contenido "proyectos", activando el pluguin "AMK Proyectos post type" que se incluía con este tema.', 'apk');
+		}
+
+7) Ahora, para mostrar el contenido en el frontend, usamos el loop, con un query personalizado para que sea del custom post type "proyectos" y para limitar el numero de slides, segun nuestra maquetación:
+
+	<section class="portfolio-recent-projects-widget">
+	
+		<ul class="projects">
+		<?php
+			$proyectos_widget_query = new WP_Query(array(
+				'post_type' 	=> 'proyectos',
+				'posts_per_page' => $projects_to_display
+			));
+
+			if ( $proyectos_widget_query->have_posts() ) : while ( $proyectos_widget_query->have_posts() ) : $proyectos_widget_query->the_post();
+
+				global $post;
+			?>
+				<li class="">
+					<article class="portfolio">
+						<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">
+							<?php
+								if ( has_post_thumbnail() ) {
+									the_post_thumbnail('blog-image');
+								}
+							?>
+						</a>
+						<div class="text">
+							<h4><a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>" ><?php the_title(); ?></a></h4>
+							<div class="services">
+								<?php echo get_the_term_list( $post->ID, 'servicios', '', ', ', '' ); ?>
+							</div> 
+						</div>
+						
+					</article>
+				</li>
+
+				<?php
+					endwhile; else: 
+					?>
+						<p><?php _e('No hay Proyectos disponibles', 'apk'); ?></p>
+					<?php
+
+			endif;
+
+			wp_reset_postdata();
+
+Aca dentro del loop usamos "global $post;", para que al momento de extraer la taxonomia "servicios", no nos genere un error.
+
+Nota: el query que usamos aca, lo llamamos con "$proyectos_widget_query", ya que este widget tambien lo podemos usar en el footer, y si es así, y le dejamos el nombre de la variable "$proyectos_query", podria dar error en "template-home.php", ya que allí usamos el query con el nombre "$proyectos_query"
+
+8) Finalmente, para cargar los archivos JavaScript necesarios para mostrar los slides, unicamente donde se muestre el widget usamos:
+
+	//el contenido del widget
+	if( post_type_exists('proyectos') ){ 
+		//Cargar scripts del slider, unicamente donde se muestra el slider
+		wp_enqueue_script( 'flexslider' );
+
+		function widget_proyectos_slider(){
+			?>
+			<script type="text/javascript">
+				jQuery('document').ready(function($){
+					//---------------------------------------------------------------------
+					// PORTFOLIO WIDGET
+					//---------------------------------------------------------------------
+					$('.portfolio-recent-projects-widget').flexslider({
+						selector: '.projects > li',
+						animation: 'fade',
+						controlNav: false,
+						directionNav: true, 
+						pauseOnAction: false,
+						pauseOnHover: true,
+						prevText: '<i class="icon-chevron-left"></i>',
+						nextText: '<i class="icon-chevron-right"></i>'
+					});
+				});
+			</script>
+			<?php
+		}
+
+		add_action('wp_footer', 'widget_proyectos_slider');
+
+		?>
+
+De esta forma nos aseguramos que los scripts unicamente carguen si existe el custom post type "proyectos", y si está en una página donde se muestra el widget. Esto ayuda a no hacer peticiones al servidor por archivos inecesarios :)
+_______________________________________________________
+
+	[31]. PERSONALIZAR PANTALLA DE INGRESO:
+_______________________________________________________
+
+Para cambiar el logo de wordpress, el enlace y texto de este logo, en la pantalla de loguin del admin, por un logo que el admin pueda controlar, haremos lo siguiente:
+
+1) Requerimos el archivo en "functions.php":
+
+	/*Loguin Personalizado*/
+
+		require_once('/functions/custom-login.php');
+
+2) Creamos el archivo "custom-login.php":
+
+	<?php
+		function apk_login_logo(){
+
+			$options = get_theme_mod('apk_custom_settings');
+
+			if( empty($options['login-logo']) ){
+				$login_logo = IMAGES.'/login-logo.png';
+			}else{
+				$login_logo = $options['login-logo'];
+			}
+
+			?>
+				<style type="text/css">
+
+					body.login div#login h1 a{
+						background-image: url(<?php echo $login_logo; ?>);
+						background-size: auto;
+						-moz-background-size: auto;
+						-webkit-background-size: auto;
+						width: 100%;
+						height: 47px; 
+					}
+
+				</style>
+
+			<?php
+		}
+
+		add_action('login_enqueue_scripts', 'apk_login_logo');
+
+		function apk_login_link($url){
+			return home_url();
+		}
+
+		add_filter('login_headerurl', 'apk_login_link');
+
+		function apk_login_logo_title($message){
+			$message = get_bloginfo('name');
+			return $message;
+		}
+
+		add_filter('login_headertitle', 'apk_login_logo_title');
+
+	?>
+
+Nota: no olvidar copiar imagen "login-logo.png" a la carpeta "img" dentro del tema.
+
+3) En el archivo "theme-customizer.php", agregamos el setting y el control al area de opciones miscelaneas:
+
+	//logo Pantalla Loguin
+	$wp_customize->add_setting('apk_custom_settings[login-logo]', array(
+		'default' => IMAGES.'/login-logo.png',
+		'type' => 'theme_mod'
+	));
+
+	$wp_customize->add_control( new WP_Customize_Image_Control(
+		$wp_customize, 'login-logo', array(
+			'label' => __('Subir logo para pantalla de "loguin"', 'apk'),
+			'section' => 'apk_miscelaneous',
+			'settings' => 'apk_custom_settings[login-logo]'
+		)
+	));
+
+De este modo, el admin. puede cambiar la imagen de logo para la pantalla de loguin.
+_______________________________________________________
+
+	[32]. REVISANDO LA CALIDAD DEL TEMA:
+_______________________________________________________
+
+Podemos intalar un pluguin llamado "theme check", para compobar la calidad de nuestro tema.
+
+	https://wordpress.org/plugins/theme-check/
+
+Una vez instalado vamos a "Apariencia" -->"Theme Check"
+
+Con el pluguin "Monster Widget", podemos probar, añadiendo solo este widget a un area de widgets de nuestro tema (por ejemplo al sidebar), como se verian todos los widgets de wordpress en esa area. Así, podemos verificar errores de nuestros estilos para esa area.
+
+	https://wordpress.org/plugins/monster-widget/
+_______________________________________________________
+
+	[33]. PREPARANDO EL TEMA PARA TRADUCCIÓN:
+_______________________________________________________
+
+Vamos a preparar los textos de traducción, en caso de que el tema se use en una instalación de WordPress que funcione en otro idioma.
+
+Por supuesto que no vamos a entregar el texto traducido en todos los idiomas, pero sí entregaremos un texto de traducción original, que cada administrador de sitio podrá tomar para crear las traducciones en su propio idioma.
+
+1) La herramienta que usaremos es: Poedit.
+
+	https://poedit.net/
+
+2) Una vez descargado e instalado, vamos a Archivo --> Nuevo
+
+3) Allí escogemos el idioma (en este caso es_ES), Luego escogemos la opción:
+
+	"Extraer desde código fuente"
+
+4) Luego hacemos click en la pestaña "Propiedades de tradución", en donde colocamos lo siguiente:
+
+	Nombre proyecto: AMKfolio
+	Equipo de traductores: Ricardo Landínez
+	Conjunto de caracteres del codigo fuente: UTF-8
+
+5) Vamos a "Archivo" --> "Guardar", y lo guardamos en la misma carpeta que se indico en el archivo "functions.php":
+
+	// Add theme support for Translation
+	load_theme_textdomain( 'apk', get_template_directory() . '/languages' );
+
+Nota: creamos la carpeta "languages", dentro del tema. (C:\wamp\www\amkfolio\wp-content\themes\amkfolio\languages)
+
+Al gurdar, se crearan los archivos "es_ES.po" y "es_ES.mo", el ".po" sirve para editar, y el ".mo" es el que busca wordpress para traducir.
+
+6) Luego en la segunda pestaña "Rutas de fuentes", indicamos la ruta de los archivos, en este caso, tendria que salir de la carpeta, entonces indicamos esto con ".."
+
+7) En la tercera pestaña "Palabras clave originales", y añadiremos las siguientes:
+
+	__
+
+	_e
+
+	_n
+
+	_x
+
+	gettext
+
+Luego hacemos click en aceptar, y apareceran nuestros textos.
+
+Ahora guardamos, y con eso ya tendriamos nuestro archivo listo para traducción.
+_______________________________________________________
+
+	[34]. Haciendo la TRADUCCIÓN:
+_______________________________________________________
+
+1) Si queremos crear la traducción, copiamos en la misma carpeta el archivo "es_ES.po", y lo renombramos a "en_US.po".
+
+2) Abrimos el archivo "en_US.po" con poedit.
+
+3) Vamos a "Catálogo" --> "Propiedades", y en "Idioma", escogemos: "Ingles de Estados Unidos" y "Aceptar".
+
+4) Luego escogemos un texto, por ejemplo "Ver más", y en la parte inferior veremos dos campos:
+
+	Texto de origen:
+		Ver más
+	Traducción:
+
+En "Traducción", ponemos la traduccion del texto "Ver más" en ingles (podemos ayudarnos de google traductor). Y quedaria así:
+
+	Texto de origen:
+		Ver más
+	Traducción:
+		See More
+
+5) Repetimos el proceso con todos los textos, y una vez terminado, vamos a "Archivo" --> "Guardar". Al hacer esto, en la carpeta "languages", se generara el archivo "en_US.mo".
+
+6) Para probar la traducción, vamos al archivo "wp-config.php" de nuestra instalación de wordpress (C:\wamp\www\amkfolio), y cambiamos:
+
+	define('WPLANG', 'es_ES');
+
+Por:
+
+	define('WPLANG', 'en_US');
+
+Si no aparece esta línea de codigo, podemos cambiar el lenguaje del sitio, en el admin. "Ajustes" --> "Generales" --> "Idioma del sitio"
+_______________________________________________________
+
+	[35]. TRADUCIENDO UN PLUGUIN:
+_______________________________________________________
+
+1) Dentro de la carpeta del plugin, creamos la carpeta "languages".
+
+2) Dentro de esta carpeta creamos los archivos de traducción, igual que hicimos antes.
+
+3) en el archivo principal de nuestro plugin "apk-proyectos-post-type.php", creamos la siguiente función:
+
+	function apk_proyectos_translate(){
+		load_plugin_textdomain('apk', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	}
+
+	add_action('plugins_loaded', 'apk_proyectos_translate');
+
+4) los archivos de traducción dentro de la carpeta "languages", los debemos renombrar, anteponiendo el texto de dominio, y quedarian:
+
+	apk-en_US.mo
+	apk-en_US.po
+	apk-es_ES.mo
+	apk-es_ES.po
+_______________________________________________________
+
+	[36]. ERRORES COMUNES WORDPRESS:
+_______________________________________________________
+
+Para ver un articulo, con soluciones a errores comunes que cometen los desarrolladores en wordpress:
+
+	https://code.tutsplus.com/articles/common-wordpress-development-mistakes-and-how-to-fix-them--wp-28204

@@ -1,0 +1,983 @@
+	INTRO WORDPRESS
+_______________________________________________________
+
+INDICE:
+
+[1]. INSTALAR WORDPRESS
+[2]. CONTENIDO DE PRUEBA
+[3]. HABILITAR DEBUG
+[4]. CREAR THEME
+	[4.1]. "index.php", "style.css" y "screenshot.png"
+	[4.2]. "Header", "Aside" y "Footer"
+	[4.3]. "functions.php"
+	[4.4]. La funcion "bloginfo()"
+	[4.5]. Menú de pág. publicadas
+	[4.6]. Widgets en la barra lateral
+	[4.7]. El loop
+	[4.8]. Enlaces a entradas antiguas y recientes
+	[4.9]. "single.php"
+	[4.10]. Comentarios
+	[4.11]. "page.php"
+	[4.12]. Plantillas de Página adicionales
+	[4.13]. Página de Inicio Estatica
+	[4.14]. Obtener Imagenes
+	[4.15]. Imagenes Destacadas
+	[4.16]. CARGAR MENÚS
+	[4.17]. CARGAR JavaScript
+[5]. COMENTARIOS DE DOCUMENTACIÓN
+_______________________________________________________
+
+	[1]. INSTALAR WORDPRESS:
+_______________________________________________________
+
+1) Descargar Wordpress.
+
+	https://es.wordpress.org/
+	https://wordpress.org/
+
+2) Descomprimir en la carpeta del proyecto, ubicada en la carpeta "/htdocs" en el caso de XAMP, o "/www" en el caso de WAMP, o en la correspondiente de MAMP.
+
+3) En el navegador ir a:
+
+	http://localhost/nombre_carpeta_proyecto
+
+4) Ir a "phpmyadmin", y crear la base de datos para nuestro proyecto (solo el nombre de la DB, sin tablas, ya que las crea Wordpress).
+
+5) Regresar a la pag. de configuracion de wordpress, y llenar los datos (nombre DB, Usuario DB, password...).
+
+Continuar con los datos que nos piden, como la información del sitio:
+
+	Titulo: All Wallpapers
+	Usuario: nombreUsuarioAdministradorWebContenido
+	Pass:
+_______________________________________________________
+
+Ingresar al administrador de contenidos:
+
+	http://localhost/nombre_carpeta_proyecto/wp-admin
+_______________________________________________________
+
+	[2]. CONTENIDO DE PRUEBA:
+_______________________________________________________
+
+	Esto nos sirve para tener Wordpress poblado de una gran cantidad de artículos y páginas que ponen a prueba nuestro tema en cada situación posible.
+
+	Se descarga desde:
+
+		https://codex.wordpress.org/Theme_Unit_Test
+
+	Para importarlo, sólo debemos activar la herramienta de importación de WordPress desde:
+
+		Herramientas > Importar > WordPress
+
+	Esta operación instalará un plugin, y luego de instalado deberás importar el archivo XML de test unit.
+_______________________________________________________
+
+	[3]. HABILITAR DEBUG:
+_______________________________________________________
+
+Cuando estamos desarrollando un thema en Wordpress, si queremos que en el navegador nos salgan posibles errores de nuestro codigo, vamos al archivo "wp-config.php" (ubicado en la carpeta raiz de Wordpress), y la siguiente línea:
+
+	define('WP_DEBUG', false);
+
+Y lo cambiamos a "true".
+
+En el mismo archivo, tambien podemos usar:
+
+	define('WP_DEBUG_LOG', true);
+
+Este imprime los errores en un archivo "debug.log", que se guarda dentro de la carpeta "wp-content".
+
+Y si usamos:
+
+	define('WP_DEBUG_DISPLAY', false);
+
+Junto con las 2 opciones anteriores ('WP_DEBUG' y 'WP_DEBUG_LOG'), se crea el archivo "debug.log", pero no se muestra en pantalla, esto es util, por ejemplo en sitios de producción.
+
+_______________________________________________________
+
+	[4]. CREAR THEME:
+_______________________________________________________
+
+--> [4.1]. "index.php", "style.css" y "screenshot.png":
+	_______________________________________________________
+
+	1) Ir a la carpeta del proyecto, y buscar la carpeta "wp-content".
+
+	Está carpeta, es la que contiene las imagenes, pluguins, y themas subidos a la pagina, todo lo demas se obtiene en una instalación de wordpress, así que esa es la carpeta a la cual se le debe hacer backup.
+
+	2) Dentro de la carpeta "themes", creamos una carpeta, con el nombre de nuestro tema.
+
+	3) Dentro de la carpeta de "nuestroTema", creamos un archivo "index.php", el cual sera nuestra plantilla, que en este caso contendra una vista donde se presentan todos los Posts o entradas del blog.
+
+	4) Dentro de la carpeta de "nuestroTema", creamos un archivo "style.css".
+
+	5) En el panel de administración CMS donde creamos las entradas, etc, ya podemos ver nuestro tema. Para añadir la descripción de nuestro thema, lo hacemos en un comentario, dentro del archivo "style.css":
+
+		/*
+		Theme Name: Wallpapers
+		Theme URI: http://landinezrichard.tk
+		Author: Ricardo Landínez Ospino
+		Author URI: http://landinezrichard.tk
+		Description: Tema para una página de fondos de pantalla o wallpapers.
+		Version: 1.0
+		License: GNU General Public License v2 or later
+		License URI: http://www.gnu.org/licenses/gpl-2.0.html
+		Tags: black, brown, orange, tan, white, yellow, light, one-column, two-columns, right-sidebar, flexible-width, custom-header, custom-menu, editor-style, featured-images, microformats, post-formats, rtl-language-support, sticky-post, translation-ready
+		Text Domain: apk
+
+		This theme, like WordPress, is licensed under the GPL.
+		Use it to make something cool, have fun, and share what you've learned with others.
+		*/
+
+		body{
+			background: red;
+		}
+
+	Nota: los estilos, se ponen tal cual como en cualquier archivo ".css".
+
+	6) Dentro de la carpeta de "nuestroTema", ponemos una imagen de medidas "880 x 660", llamada "screenshot.png". Esta imagen sera la vista  previa de nuestro tema en el panel de admin. de Wordpress.
+
+	Nota, podemos activar nuestro tema desde: 
+
+		el admin, Apariencia, Temas.
+	_______________________________________________________
+
+-->	[4.2]. "Header", "Aside" y "Footer"
+	_______________________________________________________
+
+	Dependiendo del diseño de nuestra pág. es probable que se repita el header, con el logo de nuestro sitio y el menu, así como el footer, y un aside con enlaces o un buscador. Lo que vamos a hacer es separar esas partes que se repiten en otras plantillas, para reutilizarlas.
+
+	7) Ej: cremos un archivo llamado "header.php" con el siguiente contenido:
+
+		<!DOCTYPE html>
+		<html lang="es">
+		<head>
+			<meta charset="utf-8">
+			<title>Tema de Ejemplo</title>
+			
+			<link rel="stylesheet" href="style.css" >
+
+		</head>
+
+		<body>
+			
+			<div id="global-container">
+				
+				
+				<header id="main-header">
+					
+					<h1 class="site-title">El nombre del sitio</h1>
+					<h2 class="site-description">En este lugar debe ir la descripción del sitio</h2>
+				
+				</header><!-- /#main-header -->
+				
+				
+				<nav id="main-nav">
+					<ul class="menu">
+						<li><a href="">Menú item 1</a></li>
+						<li><a href="">Menú item 2</a></li>
+						<li><a href="">Menú item 3</a></li>
+						<li><a href="">Menú item 4</a></li>
+						<li><a href="">Menú item 5</a></li>
+						<li><a href="">Menú item 6</a></li>
+					</ul>
+				</nav><!-- /#main-nav -->
+				
+				
+				<section id="global-content" class="cf">
+	8) Ahora en nuestro archivo "index.php", llamamos esa plantilla con la siguiente función:
+
+		<?php get_header(); ?>
+
+		<section id="main-content">
+			
+			<article class="post resume">
+				<header class="post-title">
+					<h2><a href="">El título de un post</a></h2>
+					<small class="meta">Marzo 22, 2014 &bull; <a href="">Categoría</a></small>
+				</header>
+				<div class="post-content">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<a href="" class="readmore">Seguir leyendo &rarr;</a>
+				</div>
+			</article>	<!-- article -->
+
+			... el resto de nuestro código del index...
+
+	9) Hacemos lo mismo con el footer, creando "footer.php":
+
+				</section><!-- /#global-content -->
+				
+				
+				<footer id="main-footer">
+					
+					<div class="footer-copyright">
+						&copy; 2014 Tema de prueba
+					</div><!-- /.footer-copyright -->
+					
+				</footer><!-- footer -->
+			
+			</div><!-- /#global-container -->
+
+			
+		</body>
+		</html>
+
+	10) Llamamos la plantilla "footer.php" desde el "index.php":
+
+		<?php get_footer(); ?>
+
+	11) Repetimos el proceso con la barra lateral, creando el archivo "sidebar.php"
+
+		<aside id="sidebar">
+			
+			<div class="widget">
+				<h3 class="widget-title">Widget de texto</h3>
+				<div class="widget-content">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				</div>
+			</div>
+			
+			
+			
+		</aside><!-- /#sidebar -->
+
+	12) Llamamos la plantilla "sidebar.php" desde el "index.php":
+
+		<?php get_sidebar(); ?>
+	_______________________________________________________
+
+-->	[4.3]. "functions.php"
+	_______________________________________________________
+
+	El archivo "functions.php", ejecuta funciones de programación php, así como añade, o habilita nuevas opciones y funcionalidades al admin de Wordpress y a nuestro tema.
+
+	13) Dentro de la carpeta de nuestro theme, creamos el archivo "functions.php":
+
+		<?php
+
+			function apk_load_styles(){
+				wp_register_style('theme_style', get_stylesheet_uri(), '', '1.0', 'all');
+				wp_enqueue_style('theme_style');
+			}
+
+			add_action('wp_enqueue_scripts', 'apk_load_styles');
+
+		?>
+
+	Aqui creamos la funcion "apk_load_styles", la cual usa la funcion nativa de wordpress "wp_register_style".
+
+	Está funcion recibe los siguientes parametros:
+
+		'theme_style' --> nombre de la hoja de estilos
+		
+		get_stylesheet_uri() --> funcion wordpress, que obtiene la URL o direccion en donde está la hoja de estilos.
+
+		'' --> indicamos si depende de otra hoja de estilos.
+		'1.0' --> la versión de la hoja de estilos.
+		'all' --> a que medio se va a aplicar la hoja de estilos (para pantalla, impresora, etc) (all, print, screen).
+
+	Con la función "wp_enqueue_style('theme_style');", registramos la hoja de estilo.
+
+	--> Ejemplo Adicional:
+
+	Si queremos cargar una fuente de "Google Fonts", y si nuestra hoja de estilos depende de otra, por ejemplo "normalize", o una hoja de estilos de "bootstrap", podemos usar el parametro de la dependencia de la siguiente forma:
+
+		//---------------------------------------------------------------------
+		// CARGANDO ESTILOS DEL TEMA
+		//---------------------------------------------------------------------
+		//Creamos una función para cargar los estilos
+		function amk_theme_styles() { 
+		 
+			//Registramos la fuente Open Sans
+			wp_register_style( 'font-sans', 'http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700', '', '', 'all' );
+		 
+			//Registramos Bootstrap
+			wp_register_style( 'bootstrap', get_stylesheet_directory_uri().'/css/bootstrap.min.css', '', '3.3.7', 'all' );
+		 
+			//registramos la hoja de estilos del tema
+			wp_register_style( 'amk-style', get_stylesheet_uri(), array('font-sans', 'bootstrap'), '1.0.0', 'all' );
+		 
+			//Ahora cargamos los estilos. Nota que sólo cargamos 'amk-style' ya que en esta hoja de estilos declaramos dependendencia de 'font-sans' y 'bootstrap', éstas cargaran de manera automática
+			wp_enqueue_style( 'amk-style' );
+		}
+
+		add_action('wp_enqueue_scripts', 'amk_theme_styles');
+
+	Nota: la hoja de estilos "bootstrap.min.css", se encontrara en la carpeta "css", dentro de nuestro tema.
+
+	14) En el archivo "header.php", usamos la función "wp_head()", que carga el head con etiquetas meta y scripts de wordpress, así como estilos de su barra de edición, que se muestra cuando estamos logueados como admin.
+
+		<!DOCTYPE html>
+		<html lang="es">
+		<head>
+			<meta charset="utf-8">
+			<title>Tema de Ejemplo</title>
+			
+			<?php wp_head(); ?>
+
+		</head>
+
+	De esta forma, si inspeccionamos la pág., veremos linkeados y aplicados los estilos.
+
+		<link rel="stylesheet" id="theme_style-css" href="http://localhost/intro_wordpress/wp-content/themes/introwordpress/style.css?ver=1.0" type="text/css" media="all">
+
+	15) En el footer, antes de cerrar el body, usamos la función "wp_footer()", que carga scripts y la barra de edición de wordpress, cuando estamos logueados como admin.
+
+			<?php wp_footer(); ?>
+		</body>
+		</html>
+	_______________________________________________________
+
+-->	[4.4]. La funcion "bloginfo()":
+	_______________________________________________________
+
+	Está función nos sirve para obtener diversa información de nuestro blog, como el titulo del sitio, la descripción, etc.
+
+	16) Usamos la funcion "bloginfo()" en el archivo "header.php" para traer dinamicamente los datos de nuestra pág.
+
+		<!DOCTYPE html>
+		<html <?php language_attributes(); ?> >
+		<head>
+			<meta charset="<?php bloginfo('charset'); ?>">
+			<title><?php wp_title(' | ', true, 'right'); bloginfo('name'); ?> </title>
+			
+			<?php wp_head(); ?>
+
+		</head>
+
+		<body>
+			
+			<div id="global-container">
+				
+				
+				<header id="main-header">
+					
+					<h1 class="site-title"> <?php bloginfo('name'); ?> </h1>
+					<h2 class="site-description"> <?php bloginfo('description'); ?> </h2>
+
+	Aquí usamos:
+
+		language_attributes(); --> trae el lenguaje de la instalación de wordpress.
+
+		bloginfo('charset'); --> trae el charset utf-8
+
+		wp_title(' | ', true, 'right'); --> aquí indicamos que el titulo de la pagina, que se ve en la pestaña del navegador, traiga un separador, que en nuestro caso es ' | ', y que se posicione a la derecha, esto solo sera visible cuando se ve una pág. interna o una entrada. Y se vera así “Nombre de la página actual | Nombre del sitio”.
+
+		bloginfo('name'); --> el nombre de la pág.
+
+		bloginfo('description'); --> la descripción de nuestro sitio.
+
+	Para más info de la función "bloginfo" ir a: 
+
+		https://codex.wordpress.org/Function_Reference/bloginfo
+
+		https://developer.wordpress.org/reference/functions/bloginfo/
+
+	Si queremos que el titulo del sitio se encuentre en un enlace, que nos lleva al home del sitio, usamos:
+
+		<h1><a href="<?php echo home_url(); ?>"><?php bloginfo('name'); ?></a></h1>
+
+	17) Y en este caso, en el "footer.php":
+
+		<div class="footer-copyright">
+			&copy; <?php echo date('Y'); bloginfo('name'); ?>
+		</div>
+	_______________________________________________________
+
+-->	[4.5]. Menú de pág. publicadas:
+	_______________________________________________________
+
+	18) Para tener un menú correspondiente a cada página creada en el admin, en "header.php" usamos:
+
+		<nav id="main-nav">
+			<ul class="menu">
+				<?php wp_list_pages('title_li=') ?>
+			</ul>
+		</nav>
+
+	El atributo 'title_li=' que le pasamos a la función, sirve para que liste las páginas sin un titulo, de lo contrario apareceria en al menú algo que dice "Pagínas", y al hacer hover, aparecerian los items del menú.
+
+	Luego para ordenar estos items, en el admin de wordpress, vamos a:
+
+		Paginas --> Todas las páginas
+
+	Y en edición rápida, cambiamos el orden de cada item.
+	_______________________________________________________
+
+-->	[4.6]. Widgets en la barra lateral:
+	_______________________________________________________
+
+	Los widgets son pequeñas funcionalidades como un buscador, cuadro de texto, galeria de imagenes, un submenú de categorias, enlaces a redes sociales, etc.
+
+	19) Para añadir esta funcionalidad dinámica a wordpress, lo hacemos desde el archivo "functions.php":
+
+		function apk_register_sidebars(){
+			register_sidebar(
+				array(
+					'name' => __('Sidebar principal', 'apk'),
+					'id'   => 'main_sidebar',
+					'description' => __('Este es el sidebar principal para widgets', 'apk'),
+					'before_widget' => '<div id="%1$s" class="widget %2$s">',
+					'after_widget'  => '</div>',
+					'before_title'  => '<h3 class="widget-title">',
+					'after_title'   => '</h3>'
+				)
+			);
+		}
+
+		add_action('widgets_init', 'apk_register_sidebars');
+
+	La función "register_sidebar()", recibe como parametro un array con las siguientes opciones:
+
+		'name' => __('Sidebar principal', 'apk')
+
+	Aquí indicamos el nombre del area para widgets, la función "__()" es para traducir el texto, esta función recibe los parametros del texto a traducir, y el "Text Domain", que difinimos en el comentario del archivo "style.css".
+
+	De esta forma, si nuestro tema es instalado en wordpress en ingles, traduciria a "Main sidebar"; este texto es visible en el admin. de wordpress.
+
+	Tambien existe la función "_e('texto a traducir', 'TextDomain')", que a diferencia de esta, lo que hace es un echo, imprimiendo el texto traducido. esta función no la usamos aquí, ya que no necesitamos imprimir ese texto, y lo estamos es pasando como elemento del array. La función "_e()", es equivalente a usar:
+
+		echo __();
+
+	Ahora, aquí indicamos el identificador unico del sidebar:
+
+		'id'   => 'main_sidebar'
+
+	Está es la descripción del area dinamica que estamos creando, este texto, saldra en el admin de wordpress:
+
+		'description' => __('Este es el sidebar principal para widgets', 'apk')
+
+	Indicamos lo que se debe mostrar antes del widget, esto lo hacemos viendo nuestra estructura html, del archivo "sidebar.php":
+
+		'before_widget' => '<div id="%1$s" class="widget %2$s">'
+
+	Adicionalmente, indicamos que a ese "div", se le asigne un id unico, que se lo pondra wordpress dinamicamente, dependiendo del tipo de widget. Esto lo hacemos con:
+
+		id="%1$s"
+
+	De la misma forma, se le asigna una clase adicional, de acuerdo al widget con:
+
+		class="widget %2$s"
+
+	Nuevamente revisamos el html de nuestro archivo "sidebar.php", y vemos que el widget tiene un titulo, para hacer esto dinamicamente, en "functions.php", indicamos en el array que se inserte antes del titulo la etiqueta h3:
+
+		'before_title'  => '<h3 class="widget-title">'
+
+		'after_title'   => '</h3>'
+
+	Con 'after_title', indicamos el cierre de la etiqueta h3.
+
+	Hasta el momento creamos la función que habilitara (en el admin), y creara (en el front) el widget, pero no le hemos indicado a wordpress, cuando se ejecutara esta función, esto lo hacemos con:
+
+		add_action('widgets_init', 'apk_register_sidebars');
+
+	20) Si nos dirigimos al admin de Wordpress, y vamos a "Apariencia", encontramos habilitada la nueva opción "Widgets". en esta area podremos agregar el widget que necesitemos mostrar en el front.
+
+	21) Para que en el front, se muestren dinamicamente los widgets agregados en el admin, modificamos el archivo "sidebar.php":
+
+		<aside id="sidebar">
+			
+			<?php
+				if( is_active_sidebar('main_sidebar') ){
+					dynamic_sidebar('main_sidebar');
+				}else{ ?>
+				
+					<div class="widget">
+						<h3 class="widget-title">
+							<?php
+								_e('Buscar', 'apk');
+							?>
+						</h3>
+
+						<?php get_search_form(); ?>
+					</div>
+			<?php
+				}
+			?>	
+			
+		</aside>
+
+	En la primera parte:
+
+		if( is_active_sidebar('main_sidebar') ){
+			dynamic_sidebar('main_sidebar');
+		}
+
+	Indicamos que si en el admin, en el "main_sidebar" (id que le pusimos en "functions.php") agregamos algun widget, esté se muestre con la función "dynamic_sidebar()".
+
+	Y en caso que no este activo ningun widget, cargamos el div con clase "widget", en donde mostramos por defecto el buscador, con la función "get_search_form()". En caso de que no pusieramos el "else", saldria un espacio vacio.
+	_______________________________________________________
+
+-->	[4.7]. El loop:
+	_______________________________________________________
+
+	El looop es un ciclo, que dependiendo del contexto donde lo usemos, nos servira para extraer el contenido de las entradas o paginas de wordpress.
+
+		<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+
+		<?php endwhile; endif; ?>
+
+	Primero pregunta si existen post, entonces (los ":"" significan entonces), mientras hallan posts, saca el contenido, luego por cada post repetira lo que pongamos por fuera de las etiquetas php, finalmente cerramos el ciclo y el if.
+
+	22) Usaremos el loop en el archivo "index.php":
+
+		<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+			
+			<article class="post resume">
+				<header class="post-title">
+					<h2><a href="">El título de un post</a></h2>
+					<small class="meta">Marzo 22, 2014 &bull; <a href="">Categoría</a></small>
+				</header>
+				<div class="post-content">
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<a href="" class="readmore">Seguir leyendo &rarr;</a>
+				</div>
+			</article>	<!-- article -->
+		
+		<?php endwhile; endif; ?>
+
+	23) Ahora para traer dinamicamente los datos del post usamos:
+
+		<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+			
+			<article class="post resume">
+				<header class="post-title">
+					<h2><a href="<?php the_permalink(); ?>">
+						<?php the_title(); ?>
+					</a></h2>
+					<small class="meta"><?php the_time( get_option('date_format') ); ?> &bull; <?php the_category(', '); ?></small>
+				</header>
+				<div class="post-content">
+					<?php the_excerpt(); ?>
+					<a href="<?php the_permalink(); ?>" class="readmore">
+						<?php _e('Seguir leyendo &rarr;', 'apk'); ?></a>
+				</div>
+			</article>	<!-- article -->
+		
+		<?php endwhile; else: ?>
+			<article class="post resume">
+				<header class="post-title">
+					<h2>
+						<?php _e('No hay contenidos disponibles', 'apk'); ?>
+					</h2>
+				</header>
+				<div class="post-content">
+					<p>
+					<?php _e('No hay contenidos que correspondan con esta página, por favor realiza una búsqueda para encontrar lo que deseas ver:', 'apk'); ?>
+					</p>
+					<?php get_search_form(); ?>
+				</div>
+			</article>
+		<?php endif; ?>
+
+	La función "the_permalink()" trae el enlace para ver con más detalle la entrada, o el post. En este caso, como no hemos creado plantilla para nuestra entrada, nos muestra "index.php", sin embargo en la barra de direcciones del navegador podemos ver la dirección a esa entrada.
+
+	La función "the_title()", trae el titulo de la entrada.
+
+	La función "the_time( get_option('date_format') )", nos trae la fecha en la que se hizo la entrada, con "get_option('date_format')", hacemos que esta fecha corresponda al formato de fecha definido en los ajustes del admin. Si solo usamos "the_time()", se nos imprime la hora.
+
+	La función "the_category(', ')" imprime el nombre de la categoria en un link, si la entrada trae varias categorias, estos links los separa con una coma (,) y un espacio ( ).
+
+	La funcion "the_excerpt()" saca un resumen del contenido de la entrada, y al final pone [...].
+
+	Esta vez, al finalizar el ciclo (endwhile; else:), continuamos colocando un código que nos informara que no hay contenidos disponibles, y nos muestra el formulario de busqueda.
+	_______________________________________________________
+
+-->	[4.8]. Enlaces a entradas antiguas y recientes:
+	_______________________________________________________
+
+	24) En el archivo "index.php", usamos el siguiente código:
+
+		<?php if( get_next_posts_link() || get_previous_posts_link() ){ ?>
+			<div class="posts-nav cf">
+				<?php next_posts_link( __('&larr; Previos', 'apk') ); ?>
+				<?php previous_posts_link( __('Recientes &rarr;', 'apk') ); ?>
+			</div>
+		<?php } ?>
+
+	Primero preguntamos si existen post antiguos ("get_next_posts_link") o recientes ("get_previous_posts_link"), ya que no deberia mostrar estos enlaces si no existen entradas antiguas o nuevas.
+
+	Si existen entradas antiguas, se muestra el enlace con "next_posts_link()", que como parametro recibe el texto a mostrar.
+
+	_______________________________________________________
+
+-->	[4.9]. "single.php":
+	_______________________________________________________
+
+	El archivo "single.php", servira para mostrar el detalle de cada entrada, con su contenido completo.
+
+	25) Creamos el archivo "single.php", el cual, al igual que el "index.php", llamara a la plantilla del header, el footer y el sidebar:
+
+		<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+
+			<article class="post">
+				<header class="post-title">
+					<h1><?php the_title(); ?></h1>
+					<small class="meta"><?php the_time( get_option('date_format') ); ?> &bull; <?php the_category(', '); ?></small>
+				</header>
+				<div class="post-content">
+					<?php the_content(); ?>
+				</div>
+			</article>	<!-- article -->
+
+		<?php endwhile; endif; ?>
+
+	Al igual que "index.php", utiliza el loop para extraer el contenido, pero a diferencia del loop del "index", no tendra la validación else, ya que wordpress, solo buscara el "single.php", en caso de existir la entrada, y si no existe, seguira usando el "index.php".
+
+	Otras diferencias son, que en el titulo de la entrada, ya no usamos el "permalink", y en vez de usar "the_excerpt()", usamos "the_content()", para mostrar el contenido completo.
+
+	_______________________________________________________
+
+-->	[4.10]. Comentarios:
+	_______________________________________________________
+
+	26) Para habilitar los comentarios, usamos la siguiente función en "single.php":
+
+		<?php endwhile; endif; ?>
+
+			<div id="comments-area">
+
+				<?php comments_template(); ?>
+
+			</div><!-- #comments-area -->
+
+		</section><!-- /#main-content -->
+
+	Esto lo colocamos fuera de el loop.
+
+	Si hicimos todo bien, y habilitamos el debug, al recargar la vista single, de alguna entrada, en el area de comentarios veremos un mensaje de error como el siguiente:
+
+		Notice: Tema sin comments.php ha quedado <strong>obsoleto</strong> desde la versión 3.0.0 y no hay alternativas disponibles. Por favor, incluye una plantilla comments.php en tu tema. in C:\wamp\www\intro_wordpress\wp-includes\functions.php on line 3959
+
+	Esto nos indica que la función "comments_template()" ya no se usa, y que debemos crear una plantilla llamada "comments.php".
+
+	27) Creamos la plantilla "comments.php":
+
+		<h3>
+			<?php
+				comments_number(
+					'No hay comentarios aún',
+					'Hay un comentario publicado',
+					'Hay % comentarios'
+				);
+			?>
+		</h3>
+		<ol id="comments-list">
+			<?php wp_list_comments(); ?>
+		</ol>
+		<?php
+			paginate_comments_links();
+			comment_form();
+		?>
+
+	En la función "comments_number()", indicamos la frase que se mostrara cuando no hay comentarios, hay un solo comentario, o 2 o más comentarios. En este ultimo caso, el porcentaje ("%"), mostraria el numero total de comentarios.
+
+	La función "wp_list_comments()", muestra los comentarios.
+
+	La función "paginate_comments_links()", mostrara una paginación para los comentarios, similar a la que se hizo con la de los posts antiguos y recientes, en caso de haber más de 50 comentarios.
+
+	La función "comments_form()", muestra el formulario para poder escribir un comentario.
+
+	Nota: al recargar la pág. de detalle de la entrada, deberiamos ver la frace "No hay comentarios aún", si no se ve el formulario para dejar un comentario, vamos al admin, y al ver una entrada, en la esquina superior derecha, encontramos la opción "Opciónes de pantalla", en donde podremos activar las casillas "Comentarios".
+
+	Tambien podemos hacer una validación para que los mensajes, los comentarios, y la paginación de estos, solo se muestre si hay comentarios: 
+
+		<?php if( have_comments() ) { ?>
+			<h3>
+				<?php
+					comments_number(
+						__('No hay comentarios aún', 'apk'),
+						__('Hay un comentario publicado', 'apk'),
+						__('Hay % comentarios', 'apk')
+					);
+				?>
+			</h3>
+
+			<ol id="comments-list">
+				<?php wp_list_comments(); ?>
+			</ol>
+
+			<?php paginate_comments_links(); ?>
+
+		<?php } ?>
+
+		<?php comment_form(); ?>
+
+	Aquí tambien usamos la función de traducción para las fraces.
+	_______________________________________________________
+
+-->	[4.11]. "page.php":
+	_______________________________________________________
+
+	La plantilla "page.php", es la encargada de mostrar las pág. de Wordpress, normalmente utilizadas para mostrar contenido estatico como "Acerca de", "Contacto", "Sobre nosotros", etc.
+
+	28) Creamos el archivo "page.php":
+
+		<?php get_header(); ?>
+					
+					<section id="main-content">
+						
+					<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+
+						<article class="post">
+							<header class="post-title">
+								<h1><?php the_title(); ?></h1>
+							</header>
+							<div class="post-content">
+								<?php the_content(); ?>
+							</div>
+						</article>	<!-- article -->
+
+					<?php endwhile; endif; ?>
+						
+						
+					</section><!-- /#main-content -->
+					
+				<?php get_sidebar(); ?>
+					
+		<?php get_footer(); ?>
+
+	Este archivo es muy similar a "single.php", a diferencia que no mostramos la fecha ni el autor de la página, ni el area de comentarios (en este caso, ya que sí los podemos habilitar, de la misma forma que hicimos en "single.php").
+
+	_______________________________________________________
+
+-->	[4.12]. Plantillas de Página adicionales:
+	_______________________________________________________	
+
+	Las plantillas de página adicionales, nos sirven para darle un diseño diferente a una página estatica.
+
+	29) Para crear una plantilla de página adicional, con otro diseño, es necesario crear el archivo "template-fullwidth.php":
+
+		<?php 
+
+		/*
+		Template name: Ancho completo
+		*/
+
+		get_header(); ?>
+					
+					<section id="main-content" class="fullwidth">
+						
+					<?php if ( have_posts() ) : while ( have_posts() ) : the_post(); ?>
+						
+						<article class="post">
+							<header class="post-title">
+								<h1><?php the_title(); ?></h1>
+							</header>
+							<div class="post-content">
+								<?php the_content(); ?>
+							</div>
+						</article>	<!-- article -->
+
+					<?php endwhile; endif; ?>
+						
+					</section><!-- /#main-content -->
+					
+		<?php get_footer(); ?>
+
+	El nombre del archivo "template-fullwidth.php", no es necesario que tenga la palabra template, pero como buena practica es mejor ponerselo para reconocer que es una plantilla.
+
+	El comentario al principio del código, si es necesario, ya que con ese comentario Wordpress lo reconocera como una plantilla adicional. El nombre de la plantilla, indicada en el comentario, es el que saldrá en el admin de Wordpress.
+
+	30) Para usar la nueva plantilla, vamos al admin, "Paginas" (si  no existe una, crearla), "Atributos de la página", "Plantilla", y allí en vez de la "Plantilla predeterminada", escogemos "Ancho completo".
+	_______________________________________________________
+
+-->	[4.13]. Página de Inicio Estatica:
+	_______________________________________________________
+
+	Para tener una pagína de inicio, diferente a la que nos muestra todas las entradas, creamos la pág. que vamos a usar como inicio, luego otra pág. donde mostraremos las entradas, en donde como titulo, por ejemplo le daremos "Blog", pero en el contenido no le ponemos nada.
+
+	Luego vamos a "Ajustes", "Lectura", y en donde dice "Pagina frontal muestra", escogemos la opción "Una página estática (seleccionar abajo)".
+
+	En "Página de inicio", seleccionamos la pág. de Inicio, y en "Página de entradas", escogemos "Blog".
+
+	_______________________________________________________
+
+-->	[4.14]. Obtener Imagenes:
+	_______________________________________________________
+
+	Si en nuestro tema usamos imagenes de diseño, como por ejemplo el favicon de la pág. estas las podemos poner dentro de la carpeta de nuestro tema, en una carpeta llamada "img", y las podemos obtener con la función:
+
+		get_stylesheet_directory_uri()
+
+	Que obtiene la ruta a la carpeta en donde se encuentra nuestra hoja de estilos "style.css".
+
+		<link rel="shortcut icon" href="<?php echo get_stylesheet_directory_uri(); ?>/img/favicon.ico" type="image/x-icon" />
+
+	En este caso, utilizamos "echo", para imprimir esa ruta.
+
+	_______________________________________________________
+
+-->	[4.15]. Imagenes Destacadas:
+	_______________________________________________________
+
+	Para asignar una imagen destacada en cada entrada o articulo, primero añadimos el soporte a esta funcionalidad en el archivo "functions.php":
+
+		function amk_theme_features(){
+
+			add_theme_support('post-thumbnails');
+		}
+
+		// Ejecutamos la función y registra las características
+		add_action( 'after_setup_theme', 'amk_theme_features' );
+
+	Con esto veremos al crear una nueva entrada, una nueva opcion en la parte inferior derecha, que nos pemite subir una imagen con la entrada, o usar imagenes que ya se han subido a Wordpress.
+
+	Luego para que la imagen se vea con cada entrada, la incluimos en el loop:
+
+		<?php //Verifica si el post tiene una imágen destacada
+		if ( has_post_thumbnail() ) {
+
+			//Si tiene imágen destacada entonces carga la imagen en tamaño thumbnail (miniatura), y le añade la clase alignleft
+			the_post_thumbnail('thumbnail', array(
+				'class' => 'alignleft'
+			));
+		}?>
+
+	Nota: se pueden usar los tamaños, 'thumbnail', 'medium', 'large', 'full'.
+
+	the_post_thumbnail('thumbnail');	// Thumbnail (default 150px x 150px max)
+
+	the_post_thumbnail('medium');	// Medium resolution (default 300px x 300px max)
+
+	the_post_thumbnail('large');	// Large resolution (default 640px x 640px max)
+
+	the_post_thumbnail('full');	// Original image resolution (unmodified)
+
+	the_post_thumbnail( array(100,100) );	// Other resolutions
+	_______________________________________________________
+
+-->	[4.16]. CARGAR MENÚS:
+	_______________________________________________________
+
+	Vamos a crear un menú como el siguiente:
+
+		<div class="col-md-6">
+			<nav>
+				<ul class="menu nav nav-pills">
+					<li><a href="">Inicio</a></li>
+					<li><a href="">Acerca de</a></li>
+					<li><a href="">FranciscoAMK</a></li>
+					<li><a href="">Volver al tutorial</a></li>
+				</ul>
+			</nav>
+		</div>
+
+	Para eso, usaremos la función:
+
+		wp_nav_menu() 
+
+	Con esta función le indicámos a WordPress que en ese lugar vamos a cargar un menú, como por ejemplo en el header:
+
+		<div class="col-md-6">
+			<?php wp_nav_menu(array(
+				'theme_location'  => 'menu-principal',
+				'container'       => 'nav',
+				'items_wrap'      => '<ul id="%1$s" class="%2$s nav nav-pills">%3$s</ul>'
+				)); 
+			?>
+		</div>
+
+	Aquí indicamos lo siguiente:
+
+		- Vamos a cargar el menú que asignemos al área "menu-principal".
+
+		- El menú va a estar dentro de un elemento "nav".
+
+		- Los ítems estarán dentro de un elemento "ul" con la clase "nav nav-pills"
+
+	Para que la llamada al menú funcione, primero deberemos registrar el área de menú "menu-principal", en el archivo "functions.php":
+
+		//---------------------------------------------------------------------
+		// REGISTRAMOS EL MENU
+		//---------------------------------------------------------------------
+		 
+		register_nav_menus( array(
+			'menu-principal' => __('Area principal de navegación', 'amk')
+		) );
+
+	El texto "Area principal de navegación", es el que aparecera en el admin de Wordpress, en: "Apariencia" > "Menús", una vez creado el menú, en esa area, en "Opciones del Menú" aparece "Mostrar ubicación" aparecera un check con el texto "Area principal de navegación".
+
+	_______________________________________________________
+
+-->	[4.17]. CARGAR JavaScript:
+	_______________________________________________________
+
+	Para cargar archivos javascript haremos algo muy similar a lo que hicimos para cargar archivos CSS, pero esta vez con las funciones "wp_register_script" y "wp_enqueue_script".
+
+	La función "wp_register_script" recibe ciertos parámetros, muy similares a los que recibe "wp_register_style":
+
+		- Nombre: Un nombre para el script.
+
+		- URL: la dirección donde se encuentra el script.
+
+		- Dependencia: Si este script depende de otros para funcionar aquí añadimos su nombre.
+
+		- Versión: La versión de este script.
+
+		- Posición: Si se cargará en el pie de página (true) o en la cabecera del HTML (false).
+
+	Ejemplo:
+
+		//---------------------------------------------------------------------
+		// CARGANDO EL JAVASCRIPT DEL TEMA
+		//---------------------------------------------------------------------
+		//Creamos una función para cargar los scripts
+		function amk_theme_scripts() {
+
+			//Registramos el script de bootstrap
+			wp_register_script( 'bootstrap', get_stylesheet_directory_uri().'/js/bootstrap.min.js', array('jquery'), '3.3.7', true );
+
+			//Registramos el script personalizado del tema
+			wp_register_script( 'amk-scripts', get_stylesheet_directory_uri().'/js/amk-scripts.js', array( 'jquery', 'bootstrap' ), '2.1', true );
+
+			//Ahora cargamos el script del tema.Como declaramos dependendencia de 'jquery' y 'bootstrap', éstas cargaran de manera automática
+			wp_enqueue_script( 'amk-scripts' );
+		}
+
+		add_action( 'wp_enqueue_scripts', 'amk_theme_scripts' ); //Ejecutamos la función
+
+	Con estas líneas hemos registrado y cargado los archivos "bootstrap.min.js", "amk-scripts.js" (estos archivos estan en la carpeta "js", dentro de nuestro tema).
+
+	Y además estamos cargando la librería jQuery, ya que en ambos scripts declaramos dependencia, sin embargo podrás apreciar que no hemos registrado a jquery como un script, esto es así porque jQuery ya viene registrado al momento de instalar WordPress, por ello sólo basta con que declaremos dependencia y se cargará de manera automática.
+_______________________________________________________
+
+	[5]. COMENTARIOS DE DOCUMENTACIÓN:
+_______________________________________________________
+
+Como buena practica, deberiamos documentar todos los archivos que creemos, con el sighuiente código:
+
+	/**
+	 * Summary (no period for file headers)
+	 *
+	 * Description. (use period)
+	 *
+	 * @link URL
+	 *
+	 * @package WordPress
+	 * @subpackage Component
+	 * @since x.x.x (when the file was introduced)
+	 */
+
+Esto lo podemos revizar más a fondo en:
+
+	https://codex.wordpress.org/WordPress_Coding_Standards
+
+	https://make.wordpress.org/core/handbook/best-practices/inline-documentation-standards/php/#6-file-headers
+
+Por ejemplo, usando esta documentación en el archivo "header.php" quedaria:
+
+	<?php
+	/**
+	 * Archivo de cabecera
+	 *
+	 * Este archivo maneja el html del head y el header
+	 *
+	 * @author Ricardo Landínez Ospino
+	 * @package ryc-tema-base
+	 * @since 1.0
+	 *  
+	 */
+	?>

@@ -1,0 +1,885 @@
+	REACT
+_______________________________________________________
+
+INDICE:
+
+[1]. Crear Aplicación React
+    [1.1]. Herramientas
+[2]. Scaffolding
+[3]. Crear Aplicación Gif
+    [3.1]. Creando un componente
+    [3.2]. Estado de un componente
+        [3.2.1]. Settear el estado de un componente
+    [3.3]. Comunicación entre componentes
+    [3.4]. Giphy API
+        [3.4.1]. Usando La API
+    [3.5]. Hook "useEffect"
+    [3.6]. Refactorizando la APP
+    [3.7]. Hooks Personalizados
+_______________________________________________________
+
+	[1]. Crear Aplicación React:
+_______________________________________________________
+
+Para crear una aplicación de React, podemos hacerlo de las siguientes maneras:
+
+NOTA: es necesario tener previamente instalado NodeJs.
+
+1) Por medio de "Create React App", que configura el ambiente de desarrollo de forma que se puede usar las últimas características de Javascript, brindando una buena experiencia de desarrollo, y optimizando tu aplicación para producción. 
+
+- En consola escribimos el comando:
+
+    npx create-react-app nombreProyecto
+
+- Luego nos cambiamos a la carpeta del proyecto:
+
+    cd nombreProyecto
+
+- Corremos nuestra app con:
+
+    npm start
+
+Nota: para más info ir a:
+
+    https://es.reactjs.org/docs/create-a-new-react-app.html
+
+2) Por medio de "ViteJs", que es una nueva herramienta que nos permite generar la base de nuestro proyecto de una forma fácil, y sin tantos archivos extra, que por el momento no se necesitan. No solo sirve para React, sino también para otros frameworks.
+
+- En consola escribimos el comando:
+
+    npm create vite@latest
+
+Se nos pide que ingresemos un nombre de proyecto, seleccionemos un framework(en este caso seleccionamos React), luego seleccionamos si queremos crear el proyecto por "VanillaJs" o "TypeScript".
+
+- Luego nos cambiamos a la carpeta del proyecto:
+
+    cd nombreCarpeta
+
+- Instalamos las dependencias del proyecto creado con:
+
+    npm i
+
+- Finalmente ponemos a correr nuestro proyecto con:
+
+    npm run dev
+
+Nota: para más info. de Vite:
+
+    https://vitejs.dev/guide/
+_______________________________________________________
+
+	[1.1]. Herramientas:
+_______________________________________________________
+
+1) En "Visual Studio Code" podemos instalar la extensión:
+
+    VS Code ES7+ React/Redux/React-Native/JS snippets
+
+Esta extensión nos permite generar código base(snippets) para React, de una forma rápida.
+
+- Por ejemplo, al crear un componente, podemos escribir en nuestro archivo de componente:
+
+    rafc
+
+Al escribir esto y presionar el tabulador, se nos autocompleta el código. Esto nos crea el código inicial de un componente con exportación en constante("const"):
+
+    import React from 'react'
+
+    export const NombreComponente = () => {
+        return (
+            <div>NombreComponente</div>
+        )
+    }
+
+- También podemos usar:
+
+    rafce
+
+Que también nos crea el código base del componente exportándolo por "default", es decir que en ese archivo no existirán más exportaciones:
+
+    import React from 'react'
+
+    const NombreComponente = () => {
+        return (
+            <div>NombreComponente</div>
+        )
+    }
+
+    export default NombreComponente
+
+La diferencia principal entre "rafc" y "rafce", la vemos al momento de importar ese componente en otro archivo, con "rafc" al momento de importarlo, nos toca desestructurar ese componente:
+
+    import { NombreComponente } from './NombreComponente';
+
+Y con "rafce" no es necesaria la desestructuración:
+
+    import NombreComponente from './NombreComponente';
+
+Nota: Para ver documentación del snippet:
+
+    https://marketplace.visualstudio.com/items?itemName=dsznajder.es7-react-js-snippets
+
+    https://github.com/dsznajder/vscode-react-javascript-snippets/blob/HEAD/docs/Snippets.md
+
+2) En Google Chrome podemos instalar la extensión "React Developer Tools", que nos permite tener en el inspector de elementos, una pestaña extra donde podemos ver los componentes de React.
+
+_______________________________________________________
+
+	[2]. Scaffolding:
+_______________________________________________________
+
+El proyecto creado con "Vite" tendrá la siguiente estructura:
+
+    - src/  --> Carpeta de código fuente (código editable)
+        - App.css --> archivo de estilos de nuestro componente
+        - App.jsx --> componente
+        - main.jsx --> componente principal o padre, que renderiza el componente "App.jsx"
+        - index.html --> nuestro archivo principal HTML donde renderizamos los componentes.
+
+_______________________________________________________
+
+	[3]. Crear Aplicación Gif:
+_______________________________________________________
+
+Crearemos una aplicación, encargada de consumir una API de gifs, tendrá un input en donde buscaremos algún tema, y nos devolverá un listado de gifs que consume desde la API, al buscar un nuevo resultado, se mostrará encima de los resultados previamente obtenidos.
+
+1) Borramos los archivos que nos creó Vite, a excepción de "index.html" y "main.jsx".
+
+2) En el archivo "main.jsx" que es donde renderizamos nuestros componentes, debemos tener algo así:
+
+    import React from 'react'
+    import ReactDOM from 'react-dom/client'
+    
+
+    let root = document.getElementById('root');
+
+    ReactDOM.createRoot(root).render(
+        // <React.StrictMode>
+            <h1>Hola Mundo!!!</h1>
+        // </React.StrictMode>
+    )
+
+Nota: Acá podemos ver que comentamos el modo estricto de react. Para más info. de este modo:
+
+    https://es.reactjs.org/docs/strict-mode.html
+
+_______________________________________________________
+
+	[3.1]. Creando un componente:
+_______________________________________________________
+
+Los componentes son como las funciones de JavaScript. Aceptan entradas arbitrarias (llamadas “props”) y retornan elementos de React que describen lo que debe aparecer en la pantalla.
+
+1) Dentro de la carpeta "src/" creamos un archivo llamado "GifMainApp.jsx":
+
+    import React from 'react';
+
+    const GifMainApp = () => {
+        return (
+            <div className="container">Hola Gif App!!!</div>
+        );
+    }
+
+    export default GifMainApp
+
+"GifMainApp.jsx" será nuestro componente principal, el cual será también el contenedor de nuevos componentes, esto porque en "main.jsx" es mejor renderizar de a un solo componente.
+
+Todo el código que parece HTML es "JSX", y se recomienda envolverlo entre paréntesis para evitar errores por la inserción automática del punto y coma.
+
+Para darle clase a los elementos usamos "className", ya que "class" es una palabra reservada en JavaScript, y cualquier otro atributo de html que se le quiera asignar, se le pasa con camelCase.
+
+Otra regla de React, es que solo podemos retornar un solo elemento de React, por lo que si hacemos:
+
+    const GifMainApp = () => {
+        return (
+            <div className='container mt-5'> Hola a GifMainApp</div>
+            <hr></hr>
+        );
+    }
+
+Esto es un error, y para solucionarlo podemos envolver los elementos en un "div", si queremos controlar su clase:
+
+    return (
+        <div className='container'>
+            <div className='container mt-5'> Hola a GifMainApp</div>
+            <hr></hr>
+        </div>
+    );
+
+O tambien podemos usar una función de React "React.Fragment":
+
+    return (
+        <>
+            <div className='container mt-5'> Hola a GifMainApp</div>
+            <hr></hr>
+        </>
+    );
+
+Es lo mismo que:
+
+    return (
+        <React.Fragment>
+            <div className='container mt-5'> Hola a GifMainApp</div>
+            <hr></hr>
+        </React.Fragment>
+    );
+
+Nota: El "React Fragment" no genera ninguna etiqueta en el DOM.
+
+2) Debemos importar y renderizar nuestro componente en el archivo "main.jsx":
+
+    import React from 'react'
+    import ReactDOM from 'react-dom/client'
+    import GifMainApp from "./GifMainApp";
+    import './themes/main.css';
+
+    let root = document.getElementById('root');
+
+    ReactDOM.createRoot(root).render(
+    // <React.StrictMode>
+        <GifMainApp />
+    // </React.StrictMode>
+    )
+
+Nota: Comienza siempre los nombres de componentes con una letra mayúscula.
+
+_______________________________________________________
+
+	[3.2]. Estado de un componente:
+_______________________________________________________
+
+El estado les permite a los componentes de React cambiar su salida a lo largo del tiempo en respuesta a acciones del usuario, respuestas de red y cualquier otra cosa.
+
+1) Para la aplicación de Gifs, usaremos un estado, que funciona como un constructor, donde nos permite leer(get) y escribir(set) un valor, en este caso crearemos un array con categorías:
+
+    import React, {useState} from 'react';
+
+    const GifMainApp = () => {
+
+        const [categories, setCategories] = useState(['One Punch Man', 'Netflix']);
+
+        return (
+            <div className='container'>
+                <div className='container mt-5'> Hola a GifMainApp</div>
+                <hr></hr>
+                { categories }
+            </div>
+        );
+    }
+
+    export default GifMainApp
+
+Acá importamos "useState" de React, y creamos el estado "categories", con "setCategories" es el setter que nos permitirá cambiar el valor de "categories", en "useState" definimos el tipo de dato del estado, en este caso un array, y definimos dos valores.
+
+Para imprimir el valor del estado en el HTML, usamos las llaves "{}", que nos permiten insertar una expresión JavaScript.
+
+2) Dentro de las llaves podemos usar cualquier expresión JavaScript y método, por ejemplo, vamos a usar el método de los arrays ".map()" para crear otro array:
+
+     <ol>
+        {
+            categories.map((categoria)=>{
+                return (
+                    <li key={categoria}>
+                        <span>{categoria}</span>
+                    </li>
+                );
+            })
+        }
+    </ol>
+
+Aquí por cada elemento en el array "categories", devolvemos un "li" con un "span" que muestra la categoría.
+
+Dentro del "ol" estamos creando contenido dinámico (se va creando según los ítems del array), por lo que es necesario añadirles el parámetro "key", que es como un "id" para cada elemento en el virtual Dom de React, si no hacemos esto, se genera un error.
+
+_______________________________________________________
+
+	[3.2.1]. Settear el estado de un componente:
+_______________________________________________________
+
+Para settear el estado del componente, vamos a crear un nuevo elemento "button", que estará escuchando el evento click, y añadirá un nuevo valor al array:
+
+
+    const addCategory = () => {
+        console.log("Click!!!");
+        setCategories(['Dragon Ball Z', ...categories]);
+    }
+
+    return (
+        <div className='container'>
+            <div className='container mt-5'> Hola a GifMainApp</div>
+            <hr></hr>
+
+            <button
+                className='btn btn-info'
+                onClick={addCategory}
+            >Añadir categoria</button>
+
+        ...
+    );
+
+Acá en "setCategories", le pasamos un array, en donde su primer elemento es el nuevo valor del array, y como segundo elemento, usamos el operador spread(...), el cual hace una copia de lo que tenemos en el array, de esta forma creamos un nuevo array, en donde su primer elemento es el nuevo valor, y los valores antiguos continuarían desde la posición 1 del array.
+
+Cuando le damos click al botón, react automáticamente nos imprime en el DOM el nuevo ítem.
+
+Nota: al volver a hacer click, se genera otro ítem igual y en consola nos sale un error, ya que estamos generando contenido dinámico con el mismo identificador("key").
+
+_______________________________________________________
+
+Creamos y usamos el estado de un componente:
+
+1) Ahora creamos una carpeta llamada "components/", en donde crearemos los componentes que llamaremos en el archivo "GifMainApp.jsx".
+
+2) Creamos un componente llamado "AddGif.jsx":
+
+    import React from 'react'
+
+    const AddGif = () => {
+        return (
+            <input 
+                type="text"
+                placeholder="Buscar gifs"
+            />
+        );
+    }
+
+    export default AddGif
+
+3) Llamamos nuestro componente en el archivo "GifMainApp.jsx":
+
+    import AddGif from './components/AddGif';
+
+    ...
+
+    <AddGif />
+
+Nota 1: como el componente no tiene otros elementos o componentes por dentro, podemos auto cerrarlo, en vez de:
+
+    <AddGif></AddGif>
+
+Nota 2: Para nombrar los componentes se usa notación "CamelCase" y "Capitalize"(cada primera letra de palabra en mayúsculas).
+
+4) En el archivo "AddGif", creamos el estado para manejar el valor escrito en el "input":
+
+    import { useState } from 'react'
+
+    const AddGif = () => {
+
+        const [inputValue, setInputValue] = useState('')
+
+        const onInputChange = ({target}) => {
+            setInputValue(target.value)
+            console.log(target.value);
+        };
+
+        return (
+            <input 
+                type="text"
+                placeholder="Buscar gifs"
+                value={inputValue}
+                onChange={onInputChange}
+            />
+        );
+    }
+
+    export default AddGif
+
+Primero creamos el estado para manejar el valor del input, en este caso es "inputValue" y "setInputValue" para poder cambiar su valor, como estado inicial es un string vacío ''.
+
+Para que el "input" no sea un campo de solo lectura, ni nos genere un "warning" en consola, es necesario manejar el evento "change" del input, que en este caso llamara la función de flecha "onInputChange". Está función recibe como parámetro el evento(evt), del cual podemos obtener el valor del input, a través de "evt.target.value". Aquí usamos desestructuración("{target}") en "evt", para obtener "target" de una vez.
+
+Luego con "setInputValue" cambiamos el valor del input.
+
+_______________________________________________________
+
+	[3.3]. Comunicación entre componentes:
+_______________________________________________________
+
+Podemos enviar datos de un componente padre a un componente hijo, a través de propiedades, de la siguiente manera:
+
+1) Enviamos un nuevo valor "title" desde el componente padre "GifMainApp":
+
+    <AddGif 
+        title="Algún texto"
+    />
+
+2) Podemos obtener ese valor en el componente hijo mediante "props":
+
+    const AddGif = (props) => {
+
+        console.log(props);
+
+Recordemos que podemos desestructurar "props", para acceder directamente a los valores enviados:
+
+    const AddGif = ({title}) => {
+
+        console.log(title);
+_______________________________________________________
+
+Comunicamos el componente padre "GifMainApp" con el componente hijo "AddGif":
+
+1) En el componente "AddGif", creamos un nuevo método encargado de manejar el evento submit del formulario:
+
+    const onSubmitForm = (evt) => {
+        evt.preventDefault();
+        console.log('Valor que voy a enviar ', inputValue)
+        setInputValue('');
+    };
+
+    return (
+        <form onSubmit={onSubmitForm} >
+            <input
+                type="text"
+                placeholder='Buscar Gifs'
+                value={inputValue}
+                onChange={onInputChange}
+            />
+        </form>
+    );
+
+Creamos la etiqueta "form", la cual maneja el evento "onSubmit", llamando a "onSubmitForm", en donde prevenimos el comportamiento por defecto, imprimimos en consola el valor escrito en el input, y borramos lo escrito en el input.
+
+2) En el componente padre "GifMainApp", modificamos el método "addCategory":
+
+    const addCategory = (inputVal) => {
+        console.log(inputVal);
+        // ... operador spread, hace una copia de lo que tenemos en el array
+        setCategories([inputVal, ...categories]);
+    }
+
+    ...
+
+    <AddGif 
+        onAddCategory={addCategory}
+    />
+
+Ahora la función "addCategory", recibe como parámetro "inputVal", que es el valor del input que se le pasara desde el componente hijo.
+
+Luego en el llamado del componente hijo "AddGif", creamos una propiedad llamada "onAddCategory", cuyo valor será la función "addCategory".
+
+3) En el componente hijo "AddGif", desestructuramos "props", obteniendo la función del componente padre:
+
+    export const AddGif = ({onAddCategory}) => {
+
+        ...
+
+        const onSubmitForm = (evt) => {
+            evt.preventDefault();
+            onAddCategory(inputValue);
+            console.log('Valor que voy a enviar ', inputValue)
+            setInputValue('');
+        };
+
+Aquí en la función encargada de manejar el evento submit del formulario, usamos la función del componente padre "onAddCategory" y le pasamos el valor de lo escrito en el input. De esta forma el componente hijo recibe una función del componente padre, y esa función le permite settear un valor en el estado del componente padre.
+
+4) Finalmente, hacemos unas validaciones en el archivo "AddGif.jsx":
+
+    const onSubmitForm = (evt) => {
+        evt.preventDefault();
+        if(inputValue.trim().length <= 1) return;
+        onAddCategory(inputValue);
+        console.log('Valor que voy a enviar ', inputValue)
+        setInputValue('');
+    };
+
+Acá con la función para strings ".trim()" eliminamos los espacios en blanco, y con ".length", obtenemos la longitud del string, entonces si escriben espacios, o es un solo carácter, retornamos y no se envía el valor del input al componente padre.
+
+5) Hacemos una validación en el archivo "GifMainApp.jsx":
+
+    const addCategory = (inputVal) => {
+        console.log(inputVal);
+        if(categories.includes(inputVal)) return;
+        setCategories([inputVal, ...categories]);
+    }
+
+En este caso, usamos el método de strings "includes()" para verificar que, en el array de categorías, no exista ya el valor escrito en el input, si ya existe retornamos y no se añade al array.
+_______________________________________________________
+
+	[3.4]. Giphy API:
+_______________________________________________________
+
+1) Vamos a crear una cuenta de "Giphy", que nos proveerá de gifs y stickers. Para hacer esto vamos a:
+
+    https://developers.giphy.com
+
+2) Una vez creada la cuenta, damos click en el botón "Create an App" y seleccionamos API.
+
+3) Allí damos un nombre y descripción de nuestra aplicación, y generamos un API key, la cual será requerida para hacer las peticiones al API.
+
+Nota: En nuestro PC podemos instalar el cliente Postman, para verificar las peticiones que hacemos, o en Visual Studio Code, podemos instalar la extensión "Thunder Client"
+
+4) Para la documentación del API, podemos ir a:
+
+    https://developers.giphy.com/docs/api/endpoint#search
+
+En nuestro caso haremos una consulta a través del método "GET" a la siguiente url:
+
+    https://api.giphy.com/v1/gifs/search
+
+Luego pasaremos los siguientes parametros:
+
+    api_key=iTjs1Bpy4hfGS5Xgv1CZVoXInrrP2Xhm
+    limit=20
+    q=Los simpsons
+
+El "api_key" es el generado en la aplicación Giphy. "limit" klo usamos para limitar el número de gifs que nos devuelve, en este caso lo limitamos a 20. "q" hace referencia al query, o la consulta, en este caso pasamos "Los simpsons", para probar en postman, pero lo ideal es pasarle lo que escribimos en el input de la aplicación que estamos desarrollando.
+
+La url quedaria algo así:
+
+    https://api.giphy.com/v1/gifs/search?api_key=iTjs1Bpy4hfGS5Xgv1CZVoXInrrP2Xhm&limit=20&q=Los simpsons
+
+_______________________________________________________
+
+	[3.4.1]. Usando La API:
+_______________________________________________________
+
+Vamos a hacer uso del API, usando el API fetch de JavaScript.
+
+1) Creamos un nuevo componente llamado "GifGrid.jsx":
+
+    import React from 'react' 
+
+    const GifGrid = ({ categoria }) => {
+
+        return (
+            <>
+                <h2>{categoria}</h2>
+            </>
+        );
+    }
+
+    export default GifGrid
+
+2) Renderizamos el nuevo componente en "GifMainApp.jsx":
+
+    import GifGrid from './components/GifGrid';
+
+    ...
+
+    <ol>
+    {
+        categories.map((categoria)=>{
+            return (
+                <GifGrid 
+                    key={categoria}    
+                    categoria={categoria}
+                />
+            );
+        })
+    }
+    </ol>
+
+3) En el archivo "GifGrid.jsx", hacemos uso del API:
+
+    import React from 'react'
+
+    // Peticion HTTP por medio de fetchAPI
+    const getGifs = async (categoria) => {
+        const urlEndpoint = `https://api.giphy.com/v1/gifs/search?api_key=iTjs1Bpy4hfGS5Xgv1CZVoXInrrP2Xhm&q=${ encodeURI(categoria) }&limit=20`;
+
+        const respuesta = await fetch(urlEndpoint);
+
+        const {data} = await respuesta.json();
+
+        const gifs = data.map((gif) => {
+            return {
+                id: gif.id,
+                title: gif.title,
+                url: gif.images.downsized_medium.url
+            }
+        });
+
+        console.log(gifs);
+        
+        return gifs;
+    }
+
+    const GifGrid = ({ categoria }) => {
+
+        getGifs(categoria);
+
+        return (
+            <>
+                <h2>{categoria}</h2>
+            </>
+        );
+    }
+
+    export default GifGrid
+
+Acá, hacemos uso del fetchAPI de JavaScript, creamos la función asíncrona "getGifs", adentro de la función definimos la "urlEndpoint", que corresponde a la url a donde se le hace la petición al API, allí usamos "encodeURI()", para codificar la categoría escrita en el input, con eso codificamos tildes, espacios y otros caracteres especiales para poderlos usar de forma segura en la url.
+
+Luego con "await" y "fetch" esperamos y resolvemos la promesa. La respuesta que obtenemos la analizamos como JSON(".json()" https://developer.mozilla.org/en-US/docs/Web/API/Response/json), y desestructuramos "data".
+
+Mapeamos esa "data", generando un nuevo array, ya que, de toda la información obtenido en la API, solo necesitaremos el "id", el "title", y la "url" de la imagen del gif.
+
+Por último, retornamos esos resultados.
+
+Nota 1: En nuestro componente estamos llamando a "getGifs()", pero esto es una mala forma de hacerlo, ya que, si reutilizamos nuestro componente, cada vez que lo renderizamos, estaría haciendo la petición al API, y podría generarnos error y otros problemas, para solucionar esto debemos usar el hook "useEffect".
+
+Nota 2: La petición a nuestra API, la estamos haciendo en nuestro archivo de componente, pero es una mala práctica, y se debe hacer de forma diferente.
+_______________________________________________________
+
+	[3.5]. Hook "useEffect":
+_______________________________________________________
+
+El hook de efecto, nos permite ejecutar algunas funciones después del renderizado de los componentes; algunas de estas funciones pueden ser: peticiones de datos, establecimiento de suscripciones y actualizaciones manuales del DOM en componentes de React.
+
+1) Para usar "useEffect", debemos importarlo:
+
+    import React, {useEffect} from 'react'
+
+    ...
+
+    const GifGrid = ({ categoria }) => {
+
+        useEffect(() => {
+        first
+        
+        return () => {
+            second
+        }
+        }, [third]);
+
+"useEffect", tiene tres partes:
+
+    - "first" --> que es lo que va a pasar.
+    - "second" --> aquí se define que se va a desmontar o que se va a dejar en su estado inicial, todo el "return" es opcional.
+    - "third" --> se definen las dependencias del "useEffect".
+
+Ejemplo:
+
+    const [varBooleana, setVarBooleana] = useState(false);
+
+    useEffect(() => {
+        setVarBooleana(false);
+        
+        return () => {
+            setVarBooleana(false);
+        }
+    }, []);
+
+Acá tenemos como estado inicial una variable "varBooleana" con un estado inicial de "false".
+
+Lo que queremos que pase en el "useEffect", es que se settee en "false".
+
+En el "return" definimos que cuando no aparezca en la pantalla y se desmonte el componente, se settea el estado a "false", es decir, lo regresa a su estado inicial.
+
+Al dejar el array de dependencias vacío "[]", hacemos que el "useEffect" se ejecute solo una vez.
+
+Si le pasamos la variable de estado:
+
+    return () => {
+            setVarBooleana(false);
+        }
+    }, [varBooleana]);
+
+Hacemos que el "useEffect" solo se ejecute dependiendo del estado de "varBooleana".
+
+2) En nuestro archivo "GifGrid.jsx", creamos un estado para usarlo en conjunto con el efecto:
+
+    import React, { useState, useEffect} from 'react'
+
+    ...
+
+    const GifGrid = ({ categoria }) => {
+
+    const [gifs, setGifs] = useState([]);
+
+
+    useEffect(() => {
+        getGifs(categoria).then((gifs) => {
+            setGifs(gifs);
+            console.log('Gifs: ',gifs);
+        });
+    }, []);
+
+Recordemos que "getGifs()" es una promesa, entonces la resolvemos con "then", recibimos los gifs de la petición al API, y los añadimos en el estado("setGifs()").
+
+En consola se imprimiría 2 veces los gifs, ya que se renderizo o monto el componente 2 veces (el array de ['One Punch Man', 'Netflix'] en "GifMainApp"), si no queremos que salgan, dejamos este array como vacío.
+
+3) Ahora renderizamos lo obtenido gracias al estado:
+
+    const GifGrid = ({ categoria }) => {
+
+        const [gifs, setGifs] = useState([]);
+
+        useEffect(() => {
+            getGifs(categoria).then((gifs) => {
+                setGifs(gifs);
+            });
+        }, []);
+
+        return (
+            <>
+                {
+                    gifs.map((gif) => (
+                        <div key={gif.id}>
+                            <h3>{gif.title}</h3>
+                            <span>{gif.id}</span>
+                            <img src={gif.url} alt={gif.title} />
+                        </div>
+                    ))
+                }
+            </>
+        );
+    }
+
+    export default GifGrid
+
+_______________________________________________________
+
+	[3.6]. Refactorizando la APP:
+_______________________________________________________
+
+Un componente debe hacer una sola funcionalidad, así, por buenas prácticas, sacaremos la funcionalidad encargada de hacer la petición a la API, de nuestro componente "GifGrid.jsx".
+
+1) Dentro de la carpeta "src/", creamos una carpeta llamada "actions/" o "helpers/".
+
+2) Dentro de "actions/", creamos un archivo "getGifs.js":
+
+    // Peticion HTTP por medio de fetchAPI
+    export const getGifs = async (categoria) => {
+        const urlEndpoint = `https://api.giphy.com/v1/gifs/search?api_key=iTjs1Bpy4hfGS5Xgv1CZVoXInrrP2Xhm&q=${encodeURI(categoria)}&limit=20`;
+
+        const respuesta = await fetch(urlEndpoint);
+
+        const { data } = await respuesta.json();
+
+        const gifs = data.map((gif) => {
+            return {
+                id: gif.id,
+                title: gif.title,
+                url: gif.images.downsized_medium.url
+            }
+        });
+
+        return gifs;
+    }
+
+Aquí como código adicional, únicamente se añade el "export".
+
+3) En el archivo "GifGrid.jsx", importamos el nuevo archivo:
+
+    import { getGifs } from '../actions/getGifs';
+
+4) Ahora creamos un nuevo componente llamado "GifItem.jsx":
+
+    import React from 'react'
+
+    const GifItem = ({id, title, url}) => {
+    return (
+        <div key={id} className='card'>
+            <img src={url} alt={title} title={title} />
+            <span>{title}</span>
+        </div>
+    )
+    }
+
+    export default GifItem
+
+5) renderizamos el nuevo componente dentro de "GifGrid.jsx":
+
+    import GifItem from "./GifItem";
+
+    ...
+
+    return (
+        <>
+            <h3>{categoria}</h3>
+            <div className='card-grid'>
+                {
+                    gifs.map((gif) => (
+                    <GifItem
+                            key={gif.id}
+                            {...gif}
+                    /> 
+                    ))
+                }
+            </div>
+        </>
+    );
+
+_______________________________________________________
+
+	[3.7]. Hooks Personalizados:
+_______________________________________________________
+
+Un Hook personalizado es una función de JavaScript cuyo nombre comienza con "use" y que puede llamar a otros Hooks (por ejemplo "useState" y "useEffect").
+
+Construir tus propios Hooks te permite extraer la lógica del componente en funciones reutilizables.
+
+1) Creamos en "src/" una nueva carpeta llamada "hooks".
+
+2) Creamos un archivo llamado "useFetchGifs.jsx":
+
+    import React, { useEffect, useState } from 'react'
+    import { getGifs } from '../actions/getGifs';
+
+    export const useFetchGifs = (categoria) => {
+        const [gifsState, setGifsState] = useState({
+            gifs: [],
+            loading: true,
+        });
+
+        useEffect(() => {
+            getGifs(categoria).then((gifs) => {
+                setGifsState({
+                    gifs: gifs,
+                    loading: false,
+                });
+            });
+        }, [ categoria ]);
+
+        return gifsState;
+    }
+
+En este archivo, extrajimos un poco la lógica que teníamos en "GifGrid.jsx".
+
+Como estamos creando un estado y usando un efecto (hooks), es necesario importarlos.
+
+En el estado, cambiamos de "gifs" a "gifsState", que ahora en vez de tener como estado inicial un array vacío, será un objeto con dos propiedades: "gifs", que sustituye el array anterior de gifs, y "loading" que nos permitirá cargar un "loader" o pantalla de "cargando", mientras se hace la petición, su valor inicial es "false".
+
+Como este "hook" personalizado es una función, y el efecto depende de la categoría, "useFetchGifs" recibirá esa categoría como parámetro.
+
+En "useEffect", ahora agregamos su tercera opción, la dependencia a una "categoria", esto hará que se ejecute el efecto cada vez que se cambie de categoría. En este caso hace la petición a través de la fetchAPI, settea los gifs obtenidos, y settea "loading" en "false" para indicar que ya se cargaron los gifs.
+
+3) Ahora nuestro archivo "GifGrid.jsx" quedaría:
+
+    import React, { useState, useEffect } from 'react'
+    import { useFetchGifs } from '../hooks/useFetchGifs';
+    import GifItem from "./GifItem";
+
+    const GifGrid = ({ categoria }) => {
+
+        const {gifs, loading} = useFetchGifs(categoria);
+
+        return (
+            <>
+                {
+                    !loading ? (
+                        <>
+                            <h3>{categoria}</h3>
+                            <div className='card-grid'>
+                                {
+                                    gifs.map((gif) => (
+                                    <GifItem
+                                            key={gif.id}
+                                            {...gif}
+                                    /> 
+                                    ))
+                                }
+                            </div>
+                        </>
+                    ) : (
+                        <h3 className='text-center container'>Loading...</h3>
+                    )
+                }
+            </>
+        );
+    }
+
+    export default GifGrid
+
+Vemos que se quitó la lógica que ahora usamos en nuestro "hook" personalizado, haciendo que este componente este más limpio y entendible.
+
+Desestructuramos "useFetchGifs" en "gifs" y "loading", y luego usando el operador ternario, preguntamos, si "loading" es "false", me muestra el título de la categoría buscada y la cuadricula con los gifs, si no, vemos el mensaje de "Loading...". 

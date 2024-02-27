@@ -1,0 +1,249 @@
+______________________________________________________
+			
+
+			TIPS PARA DAR ESTILOS:
+
+______________________________________________________			
+
+REGLAS DE CODIFICACIÓN EN CSS
+
+	1. Todos los atributos en orden alfabético
+	2. Orden de estilos:
+		*. pre-render -->@
+		1. etiquetas  -->body
+		2. IDs        -->#id
+		3. Clases     -->.clase
+	3. Orden alfabético todos los estilos (en sublime tecla "F9")
+	4. Identar y hacer código LINDO
+
+______________________________________________________
+
+	-Color o imagen del fondo (background).
+		
+		Si se quiere especificar una imagen como fondo se puede usar:
+			background-image:url("");
+
+		Para que la imagen de fondo no se repita:
+			background-repeat: no-repeat;
+
+		Para centrar (Horizontal y vertical) la imagen de fondo:
+			background-position: center;
+
+		Para que la imagen de fondo ocupe el 100% del ancho y el alto del elemento:
+			background-size: cover; --> "cover=100%"
+______________________________________________________				
+
+	-Color de Texto (color).
+______________________________________________________	
+
+	-Decoración del texto (text-decoration).
+______________________________________________________	
+
+	-Si tenemos varios items como por ejemplo una lista (ul-li), y cada item se muestra en bloque(uno debajo del otro), pero en diseño se ven en línea(uno al lado del otro), podemos usar en estos items la propiedad "display:inline-block".
+
+		Si tenemos los mismos items, pero  la situación inversa, es decir se muestran como elementos en línea, y queremos que se muestren uno debajo del otro, basta con añadir la propiedad: "display:block".
+
+		Los elementos "inline-block", tienen una propiedad para centrarlos verticalmente:
+			vertical-align: top; --> tiene mas valores de alineación.
+
+	-Cuando le damos la propiedad: "display:inline-block" a algunos elementos para que se muestren en línea, pero estos quedan separados con un pequeño espacio (que no se quita con padding:0 ni margin:0), este espacio lo quitamos quitandole el font-size a su contenedor:
+	
+		.Contenedor{
+			font-size:0;		
+		}
+
+	Y luego al item le damos nuevamente el font-size correspondiente en rem, para que tome el tamaño de fuente del padre del contenedor, o elemento raíz con font-size asignado:
+
+		.item{
+			font-size:1rem;
+		}			
+______________________________________________________			
+
+	-Si se quiere centrar un elemento texto, o una imagen, o un elemento "inline-block", se puede centrar con la propiedad de centrado de texto: "text-align:center" pero aplicada a su elemento padre.
+______________________________________________________	
+
+	-Si se quiere centrar un elemento "display:block", que tenga un ancho, se usa la propiedad:
+		margin:0 auto;
+______________________________________________________		
+
+	-Al añadir altos o anchos de algun componente, como por ejemplo el menu de navegación, que mide 60px, podemos asignarle una medida absoluta (height:60px) o relativa (height:1em).
+
+		Es mejor asignar tamaños con unidades relativas.
+
+		1em --> equivale a la medida de la fuente asignada más cercana.
+			
+			Por esto es conveniente inicializar el tamaño de fuente en la hoja de estilo de "normalize" con la propiedad "font-size".
+
+			Esta propiedad se la podemos asignar al selector del body o html. Es preferible html, porque es la primera etiqueta de la pág.
+
+			Ej: html {
+					font-size:16px;
+				} 
+
+				--> en este ejemplo: "1em = 16px"
+
+		Ahora, como en el ejemplo, el menu de navegación mide 60px de alto, entonces hacemos el calculo así:  
+
+			60px/16px = 3.75em
+
+		Y asignamos al componente ( en este caso el menu de navegacion) la propiedad del ancho:
+
+			height:3.75em; --> equivale a 60px de alto
+______________________________________________________			
+
+	-Si se quiere centrar un elemento de texto verticalmente (situación que se puede presentar porque el alto del elemento padre es mayor que el alto del texto), se puede aplicar la propiedad: "line-height", y como valor se le asigna el alto del elemento padre.
+
+		NOTA: esta alineación vertical solo sirve si es una sola línea de texto.
+
+		Ej: .ElementoPadre{height:3.75em;}
+
+			.ElementoPadre-textoHijo{line-height:3.75em;}
+______________________________________________________			
+
+	-Para hacer un menu que siempre este visible (aún cuando se hace scroll) y que además ocupe todo el ancho de la pantalla podemos asignarle las propiedades:
+		position:fixed;
+		left:0;
+		rigth:0;
+
+		NOTA: "position:fixed" rompe el modelo de cajas (solapamiento).
+
+		Si queremos que el menú este bien arriba de la pantalla, le agregamos la propiedad:
+			top:0;
+
+		Si rompemos el modelo de cajas y hay solapamiento, (el menú esta encima del siguiente componente, que puede ser el header), podemos solucionar ese solapamiento asignandole un margen superior al header, que tenga el mismo alto del menu.
+______________________________________________________
+
+	-Si al posicionar un elemento, este pierde alguna propiedad, como por ejemplo el alineamiento vertical, es necesario utilizar el inspector de elementos del navegador, y revisar si el mismo elemento, o algun elemento padre tiene un tipo de "margin" o "padding" y eliminarlo (margin:0).
+______________________________________________________	
+
+	-Si algun elemento tiene algun tipo de borde usamos la propiedad:
+		border: 5px solid white;
+
+		Si adicionalemnte se quiere que tenga bordes redondeados se usa:
+			border-radius:esquinaSupIzq esquinaSupDer esquinaInfDer esquinaInfIzq;
+
+		Si se indican diferentes valores para cada esquina, se puede tener una forma iregular, como por ejemplo la de una hoja:
+			border-radius:10px 100px 10px 100px;
+
+		Esta propiedad es muy util para hacer que una imagen cuadrada se vea redonda y con borde:
+			border-radius:50%;	
+______________________________________________________
+
+"overflow:hidden" --> sirve para que una caja contenedora, siga encerrando, o conteniendo los elementos que sean hijos, y que tengan una posición flotante (float).
+______________________________________________________
+
+Si Tenemos, por ejemplo 3 elementos en la pág. y estos se deben mostrar en la misma línea, y por cuestiones de diseño, el primero esta a la izquierda ("float:left"), el segundo en el centro, y el tercero a la derecha de la página, al darle la propiedad:
+	"float: right;"
+
+Al ultimo elemento, este se posiciona a la derecha, pero no en la misma línea que los otros elementos, por lo que hay que posicionarlo de forma absoluta hacia la derecha:
+
+	position:absolute;	
+	top: 0;
+	right: 0; 
+
+Pero para que sirva bien ese posicionamiento, es necesario posicionar su elemento contenedor (elemento padre de los 3 elementos), con relative.
+
+	-Si tambien ese elemento tiene algun tipo de margenes exteriores (margin) o interiores (padding), se asignan con estas propiedades y no en top o left.
+______________________________________________________
+
+Para Menús:
+
+	-Si en una caja, tenemos que el primer elemento es un ul, y la caja no tiene padding, entonces CSS añade un margin y un padding que se sale de la caja, por lo que es necesario quitarle el margin y padding al elemento ul.
+
+		.MainMenu-list{
+			padding: 0;
+			margin: 0;
+		}
+
+	A cada botón del menu (elemento li), los ponemos inline-block, para que se ubiquen en la misma línea, y les damos un margen derecho para que tengan una separación entre elementos:	
+
+		.MainMenu-item{
+			display: inline-block;
+			margin: 0 1em 0 0;
+		}
+
+	Si los botones no tienen la linea inferior de los enlaces se la quitamos, y les damos un padding superior e inferior de la mitad del margen de su elemento padre (li), esto para que se amplie la región "clickeable", la cual podemos ver, si por ejemplo aplicamos un color de fondo rojo (esto si el contenedor del ul, tiene un color diferente al rojo):	
+
+	.MainMenu-link{		
+		text-decoration: none;
+		display: block;
+		padding: 0.5em 0;
+		background: red;	
+	}
+______________________________________________________
+
+Para una sombra de un texto usamos la propiedad:
+	text-shadow:color desplazamientoX desplazamientoY difuminación;
+
+Ej: text-shadow:rgba(0,0,0,0.5) 5px 5px 5px;
+
+Si necesitamos usar una propiedad similar, pero para la sombra de una caja usamos:
+
+	box-shadow
+
+______________________________________________________
+
+/*Con estos estilos agregamos la cajita gris tipo bocadillo de comic*/
+.Contenido-itemComentarios
+{
+	background: #878787;
+	border-radius: 4px;
+	color: white;
+	margin: 0 0 0 2em;
+	padding: 4px;
+	position: relative;
+	text-decoration: none;
+}
+
+/*
+	Agregandole a la caja gris con bordes redondeados, un contenido vacio 
+	(content:"") despues de la caja (:after), y aplicandole bordes superior 
+	del color de la caja, y bordes laterales (der/izq) transparentes se crea 
+	el efecto de un triangulo 
+*/
+
+.Contenido-itemComentarios:after
+{
+	border-left: 5px solid transparent;
+	/*border-right: 5px solid transparent;*/
+	border-top: 5px solid #878787;
+	content: "";
+	left: 10px;
+	position: absolute;
+	top: 100%;
+}
+
+- Si por ejemplo necesitamos unicamente un triangulo, y este va a un lado de un texto u otro elemento, para que no se solape encima le damos un display: inline-block:
+
+	.item:after
+	{
+		content ""
+		border-left 7px solid transparent
+		border-right 7px solid transparent		
+		border-top 9px solid gris_claro		
+		display inline-block
+	}
+
+	/*
+		"Border-Top" controla el ancho del triangulo
+		La suma de "Border-left" y "Border-right" nos indican el ancho del triangulo
+	*/
+______________________________________________________
+
+- Si alguna vez tenemos elementos que se muestran encima de una imagen, en la parte inferior de esta, pero estos contenidos se salen de la imagen, solo se le quita el alineamiento vertical por defecto de la imagen (vertical-align:baseline) y lo cambiamos por:
+
+	img{
+		vertical-align: top;	
+	}
+
+	Los estilos que tienen los elementos que estan sobre la imagen, pueden estar posicionados así:
+
+	.Contenidos_Sobre_imagen{
+		position: absolute
+		bottom: 0;
+		left: 0;
+		right: 0;
+	}	
+
+La imagen se sigue viendo igual, pero el contenido que esta sobre esta ya no se desborda.		
+	

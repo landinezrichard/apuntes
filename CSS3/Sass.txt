@@ -1,0 +1,400 @@
+
+	SASS:
+_______________________________________________________
+
+INDICE:
+
+[1]. Introducción
+[2]. Instalación
+[3]. Comentarios, Variables y Compilación
+[4]. Interpolación
+[5]. Anidación
+[6]. Módulos/Parciales
+[7]. Valores es Sass Mapas
+[8]. Mixins/Funciones
+[9]. Herencia/Extend
+
+_______________________________________________________
+
+	[1]. Introducción:
+_______________________________________________________
+
+Sass (Syntactically Awesome StyleSheets), es un pre procesador de CSS que añade características muy potentes y elegantes a este lenguaje de estilos. Sass permite el uso de variables, reglas CSS anidadas, mixins, importación de hojas de estilos y muchas otras características, al tiempo que mantiene la compatibilidad con CSS.
+
+	https://sass-lang.com/
+
+	https://uniwebsidad.com/libros/sass
+
+	https://www.w3schools.com/sass/default.asp
+_______________________________________________________
+
+	[2]. Instalación:
+_______________________________________________________
+
+1) Para instalar Sass, primero instalamos Node:
+
+	https://nodejs.org/es/
+
+2) Luego en consola (windows cmd o powershell), escribimos el comando:
+
+	node -v
+
+Esto nos mostrara la version de Node instalada. Para ver la versión de "npm" instalada usamos:
+
+	npm -v
+
+3) Ahora instalamos Sass con:
+
+	npm install -g sass
+
+4) En el directorio del proyecto, tener el archivo "index.html" y le agregamos el link a un archivo de "estilos.css" (que se creará despues al compilar Sass).
+
+5) En el mismo directorio crear un archivo:
+
+	estilos.scss
+
+Nota: para que Sublime Text le de colores y sintaxis a los archivos "*.scss" y "*.sass", vamos a:
+
+	Menu Preferences > Package Control > Install Package
+
+En el desplegable buscamos por "sass" y instalamos el primer resultado que nos aparece en la lista: Sass
+
+	https://packagecontrol.io/packages/Sass
+
+_______________________________________________________
+
+	[3]. Comentarios, Variables y Compilación:
+_______________________________________________________
+
+En el archivo "estilos.scss", tenemos el siguiente codigo:
+
+	/* definir Variables */
+
+	$fuente-tipica: sans-serif, Helvetica, Arial;
+	$color-fondo: #ccc;
+
+	body{
+		background-color: $color-fondo; //usamos el color de fondo
+	}
+
+	h1{
+		font-family: $fuente-tipica;
+	}
+
+Nota 1: los comentarios de varias lineas (/* ... */) salen en el archivo "*.css" compilado, mientras que los comentarios de una línea (//...) no salen en el archivo compilado.
+
+Nota2: en los nombres de variables, SASS no distingue entre guión y guión bajo:
+
+	$color-fondo = $color_fondo
+_______________________________________________________
+Para compilar el archivo y convertirlo en un archivo "*.css", ejecutamos el comando:
+
+	sass --watch estilos.scss estilos.css
+
+Con la bandera "--watch", hacemos que cada vez que haya un cambio en el archivo "estilos.scss", se compile automaticamente.
+
+Nota: para ver otros parametros que podemos pasar a Sass usamos el comando:
+
+	sass --help
+
+Nota: Los estilos compilados de Sass, no ordenan alfabeticamente los estilos, podemos ordenar alfabeticamente los estilos en "Sublime Text 3" seleccionando las lineas e ir al menu "Edit --> Sort Lines" o la tecla "F9".
+
+Tambien deberias ordenar las propiedades CSS en grupos así:
+
+	- Layout Properties (position, float, clear, display)
+
+	- Box Model Properties (width, height, margin, padding)
+
+	- Visual Properties (color, background, border, box-shadow)
+
+	- Typography Properties (font-size, font-family, text-align, text-transform)
+
+	- Misc Properties (cursor, overflow, z-index)
+
+Para más info de como se deberian ordenar los estilos:
+
+	https://dev.to/thekashey/happy-potter-and-the-order-of-css-5ec
+
+_______________________________________________________
+
+	[4]. Interpolación:
+_______________________________________________________
+
+Para poder usar una variable como selector, propiedad CSS, o como valor de una variable nativa CSS (custom properties), es necesario interpolar la variable. la interpolación es como "escapar" la variable para tomar su valor y no su nombre.
+
+Para interpolar una variable, usamos el simbolo numeral, y encerramos la variable en llaves:
+
+	#{ $variable }
+
+Ejemplo:
+
+	$selector: '.hero';
+	$propiedad: 'background-color';
+	$color: 'red';
+
+	:root{
+		--color: #{$color};
+	}
+
+	#{$selector}{
+		#{$propiedad}: #000;
+	}
+
+_______________________________________________________
+
+	[5]. Anidación:
+_______________________________________________________
+
+Sass permite anidar las reglas CSS para que las hojas de estilos sean más concisas y fáciles de escribir. A los selectores anidados se les prefija automáticamente todos los selectores de los niveles superiores.
+
+Ejemplo: Tenemos el siguiente HTML:
+
+	<div class="caja">
+		<h1>Soy una caja</h1>
+		<p>Soy un parrafo</p>
+		<div class="info">
+			30-01-2020
+			<span class="author">Ricardo Landínez</span>
+		</div>
+	</div>
+
+Podemos darle estilos en el archivo "estilos.scss" así:
+
+	.caja{
+		background-color: white;
+		border: 1px solid black;
+		margin: 0px auto;
+		padding: 10px;
+		text-align: center;
+		width: 500px;
+		 
+		h1{
+			color: blue;
+		}
+
+		p{
+			color: green;
+		}
+
+		.info{
+			font-size: 10px;
+
+			.author{
+				color: green;
+				font-size: 15px;
+			}
+		}
+	}
+
+Estos estilos quedaran en "estilos.css" así:
+
+	.caja {
+		background-color: white;
+		border: 1px solid black;
+		margin: 0px auto;
+		padding: 10px;
+		text-align: center;
+		width: 500px;
+	}
+	.caja h1 {
+		color: blue;
+	}
+	.caja p {
+		color: green;
+	}
+	.caja .info {
+		font-size: 10px;
+	}
+	.caja .info .author {
+		color: green;
+		font-size: 15px;
+	}
+
+Para más reglas e info de la anidación:
+
+	https://uniwebsidad.com/libros/sass/capitulo-4
+_______________________________________________________
+
+	[6]. Módulos/Parciales:
+_______________________________________________________
+
+Los archivos Sass parciales contienen pequeños fragmentos de CSS que puede incluir en otros archivos Sass. Esta es una excelente manera de modularizar su CSS y ayudar a mantener las cosas más fáciles. 
+
+Un parcial es un archivo Sass llamado con un guión bajo. Puede llamarlo algo así como" _partial.scss". El guión bajo le permite a Sass saber que el archivo es solo un archivo parcial y que no debe compilarse en un archivo CSS.
+
+Ejemplo: En el archivo de estilos principal llamamos a nuestros modulos o parciales:
+
+	@import "variables";
+	@import "colors";
+	@import "reset";
+
+El archivo parcial	"_colors.scss" seria algo como:
+
+	$myPink: #EE82EE;
+	$myBlue: #4169E1;
+	$myGreen: #8FBC8F;
+
+Podemos ver que en el archivo principal de estilos, llamamos al archivo parcial de colores, sin necesidad de incluir el guión bajo primero (_), ni la extención (.scss).
+_______________________________________________________
+NOTA: ACTUALMENTE SE DESACONCEJA USAR "@import", se debe usar "@use":
+
+El archivo "_variables.scss" seria así:
+
+	$primary: #4169E1;
+
+El archivo "estilos.scss":
+
+	@use "variables";
+
+	body{
+		color: variables.$primary;
+	}
+
+Podemos ver que para hacer referencia a nuestra variable "$primary", tenemos que llamar al modulo que la contiene ("variables").
+
+Tambien podemos definir las variables con valores por defecto, por ejemplo el archivo "_variables.scss" ahora queda:
+
+	$primary: #4169E1 !default;
+
+Y en el archivo "estilos.scss" podemos cambiar el valor por defecto de la variable:
+
+	@use "variables" with (
+		$primary: red
+	);
+
+	body{
+		color: variables.$primary;
+	}
+
+En este caso el "body" tendria el color de letra rojo._______________________________________________________
+
+	[7]. Valores es Sass Mapas:
+_______________________________________________________
+
+Ademas de los diversos valores para las variables en Sass (numeros, strings, listas, booleanos), tenemos un valor muy interesante y son los mapas, los cuales nos permiten definir una estructura parecida a un JSON, con pares clave-valor agrupados.
+
+Ejemplo: 
+
+	@use "sass:map";
+
+	$colores: (
+		"primary": royalblue,
+		"secondary": crimson,
+		"buttons": teal
+	);
+
+	h1{
+		color: map.get($colores, "primary");
+	}
+
+Como vemos primero hacemos uso de un modulo de Sass llamado "map", el cual nos ayuda a obtener los valores del mapa de colores.
+_______________________________________________________
+
+	[8]. Mixins/Funciones:
+_______________________________________________________
+
+Un mixin es una función, la cual nos sirve para reutilizar propiedades css en varias partes.
+
+	//definimos el mixin
+	@mixin important-text {
+		color: red;
+		font-size: 25px;
+		font-weight: bold;
+		border: 1px solid blue;
+	}
+
+	.danger {
+		@include important-text; //usamos el mixin
+		background-color: green;
+	}
+
+Nota: un mixin puede incluir otros mixins:
+
+	@mixin special-text {
+		@include important-text;
+		@include link;
+		@include special-border;
+	}
+
+Podemos pasar argumentos a un mixin:
+
+	/* Definir mixin con dos argumentos */
+	@mixin bordered($color, $width) {
+		border: $width solid $color;
+	}
+
+	.myArticle {
+		@include bordered(blue, 1px);  //llamamos el mixin con dos valores
+	}
+
+	.myNotes {
+		@include bordered(red, 2px); //llamamos el mixin con dos valores
+	}
+
+Tambien podemos definir valores por defecto para el mixin:
+
+	@mixin bordered($color: blue, $width: 1px) {
+		border: $width solid $color;
+	}
+
+Luego donde usemos el mixin, podemos especifiar los valores que cambian:
+
+	.myTips {
+		@include bordered($color: orange);
+	}
+
+Nota1: un mixin muy util, puede ser el de agregar los prefijos de los navegadores para que funcionen ciertas propiedades css(vendor prefixes) (-webkit- / -ms- / -o- / -moz-)
+
+Nota2: Sass define unas funciones utiles predefinidas, para el manejo de strings, numeros, listas, mapa, selectores, color e introspección.
+
+	https://www.w3schools.com/sass/sass_functions_string.asp
+_______________________________________________________
+
+	[9]. Herencia/Extend:
+_______________________________________________________
+
+La directiva @extend permite compartir un conjunto de propiedades CSS de un selector a otro.
+
+	/* %message-shared
+			-->funciona como extender una clase
+			-->este codigo CSS se imprime, ya que más adelante lo extendemos con @extend
+	*/
+	%message-shared {
+		border: 1px solid #ccc;
+		padding: 10px;
+		color: #333;
+	}
+
+	// este CSS no se imprime, ya que %equal-heights nunca lo extendemos.
+	%equal-heights {
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	.message {
+		@extend %message-shared;
+	}
+
+	.success {
+		@extend %message-shared;
+		border-color: green;
+	}
+
+	.error {
+		@extend %message-shared;
+		border-color: red;
+	}
+
+	.warning {
+		@extend %message-shared;
+		border-color: yellow;
+	}
+
+Y en el codigo HTML:
+
+	<div class="message">Mensaje Normal</div>
+	<div class="success">Mensaje Exito</div>
+	<div class="error">Mensaje Error</div>
+	<div class="warning">Mensaje Advertencia</div>
+
+De esta forma, tenemos un uso más eficiente de clases, en vez de crear muchas clases y asignarlas a los elementos HTML para tener el mismo resultado (.message .normal, .message .success, .message .error, .message .warning).

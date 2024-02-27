@@ -1,0 +1,2625 @@
+
+	JavaScript:
+_______________________________________________________
+
+INDICE:
+
+[1]. Inclución de JavaScript
+[2]. Impresión de datos
+[3]. Variables y Comentarios
+[4]. Estructuras de control
+	[4.1]. Condicional if/else
+	[4.2]. Operador ternario
+	[4.3]. Switch
+[5]. Arrays
+	[5.1]. Acceso a los Elementos del Array
+	[5.2]. Recorrido Arrays
+		[5.2.1]. Recorrido con "forEach"
+		[5.2.2]. Recorrido con ciclo "For In"
+[6]. Funciones
+	[6.1]. Funciones Anónimas
+	[6.2]. Funciones Callbacks
+	[6.3]. Funciones Autoejecutables
+	[6.4]. Funciones Clausuras
+	[6.5]. Funciones flecha
+	[6.6]. Funciones para Strings
+	[6.7]. Funciones para Arrays
+		[6.7.1]. Ordenando Arrays
+		[6.7.2]. Filtrando Arrays
+		[6.7.3]. Buscando en Arrays
+	[6.8]. Funciones para Números
+[7]. Objetos
+	[7.1]. Acceso a las propiedades del objeto
+	[7.2]. Métodos del objeto
+		[7.2.1]. Acceso a los metodos del objeto
+	[7.3]. JSON
+		[7.3.1]. Convertir JSON a Objeto
+		[7.3.2]. Convertir Objeto a JSON
+	[7.4]. CLASES
+		[7.4.1]. Métodos Estáticos
+		[7.4.2]. Constructores
+		[7.4.3]. Propiedades
+			[7.4.3.1]. Ámbitos en una clase
+			[7.4.3.2]. Getters
+			[7.4.3.3]. Setters
+		[7.4.4]. Herencia
+[8]. Elementos DOM
+	[8.1]. Acceso a los Nodos(Métodos Clasicos)
+	[8.2]. Acceso a los Nodos(Métodos Modernos)
+	[8.3]. Contenido de los elementos
+	[8.4]. Crear elementos
+	[8.5]. Atributos de un elemento
+		[8.5.1]. Atributo "Class" de un elemento
+	[8.6]. Insertar Elementos
+	[8.7]. Eliminar Elementos
+	[8.8]. Elementos Relacionados
+	[8.9]. Resumen Crear y Añadir Elementos
+	[8.10]. Librerías para manejar Elementos
+[9]. Eventos
+	[9.1]. Manejador de Eventos
+		[9.1.1]. Metodo "addEventListener()"
+		[9.1.2]. Metodo "removeEventListener()"
+[10]. AJAX Peticiones HTTP
+	[10.1]. XHR: "XMLHttpRequest"
+		[10.1.1]. Propiedades XHR
+		[10.1.2]. Métodos XHR
+		[10.1.3]. Eventos XHR
+	[10.2]. PROMESAS (promise)
+	[10.3]. Fetch
+		[10.3.1]. Cabeceras (Headers)
+		[10.3.2]. Respuesta de la petición HTTP
+		[10.3.3]. Métodos del objeto "response"
+		[10.3.4]. Ejemplo usando promesas
+		[10.3.5]. Ejemplo usando "Async/await"
+	[10.4]. Política CORS
+
+_______________________________________________________
+
+	[1]. Inclución de JavaScript:
+_______________________________________________________
+
+JavaScript es un lenguaje de programación que se utiliza principalmente para crear páginas web dinámicas (con efectos, animaciones e interacción con el usuario).
+
+Al igual que CSS, se puede incluir de 3 formas:
+
+1) En línea:
+	<p onclick="alert('Un mensaje de prueba')">Un párrafo de texto.</p>
+    
+2) Forma interna embebida:
+	<head>
+		<script type="text/javascript">
+			alert("Un mensaje de prueba");
+		</script>
+	</head>
+3) Archivo externo "pagina.html":
+
+	<!DOCTYPE html>
+	<html lang="es">
+		<head>
+			<meta charset="utf-8"/>
+			<title>Incluir JavaScript archivo externo</title>
+			<!--Scripts en el Head -->
+			<script type="text/javascript" src="myScript.js">
+			</script>
+		</head>
+		<body>
+			<h1>Página Web</h1>
+			<p id="demo">Este es un parrafo</p>
+			<button type="button" onclick="myFunction()">Cambiar!!!</button>
+
+			<!--Scripts en el Body -->
+			<script type="text/javascript" src="myScript2.js">
+			</script>
+		</body>
+	</html>
+
+Archivo "myScript.js":
+
+	function myFunction() {
+  		document.getElementById("demo").innerHTML = "Parrafo cambiado.";
+	}
+
+Nota: Colocar scripts en la parte inferior del elemento "<body>" mejora la velocidad de visualización, porque la interpretación de los scripts ralentiza la visualización.
+_______________________________________________________
+
+	[2]. Impresión de datos:
+_______________________________________________________
+
+JavaScript puede "mostrar" datos de diferentes maneras:
+
+- Escribir en un elemento HTML, usando "innerHTML".
+
+	<!DOCTYPE html>
+	<html>
+	<body>
+		<h1>My First Web Page</h1>
+		<p>My First Paragraph</p>
+
+		<p id="demo"></p>
+
+		<script>
+			document.getElementById("demo").innerHTML = 5 + 6;
+		</script>
+
+	</body>
+	</html>
+
+- Escribir en la salida HTML usando "document.write()".
+
+	<!DOCTYPE html>
+	<html>
+	<body>
+		<h1>My First Web Page</h1>
+		<p>My first paragraph.</p>
+
+		<script>
+			document.write(5 + 6);
+		</script>
+
+	</body>
+	</html>
+
+Nota: Si usa "document.write()" después de cargar un documento HTML, eliminará todo el HTML existente. Por eso solo se debe usar para pruebas.
+
+- Escribir en un cuadro de alerta, usando "window.alert()".
+
+	<!DOCTYPE html>
+	<html>
+	<body>
+		<h1>My First Web Page</h1>
+		<p>My first paragraph.</p>
+
+		<script>
+			window.alert(5 + 6);
+		</script>
+
+	</body>
+	</html>
+
+Nota: En JavaScript, el objeto "window" es el objeto de alcance global, lo que significa que las variables, propiedades y métodos pertenecen por defecto al objeto "window". Esto también significa que especificar la palabra clave "window" es opcional.
+
+- Escribir en la consola del navegador, usando "console.log()".
+
+	<!DOCTYPE html>
+	<html>
+	<body>
+		<script>
+			console.log(5 + 6);
+		</script>
+	</body>
+	</html>
+
+Nota1: este se usa para fines de depuración(debugging).
+
+Nota2: pulsar CTRL+SHIFT+I sobre la pestaña de la página web en cuestión, lo que nos llevará al Inspector de elementos.
+
+Nota3: para más info de la consola ir a: 
+
+	https://lenguajejs.com/javascript/introduccion/consola-de-javascript/
+_______________________________________________________
+
+	[3]. Variables y Comentarios:
+_______________________________________________________
+
+En un lenguaje de programación, las variables se utilizan para almacenar valores de datos.
+
+JavaScript usa la palabra clave "var" para declarar variables.
+
+Se utiliza un signo igual para asignar valores a las variables.
+
+	//Comentario de una línea
+	/*
+		Comentario de varias lineas
+	*/
+
+	var x, y, z;       // Declarar variables
+	x = 5; y = 34.6;      // Asignar valores
+	z = x + y;         // Calcular valores
+
+	var person = "Jackie Chan";
+	var answer = 'Yes I am!';
+
+	//Declaración de muchas variables en una sola sentencia
+	var person = "John Doe", carName = "Volvo", price = 200;
+
+Siempre que sea posible se debería utilizar "let" y "const", en lugar de var. Declarar variables mediante var se recomienda en fases de aprendizaje o en el caso de que se quiera mantener compatibilidad con navegadores muy antiguos utilizando ECMAScript 5.
+
+"let" es para tener claridad en el ambito de la variable:
+
+	// Opción 1: Bucle con let
+	console.log("Antes: ", p); // Antes: undefined
+	for (
+		let p = 0;
+		p < 3;
+		p++ // - 0
+	)
+  		console.log("- ", p); // - 1
+	// - 2
+	console.log("Después: ", p); // Después: undefined
+
+	// Opción 2: Bucle con var
+	console.log("Antes: ", p); // Antes: undefined
+	for (
+		var p = 0;
+		p < 3;
+		p++ // - 0
+	)
+		console.log("- ", p); // - 1
+	// - 2
+	console.log("Después: ", p); // Después: 3 (WTF!)
+
+Mientras que en el ciclo con "let", antes y despues del ciclo la variable "p" no está definida (ámbito local), en el ciclo con "var", vemos que fuera del ciclo "p" queda con el valor "3", y sigue existiendo fuera del ciclo (ámbito global).
+
+En ECMAScript 2015 (ES6) se añade la palabra clave "const", que inicializada con un valor concreto, permite crear variables con valores que no pueden ser cambiados.
+
+	const NAME = "Sandra";
+_______________________________________________________
+
+	[4]. Estructuras de control:
+_______________________________________________________
+
+Al hacer un programa necesitaremos establecer condiciones o decisiones, donde buscamos que el navegador realice una acción A si se cumple una condición o una acción B si no se cumple. 
+_______________________________________________________
+
+	[4.1]. Condicional if/else:
+_______________________________________________________
+
+Condición con alternativa:
+
+	var nota = 7;
+	console.log("He realizado mi examen. Mi resultado es el siguiente:");
+
+	// Condición
+	if (nota < 5) {
+		// Acción A (nota es menor que 5)
+		calificacion = "suspendido";
+	} else {
+		// Acción B: Cualquier otro caso a A (nota es mayor o igual que 5)
+		calificacion = "aprobado";
+	}
+
+	console.log("Estoy", calificacion);
+_______________________________________________________
+
+	[4.2]. Operador ternario:
+_______________________________________________________
+
+Operador ternario (If/else abreviado)
+
+	var nota = 7;
+	console.log("He realizado mi examen. Mi resultado es el siguiente:");
+
+	// Operador ternario: (condición ? verdadero : falso)
+	var calificacion = nota < 5 ? "suspendido" : "aprobado";
+
+	console.log("Estoy", calificacion);
+_______________________________________________________
+
+	[4.3]. Switch:
+_______________________________________________________
+
+Permite definir casos específicos a realizar en el caso de que la variable expuesta como condición sea igual a los valores que se especifican a continuación mediante los "case".
+
+	var nota = 7;
+	console.log("He realizado mi examen. Mi resultado es el siguiente:");
+
+	switch (nota) {
+		case 10:
+			calificacion = "Insuficiente";
+			break;
+		case 9:
+		case 8:
+			calificacion = "Notable";
+			break;
+		case 7:
+		case 6:
+			calificacion = "Bien";
+			break;
+		case 5:
+			calificacion = "Suficiente";
+			break;
+		case 4:
+		case 3:
+		case 2:
+		case 1:
+		case 0:
+			calificacion = "Insuficiente";
+			break;
+		default:
+			// Cualquier otro caso
+			calificacion = "Nota errónea";
+			break;
+	}
+
+	console.log("He obtenido un", calificacion);
+_______________________________________________________
+
+	[5]. Arrays:
+_______________________________________________________
+
+Un array es una variable especial, que puede contener más de un valor a la vez.
+
+	//Delcaramos el array "nombres"
+	var nombres = ["Sara", "Laura", "Pedro"];
+
+	//Tambien se puede declarar dividiendolo en multiples lineas
+	var nombres = [
+		"Sara",
+		"Laura",
+		"Pedro"
+	];
+
+	//Otra forma de declararlo vacio
+	var nombres = [];
+
+	//otra forma de declararlo
+	var nombres = new Array();
+
+La palabra clave "new" solo complica el código. También puede producir algunos resultados inesperados:
+
+	var points = new Array(40, 100);  // Crea un array con dos elementos. (40 y 100)
+
+Si se remueve uno de los elementos:
+
+	var points = new Array(40);  // Crea un array con 40 elementos indefinidos. !!!!!
+_______________________________________________________
+
+	[5.1]. Acceso a los Elementos del Array:
+_______________________________________________________
+Accede a un elemento del array haciendo referencia al número de índice.
+
+Los índices del array comienzan con 0.
+
+	var nombre = nombres[0];
+
+Para cambiar un elemento del array:
+
+	nombres[2] = "Maria";
+
+Se puede acceder al array completo haciendo referencia al nombre del array:
+
+	document.getElementById("demo").innerHTML = nombres; //imprime "Sara,Laura,Pedro".
+
+Nota: para más info de los arrays(matrices):
+
+	https://www.w3schools.com/js/js_arrays.asp
+_______________________________________________________
+
+	[5.2]. Recorrido Arrays:
+_______________________________________________________
+
+	var nombres = ["Sara", "Laura", "Pedro"];
+
+	for(var i=0; i<nombres.length; i++){
+		document.write(nombres[i]+'<br/>');
+	}
+
+Nota: En JavaScript, se pueden incluir etiquetas Html o estilos CSS.
+_______________________________________________________
+
+	[5.2.1]. Recorrido con "forEach":
+_______________________________________________________
+
+El recorrido con el metodo ".forEach()" llama una función("callback") para cada elemento del array:
+
+	nombres.forEach(miFuncion);
+
+	function miFuncion(valor, indice, array) {
+		document.write(valor +'<br/>');
+	}
+
+En este caso llamamos la función "callback" que escribimos aparte. Está función toma 3 argumentos, el valor del item, el indice del item, y el propio array.
+
+Cuando se usa un solo argumento(ejemplo: "valor"), podemos omitir los otros.
+
+En el siguiente ejemplo declaramos la función dentro del mismo "forEach":
+
+	nombres.forEach(function(nombre){
+		document.write(nombre +'<br/>');
+	});
+
+Nota: La funcion dentro del "forEach" es una función callback. Tambien es una función anonima (sin nombre).
+
+- Recorrido con función de flecha:
+
+	nombres.forEach((nombre)=> {
+		document.write(nombre +'<br/>');
+	});
+_______________________________________________________
+
+	[5.2.2]. Recorrido con ciclo "For In":
+_______________________________________________________
+
+- Recorrido ciclo "For In":
+
+	for(indice in array){…}
+
+Ejemplo:
+
+	var dias=["Lunes","Martes","Miércoles","Jueves","Viernes","Sábado", "Domingo"];
+
+	for (i in dias){
+		alert(dias[i]);
+	}
+_______________________________________________________
+
+	[6]. Funciones:
+_______________________________________________________
+
+Una función de JavaScript es un bloque de código diseñado para realizar una tarea en particular.
+
+Una función de JavaScript se ejecuta cuando "algo" lo invoca (lo llama).
+
+	function name(parameter1, parameter2, parameter3) {
+  		//code to be executed
+	}
+
+Los parámetros de la función se enumeran entre paréntesis () en la definición de la función.
+
+Los argumentos de función son los valores recibidos por la función cuando se invoca.
+
+Dentro de la función, los argumentos (los parámetros) se comportan como variables locales.
+
+	function multiplica(p1, p2) {
+		return p1 * p2;  //Retorna el producto de p1 y p2
+	}
+
+	var x = multiplica(4, 3);   // Lllamado a la función, el valor que retorne se guarda en "x"
+
+Otro ejemplo de funciones:
+
+	function MostrarDatos(nombre, edad){
+		//comillas invertidas --> Alt+ 96
+		var plantilla = `
+			<h2>Caja de Datos</h2>
+			<p>Mi nombre es ${nombre} y mi edad es de ${edad} años.</p>  
+		`;
+
+		return plantilla;
+	}
+
+	function imprimir(){
+		var datos = document.getElementById("datos");
+		datos.innerHTML = MostrarDatos("Pedro", 25);
+	}
+
+	//ejecutar funcion
+	imprimir();
+
+Nota: Las comillas invertidas o backticks se introducen en ECMAScript 6.
+_______________________________________________________
+
+	[6.1]. Funciones Anónimas:
+_______________________________________________________
+
+Las funciones anónimas o funciones lambda son un tipo de funciones que se declaran sin nombre de función y se alojan en el interior de una variable y haciendo referencia a ella cada vez que queramos utilizarla.
+
+Crea una función mediante expresión (a través de una variable):
+
+	// Función anónima "saludo"
+	var saludo = function () {
+		return "Hola";
+	};
+
+	saludo; // ƒ () { return "Hola"; }
+	saludo(); // "Hola"
+
+Otro ejemplo, pasando parametro:
+
+	var factorial=function (num){
+		var fac=1;
+		for(num;num>0;num--){
+			fac=fac*num;
+		}
+		alert(fac);
+	}
+
+	factorial(5);
+
+La diferencia fundamental entre las funciones por declaración y las funciones por expresión es que estas últimas sólo están disponibles a partir de la inicialización de la variable. Si «ejecutamos la variable» antes de declararla, nos dará un error.
+_______________________________________________________
+
+	[6.2]. Funciones Callbacks:
+_______________________________________________________
+
+Un callback (llamada hacia atrás) es pasar una función B por parámetro a una función A, de modo que la función A puede ejecutar esa función B de forma genérica desde su código, y nosotros podemos definirlas desde fuera de dicha función:
+
+	// fB = Función B
+	var fB = function () {
+		console.log("Función B ejecutada.");
+	};
+
+	// fA = Función A
+	var fA = function (callback) {
+		callback();
+	};
+
+	fA(fB);
+
+Esto nos podría permitir crear varias funciones para utilizar a modo de callback y reutilizarlas posteriormente con diferentes propósitos. De hecho, los callbacks muchas veces son la primera estrategia que se suele utilizar en Javascript para trabajar la asincronía.
+
+	// fB = Función B (callback)
+	var fB = function () {
+		console.log("Función B ejecutada.");
+	};
+
+	// fError = Función Error (callback)
+	var fError = function () {
+		console.error("Error");
+	};
+
+	// fA = Función A
+	var fA = function (callback, callbackError) {
+		var n = ~~(Math.random() * 5);
+		if (n > 2) callback();
+		else callbackError();
+	};
+
+	fA(fB, fError); // Si ejecutamos varias veces, algunas darán error y otras no
+
+Podemos planear ejecutar la función fA() cambiando los callbacks según nos interese, sin necesidad de crear funciones con el mismo código repetido una y otra vez.
+_______________________________________________________
+
+	[6.3]. Funciones Autoejecutables:
+_______________________________________________________
+
+Para crear una función y ejecutarla sobre la marcha, sólo tenemos que envolver entre paréntesis la función anónima en cuestión (no necesitamos que tenga nombre, puesto que no la vamos a guardar) y luego, ejecutarla:
+
+	// Función autoejecutable
+	(function () {
+		console.log("Hola!!");
+	})();
+
+	// Función autoejecutable con parámetros
+	(function (name) {
+		console.log(`¡Hola, ${name}!`);
+	})("Ricardo");
+
+Si la función autoejecutable devuelve algún valor con return, a diferencia de las funciones por expresión, en este caso lo que se almacena en la variable es el valor que devuelve la función autoejecutada:
+
+	var saludo = function () {
+		return "Hola";
+	};
+
+	saludo; // ƒ () { return "Hola"; }
+	saludo(); // "Hola"
+	typeof saludo; // "function"
+
+	var f = (function (name) {
+		return `¡Hola, ${name}!`;
+	})("Ricardo");
+
+	f; // "¡Hola, Ricardo!"
+	typeof f; // "string"
+_______________________________________________________
+
+	[6.4]. Funciones Clausuras:
+_______________________________________________________
+
+Una clausura o cierre se define como una función que «encierra» variables en su propio ámbito (y que continúan existiendo aún habiendo terminado la función).
+
+	// Clausura: Función incr()
+	var incr = (function () {
+		var num = 0;
+		return function () {
+			num++;
+			return num;
+		};
+	})();
+
+	typeof incr; // "function"
+	incr(); // 1
+	incr(); // 2
+	incr(); // 3
+
+Tenemos una función anónima que es también una función autoejecutable. Aunque parece una función por expresión, no lo es, ya que la variable "incr" está guardando lo que devuelve la función anónima autoejecutable, que a su vez, es otra función diferente.
+
+La «magia» de las clausuras es que en el interior de la función autoejecutable estamos creando una variable "num" que se guardará en el ámbito de dicha función, por lo tanto existirá con el valor declarado: 0.
+
+En la variable "incr" tenemos una función por expresión que además conoce el valor de una variable "num", que sólo existe dentro de "incr". Si nos fijamos en la función que devolvemos, lo que hace es incrementar el valor de "num" y devolverlo. Como la variable "incr" es una clausura y mantiene la variable en su propio ámbito, veremos que a medida que ejecutamos "incr()", los valores de "num" (que estamos devolviendo) conservan su valor y se van incrementando.
+_______________________________________________________
+
+	[6.5]. Funciones flecha:
+_______________________________________________________
+
+Las Arrow functions, funciones flecha o «fat arrow» son una forma corta de escribir funciones que aparece en Javascript a partir de ECMAScript 6. Básicamente, se trata de reemplazar eliminar la palabra function y añadir => antes de abrir las llaves:
+
+	var func = function () {
+		return "Función tradicional.";
+	};
+
+	var func = () => {
+		return "Función flecha.";
+	};
+
+Las ventajas de las funciones flecha son:
+
+	- Si el cuerpo de la función sólo tiene una línea, podemos omitir las llaves ({}).
+	- Además, en ese caso, automáticamente se hace un "return" de esa única línea, por lo que podemos omitir también el "return".
+	- En el caso de que la función no tenga parámetros, se indica como en el ejemplo anterior: () =>.
+	- En el caso de que la función tenga un solo parámetro, se puede indicar simplemente el nombre del mismo: e =>.
+	- En el caso de que la función tenga 2 ó más parámetros, se indican entre paréntesis: (a, b) =>.
+	- Si queremos devolver un objeto, que coincide con la sintaxis de las llaves, se puede englobar con paréntesis: ({name: 'Ricardo'}).
+
+	var func = () => "Función flecha."; // 0 parámetros: Devuelve "Función flecha"
+
+	var func = (e) => e + 1; // 1 parámetro: Devuelve el valor de e + 1
+
+	var func = (a, b) => a + b; // 2 parámetros: Devuelve el valor de a + b
+_______________________________________________________
+
+	[6.6]. Funciones para Strings:
+_______________________________________________________
+
+".length" --> calcula la longitud de una cadena de texto.
+
+	var mensaje="Hola Mundo";
+	var num_letras=mensaje.length; //num_letras=10
+
+".concat()" --> concatena igual que el "+":
+
+	mensaje1="Hola";
+	mensaje2=mensaje1.concat(" mundo"); //mensaje2="Hola mundo"
+
+".toUpperCase()" --> pasa todo a mayúsculas.
+
+	mensaje2=mensaje1.toUpperCase(); //mensaje2="HOLA"
+
+".toLowerCase()" --> pasa a minúsculas.
+
+".charAt(posicion)" --> obtiene el carácter que se encuentra en la posición indicada.
+
+	var letra = mensaje1.charAt(0); // letra = "H"
+	letra = mensaje1.charAt(2); // letra = "l"
+
+".indexOf(caracter)" --> indica la posición del carácter dado. Devuelve la primera posición empezando a contar desde la izquierda. 
+
+Si la cadena no tiene el carácter devuelve un -1
+	
+	var mensaje1 = "Hola";
+	var posicion = mensaje1.indexOf('a'); // posicion = 3
+	posicion = mensaje1.indexOf('b'); // posicion = -1
+
+".lastIndexOf(caracter)" --> análoga a la función "indexOf()", devuelve la última posición del carácter.
+
+".substring(inicio,final)" --> extrae un pedazo de la cadena. El parámetro "final" es opcional.
+
+	var mensaje = "Hola Mundo";
+	var porcion = mensaje.substring(2); // porcion = "la Mundo"
+	porcion = mensaje.substring(1,8); // porcion = "ola Mun"
+	porcion = mensaje.substring(-2); // porcion = "Hola Mundo"
+
+".split(separador)" --> convierte una cadena de texto en un array de cadenas de texto.
+
+	var mensaje = "Hola pollo, perro conejo ";
+	var palabras = mensaje.split(" ");
+	// palabras = ["Hola", "pollo,", "perro", "conejo"];
+	
+	var palabra = "Hola";
+	var letras = palabra.split(""); // letras = ["H", "o", "l", "a"]
+
+Nota: para ver más funciones para texto ir a:
+
+	https://www.w3schools.com/js/js_string_methods.asp
+_______________________________________________________
+
+	[6.7]. Funciones para Arrays:
+_______________________________________________________
+
+".length" --> indica la cantidad de elementos.
+
+".concat()" --> concatena elementos de varios arrays.
+	
+	var array1 = [1, 2, 3];
+	var array2 = array1.concat(4, 5, 6); // array2 = [1, 2, 3, 4, 5, 6]
+
+".join(separador)" --> función contraria a .split(). Une los elementos.
+
+	var array = ["hola", "mundo"];
+	var mensaje = array.join(""); // mensaje = "holamundo"
+	mensaje = array.join(" "); // mensaje = "hola mundo"
+
+".pop()" --> elimina y devuelve el último elemento.
+
+	var array = [1, 2, 3];
+	var ultimo = array.pop();
+	// array = [1, 2] ultimo=3
+
+".push()" --> añade al final.
+
+	array.push(4);
+	// array = [1, 2, 4]
+
+".shift()" --> elimina y devuelve el primer elemento.
+	var primero = array.shift();
+	// array = [2, 4] primero=1
+
+".unshift()" --> añade al principio.
+	
+	array.unshift(0);
+	// array = [0, 2, 4]
+
+".reverse()" --> Invierte el orden de elementos del array.
+
+	var array = [1, 2, 3];
+	array.reverse();
+	// array = [3, 2, 1]
+
+".splice()" --> sirve para ajustar(empalmar o unir) un array.
+
+Por ejemplo para añadir nuevos elementos al medio del array:
+
+	var fruits = ["Banana", "Orange", "Apple", "Mango"];
+
+	fruits.splice(2, 0, "Lemon", "Kiwi");
+
+	//el array "fruits" queda así: ["Banana","Orange","Lemon","Kiwi","Apple","Mango"].
+
+El primer parametro (2) define la posición donde  donde se deben agregar nuevos elementos (empalmados).
+
+el segundo parametro (0) define cuántos elementos deben eliminarse.
+
+El resto de los parámetros ("Lemon", "Kiwi") definen los nuevos elementos que se agregarán.
+
+El método splice () devuelve un array con los elementos eliminados:
+
+	var fruits = ["Banana", "Orange", "Apple", "Mango"];
+	var removed = fruits.splice(2, 2, "Lemon", "Kiwi");
+	//la variable "removed" queda con ["Apple", "Mango"]
+
+Tambien podemos remover un elemento del array sin dejar agujeros en él:
+
+	var fruits = ["Banana", "Orange", "Apple", "Mango"];
+	fruits.splice(0, 1);
+	// remueve el primer elemento de "fruits"
+
+Nota: para más info de las funciones para arrays:
+
+	https://www.w3schools.com/js/js_array_methods.asp
+_______________________________________________________
+
+Esta función es de ECMAScript 5, y no la soportan navegadores antiguos:
+
+	Array.isArray(nombreArray) --> nos indica si una variable es un array.
+
+		var fruits = ["Banana", "Orange", "Apple", "Mango"];
+		document.getElementById("demo").innerHTML = Array.isArray(fruits);
+		//imprime "true"
+_______________________________________________________
+
+	[6.7.1]. Ordenando Arrays:
+_______________________________________________________
+
+El método "sort()" ordena un array alfabéticamente:
+
+	var fruits = ["Banana", "Orange", "Apple", "Mango"];
+	fruits.sort();
+	// el array "fruits" queda así: ["Apple","Banana","Mango","Orange"]
+
+Por defecto, la función "sort()" ordena los valores como cadenas(strings).
+
+Sin embargo, si los números se ordenan como cadenas, "25" es mayor que "100", porque "2" es mayor que "1".
+
+Debido a esto, el método "sort()" producirá resultados incorrectos al ordenar números.
+
+Puede solucionar esto proporcionando una función de comparación:
+
+	var points = [40, 100, 1, 5, 25, 10];
+	points.sort(function(a, b){return a - b});
+	//el array points queda [1,5,10,25,40,100]
+
+Nota: para ver más sobre el metodo "sort()", y ordenar arrays con objetos ir a:
+
+	https://www.w3schools.com/js/js_array_sort.asp
+_______________________________________________________
+
+	[6.7.2]. Filtrando Arrays:
+_______________________________________________________
+
+El método ".filter()" crea un nuevo array con elementos del array que pasan una prueba.
+
+Este ejemplo crea un nuevo array a partir de elementos con un valor mayor que 18:
+
+	var numbers = [45, 4, 9, 16, 25];
+	var over18 = numbers.filter(myFunction);
+
+	function myFunction(value, index, array) {
+		return value > 18;
+	}
+
+	// "over18" queda así: [45,25]
+
+Nota: en este ejemplo la función "callback" no utiliza los parámetros de "index" y "array", por lo que pueden omitirse.
+
+	function myFunction(value) {
+		return value > 18;
+	}
+_______________________________________________________
+
+	[6.7.3]. Buscando en Arrays:
+_______________________________________________________
+
+- El método "indexOf()" busca en un array un valor de un elemento y devuelve su posición.
+
+	array.indexOf(item, start);
+
+El argumento "item" es requerido, el item a buscar.
+El argumento "start" es opcional, dónde comenzar la búsqueda, los valores negativos comenzarán en la posición dada contando desde el final y buscarán hasta el final.
+
+	var fruits = ["Apple", "Orange", "Apple", "Mango"];
+	var a = fruits.indexOf("Apple");
+	document.getElementById("demo").innerHTML = "Apple is found in position " + a;
+	//imprime: "Apple is found in position 0"
+
+Nota: devuelve un "-1" si no encuentra nada. Si el elemento está presente más de una vez, devuelve la posición de la primera aparición.
+
+El metodo ".lastIndexOf()" es igual a "indexOf()", pero devuelve la posición de la ultima ocurrencia.
+
+- El método ".find()" devuelve el valor del primer elemento del array que pasa una función de prueba.
+
+Este ejemplo encuentra (devuelve el valor de) el primer elemento que es mayor que 18:
+
+	var numbers = [4, 9, 16, 25, 29];
+	var first = numbers.find(myFunction);
+
+	function myFunction(value, index, array) {
+		return value > 18;
+	}
+
+	//"first" = 25
+
+- El método ".findIndex()" devuelve el índice del primer elemento de matriz que pasa una función de prueba.
+
+Este ejemplo encuentra el índice del primer elemento que es mayor que 18:
+
+	var numbers = [4, 9, 16, 25, 29];
+	var first = numbers.findIndex(myFunction);
+
+	function myFunction(value, index, array) {
+		return value > 18;
+	}
+	//fist = 3
+
+Nota: para ver más metodos de iteración de arrays ir a:
+
+	https://www.w3schools.com/js/js_array_iteration.asp
+_______________________________________________________
+
+	[6.8]. Funciones para Números:
+_______________________________________________________
+
+"NaN" --> (Not a Number), indica un valor numérico no definido (EJ: 0/0)
+
+	var num1=0;
+	var num2=0;
+	alert(num1/num2); // se muestra el valor NaN
+
+"isNaN()" --> permite proteger la aplicación de posibles valores numéricos no definidos.
+
+	if(isNaN(num1/2)){
+		alert("La división no está definida para los números indicados");
+	}else{
+		alert("La división es igual a "+num1/num2);
+	}
+
+"Infinity" --> hace referencia al valor numérico infinito.
+	var num1=10;
+	var num2=0;
+	alert(num1/num2); // se muestra el valor Infinity.
+
+"toFixed(digitos)" --> devuelve el # con los decimales indicados, y realiza los redondeos necesarios.
+
+	var numero1 = 4564.34567;
+	numero1.toFixed(2); // 4564.35
+	numero1.toFixed(6); // 4564.345670
+	numero1.toFixed(); // 4564
+
+Nota: para más info de variables numericas y metodos pra numeros:
+
+	https://www.w3schools.com/js/js_numbers.asp
+
+	https://www.w3schools.com/js/js_number_methods.asp
+_______________________________________________________
+
+	[7]. Objetos:
+_______________________________________________________
+
+Podemos definir objetos, como por ejemplo un automóvil.
+
+Un automóvil tiene propiedades como el peso y el color, y métodos como iniciar y detener.
+
+Todos los automóviles tienen las mismas propiedades, pero los valores de las propiedades difieren de un automóvil a otro.
+
+Todos los automóviles tienen los mismos métodos, pero los métodos se realizan en diferentes momentos.
+
+Los objetos tambien son variables, pero contienen más valores.
+
+Los objetos de JavaScript se escriben con llaves {}.
+
+Las propiedades de los objetos se escriben como pares "nombre:valor", separados por comas.
+
+	var car = {
+		type:"Fiat", 
+		model:"500", 
+		color:"white"
+	};
+_______________________________________________________
+
+	[7.1]. Acceso a las propiedades del objeto:
+_______________________________________________________
+
+Se puede acceder a las propiedades del objeto de dos formas:
+
+	nombreObjeto.nombrePropiedad
+
+O tambien con:
+
+	nombreObjeto["nombrePropiedad"]
+
+Ejemplo:
+
+	document.getElementById("demo").innerHTML = 
+	car.type + " " + car[color];
+
+	//imprime "Fiat white"
+_______________________________________________________
+
+	[7.2]. Métodos del objeto:
+_______________________________________________________
+
+Los métodos son acciones que se pueden realizar en objetos.
+
+Los métodos se almacenan en propiedades como definiciones de funciones.
+
+	var person = {
+		firstName:"John",
+		lastName:"Doe",
+		age:50,
+		eyeColor:"blue",
+		fullName: function() {
+			return this.firstName + " " + this.lastName;
+		}
+	};
+
+En la definición de la función, "this" se refiere al "propietario" de la función.
+
+En este ejemplo, "this" es el objeto persona que "posee" la función "fullName".
+
+En otras palabras, "this.firstName" significa la propiedad firstName de este objeto.
+_______________________________________________________
+
+	[7.2.1]. Acceso a los metodos del objeto:
+_______________________________________________________
+
+Se puede acceder al metodo del objeto de la siguiente forma:
+
+	nombreObjeto.nombreMetodo()
+
+Ejemplo:
+
+	document.getElementById("demo").innerHTML = person.fullName(); //imprime "John Doe"
+_______________________________________________________
+
+	[7.3]. JSON:
+_______________________________________________________
+
+Cuando trabajamos con mucha cantidad de información, se puede volver necesario aislar el código de programación de los datos. De esta forma, podemos guardar información en un fichero independiente, separado del archivo donde tenemos el código de nuestro programa. Así, si necesitamos actualizar o modificar datos, no tenemos que tocar el código de nuestro programa.
+
+JSON son las siglas de JavaScript Object Notation, y no es más que un formato ligero de datos, con una estructura (notación) específica, que es totalmente compatible de forma nativa con Javascript.
+
+	{
+		"name": "Manz",
+		"life": 99,
+		"dead": false,
+		"props": ["invisibility", "coding", "happymood"],
+		"senses": {
+			"vision": 50,
+			"audition": 75,
+			"taste": 40,
+			"smell": 50,
+			"touch": 80
+		}
+	}
+
+Todos los textos deben estar con comillas dobles, y solo se pueden utilizar tipos de datos como "string", "number", "object", "array", "boolean" o null.
+
+¿Cuál es la diferencia entre JSON y un objeto de JavaScript?
+
+Aunque es similar la estructura, la principal diferencia es que un JSON es un string es decir, es un texto.
+
+El formato JSON es más restrictivo que un objeto de JavaScript:
+
+- Siempre comillas dobles "", simples '' NO.
+- Valores numéricos en decimal.
+- No admite valores undefined.
+- No admite comentarios.
+
+Nota: para poner varios objetos JSON en un archivo JSON, los ponemos dentro de un array ([]), es decir cada objeto seria un elemento del array.
+_______________________________________________________
+
+	[7.3.1]. Convertir JSON a Objeto:
+_______________________________________________________
+
+	var str = '{ "name": "Manz", "life": 99 }';
+
+	var obj = JSON.parse(str);
+
+	obj.name; // 'Manz'
+	obj.life; // 99
+_______________________________________________________
+
+	[7.3.2]. Convertir Objeto a JSON:
+_______________________________________________________
+
+	var obj = {
+		name: "Manz",
+		life: 99,
+		saludar: function () {
+			return "Hola!";
+		},
+	};
+
+	var str = JSON.stringify(obj);
+
+	str; // '{"name":"Manz","life":99}'
+
+Las funciones no están soportadas por JSON, por lo que si intentamos convertir un objeto que contiene métodos o funciones, "JSON.stringify()" devolverá un "string" omitiendo las propiedades que contengan funciones.
+_______________________________________________________
+
+	[7.4]. CLASES:
+_______________________________________________________
+
+Aunque Javascript no soporta clases de forma nativa, en ECMAScript 6 se introduce la posibilidad de usar clases como en otros lenguajes, aunque internamente Javascript traduce estas clases al sistema basado en prototipos que usa en realidad.
+
+Una clase es un molde que nos permite crear varios objetos a partir de ese "molde".
+
+	// Declaración de clase
+	class Animal {
+		// Métodos
+		hablar() {
+			return "Cuak";
+		}
+	}
+
+	// Creación de una instancia u objeto
+	var pato = new Animal();
+	pato.hablar(); // 'Cuak'
+
+	var donald = new Animal();
+	donald.hablar(); // 'Cuak'
+
+Nota: los nombres de las clases deben siempre empezar en mayúsculas.
+_______________________________________________________
+
+	[7.4.1]. Métodos Estáticos:
+_______________________________________________________
+
+Para usar un método de una clase, como por ejemplo" hablar()", debemos crear el objeto basado en la clase haciendo un "new" de la clase. Lo que se denomina crear un objeto o una instancia de la clase. 
+En algunos casos, nos puede interesar crear métodos estáticos en una clase porque para utilizarlos no hace falta crear ese objeto, sino que se pueden ejecutar directamente sobre la clase genérica:
+
+	class Animal {
+		static despedirse() {
+			return "Adiós";
+		}
+
+		hablar() {
+			return "Cuak";
+		}
+	}
+
+	Animal.despedirse(); // 'Adiós'
+
+Los métodos estáticos se suelen utilizar para crear funciones de apoyo que realicen tareas concretas o genéricas, que queremos incluir en la clase porque están relacionadas con la clase en cuestión.
+_______________________________________________________
+
+	[7.4.2]. Constructores:
+_______________________________________________________
+
+Se le llama constructor a un tipo especial de método de una clase, que se ejecuta automáticamente a la hora de hacer un "new" de dicha clase. 
+
+Una clase solo puede tener un constructor, y en el caso de que no se especifique un constructor a una clase, tendrá uno vacío de forma implícita.
+
+	// Declaración de clase
+	class Animal {
+		// Método que se ejecuta al hacer un "new"
+		constructor() {
+			console.warn("Ha nacido un pato.");
+		}
+		// Métodos
+		hablar() {
+			return "Cuak";
+		}
+	}
+
+	// Creación de una instancia u objeto
+	var pato = new Animal(); // 'Ha nacido un pato'
+
+Nota: En un constructor no se puede utilizar nunca un return, puesto que al hacer un new se devuelve siempre el propio objeto creado.
+_______________________________________________________
+
+	[7.4.3]. Propiedades:
+_______________________________________________________
+
+Una propiedad es una variable con información que guarda el objeto.
+
+	class Animal {
+		constructor(n = "pato") {
+			this.nombre = n;
+		}
+
+		hablar() {
+			return "Cuak";
+		}
+		quienSoy() {
+			return "Hola, soy " + this.nombre + ". ~" + this.hablar();
+		}
+	}
+
+	// Creación de objetos
+	var pato = new Animal();
+	pato.quienSoy(); // 'Hola, soy pato. ~Cuak'
+
+	var donald = new Animal("Donald");
+	donald.quienSoy(); // 'Hola, soy Donald. ~Cuak'
+
+Las propiedades se definen en el interior del constructor, precedido de la palabra clave "this" (que hace referencia a «este» elemento, es decir, la clase).
+
+Nota: la palabra clave "this", usada fuera de una clase devolverá el objeto Window(referencia al objeto global de la pestaña actual). 
+
+Las propiedades internas de la clase pueden ser modificadas externamente, simplemente sobreescribiendo la propiedad:
+
+	var pato = new Animal("Donald");
+	pato.quienSoy(); // 'Hola, soy Donald'
+
+	pato.nombre = "Paco";
+	pato.quienSoy(); // 'Hola, soy Paco'
+_______________________________________________________
+
+	[7.4.3.1]. Ámbitos en una clase:
+_______________________________________________________
+
+Dentro de una clase tenemos dos tipos de ámbitos: ámbito de método y ámbito de clase.
+
+- Ámbito dentro de un método. Si declaramos variables o funciones dentro de un método con var, let o const, estos elementos existirán sólo en el método en cuestión. Además, no serán accesibles desde fuera del método:
+
+	class Clase {
+		constructor() {
+			var name = "Ricardo";
+			console.log("Constructor: " + name);
+		}
+
+		metodo() {
+			console.log("Método: " + name);
+		}
+	}
+
+	var c = new Clase(); // 'Constructor: Ricardo'
+
+	c.name; // undefined
+	c.metodo(); // 'Método:
+
+Nota: la variable "name" solo se muestra cuando se hace referencia a ella dentro del "constructor()" que es donde se creó y donde existe.
+
+- Ámbito de clase. Podemos crear propiedades precedidas por "this.", lo que significa que estas propiedades tendrán alcance en toda la clase, tanto desde el constructor, como desde otros métodos del mismo:
+
+	class Clase {
+		constructor() {
+			this.name = "Ricardo";
+			console.log("Constructor: " + this.name);
+		}
+
+		metodo() {
+			console.log("Método: " + this.name);
+		}
+	}
+
+	var c = new Clase(); // 'Constructor: Ricardo'
+
+	c.name; // 'Ricardo'
+	c.metodo(); // 'Método: Ricardo'
+
+En este caso, podemos comprobar que si se puede acceder a la propiedad desde cualquier lugar de la clase.
+
+Nota: las propiedades también pueden ser modificadas desde fuera de la clase, simplemente asignándole otro valor.
+_______________________________________________________
+
+	[7.4.3.2]. Getters:
+_______________________________________________________
+
+Los "getters" son la forma de definir propiedades computadas de lectura en una clase.
+
+Las propiedades computadas son un tipo de propiedades a las que queremos realizarle ligeros cambios antes de guardarla o antes de obtenerla.
+
+	class Animal {
+		constructor(n) {
+			this._nombre = n;
+		}
+
+		get nombre() {
+			return "Sr. " + this._nombre;
+		}
+
+		hablar() {
+			return "Cuak";
+		}
+		quienSoy() {
+			return "Hola, soy " + this.nombre;
+		}
+	}
+
+	// Creación de objetos
+	var donald = new Animal("Donald");
+
+	donald.nombre; // 'Sr. Donald'
+	donald.nombre = "Pancracio"; // 'Pancracio'
+	donald.nombre; // 'Sr. Donald'
+
+Nota: las propiedades con "get" no se pueden cambiar, son de sólo lectura.
+_______________________________________________________
+
+	[7.4.3.3]. Setters:
+_______________________________________________________
+
+El "setter", es muy similar al "getter", pero en lugar de leer la información, la modifica:
+
+	class Animal {
+		constructor(n) {
+			this.nombre = n;
+		}
+
+		get nombre() {
+			return "Sr. " + this._nombre;
+		}
+
+		set nombre(n) {
+			this._nombre = n.trim();
+		}
+
+		hablar() {
+			return "Cuak";
+		}
+		quienSoy() {
+			return "Hola, soy " + this.nombre;
+		}
+	}
+
+	// Creación de objetos
+	var donald = new Animal("Donald");
+
+	donald.nombre; // 'Sr. Donald'
+	donald.nombre = "   Lucas  "; // '   Lucas  '
+	donald.nombre; // 'Sr. Lucas'
+
+Podemos realizar tareas sobre los parámetros del "setter" antes de guardarlos en la propiedad interna. En este ejemplo, realizamos un "trim()" para limpiar posibles espacios antes de guardar esa información.
+_______________________________________________________
+
+	[7.4.4]. Herencia:
+_______________________________________________________
+
+A partir de ECMAScript 6 podemos utilizar las clases y «extender clases»:
+
+	// Clase padre
+	class Forma {
+		constructor() {
+			console.log("Soy una forma geométrica.");
+		}
+
+		gritar() {
+			console.log("YEP!!");
+		}
+	}
+
+	// Clases hijas
+	class Cuadrado extends Forma {
+		constructor() {
+			super();
+			console.log("Soy un cuadrado.");
+		}
+	}
+
+	class Circulo extends Forma {
+		constructor() {
+			super();
+			console.log("Soy un círculo.");
+		}
+	}
+
+	class Triangulo extends Forma {
+		constructor() {
+			super();
+			console.log("Soy un triángulo.");
+		}
+	}
+
+La clase padre "Forma" muestra un mensaje en su constructor y tiene un método gritar(). Cada clase hija extiende a su clase padre, por lo que la clase "Cuadrado" será una mezcla de la clase "Forma" más la clase "Cuadrado". El método especial "super()" llama al constructor de la clase padre, por lo que si creamos varios objetos, funcionarán en cascada, mostrando primero el texto del constructor del padre, y luego el texto del constructor del hijo:
+
+	var c1 = new Cuadrado();
+	// 'Soy una forma geométrica.'
+	// 'Soy un cuadrado.'
+	c1.gritar();
+	// 'YEP!!'
+	var t1 = new Triangulo();
+	// 'Soy una forma geométrica.'
+	// 'Soy un triángulo.'
+	t1.gritar();
+	// 'YEP!!'
+
+Nota: es obligatorio llamar a "super()" en el constructor de la clase hija antes de realizar ninguna tarea.
+
+La palabra clave "super()" hace referencia a la superclase, es decir, a clase padre.
+
+"super()" también se puede utilizar en métodos para llamar de forma opcional u obligatoria a métodos del padre para que hagan tareas complementarias o parciales.
+
+	class Padre {
+		tarea() {
+			console.log("Tarea del padre...");
+		}
+	}
+
+	class Hijo extends Padre {
+		tarea() {
+			super.tarea();
+			console.log("Tarea del hijo...");
+		}
+	}
+
+En el caso de que la clase "Hijo" no tuviera método "tarea()" heredaría dicho método de su clase padre, ejecutándolo. En el caso del ejemplo anterior, tiene un método "tarea()" en la clase "Hijo" que sobreescribe el método "tarea()" del padre, realizando únicamente el código indicado en esa clase hija. Sin embargo, la diferencia radica en lo siguiente:
+
+- Si se indica "super.tarea()" (donde "tarea" es el nombre del método de la clase padre), esto llamará y ejecutará el método de la clase "Padre", y al terminar, continua realizando el código del método de la clase hija. Es el caso del ejemplo anterior.
+
+- Si no se indica "super.tarea()", el método "tarea()" de la clase hijo sobreescribe al de la clase "Padre", ocultándolo y ejecutando sólo el código de la clase hija.
+_______________________________________________________
+
+	[8]. Elementos DOM:
+_______________________________________________________
+
+Document Object Model. Los navegadores, cuando abrimos una pág. web, automáticamente generan un árbol de nodos.
+
+DOM, transforma todos los documentos HTML en arboles de nodos.
+
+Si tenemos el siguiente archivo HTML:
+
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<meta charset="utf-8"/>
+			<title>Página Sencilla</title>
+		</head>
+		<body>
+			<h1>Ejercicio</h1>
+			<p>Parrafo</p>
+			<p>Otro <strong>parrafo</strong></p>
+		</body>
+	</html>
+
+Se transforma en el siguiente árbol de nodos:
+
+					-------------
+					| Documento |
+					|   HTML    |
+					-------------
+		__________________|___________________
+		|									 |
+	 ------------						------------
+	 | Elemento |						| Elemento |
+	 |  "head"  |						|  "body"  |
+   __------------__  			________------------_______
+   |			  |				|			|			  |
+----------- -----------	 ------------  ------------  ------------
+|Elemento | |Elemento |	 | Elemento |  | Elemento |  | Elemento | 
+| "meta"  | | "title" |	 |   "h1"   |  |   "p"    |  |   "p"    |
+----------- -----------	 ------------  ------------  ------------
+				|			 |			 |			  |      |
+		-----------  ------------- ----------- -------- ---------- 
+		|  Texto  |  | Texto     | |  Texto  | | Texto| | Elem.  |       
+		|"Página  |  |"Ejercicio"| |"Parrafo"| |"Otro"| |"strong"|
+		|Sencilla"|  ------------- ----------- -------- ----------
+		-----------                                          |
+														-----------
+														|Texto    |
+														|"parrafo"|
+														-----------
+
+- Cada rectángulo es un nodo.
+- El nodo raíz, siempre es documento.
+- Cada etiqueta HTML, se transforma en un nodo de tipo "elemento".		
+_______________________________________________________
+
+	[8.1]. Acceso a los Nodos(Métodos Clasicos):
+_______________________________________________________
+
+Se hace a través de funciones del DOM; y solo cuando la pág. a cargado
+completamente.
+
+Los metodos para obtener los nodos son:
+
+- "getElementById(id)" --> Busca el elemento por "id" (el "id" es único para c/elemento). Devuelve un solo elemento. Si no, devuelve null.
+
+- "getElementsByClassName(class)" --> Busca elementos por su clase.
+
+- "getElementsByName(name)" --> Busca elementos con atributo "name".
+
+- "getElementsByTagName(tag)" --> Busca elementos por su propia etiqueta HTML.
+
+"getElementsByClassName(class)", "getElementsByName(name)", "getElementsByTagName(tag)" devuelven siempre un array con todos los elementos encontrados que encajen con el criterio, y en el caso de no encontrar ninguno, devolverán un "array" vacío ([]).
+
+	var elem = document.getElementById("page"); // Elemento con id="page"
+
+	var elems = document.getElementsByClassName("info"); // Elementos con class="info"
+	var elems = document.getElementsByName("nickname"); // Elementos con name="nickname"
+	var elems = document.getElementsByTagName("div"); // Elementos <div>
+_______________________________________________________
+
+	[8.2]. Acceso a los Nodos(Métodos Modernos):
+_______________________________________________________
+
+Usando selectores CSS podemos buscar cualquier elemento HTML de forma facil. Los metodos de búsqueda son:
+
+- "querySelector(sel)" --> Busca el primer elemento que coincide con el selector CSS "sel". Si no, null.
+
+- "querySelectorAll(sel)" --> devuelve un array con todos los elementos que coinciden con el selector CSS. Si no, devuelve un "array" vacío ([]).
+
+	var elem = document.querySelector("#page"); // Elemento con id="page"
+	var elem = document.querySelector(".main .info"); // Elemento class="info" en class="main"
+
+	var elems = document.querySelectorAll(".info"); // Todos con class="info"
+	var elems = document.querySelectorAll('[name="nickname"]'); // Elementos name="nickname"
+	var elems = document.querySelectorAll("div"); // Elementos <div>
+
+Al hacer busqueda de elementos y guardarlos en una variable, podemos seguir usando los metodos de forma recursiva:
+
+	var parrafos=document.querySelectorAll("p");
+	var primerParrafo=parrafos[0];
+	var enlaces=primerParrafo.querySelectorAll("a");
+	// saca un array con todos los enlaces.
+_______________________________________________________
+
+	[8.3]. Contenido de los elementos:
+_______________________________________________________
+
+Al obtener un elemento, es posible acceder a su contenido. Tenemos varias propiedades:
+
+	".nodeName" -->	Devuelve el nombre del nodo (etiqueta si es un elemento HTML). Sólo lectura.
+
+	".textContent" --> Devuelve el contenido de texto del elemento. Se puede asignar para modificar.
+
+	".innerHTML" --> Devuelve el contenido HTML del elemento. Se puede asignar para modificar.
+
+	".outerHTML" --> Idem a "innerHTML" pero incluyendo el HTML del propio elemento HTML.
+
+	".innerText" --> Versión no estándar de "textContent" de Internet Explorer con diferencias. Evitar.
+
+	".outerText" --> Versión no estándar de "textContent/outerHTML" de Internet Explorer. Evitar.
+
+Si usamos la propiedad "nodeName" en un elemento HTML, nos devuelve el nombre de la etiqueta en mayúsculas.
+
+La propiedad "textContent" nos devuelve el contenido de texto de un elemento HTML. Es útil para obtener (o cambiar) sólo el texto dentro de un elemento, obviando etiquetas HTML.
+
+La propiedad "innerHTML" nos permite hacer lo mismo, pero interpretando el código HTML y renderizando sus elementos.
+
+	var div = document.querySelector(".info"); // Elemento HTML con class="info"
+
+	div.textContent = "Hola a todos"; // Modifica o añade texto dentro del elemento
+	div.textContent; // 'Hola a todos'
+
+	div.innerHTML = "<strong>Importante</strong>"; // Interpreta el HTML
+	div.innerHTML; // '<strong>Importante</strong>'
+	div.textContent; // 'Importante'
+
+Nota: La propiedad "innerHTML" revisa, comprueba y parsea el etiquetado escrito al utilizar la asignación. Si en el ejemplo anterior nos olvidamos de escribir el cierre </strong> de la etiqueta, "innerHTML" automáticamente lo cerrará. Esto puede provocar algunas incongruencias si el código es incorrecto o una disminución de rendimiento en textos muy grandes que hay que preprocesar.
+
+La propiedad "outerHTML" es muy similar a "innerHTML". Mientras que "innerHTML" devuelve el código HTML del interior de un elemento HTML, "outerHTML" devuelve también el código HTML del propio elemento en cuestión. Esto puede ser muy útil para reemplazar un elemento HTML combinándolo con "innerHTML".
+
+	var data = document.querySelector(".data");
+
+	data.innerHTML = "<h1>Tema 1</h1>";
+	data.textContent; // 'Tema 1'
+	data.innerHTML; // '<h1>Tema 1</h1>'
+	data.outerHTML; // '<div class="data"><h1>Tema 1</h1></div>'
+_______________________________________________________
+
+	[8.4]. Crear elementos:
+_______________________________________________________
+
+Para crear elementos disponemos de los siguientes metodos:
+
+- "createElement(tag, options)" --> Crea y devuelve un elemento HTML tag. El elemento creado, está aislado de la página HTML, para modificar e insertar más tarde en una posición determinada.
+
+	var div = document.createElement("div"); // <div></div>
+	var span = document.createElement("span"); // <span></span>
+	var img = document.createElement("img"); // <img>
+
+- "createComment(text)" --> Crea y devuelve un nodo de comentarios HTML con el texto text.
+
+	var c = document.createComment("Comentario"); // <!--Comentario-->
+
+- "createTextNode(text)" --> Crea y devuelve un nodo HTML con el texto text.
+
+	var c = document.createTextNode("Hola"); // 'hola'
+
+- "cloneNode(deep)" --> Clona el nodo HTML y devuelve una copia.
+
+	var div = document.createElement("div");
+	div.textContent = "Elemento 1";
+
+	var div2 = div; // NO se está haciendo una copia
+	div2.textContent = "Elemento 2";
+
+	div.textContent; // 'Elemento 2'
+
+Cuando hacemos "var div2 = div;", no hacemos una copia, sino una referencia a la variable "div". Para solucionar esto hacemos:
+
+	var div = document.createElement("div");
+	div.textContent = "Elemento 1";
+
+	var div2 = div.cloneNode(); // Ahora si estamos clonando
+	div2.textContent = "Elemento 2";
+
+	div.textContent; // 'Elemento 1'
+
+El método "cloneNode(deep)" acepta un parámetro "deep" (booleano) opcional por defecto para indicar el tipo de clonación. En el caso de establecerlo a "true", clonará también sus hijos, lo que se conoce como una clonación profunda (Deep Clone). En caso contrario, no clonará sus hijos, lo que se conoce como una clonación superficial (Shallow clone).
+
+- "isConnected" --> Indica si el nodo HTML está conectado con el documento HTML.
+
+Nota: los metodos vistos hasta el momento, crean elementos, pero no los insertan en el documento HTML.
+_______________________________________________________
+
+	[8.5]. Atributos de un elemento:
+_______________________________________________________
+	
+Cuando se accede a un nodo, tambien es posible cambiar y acceder a sus
+atributos y propiedades (incluidas propiedades de CSS).
+
+Ej.1: obtener la dirección URL de un enlace (etiqueta <a>).
+	
+	//en el HTML tenemos:
+	//<a id="enlace" href="http://www.__.com">Enlace</a>
+
+	var enlace=document.getElementById("enlace");
+	alert(enlace.href); //muestra http://www.__.com
+
+Ej.2: Le asignamos valores como propiedades de objetos al elemento creado:
+
+	var div = document.createElement("div");
+	div.id = "page";
+	div.className = "data"; // Ojo, class es una palabra reservada de Javascript
+	div.style = "color: red";
+
+En algunos casos esto se puede complicar, ya que por ejemplo la palabra class (para crear clases) o la palabra for (para bucles) son palabras reservadas de Javascript y no se podrían utilizar para crear atributos. Por eso tenemos métodos para utilizar en un elemento HTML y referirnos a sus atributos:
+
+- "hasAttribute(attr)" --> Indica si el elemento tiene el atributo "attr".
+
+- "hasAttributes()" -->	Indica si el elemento tiene atributos.
+
+- "getAttributeNames()" --> Devuelve un array con los atributos del elemento.
+
+- "getAttribute(attr)" --> Devuelve el valor del atributo "attr" del elemento o null si no existe.
+
+- "removeAttribute(attr)" --> Elimina el atributo "attr" del elemento.
+
+- "setAttribute(attr, value)" --> Añade o cambia el atributo "attr" al valor value.
+
+- "getAttributeNode(attr)" --> Idem a "getAttribute()" pero devuelve el atributo como nodo.
+
+- "removeAttributeNode(attr)" --> Idem a "removeAttribute()" pero devuelve el atributo como nodo.
+
+- "setAttributeNode(attr, value)" --> Idem a "setAttribute()" pero devuelve el atributo como nodo.
+
+	// <div id="page" class="info data dark" data-number="5"></div>
+	var div = document.querySelector("#page");
+
+	div.hasAttribute("data-number"); // true
+	div.hasAttributes(); // true (tiene 3)
+
+	div.getAttributeNames(); // ['id', 'data-number', 'class']
+	div.getAttribute("id"); // 'page'
+	div.removeAttribute("id"); // Elimina el atributo id. No devuelve nada.
+	div.setAttribute("id", "page"); // Vuelve a añadirlo.
+
+Los tres últimos métodos, "getAttributeNode()", "removeAttributeNode()" y "setAttributeNode()" son versiones idénticas a las anteriores, sólo que devuelven el nodo afectado, útil si queremos guardarlo en una variable y seguir trabajando con él.
+_______________________________________________________
+
+	[8.5.1]. Atributo "Class" de un elemento:
+_______________________________________________________	
+
+Al margen de tener que utilizar "className" en lugar de "class", lo que puede dar lugar a confusiones y equivocaciones, trabajar con clases utilizando atributos puede ser poco apropiado, ya que recordemos que un elemento HTML puede tener varias clases. En el caso de sobreescribir con una asignación una clase, eliminaríamos las anteriores.
+
+Para trabajar más cómodamente, existe un sistema muy interesante para trabajar con clases: el objeto propiedad "classList", que devuelve la lista de clases del elemento. Además, incorpora una serie de métodos especiales que nos harán muy sencillo trabajar con clases:
+	
+- "classList" --> Devuelve la lista de clases del elemento HTML.
+
+- "classList.item(n)" --> Devuelve la clase número n del elemento HTML.
+
+- "classList.add(c1, c2, ...)" --> Añade las clases c1, c2... al elemento HTML.
+
+- "classList.remove(c1, c2, ...)" --> Elimina las clases c1, c2... del elemento HTML.
+
+- "classList.contains(clase)" --> Indica si la clase existe en el elemento HTML.
+
+- "classList.toggle(clase)" --> Si la clase no existe, la añade. Si no, la elimina. Devuelve "true" si añade la clase y "false" si la elimina.
+
+- "classList.toggle(clase, expr)" --> Si "expr" es "true", añade clase. Si no, la elimina.
+
+- "classList.replace(old, new)" --> Reemplaza la clase "old" por la clase "new". Devuelve "true" si realiza el cambio con éxito.
+
+	// <div id="page" class="info data dark" data-number="5"></div>
+	var div = document.querySelector("#page");
+
+	div.classList; // ['info', 'data', 'dark']
+	div.classList.add("uno", "dos"); // No devuelve nada. Añadimos 'uno' y 'dos'
+	div.classList.remove("uno", "dos"); // No devuelve nada. Eliminamos 'uno' y 'dos'
+	div.classList.item(1); // 'data'
+	div.classList.contains("info"); // Devuelve `true` (existe la clase)
+	div.classList.toggle("info"); // Devuelve `false` (elimina 'info')
+	div.classList.toggle("info"); // Devuelve `true` (no existía, añade 'info')
+	div.classList.replace("dark", "light"); // Devuelve `true` (se hizo el cambio)
+
+Nota: la propiedad "classList" aunque parece un "array" no lo es, es un elemento que actúa como un "array", por lo que puede carecer de algunos métodos o propiedades concretos.
+_______________________________________________________
+
+	[8.6]. Insertar Elementos:
+_______________________________________________________
+
+Para añadir los elementos al documento HTML, se puede realizar mediante los siguientes métodos:
+
+- "appendChild(node)" --> Añade como hijo, el nodo "node". Devuelve el nodo insertado.
+
+	var div = document.createElement("div");
+	div.textContent = "Esto es un div insertado con JS.";
+
+	var app = document.querySelector("#app"); // <div id="app"></div>
+	app.appendChild(div);
+
+Este método inserta el elemento como un hijo y al final de todos los elementos hijos que existan.
+
+- "insertAdjacentElement(pos, elem)" --> Inserta el elemento "elem" en la posición "pos". Si falla, null.
+
+- "insertAdjacentHTML(pos, str)" --> Inserta el código HTML "str" en la posición "pos".
+
+- "insertAdjacentText(pos, text)" --> Inserta el texto "text" en la posición "pos".
+
+- "insertBefore(new, node)" --> Inserta el nodo "new" antes de "node" y como hijo del nodo actual.
+
+El parámetro "new" es el nodo a insertar, mientras que "node" puede ser:
+
+	-"null" insertando "new" después del último nodo hijo.
+	-un nodo de referencia, insertando "new" antes de dicho "node" de referencia.
+
+Los métodos de la familia "insertAdjacent" son bastante más versátiles. Tenemos tres versiones diferentes: "insertAdjacentElement()" donde insertamos un objeto , "insertAdjacentHTML()" donde insertamos el código HTML directamente (similar a como lo hacemos con "innerHTML") y por último "insertAdjacentText()" donde insertamos un texto específico. En las tres versiones, debemos indicar un  "pos" como primer parámetro para indicar en que posición vamos a insertar el contenido:
+
+- "beforebegin": El elemento se inserta antes de la etiqueta HTML de apertura.
+- "afterbegin": El elemento se inserta dentro de la etiqueta HTML, antes de su primer hijo.
+- "beforeend": El elemento se inserta dentro de la etiqueta HTML, después de su último hijo. Es el equivalente a usar "appendChild()".
+- "afterend": El elemento se inserta después de la etiqueta HTML de cierre.
+
+	var div = document.createElement("div");
+	div.textContent = "Ejemplo";
+
+	var app = document.querySelector("#app"); // <div id="app">App</div>
+
+	// Opción #1 Antes del elemento:
+	app.insertAdjacentElement("beforebegin", div);
+	// <div>Ejemplo</div> <div id="app">App</div>
+
+	// Opción #2 Antes del primer hijo:
+	app.insertAdjacentElement("afterbegin", div);
+	// <div id="app"> <div>Ejemplo</div> App</div>
+
+	// Opción #3 Después del último hijo:
+	app.insertAdjacentElement("beforeend", div);
+	// <div id="app">App <div>Ejemplo</div> </div>
+
+	// Opción #4 Después del elemento:
+	app.insertAdjacentElement("afterend", div);
+	// <div id="app">App</div> <div>Ejemplo</div>
+
+La diferencia entre las versiones de los métodos es la que podemos ver a continuación:
+
+	// Inserta el elemento HTML div creado con "createElement"
+	app.insertAdjacentElement("beforebegin", div);
+
+	// Inserta el código HTML pasado por parámetro
+	app.insertAdjacentHTML("beforebegin", '<div id="app"></div>');
+
+	// Inserta un nodo con el texto pasado por parámetro
+	app.insertAdjacentText("beforebegin", "Hola a todos");
+_______________________________________________________
+
+	[8.7]. Eliminar Elementos:
+_______________________________________________________
+
+Los métodos más para eliminar o reemplazar elementos son:
+
+- "remove()" --> Elimina el propio nodo de su elemento padre. No devuelve nada.
+
+	var div = document.querySelector(".deleteme");
+	div.remove();
+
+Nota: cuando se elimina un nodo, se eliminan todos sus hijos.
+
+- "removeChild(node)" --> Elimina y devuelve el nodo hijo "node".
+
+	// <p id="provisional">…</p>
+	var parrafo=document.querySelector("#provisional");
+	parrafo.parentNode.removeChild(parrafo);
+
+El método ".removeChild", se invoca desde el elemento padre del nodo.
+Para acceder al padre de este elemento o cualquier otro se usa:
+
+	"nodoHijo.parentNode"
+
+- "replaceChild(new, old)" --> Reemplaza el nodo hijo old por "new". Devuelve "old".
+_______________________________________________________
+
+	[8.8]. Elementos Relacionados:
+_______________________________________________________
+
+Existen unas propiedades para navegar por la jerarquía de elementos HTML relacionados.
+
+El primer grupo de propiedades nos permiten acceder a elementos HTML:
+
+- "children" --> Devuelve una lista ("array") de elementos HTML hijos.
+
+- "parentElement" --> Devuelve el padre del elemento o "null" si no tiene.
+
+- "firstElementChild" --> Devuelve el primer elemento hijo.
+
+- "lastElementChild" --> Devuelve el último elemento hijo.
+
+- "previousElementSibling" --> Devuelve el elemento hermano anterior o "null" si no tiene.
+
+- "nextElementSibling" --> Devuelve el elemento hermano siguiente o "null" si no tiene.
+
+Ejemplo de uso de las propiedades teniendo el siguiente documento HTML:
+
+	<html>
+		<body>
+			<div id="app">
+				<div class="header">
+					<h1>Titular</h1>
+				</div>
+				<p>Párrafo de descripción</p>
+				<a href="/">Enlace</a>
+			</div>
+		</body>
+	</html>
+
+Podemos «navegar» por la jerarquía de elementos, moviéndonos entre elementos padre, hijo o hermanos:
+
+	document.body.children.length; // 1
+	document.body.children; // [div#app]
+	document.body.parentElement; // <html>
+
+	var app = document.querySelector("#app");
+
+	app.children; // [div.header, p, a]
+	app.firstElementChild; // <div class="header">
+	app.lastElementChild; // <a href="...">
+
+	var a = app.querySelector("a");
+
+	a.previousElementSibling; // <p>
+	a.nextElementSibling; // null
+
+El segundo grupo de propiedades son equivalentes pero trabajando a nivel de nodos HTML:
+
+- "childNodes" --> Devuelve una lista de nodos hijos. Incluye nodos de texto y comentarios.
+
+- "parentNode" --> Devuelve el nodo padre del nodo o "null" si no tiene.
+
+- "firstChild" --> Devuelve el primer nodo hijo.
+
+- "lastChild" --> Devuelve el último nodo hijo.
+
+- "previousSibling" --> Devuelve el nodo hermano anterior o null si no tiene.
+
+- "nextSibling" --> Devuelve el nodo hermano siguiente o null si no tiene.
+
+A nivel de nodos HTML, los textos (¡y espacios en blanco entre elementos HTML!) influyen:
+
+	document.body.childNodes.length; // 3
+	document.body.childNodes; // [text, div#app, text]
+	document.body.parentNode; // <html>
+
+	var app = document.querySelector("#app");
+
+	app.childNodes; // [text, div.header, text, p, text, a, text]
+	app.firstChild.textContent; // '                             '
+	app.lastChild.textContent; // '                             '
+
+	var a = app.querySelector("a");
+
+	a.previousSibling; // #text
+	a.nextSibling; // #text
+_______________________________________________________
+
+	[8.9]. Resumen Crear y Añadir Elementos:
+_______________________________________________________
+
+Consta de 4 pasos:
+
+(1) Crear un nodo de tipo "Element" para representar el elemento.
+
+	.createElement(etiqueta);
+
+	var parrafo=document.createElement("p");
+
+(2) Crear un nodo del tipo "Text" que represente el contenido del elemento.
+
+	.createTextNode(contenido);
+
+	var contenido=document.createTextNode("Hola Mundo!");
+
+(3) Añadir el nodo "Text", como hijo del nodo "Element".
+
+	.nodoPadre.appendChild(nodoHijo);
+
+	parrafo.appendChild(contenido);
+
+(4) Añadir el nodo "Element" a la pág. en forma de hijo del nodo correspondiente al lugar donde se quiere insertar el elemento.
+
+	document.body.appendChild(parrafo);
+_______________________________________________________
+
+	[8.10]. Librerías para manejar Elementos:
+_______________________________________________________
+
+En muchos casos, el rendimiento no es tan importante como para trabajar a tan bajo nivel, por lo que podemos utilizar algunas librerías de terceros que nos facilitan el trabajo, nos permiten programar más rápidamente y la perdida de rendimiento es aceptable en comparación con el trabajo que podría llevar.
+
+	- SuperDOM: https://github.com/szaranger/superdom
+
+	- Voyeur.js: http://adriancooney.ie/voyeur.js/
+
+	- HtmlJs: https://nhanfu.github.io/htmljs/api/index.html
+
+	- Re:DOM: https://redom.js.org/
+_______________________________________________________
+
+	[9]. Eventos:
+_______________________________________________________
+
+Un evento HTML, es creado cuando el navegador hace algo, o el usuario hace algo.
+
+Hay muchos tipos de eventos, como: hacer clic en un botón, pasar el mouse encima, arrastrar y soltar, presionar una tecla, etc.
+
+Un evento en JavaScript es un objeto.
+
+El nombre de c/evento se construye mediante el prefijo "on", seguido del nombre en ingles de la acción asociada al evento.
+
+Ej: "onclick"
+
+Algunos de los eventos más importantes definidos para JavaScript son:
+
+	"onblur" --> Deseleccionar el elemento.
+
+	"onchange" --> Deseleccionar un elemento que se ha modificado.
+
+	"onclick" --> Pinchar y soltar el ratón.
+
+	"ondblclick" --> Pinchar dos veces seguidas con el ratón.
+
+	"onfocus" --> Seleccionar un elemento.
+
+	"onkeydown" --> Pulsar una tecla (sin soltar).
+
+	"onkeypress" --> Pulsar una tecla.
+
+	"onkeyup" --> Soltar una tecla pulsada.
+
+	"onload" --> La página se ha cargado completamente.
+
+	"onmousedown" --> Pulsar (sin soltar) un botón del ratón.
+
+	"onmousemove" --> Mover el ratón.
+
+	"onmouseout" --> El ratón "sale" del elemento (pasa por encima de otro elemento).
+
+	"onmouseover" --> El ratón "entra" en el elemento (pasa por encima del elemento).
+
+	"onmouseup" --> Soltar el botón que estaba pulsado en el ratón.
+
+	"onreset" --> Inicializar el formulario (borrar todos sus datos).
+
+	"onresize" --> Se ha modificado el tamaño de la ventana del navegador.
+
+	"onselect" --> Seleccionar un texto.
+
+	"onsubmit" --> Enviar el formulario.
+
+	"onunload" --> Se abandona la página (por ejemplo al cerrar el navegador).
+
+Nota: para ver una tabla con estos eventos y a que elementos estan definidos ir a:
+
+	https://uniwebsidad.com/libros/javascript/capitulo-6/modelo-basico-de-eventos-2
+_______________________________________________________
+
+	[9.1]. Manejador de Eventos:
+_______________________________________________________
+
+Se refiere a las funciones o código JavaScript que se define para cada evento.
+
+Los manejadores se pueden indicar de 3 formas:
+
+(1) Manejadores como atributos de los elementos HTML:
+	
+	<div id="contenidos" style="width:150px; height:60px;border:thin solid silver" onmouseover="this.style.borderColor='black';" onmouseout="this.style.borderColor='silver';">
+		Contenido del div…
+	</div>
+
+"this" hace referencia al elemento HTML que ha provocado el evento.
+
+(2) Manejadores como funciones JavaScript externas:
+
+	<div style="width:150px; height:60px; border:thin solid silver" onmouseover="resalta(this)"onmouseout="resalta(this)">
+		Contenido del div…
+	</div>
+
+	<script>
+	function resalta(elemento) {
+		switch(elemento.style.borderColor) {
+			case 'silver':
+			case 'silver silver silver silver':
+			case '#c0c0c0': 
+				elemento.style.borderColor = 'black';
+				break;
+			//Firefox
+			case 'black':
+			// IE
+			case 'black black black black':
+			//Opera
+			case '#000000':
+				elemento.style.borderColor = 'silver';
+			break;
+		}
+	}
+	</script>
+
+El inconveniente de usar funciones externas, es que toca pasar la variable "this" como parámetro a la función.
+
+Se usan muchos "case", debido a la interpretación de "borderColor", por parte de los navegadores.
+
+(3) Manejadores Semánticos: Es la mejor forma, ya que no ensucia el código HTML. Y dentro de las funciones externas asignadas sí se puede utilizar la variable "this" para referirse al elemento que provoca el evento.
+
+Para usar este método la pág. se debe cargar completamente antes de que se puedan usar las funciones DOM.
+
+Para asegurarse que el código JavaScript se ejecute después de cargar la pág. se usa:
+
+	window.onload=function(){
+		...
+	}
+
+Así el manejador semántico quedaría:
+
+	//Función externa
+	function muestraMensaje(){
+		alert('Gracias por pinchar');
+	}
+
+	//verificar que se carga la pág.
+	window.onload=function(){
+		//Asignar la función externa al elemento
+		document.getElementById("pinchable").onclick=muestraMensaje;
+	}
+
+	//Elemento HTML
+	<input id="pinchable" type="button" value="Pinchame y veras!"/>
+_______________________________________________________
+
+	[9.1.1]. Metodo "addEventListener()":
+_______________________________________________________
+
+El metodo "addEventListener()", añade un manejador de eventos al elemento especificado:
+
+	element.addEventListener(event, function, useCapture);
+
+El primer parámetro es el tipo de evento (como "clic" o "mousedown" o cualquier otro evento DOM de HTML).
+
+El segundo parámetro es la función que queremos llamar cuando ocurre el evento.
+
+El tercer parámetro es un valor booleano que especifica si se debe utilizar la propagación o la captura de eventos. Este parámetro es opcional.
+
+	function resalta(elEvento){
+		…
+	}
+	
+	window.addEventListener("load",inicio);
+	
+	function inicio(){
+		document.getElementById("seccion").addEventListener("mouseover",resalta,false);
+		
+		document.getElementById("seccion").addEventListener("mouseout",resalta);
+	}
+
+Nota: No se utiliza el prefijo "on" para el evento. Utilice "click" en lugar de "onclick".
+
+Para ver las ventajas del metodo "addEventListener()" ir a:
+
+	https://www.w3schools.com/js/js_htmldom_eventlistener.asp
+_______________________________________________________
+
+	[9.1.2]. Metodo "removeEventListener()":
+_______________________________________________________
+
+Elimina los controladores de eventos que se han añadido con el método "addEventListener()":
+
+	window.addEventListener("load",function(){
+		alert("La pág. se cargó");
+	});
+
+	var boton = document.getElementById("miBoton");
+
+	boton.addEventListener("click",boton_click);
+
+	function boton_click(){
+		alert("Bienvenido");
+		boton.removeEventListener("click",boton_click);
+	}
+
+	// El HTML es:
+	/*
+		<body>
+			<button id="miBoton">Haz clic </button>
+		</body>
+	*/
+_______________________________________________________
+
+	[10]. AJAX Peticiones HTTP:
+_______________________________________________________
+
+Una petición HTTP es como suele denominarse a la acción por parte del navegador de solicitar a un servidor web un documento o archivo, ya sea un fichero ".html", una imagen, una tipografía, un archivo ".js", etc. Gracias a dicha petición, el navegador puede descargar ese archivo, almacenarlo en un caché temporal de archivos del navegador y, finalmente, mostrarlo en la página actual que lo ha solicitado.
+
+AJAX (Asynchronous Javascript and XML / JavaScript Asíncrono + XML). Es una modalidad que se basa en que la petición HTTP se realiza desde Javascript, de forma transparente al usuario, descargando la información y pudiendo tratarla sin necesidad de mostrarla directamente en la página.
+
+Actualmente en vez de usar el formato de datos XML se usa JSON.
+
+Existen varias formas de realizar peticiones HTTP mediante AJAX, pero las principales suelen ser "XMLHttpRequest" y "fetch" (nativas, incluidas en el navegador por defecto), además de liberías como "axios" o "superagent".
+_______________________________________________________
+
+	[10.1]. XHR: "XMLHttpRequest":
+_______________________________________________________
+
+"XMLHttpRequest" (XHR) es un objeto especial de Javascript que permite realizar peticiones HTTP asíncronas (AJAX) de forma nativa desde Javascript. Se trata de la primera implementación que existió en ECMAScript (ES5) antes de surgir fetch, el estándar actual.
+
+Consta de 4 Pasos:
+
+(1) Instanciar el Objeto XMLHttpRequest.
+(2) Prepara la función de respuesta.
+(3) Realiza la petición al servidor.
+(4) Ejecuta la función de respuesta.
+
+Ejemplo: mostrar en un alert el texto del archivo "robots.txt" que se encuentra en el servidor. El archivo "robots.txt" es un fichero de texto que suele existir en prácticamente todas las páginas webs. Se trata de un fichero de texto plano que indica las URL a las que los robots o crawlers (como el de Google) no deben acceder.
+
+	function descargaArchivo(){
+		
+		//(1) Obtener la instancia del objeto XHR
+		
+		// Navegadores buenos
+		if(window.XMLHttpRequest) {
+			const peticion_http = new XMLHttpRequest();
+		}
+		// Navegadores Malos ej. I.E.
+		else if(window.ActiveXObject) {
+			const peticion_http = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		
+		//(2) Preparar la función de respuesta
+
+		peticion_http.onreadystatechange = muestraContenido;
+		
+		//(3) Realizar petición HTTP
+		
+		peticion_http.open('GET', 'http://localhost/holamundo.txt', true);
+		peticion_http.send(null);
+
+		//(4) Se ejecuta automáticamente la función cuando se recibe la respuesta del servidor
+		
+		function muestraContenido() {
+			if(peticion_http.readyState == 4) {
+				if(peticion_http.status == 200) {
+					alert(peticion_http.responseText);
+				}
+			}
+		}
+	}
+
+	window.onload = descargaArchivo;
+
+El primer paso es crear un objeto XMLHttpRequest (XHR):
+
+	// Creamos la instancia del objeto XHR
+	const client = new XMLHttpRequest();
+
+Definimos el tipo de petición utilizando el método ".open(method, url)", indicando el método HTTP y la URL a la que queremos hacer la petición:
+
+	// Preparamos la petición y la enviamos
+	client.open("GET", "/robots.txt");
+	client.send();
+
+El método ".send()", lanza la petición al servidor.
+_______________________________________________________
+
+	[10.1.1]. Propiedades XHR:
+_______________________________________________________
+
+Al crear un objeto XHR tenemos acceso a una serie de propiedades que forman parte de nuestra instancia. Entre ellas, se encuentran las siguientes:
+
+	".responseType" --> Define el tipo de respuesta de ".response": json, Blob, etc. Por defecto, text.
+ 
+ 	".response" -->	Contenido parseado automáticamente basado en ".responseType".
+
+	".responseText" -->	Respuesta de la petición como texto plano o  si no se ha recibido.
+
+	".responseURL" --> URL de la petición HTTP a realizar.
+
+	".readyState" --> Número que indica en que estado se encuentra la petición.
+
+		0: No inicializado (objeto creado, pero no se ha invocado el método open).
+		1: Cargando (objeto creado, pero no se ha invocado el método send).
+		2: Cargado (se ha invocado el método send, pero el servidor aún no ha respondido).
+		3: Interactivo (se han recibido algunos datos, aunque no se puede emplear la propiedad responseText).
+		4: Completo (se han recibido todos los datos de la respuesta del servidor).
+
+		Usamos "spinners" (gifs de carga), si la propiedad ".readyState" se encuentra entre 1 y 3.
+
+		Ejemplo:
+
+			const client = new XMLHttpRequest();
+
+			client.addEventListener("readystatechange", () => {
+			if (client.readyState === 4 && client.status === 200)
+				console.log(client.responseText);
+			});
+
+			client.open("GET", "/robots.txt");
+			client.send();
+
+	".timeout" --> Milisegundos permitidos para realizar la petición HTTP. Por defecto, 0 (sin límite).
+
+	".status" --> Código de error HTTP de respuesta de la petición (200 para respuesta correcta, 404 “No encontrado”, 500 para error del servidor, etc.).
+
+	".statusText" --> Texto con el código de error de respuesta, legible para humanos (“OK”, “Not Found”, “Internal Server Error”, etc.).
+
+	".withCredentials" --> Indica si la petición HTTP se está realizando con credenciales (enviando un usuario y contraseña).
+_______________________________________________________
+
+	[10.1.2]. Métodos XHR:
+_______________________________________________________
+
+Los metodos del objeto XHR son:
+
+	".setRequestHeader("cabecera", "valor")" --> Permite establecer cabeceras personalizadas en la petición HTTP. Se debe invocar el método "open()" antes que "setRequestHeader()".
+
+	".getAllResponseHeaders()" --> devuelve una cadena de texto con todas las cabeceras de la respuesta del servidor.
+
+	".getResponseHeader("cabecera")" --> devuelve una cadena de texto con el contenido de la cabecera solicitada.
+
+	".overrideMimeType(mimetype)" --> Permite modificar el MIME (tipo de fichero) de la petición.
+
+	".open("metodo", "url")" --> Permite preparar una petición HTTP. Los parámetros necesarios son: el método Http y la url destino (se puede indicar de forma relativa o absoluta). También tiene otros parámetros opcionales:
+		
+		open(string método, string URL[, Boolean asíncrono, string usuario, string password]);
+
+	".send()" --> Envía la petición previamente preparada con ".open()". Tambien se puede indicar un parámetro opcional que sea un objeto para enviar junto a la petición:
+
+		send(body)
+
+	".abort()" --> Cancela la petición enviada.
+_______________________________________________________
+
+	[10.1.3]. Eventos XHR:
+_______________________________________________________
+
+El objeto XHR tiene los siguientes eventos:
+
+	".onabort" --> Se dispara cuando una petición es cancelada.
+
+	".onload" --> Se dispara cuando una petición se ha completado correctamente.
+
+	".onloadstart" --> Se dispara cuando una petición comienza a cargar datos.
+
+	".onloadend" --> Se dispara cuando una petición termina (con error o sin ellos).
+
+	".onerror" --> Se dispara cuando una petición sufre un error.
+
+	".ontimeout" --> Se dispara cuando una petición agota el tiempo máximo.
+
+	".onprogress" --> Se dispara (varias veces) cuando una petición recibe datos.
+
+	".onreadystatechange" --> Se dispara cuando el valor .readyState cambia.
+_______________________________________________________
+
+	[10.2]. PROMESAS (promise):
+_______________________________________________________
+
+Usado cuando se hacen peticiones asicronas, una promesa nos permite capturar un valor de respuesta que puede estar disponible ahora, a futuro, o nunca.
+
+	//promesas
+	var saludar = new Promise((resolve, reject) =>{
+
+		//simulamos una respuesta asincrona
+		setTimeout(()=> {
+			let saludo = "Hola muy buenas tardes!!!";
+			//descomentar la siguiente línea para pobrar el "catch"
+			//saludo= false;
+			if(saludo){
+				resolve(saludo);
+			}else{
+				reject("No hay saludo disponible");
+			}
+
+		}, 2000);
+	});
+
+	//ejecutamos la promesa
+	//el ".then" es cuando haya resultado
+	//el ".catch" para capturar el error
+	saludar.then(resultado => {
+		alert(resultado);
+	})
+	.catch(err =>{
+		alert(err);
+	});
+
+Nota: para más info. de las promesas ir a:
+
+	https://lenguajejs.com/javascript/asincronia/promesas/
+_______________________________________________________
+
+	[10.3]. Fetch:
+_______________________________________________________
+
+Basado en promesas de Javascript, para realizar peticiones HTTP asíncronas de una forma más legible y cómoda.
+
+	// Realizamos la petición y guardamos la promesa
+	const request = fetch("/robots.txt");
+
+	// Si es resuelta, entonces...
+	request.then(function(response) { ... });
+
+El "fetch()" devolverá una "promesa" que será aceptada cuando reciba una respuesta y sólo será rechazada si hay un fallo de red o si por alguna razón no se pudo completar la petición. El modo más habitual de manejar las promesas es utilizando ".then()". 
+
+El ejemplo anterior se puede reescribir de la siguiente forma, que queda mucho más simple:
+
+	fetch("/robots.txt")
+		.then(function(response) {
+			/** Código que procesa la respuesta **/
+		});
+
+Al método ".then()" se le pasa una función callback donde su parámetro "response" es el objeto de respuesta de la petición que hemos realizado. En su interior realizaremos la lógica que queramos hacer con la respuesta a nuestra petición. A la función "fetch(url, options)" se le pasa por parámetro la url de la petición y, de forma opcional, un objeto options con opciones de la petición HTTP.
+
+	// Opciones de la petición (valores por defecto)
+	const options = {
+		method: "GET"
+	};
+
+	// Petición HTTP
+	fetch("/robots.txt", options)
+		.then(response => response.text())
+		.then(data => {
+			/** Procesar los datos **/
+		});
+
+En el parametro opcional "options" podemos definir:
+
+	"method" --> Método HTTP de la petición. Por defecto, "GET". Otras opciones: "HEAD"," POST", "PUT" etc...
+
+	"body" --> Cuerpo de la petición HTTP. Puede ser de varios tipos: "String", "FormData", "Blob", etc...
+
+	"headers" --> Cabeceras HTTP. Por defecto, {}.
+
+	"credentials" --> Modo de credenciales. Por defecto, "omit". Otras opciones: "same-origin" e "include".
+
+Ejemplo:
+
+	const options = {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json"
+		},
+		body: JSON.stringify(jsonData)
+	};
+_______________________________________________________
+
+	[10.3.1]. Cabeceras (Headers):
+_______________________________________________________
+
+Se puede crear un objeto "Headers":
+
+	const headers = new Headers();
+	headers.set("Content-Type", "application/json");
+	headers.set("Content-Encoding", "br");
+
+Para trabajar con cabeceras, se usan los métodos:
+
+	".has("name")" --> Comprueba si la cabecera "name" está definida.
+
+	".get("name")" --> Obtiene el valor de la cabecera "name".
+
+	".set("name", "value")" -->	Establece o modifica el valor "value" a la cabecera "name".
+
+	".append("name", "value")" --> Añade un nuevo valor "value" a la cabecera "name".
+
+	".delete("name")" --> Elimina la cabecera "name".
+
+Como muchos otros objetos iterables, podemos utilizar los métodos ".entries()", ".keys()" y/o ".values()" para recorrerlos:
+
+	for ([key, value] of headers.entries()) {
+		console.log("Clave: ", key, "valor: ", value);
+	}
+_______________________________________________________
+
+	[10.3.2]. Respuesta de la petición HTTP:
+_______________________________________________________
+
+En el primer ".then()" tenemos un objeto "response". Se trata de la respuesta que nos llega del servidor web al momento de recibir nuestra petición:
+
+	// Petición HTTP
+	fetch("/robots.txt", options)
+		.then(response => response.text())
+		.then(data => {
+			/** Procesar los datos **/
+		});
+
+Se está utilizando una arrow function que hace un "return" implícito de la promesa que devuelve el método ".text()", dicho objeto "response" tiene una serie de propiedades y métodos que pueden resultarnos útiles al implementar nuestro código:
+
+	".status" --> Código de error HTTP de la respuesta (100-599).
+
+	".statusText" --> Texto representativo del código de error HTTP anterior.
+
+	".ok" --> Devuelve "true" si el código HTTP es 200 (o empieza por 2), es decir, que todo ha ido correctamente. Util para comprobar si todo ha ido bien al realizar la petición:
+
+		fetch("/robots.txt")
+			.then(response => {
+				if (response.ok)
+					return response.text()
+			})
+
+	".headers" --> Cabeceras de la respuesta.
+
+	".url" --> URL completa de la petición HTTP que se ha realizado.
+_______________________________________________________
+
+	[10.3.3]. Métodos del objeto "response":
+_______________________________________________________
+
+La mayoría de estos métodos, procesan mediante una promesa los datos recibidos y facilitar el trabajo con ellos:
+
+	".text()" --> Devuelve una promesa con el texto plano de la respuesta.
+
+	".json()" --> Idem, pero con un objeto json. Equivalente a usar JSON.parse().
+
+	".blob()" --> Idem, pero con un objeto Blob (binary large object).
+
+	".arrayBuffer()" --> Idem, pero con un objeto ArrayBuffer (buffer binario puro).
+
+	".formData()" --> Idem, pero con un objeto FormData (datos de formulario).
+
+	".clone()" --> Crea y devuelve un clon de la instancia en cuestión.
+
+	"Response.error()" --> Devuelve un nuevo objeto "Response" con un error de red asociado.
+
+	"Response.redirect(url, code)" --> Redirige a una url, opcionalmente con un "code" de error.
+
+Ejemplo:
+
+	fetch("/robots.txt")
+		.then(response => response.text()) // Devuelve una promesa
+		.then(data => console.log(data));
+
+Despues de procesar la respuesta con "response.text()", devolvemos una "promesa" con el contenido en texto plano. Esta "promesa" se procesa en el segundo ".then()", donde gestionamos dicho contenido almacenado en "data".
+
+Tenemos varios métodos similares para procesar las respuestas. Por ejemplo:
+
+	fetch("/contents.json")
+		.then(response => response.text())
+		.then(data => {
+			const json = JSON.parse(data);
+			console.log(json);
+		});
+
+El caso anterior utilizando el método "response.json()" en lugar de "response.text()" sería equivalente al siguiente fragmento:
+
+	fetch("/contents.json")
+		.then(response => response.json())
+		.then(data => {
+			console.log(data);
+		});
+
+Con "response.json()" nos ahorraríamos tener que hacer el "JSON.parse()" de forma manual.
+_______________________________________________________
+
+	[10.3.4]. Ejemplo usando promesas:
+_______________________________________________________
+
+- Comprobamos que la petición es correcta con "response.ok".
+
+- Utilizamos "response.text()" para procesarla.
+
+- En el caso de producirse algún error, lanzamos excepción con el código de error.
+
+- Procesamos los datos y los mostramos en la consola.
+
+- En el caso de que la "promesa" sea rechazada, capturamos el error con el "catch".
+
+	// Petición HTTP
+	fetch("/robots.txt")
+		.then(response => {
+			if (response.ok)
+				return response.text()
+   			else
+				throw new Error(response.status);
+		})
+		.then(data => {
+			console.log("Datos: " + data);
+		})
+		.catch(err => {
+			console.error("ERROR: ", err.message)
+		});
+
+Podemos optimizar un poco el ejemplo anterior. Creamos la función "isResponseOk()" para procesar la respuesta (invirtiendo el condicional para hacerlo más directo). Luego, los ".then()" y ".catch()" los utilizamos con una arrow function para simplificarlos:
+
+	const isResponseOk = (response) => {
+		if (!response.ok)
+			throw new Error(response.status);
+		return response.text()
+	}
+
+	fetch("/robots.txt")
+		.then(response => isResponseOk(response))
+		.then(data => console.log("Datos: ", data))
+		.catch(err => console.error("ERROR: ", err.message));
+_______________________________________________________
+
+	[10.3.5]. Ejemplo usando "Async/await":
+_______________________________________________________
+
+Utilizar "async/await" no es más que lo que se denomina "azúcar sintáctico", es decir, utilizar algo visualmente más agradable, pero que por debajo realiza la misma tarea. Para ello, lo que debemos tener siempre presente es que un "await" sólo se puede ejecutar si esta dentro de una función definida como "async".
+
+En este caso, lo que hacemos es lo siguiente:
+
+- Creamos una función "request(url)" que definimos con "async".
+
+- Llamamos a "fetch" utilizando "await" para esperar y resolver la promesa.
+
+- Comprobamos si todo ha ido bien usando "response.ok".
+
+- Llamamos a "response.text()" utilizando "await" y devolvemos el resultado.
+
+	const request = async (url) => {
+		const response = await fetch(url);
+		if (!response.ok)
+			throw new Error("WARN", response.status);
+		const data = await response.text();
+		return data;
+	}
+
+	const resultOk = await request("/robots.txt");
+	const resultError = await request("/nonExistentFile.txt");
+
+Una vez hecho esto, podemos llamar a nuestra función" request" y almacenar el resultado, usando nuevamente "await". Al final, utilizar ".then()" o "async/await" es una cuestión de gustos y puedes utilizar el que más te guste.
+_______________________________________________________
+
+	[10.4]. Política CORS:
+_______________________________________________________
+
+"Cross Origin" (origen cruzado) es la palabra que se utiliza para denominar el tipo de peticiones que se realizan a un dominio diferente del dominio de origen desde donde se realiza la petición. De esta forma, por una parte tenemos las peticiones de origen cruzado (cross-origin) y las peticiones del mismo origen (same-origin).
+
+Estamos realizando peticiones relativas, es decir, al mismo dominio. Por defecto, en Javascript, las peticiones al mismo dominio de la web donde nos encontramos se pueden realizar sin ninguna restricción. Sin embargo, si intentamos realizarlas a otro dominio diferente, probablemente nos aparezca un error de CORS (Cross-Origin Resource Sharing) similar al siguiente:
+
+	Access to XMLHttpRequest at 'https://domain.com/robots.txt' from origin 'https://currentdomain.com/' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
+
+Las peticiones HTTP asíncronas de origen cruzado no están permitidas, pero existen formas de permitirlas. La más básica, probablemente, sea la de incluir una cabecera "Access-Control-Allow-Origin" en la respuesta de la petición, donde debe indicarse el dominio al que se le quiere dar permiso:
+
+	Access-Control-Allow-Origin: https://domain.com/
+
+_______________________________________________________
+
+	[]. Módulos ECMAScript (ESM):
+_______________________________________________________
+
+Permite la importación y exportación de código entre diferentes ficheros Javascript.
+
+Para trabajar con módulos tenemos a nuestra disposición las siguientes palabras clave:
+
+- "export" --> Exporta uno o varios elementos (variables, funciones, clases...) del fichero actual.
+
+- "import" --> Importa uno o varios elementos (variables, funciones, clases...) desde otro fichero ".js".
+
+Mediante la palabra clave "export" crearemos un objeto (módulo de exportación) que contendrá una o varias propiedades. En estas propiedades podremos guardar variables, funciones o clases (a partir de ahora, elementos). Si dicho módulo ya existe, podremos ir añadiendo más propiedades. Por otro lado, con la palabra clave "import" podremos leer dichos módulos de otros ficheros y utilizar sus propiedades en nuestro código.
+_______________________________________________________
+
+	[.1]. Exportación de Módulos:
+_______________________________________________________
+
+Existen varias formas de exportar código mediante la palabra clave export :
+
+	export { name }; --> Añade el elemento name al módulo de exportación.
+
+	export { n1, n2, n3... }; --> Añade los elementos indicados ( n1 , n2 , n3 ...) al módulo de exportación.
+
+	export * from './file.js'; --> Añade todos los elementos del módulo "file.js" al módulo de exportación.
+
+	export declaration; --> Declara una variable, función o clase y la añade al módulo de exportación.
+
+	export default declaration; --> Declara una función o clase y la añade al módulo de exportación.
+
+Es posible renombrar los elementos sobre la marcha utilizando "as" seguido del nuevo nombre. Además, si se indica "default" como nuevo nombre, ese elemento será la exportación por defecto. Sólo puede haber una exportación por defecto por fichero.
+
+	let number = 4;
+	const saludar = () => "¡Hola!";
+	const goodbye = () => "¡Adiós!";
+	class Clase {}
+
+	export {
+		number
+	}; // Se crea un módulo y se añade number
+
+	export {
+		saludar,
+		goodbye as despedir
+	}; // Se añade saludar y despedir al módulo
+
+	export {
+		Clase as
+		default
+	}; // Se añade Clase al módulo (default)
+
+	export {
+		saludar as otroNombre
+	}; // Se añade otroNombre al módulo
+
+También es posible exportar variables, funciones o clases simplemente incluyendo la palabra "export" a la izquierda de la línea de su declaración:
+
+	export const f1 = () => 42; // Se crea un módulo y se añade f1
+
+	export default function f2() {
+		return "Manz";
+	} // Se añade f2 al módulo (default)
+
+Nota: en el caso de utilizar una exportación por defecto en una declaración, no es posible utilizar "var" , "let" o "const" . Tampoco es posible usar "export" dentro de funciones, bucles o contextos específicos.
+_______________________________________________________
+
+	[.2]. Importación de Módulos:
+_______________________________________________________
+
+Existen varias formas de importar código utilizando "import", con la que podemos cargar un módulo de exportación de otro fichero Javascript, con todos los elementos exportados que contiene.
+
+	import nombre from './file.js'; --> Importa sólo el elemento por defecto de "file.js" en "nombre".
+
+	import { nombre } from './file.js'; --> Importa sólo el elemento "nombre" de "file.js".
+
+	import { n1, n2.. } from './file.js'; --> Importa los elementos indicados desde "file.js".
+
+	import * as obj from './file.js'; --> Importa todos los elementos de "file.js" en el objeto "obj".
+
+	import './file.js'; -->	No importa elementos, pero ejecuta el código de "file.js".
+
+Al igual que con la exportación, también se puede renombrar elementos utilizando "as" seguido del nuevo nombre.
+
+En el primer caso, importamos el elemento por defecto desde el módulo "file.js" y lo guardamos en la variable "nombre". En el segundo y tercer caso, importamos los elementos indicados en el interior de los corchetes, desde el módulo "file.js".
+
+En el cuarto caso, importamos todos los elementos del módulo externo "file.js" en un objeto de nombre "obj" (es obligatorio indicar el nombre) y en el quinto caso, no importamos elementos, pero leemos el código del módulo y lo ejecutamos.
+_______________________________________________________
+
+	[.3]. Convenciones de módulos ES:
+_______________________________________________________
+
+Si queremos utilizar "import" y "export" desde el navegador directamente, deberemos añadir los archivos con módulos con la etiqueta <script> utilizando el atributo type="module" . Estas etiquetas de módulos se cargan en diferido, o lo que es lo mismo, como si fueran un <script defer> :
+
+	<script type="module" src="file.js"></script>
+
+Por norma general, a los archivos Javascript con módulos se les pone la extensión ".js", aunque también se pueden encontrar con otra extensión como ".es2015" o ".mjs".
+
+Se aconseja utilizar las rutas UNIX en los export e import , ya que son las que tienen mejor soporte, tanto en navegadores como en NodeJS. También se pueden indicar rutas absolutas para cargar directamente desde el navegador:
+
+	// Incorrecto
+	import { elemento } from "module.mjs";
+	import { elemento } from "folder/module.mjs";
+
+	// Correcto
+	import { elemento } from "./module.mjs"; // misma carpeta del .js
+	import { elemento } from "/module.mjs"; // carpeta raíz
+	import { elemento } from "../module.mjs"; // carpeta anterior al .js
+	import { ceil } from "https://unpkg.com/lodash-es@4.17.11/lodash.js";
+
+Se aconseja realizar las exportaciones al final de los ficheros Javascript. Aunque no es obligatorio, esto mejora la legibilidad de código, ya que siempre te esperas que los "export" aparezcan al final del código.

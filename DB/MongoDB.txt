@@ -1,0 +1,2242 @@
+
+	MongoDB:
+_______________________________________________________
+
+ÍNDICE:
+
+[1]. NoSQL vs SQL
+	[1.1]. SQL
+	[1.2]. NoSQL
+[2]. Instalación de MongoDB
+	[2.1]. Ejercicio Crear Base de Datos, colección y documento
+	[2.2]. Administrador Visual (GUI para Mongo)
+[3]. Conceptos básicos
+	[3.1]. Características Documentos
+	[3.2]. Tipos de Datos
+	[3.3]. Colecciones
+[4]. Crear base de Datos
+[5]. CRUD
+	[5.1]. Insertar
+		[5.1.1]. Insertar un documento
+		[5.1.2]. Insertar varios documentos
+	[5.2]. Visualización
+	[5.3]. Eliminar Documentos
+		[5.3.1]. Eliminar Documentos con remove()
+		[5.3.2]. Borrar una colección
+	[5.4]. Actualizar Documentos
+		[5.4.1]. Operadores de actualización
+			[5.4.1.1]. Operador $inc
+			[5.4.1.2]. Operador $set
+			[5.4.1.3]. Operador $unset
+			[5.4.1.4]. Operador $rename
+		[5.4.2]. Operadores de actualización de arrays
+		[5.4.3]. Parámetro "upsert"
+	[5.5]. Consultas
+		[5.5.1]. Consultar Documentos
+			[5.5.1.1]. find()
+			[5.5.1.2]. findOne()
+		[5.5.2]. Operadores de Consulta
+			[5.5.2.1]. Operadores Condicionales
+			[5.5.2.2]. Operadores $not, $and y $or
+			[5.5.2.3]. Expresiones Regulares
+		[5.5.3]. Consultas sobre Arrays
+		[5.5.4]. Consultas sobre Documentos Embebidos
+		[5.5.5]. Consultas $where
+		[5.5.6]. Configuración de Consultas
+[6]. Frameworks de Agregación
+	[6.1]. Agregación mediante tuberías
+		[6.1.1]. Operación $project
+		[6.1.2]. Operación $match
+		[6.1.3]. Operación $group
+		[6.1.4]. Operación $sort
+		[6.1.5]. Ejemplo
+	[6.2]. Map Reduce
+		[6.2.1]. Etapa map
+		[6.2.2]. Etapa reduce
+		[6.2.3]. Etapa finalize
+		[6.2.4]. Sintaxis
+		[6.2.5]. Ejemplo
+	[6.3]. Operaciones de propósito único
+		[6.3.1]. Comando "count"
+		[6.3.2]. Comando "distinct"
+		[6.3.3]. Comando "group"
+[7]. Indexación en MongoDB
+	[7.1]. Consultar y crear índices
+	[7.2]. Crear índice de documento embebido
+	[7.3]. Crear índice único
+	[7.4]. Índice compuesto
+	[7.5]. Opciones sobre los índices
+	[7.6]. Eliminar índices
+[8]. Administración de una BD
+	[8.1]. Creación de usuarios
+		[8.1.1]. Roles
+		[8.1.2]. Ejemplo creación de usuarios
+	[8.2]. Realizar Backups
+	[8.3]. Restauración de una copia de seguridad
+	[8.4]. Exportación de datos
+
+_______________________________________________________
+
+	[1]. NoSQL vs SQL:
+_______________________________________________________
+
+Tenemos dos tipos de bases de datos, las SQL y las NoSQL. A continuación hay una pequeña descripción de estas, para ver sus diferencias:
+_______________________________________________________
+
+	[1.1]. SQL:
+_______________________________________________________
+
+Base de datos relacional que está escrita en lenguaje SQL (Structured Query Language o lenguaje de consulta estructurado).
+
+- Los sistemas de gestión de base de datos (DBMS, Data Base Management System), nos permiten crear y proporcionar acceso a los datos de la DB. Algunos ejemplos de DBMS son: MySQL, PostgreSQL, Oracle.
+
+- Tienen Tablas(entidades).
+
+	+-----------+
+	| Cliente   |
+	+-----------+
+	| ID        |
+	| Nombre    |
+	| Apellido  |
+	| Correo    |
+	+-----------+
+
+Acá tenemos la tabla "Cliente", la cual tiene los atributos (campos, columnas) "ID", "Nombre", "Apellido" y "Correo".
+
+
+- Son Relacionales (asociaciones entre una tabla y otra).
+
+	+-----------+					 +-----------+
+	| Cliente   |       compra       | Película  |
+	+-----------+ _________<>________+-----------+
+	|           |                    |           |
+	+-----------+                    +-----------+
+
+Acá vemos la relación entre las tablas "Cliente" y "Película"
+
+- Tienen un esquema definido. Cada tabla tiene filas, columnas y registros:
+
+	+-----------+--------+----------+------+
+	| NIF       | NOMBRE | APELLIDO | EDAD |
+	+-----------+--------+----------+------+
+	| 51972854W | MARÍA  | GOMEZ    |   27 |
+	| 50193568W | Juan   | Gómez    |   18 |
+	| 51982457B | Elena  | Martín   |   27 |
+	+-----------+--------+----------+------+
+
+Esquema Tabla SQL:
+
+	+-----------+----------+----------+
+	|           | Columna  | Columna  |
+	+-----------+----------+----------+
+	|   Fila    | Registro | Registro |
+	|   Fila    | Registro | Registro |
+	+-----------+----------+----------+
+_______________________________________________________
+
+	[1.2]. NoSQL:
+_______________________________________________________
+
+NoSQL (Not Only SQL, no solo SQL), no maneja lenguaje SQL, es Javascript.
+Algunos ejemplos de DBMS de NoSQL son: MongoDB, Redis y Apache CouchDB.
+
+- No relacional.
+
+- No tienen tablas, tienen "Colecciones de Documentos".
+
+- Los "Documentos" son objetos JSON, en MongoDB son objetos BSON (JSON Binario).
+
+- Proporcionan grandes volúmenes de información en el menor tiempo posible.
+
+-Esquema libre. En los "Documentos", no es necesario tener los mismos campos(columnas) para todos los registros.
+
+Por ejemplo en SQL, todas las filas tienen las mismas columnas: "ID", "Nombre", "Apellido" y "Correo". En NOSQL, en un documento puede tener esos campos, pero en otro solo el "Nombre y "Apellido".
+
+En NoSQL no hay esquema, hay Base de Datos, en la cual tenemos "Colecciones". Dentro de las "Colecciones", en vez de "tablas", tenemos "Documentos", en vez de "Filas", tenemos "Documentos", en lugar de "Registros" tenemos "Datos del Documento", en vez de "Columnas" tenemos "Campos":
+
+	+-----------+------------+------------+
+	|           |   Campo    |   Campo    |
+	+-----------+------------+------------+
+	| Documento | Datos Doc. | Datos Doc. |
+	| Documento | Datos Doc. | Datos Doc. |
+	+-----------+------------+------------+
+
+Documentos JSON:
+
+	{
+		Nombre: "Victor",
+		Apellido: "Robles",
+		Email: "victor@gmail.com"
+	}
+
+En donde los "Campos" son: "Nombre", "Apellido", "Email". Los "Datos del Documento" son: "Victor", "Robles", "victor@gmail.com".
+
+Colecciones (conjunto de Documentos):
+
+	Usuarios:{
+		Nombre: "Victor",
+		Apellido: "Robles",
+		Email: "victor@gmail.com"
+	},
+	{
+		Nombre: "Ana",
+		Apellido: "Castillo",
+		Email: "ana@gmail.com"
+	}
+
+Nota: para ver más diferencias entre SQL vs NoSQL ir a:
+
+	https://www.ticportal.es/glosario-tic/base-datos-sql
+
+_______________________________________________________
+
+	[2]. Instalación de MongoDB:
+_______________________________________________________
+
+(1) Vamos al siguiente enlace:
+
+	https://www.mongodb.com/es
+
+(2) Allí le damos al botón de la barra de navegación que dice "Try Free", luego escogemos la pestaña de en medio que dice "On-Premises", y escogemos el desplegable "MongoDb Community Server" (enlace directo: https://www.mongodb.com/try/download/community).
+
+(3) Una vez descargado el instalador, damos en siguiente, si no queremos que se inicie mongo como servicio siempre, lo desmarcamos. 
+
+"Compass" es un administrador visual para mongo, pero más adelante se instalará otro, así que se puede desmarcar.
+
+(4) Después de instalado, vamos al disco duro "C". Creamos una carpeta llamada "data", y dentro de esta, creamos otra carpeta llamada "db".
+
+(5) Para arrancar MongoDB, vamos a la carpeta donde se instaló: 
+
+	C:\Program Files\MongoDB\Server\4.4\bin
+
+Allí ejecutamos el archivo "mongod.exe".
+
+(6) Ejecutamos la consola de MongoDB con el archivo "mongo.exe".
+
+Para verificar que funcione ponemos el comando: 
+
+	help
+
+Esto también nos muestra los comandos que podemos usar en la consola.
+_______________________________________________________
+
+	[2.1]. Ejercicio Crear Base de Datos, colección y documento:
+_______________________________________________________
+
+Como MongoDB no usa comandos SQL, la creación de base de datos difiere un poco.
+
+Para crear una Base de Datos, en la consola de MongoDB, escribimos:
+
+	use pruebas1
+
+Esto nos crea un puntero hacia la nueva base de datos, pero está vacía, si usamos el comando "show dbs", no nos muestra esta base de datos, porque no tiene ningún contenido.
+
+Ahora, creamos una Colección con el siguiente comando:
+
+	db.usuarios.save({nombre: 'Victor Robles', email: 'victor@gmail.com'});
+
+La sintaxis del comando es:
+
+	db.nombreColeccion.save(objetoJson);
+
+Para ver las colecciones (tablas) creadas usamos el comando:
+
+	show collections;
+
+Para ver los documentos (registros), de una colección, usamos:
+
+	db.usuarios.find();
+_______________________________________________________
+
+	[2.2]. Administrador Visual (GUI para Mongo):
+_______________________________________________________
+
+Una Interfaz Gráfica de Usuario (GUI), nos permite creas Bases de Datos, Colecciones, Documentos, y también hacer consultas de una forma más fácil, sin necesidad de digitar los comandos en consola.
+
+Para instalar una GUI para MongoDB, vamos a instalar "Robo 3T":
+
+	https://robomongo.org/
+
+Allí seleccionamos "Download Robo 3T Only".
+
+Una vez instalado, hay que hacer la conexión con MongoDB.
+
+Nota: el servicio "mongod.exe" debe estar corriendo.
+
+(1) Vamos a "Create". En la pestaña "Connection", en "Type" seleccionamos "Direct Connection".
+
+En "Name" ponemos:
+
+	MongoDB Local
+
+En "Adress": Localhost y el puerto por defecto de Mongo es: 27017.
+
+Podemos hacer click en "Test", para probar la conexión.
+
+Si todo está bien le damos a "Save".
+
+(2) Hacemos click en "Connect". A mano izquierda, deben aparecer las bases de datos creadas, en nuestro caso:
+
+	config
+	pruebas1
+
+Hacemos click en "pruebas1", luego en "Collections", y si hacemos doble click en "usuarios", veremos los datos que se ingresaron.
+_______________________________________________________
+
+	[3]. Conceptos básicos:
+_______________________________________________________
+
+En esta sección se revisarán algunos conceptos teóricos y reglas a tener en cuenta para el uso de las bases de datos en MongoDB.
+_______________________________________________________
+
+	[3.1]. Características Documentos:
+_______________________________________________________
+
+Un documento en MongoDB, es la unidad básica de la estructurade la información, tiene un papel equivalente a una fila en una base de datos relacional.
+
+Un documento tiene múltiples pares "campo:valor". Ejemplo:
+
+	{
+		nombre: "Sara",
+		edad: 26,
+		status: "A",
+		grupos: ["noticias", "deportes"]
+	}
+
+- Los campos son cadenas, se puede usar cualquier carácter con las siguientes excepciones:
+
+	- no puede tener un carácter nulo \0.
+	- evitar el uso del punto "." y dolar "$".
+
+- MongoDB diferencia entre mayúsculas, minúsculas y tipos de datos. Por ejemplo los siguientes documentos son distintos:
+
+	{"Edad": 3}
+	{"Edad": "3"}
+	{"edad": 3}
+	{"edad": "3"}
+
+- Un documento no puede tener claves(campos) duplicadas. Ejemplo:
+
+	{"edad": 3, "edad": 5} --> incorrecto.
+
+- Los pares valores están ordenados en los documentos. Ejemplo:
+
+	{"x": 3, "y": 5}  --> es diferente a:
+	{"y": 5, "x": 3}
+
+- Los valores de un documento pueden ser de diferentes tipos.
+_______________________________________________________
+
+Ejemplo de documento en MongoDB:
+
+	{
+		_id: ObjectId(""515151515ff51512351bd51785),
+		name: { first: "Alan", last: "Turing" },
+		birth: new Date('Jun 23, 1912'),
+		death: new Date('Jun 07, 1954'),
+		contribs: ["Turing Machine", "Turing test", "Turingery"],
+		views: NumberLong(125000)
+	}
+
+Donde tenemos:
+
+	"_id" -->  el identificador como lo maneja MongoDB.
+
+	"name" --> La clave "name", tiene un subdocumento ({ first: "Alan", last: "Turing" }) como valor.
+
+	"new Date()" --> es una función para formatear el valor como fecha.
+
+	"contribs" --> este campo es un arreglo.
+
+	"NumberLong" --> función para poner un entero largo.
+_______________________________________________________
+
+	[3.2]. Tipos de Datos:
+_______________________________________________________
+
+Los principales tipos de datos en MongoDB son los siguientes:
+
+- Nulo, representa un valor nulo o un campo que no existe. Ejemplo:
+
+	{"x": null}
+
+- Booleanos, representan datos del tipo verdadero o falso. Ejemplo:
+
+	{"x": true}
+
+- Números, para reales y enteros. Ejemplo:
+
+	{"x": 3.14}
+	{"x": 45}
+
+- Cadenas, cualquier cadena de caracteres. Ejemplo:
+
+	{"x": "Ejemplo"}
+
+- Fechas, almacena fechas en milisegundos. Ejemplo:
+
+	{"x": new Date()}
+
+	Para crear un dato del tipo fecha se usa el comando "new Date()".
+
+	Si se llama sin el "new', solo "Date()", se retorna una cadena que representa la fecha, pero no es del mismo tipo que una fecha.
+
+	Cuando se usa una consola(SHELL) de MongoDB, las fechas se muestran de acuerdo a la zona horaria del PC, pero la base de datos las almacena sin considerar la zona horaria.
+
+- Expresiones regulares, se pueden usar para realizar consultas.
+
+- Arrays, representan un conjunto o lista de valores. Ejemplo:
+
+	{"x": ["a", "b", "c"]}
+
+	Los arrays pueden ser utilizados en operaciones en las que el orden es importante, por ejemplo pilas ("platos sucios", primero en entrar último en salir) y colas (primero en entrar, primero en salir). También en operaciones en donde el orden no es importante, como por ejemplo conjuntos.
+
+	Los arrays pueden tener diferentes tipos de valores. Ejemplo: {"x": ["Ana", 15]}
+
+	MongoDB permite navegar sobre el interior de los arrays, y de esta manera hacer operaciones sobre sus contenidos, es decir trae funciones para modificar esos arreglos.
+
+- Documentos Embebidos o subdocumentos, representan a otros documentos, como valores de un documento padre. Ejemplo:
+
+	{
+		nombre: "Juan", 
+		"dirección": {
+			"Calle": "Mayor 3",
+			"Ciudad": "Madrid",
+			"País": "España"
+		}
+	}
+
+- Identificadores de objetos, es un identificador único de 12 bytes para un documento (como la llave primaria de las BD relacionales). Ejemplo:
+
+	{"_id": objectId()}
+
+- Datos binarios, cadena de bytes que no puede ser manipulada directamente.
+
+- Código JavaScript, los documentos y consultas pueden tener código JavaScript. Ejemplo:
+
+	{"x": function(){...} }
+
+_______________________________________________________
+
+	[3.3]. Colecciones:
+_______________________________________________________
+
+Una colección es un conjunto de documentos, similar a las tablas de las BD relacionales.
+
+Tienen elementos dinámicos, es decir que puede haber documentos con diferentes estructuras dentro de una colección. Ejemplo:
+
+	{"edad": 34},
+	{"x": "casa"}
+
+En este ejemplo tenemos diferentes campos y valores.
+
+En MomgoDB, se recomienda definir un esquema y agrupar los tipos relacionados en una misma colección.
+
+No se debe empezar ningún nombre de colección con la palabra reservada "system", ya que es utilizada para los nombres de colecciones internas. Ejemplo: system.users, system.namespaces
+
+No se debe usar el carácter dólar "$" para el nombre de colección.
+_______________________________________________________
+
+	[4]. Crear base de Datos:
+_______________________________________________________
+
+Para crear una base de datos se usa el comando:
+
+	use nombreBD:
+
+Esto nos crea un puntero hacia la nueva base de datos, pero está vacía, si usamos el comando "show dbs", no nos muestra esta base de datos, porque no tiene ningún contenido.
+
+Lo que hace en realidad el comando "use", es seleccionar la base de datos a trabajar.
+
+Para que se cree la base de datos, hay que crear una "colección" dentro de esa base de datos:
+
+	db.nombreColeccion.insert(objetoJson):
+
+Ejemplo:
+
+	db.personas.insert({"nombre": "Pablo", "edad": 34});
+
+En donde:
+
+	"db" --> es el puntero hacia la base de datos que se va a crear.
+
+	"personas" --> es el nombre de la "colección".
+
+	"insert" --> para insertar el documento.
+
+	"(objetoJson)" --> el documento que se va a insertar en la colección.
+
+_______________________________________________________
+
+	[5]. CRUD:
+_______________________________________________________
+
+Para crear, leer, actualizar y borrar documentos, se usan una serie de comandos básicos de la Shell de MongoDB.
+
+_______________________________________________________
+
+	[5.1]. Insertar:
+_______________________________________________________
+
+Para insertar documentos dentro de una Base de datos, se pueden usar diversos comandos, entre los cuales están:
+
+	insert()
+	insertOne()
+	insertMany()
+
+Para más info. y ver la documentación completa de estos métodos podemos ir a:
+
+	https://docs.mongodb.com/manual/reference/insert-methods/
+_______________________________________________________
+
+	[5.1.1]. Insertar un documento:
+_______________________________________________________
+
+Para insertar un documento se usa el comando "insertOne()":
+
+	db.nombreColeccion.insertOne(documento);
+	
+Ejemplo:
+
+	db.personas.insertOne({"nombre": "Ana", "edad": 28, "telefono": 6019999999});
+
+La diferencia de usar este comando con "insert()", es el resultado que nos retorna en consola, en el caso del comando "insertOne()", nos retorna un resultado así:
+
+	{
+		"acknowledged" : true,
+		"insertedId" : ObjectId("6136769e9190684367243df4")
+	}
+
+En este caso nos retorna un documento, indicando el resultado de la inserción, y el id que le asigno automáticamente MongoDB.
+
+En el caso de usar el comando "insert()", nos retorna un objeto así:
+
+	WriteResult({ "nInserted" : 1 })
+
+Nota: MongoDB recomienda usar el comando "insertOne()".
+
+_______________________________________________________
+
+	[5.1.2]. Insertar varios documentos:
+_______________________________________________________
+
+Para insertar múltiples documentos, usamos el comando "insertMany()":
+
+	db.nombreColeccion.insertMany([documentos]);
+
+Ejemplo:
+
+	db.personas.insertMany([{"nombre": "Pedro", "edad": 18, "direccion": "calle 123"},{"nombre": "Oscar", "edad": 25, "telefono": 6011234567}, {"nombre": "Luis", "edad": 35, "direccion": "calle 456", "telefono": 6017654321}]);
+
+Este comando recibe como parámetro un array, en donde cada elemento es un documento a insertar (en este caso insertamos 3 documentos), y nos retorna como respuesta un documento como el siguiente:
+
+	{
+		"acknowledged" : true,
+		"insertedIds" : [
+			ObjectId("613676ba9190684367243df5"),
+			ObjectId("613676ba9190684367243df6"),
+			ObjectId("613676ba9190684367243df7")
+		]
+	}
+
+_______________________________________________________
+
+	[5.2]. Visualización:
+_______________________________________________________
+
+Los siguientes comandos sirven para ver diferentes resultados dentro de nuestra base de datos.
+
+Para ver las colecciones (tablas) creadas usamos el comando:
+
+	show collections;
+_______________________________________________________
+
+Para ver todos los documentos (registros), de una colección, usamos:
+
+	db.nombreColeccion.find();
+_______________________________________________________
+
+Para ver de una mejor forma los documentos de una colección usamos:
+
+	db.nombreColeccion.find().pretty();
+_______________________________________________________
+
+Para buscar un documento que cumpla con una condición usamos:
+
+	db.nombreColeccion.findOne(condicion);
+
+Ejemplo:
+
+	db.personas.findOne({"nombre": "Juan"});
+
+_______________________________________________________
+
+	[5.3]. Eliminar Documentos:
+_______________________________________________________
+
+Para eliminar documentos dentro de una Base de datos, se pueden usar diversos comandos, entre los cuales están:
+
+	remove()
+	deleteOne()
+	deleteMany()
+
+Para más info. y ver la documentación completa de estos métodos podemos ir a:
+
+	https://docs.mongodb.com/manual/reference/delete-methods/
+
+_______________________________________________________
+
+	[5.3.1]. Eliminar Documentos con remove():
+_______________________________________________________
+
+Para borrar un documento usamos el siguiente comando "remove()":
+
+	db.nombreColeccion.remove({condición});
+
+Ejemplo:
+
+	db.personas.remove({"_id": 1});
+
+En este caso se borra el documento cuyo identificador sea "1" de la colección "personas".
+
+Nota: se debe especificar una condición, o si no se borran todos los documentos.
+
+	db.personas.remove({}); --> elimina todos los documentos de una colección.
+
+_______________________________________________________
+
+	[5.3.2]. Borrar una colección:
+_______________________________________________________
+
+Para borrar una colección usamos el comando "drop()":
+
+	db.nombreColeccion.drop();
+
+Ejemplo:
+
+	db.personas.drop();
+
+_______________________________________________________
+
+	[5.4]. Actualizar documentos:
+_______________________________________________________
+
+Para actualizar un documento, usamos el comando "update()":
+
+	db.nombreColeccion.update(condicionBusqueda, cambios);
+
+Ejemplo: supongamos que tenemos el siguiente documento:
+
+	{
+		"nombre": "Juan",
+		"amigo": 22,
+		"enemigos': 2
+	}
+
+En consola, podemos crear una variable para guardar el resultado de la búsqueda:
+
+	var persona = db.personas.findOne({"nombre": "Juan"});
+
+Ahora si queremos crearle un nuevo campo, podemos trabajar directamente en la variable (no en la BD):
+
+	persona.relaciones = {"amigos": persona.amigo, "enemigos": persona.enemigos};
+
+Ahora borramos de la variable "persona":
+
+	delete persona.amigo;
+	delete persona.enemigos;
+
+Ahora actualizamos el documento en la base de datos:
+
+	db.personas.update({"nombre": "Juan"}, persona);
+
+Acá en el parámetro de "cambios", pasamos la variable "persona", que es la que tiene todos los cambios que queremos hacer.
+
+En realidad, acá se están actualizando todos los campos del documento, para actualizar un campo en específico, se usan operadores de actualización.
+
+Nota: para ver todos los métodos de actualización en MongoDB, podemos ir al siguiente enlace:
+
+	https://docs.mongodb.com/manual/reference/update-methods/
+_______________________________________________________
+
+	[5.4.1]. Operadores de actualización:
+_______________________________________________________
+
+Los operadores de actualización o modificadores, nos permiten hacer tareas de actualización de una forma más fácil y especifica.
+
+Para ver una lista de todos los modificadores de actualización, podemos ir al siguiente enlace:
+
+	https://docs.mongodb.com/manual/reference/operator/update/
+
+_______________________________________________________
+
+	[5.4.1.1]. Operador $inc:
+_______________________________________________________
+
+El operador "$inc" incrementa o decrementa un campo por un valor especificado. Acepta valores positivos y negativos. Si el campo no existe, crea el campo y establece el campo en el valor especificado.
+
+Ejemplo: tenemos el siguiente documento:
+
+	{
+		_id: 1,
+		sku: "abc123",
+		quantity: 10,
+		metrics: {
+			orders: 2,
+			ratings: 3.5
+		}
+	}
+
+Ahora usamos "update()" con el operador "$inc" para disminuir el campo quantity en 2 y aumentar el campo "metrics.orders" en 1:
+
+	db.products.update(
+		{ sku: "abc123" },
+		{ $inc: { quantity: -2, "metrics.orders": 1 } }
+	);
+
+Después de hacer la actualización, el documento queda así:
+
+	{
+		_id: 1,
+		sku: "abc123",
+		quantity: 8,
+		metrics: {
+			orders: 3,
+			ratings: 3.5
+		}
+	}
+
+_______________________________________________________
+
+	[5.4.1.2]. Operador $set:
+_______________________________________________________
+
+Establece el valor de un campo en un documento. El operador "$set" reemplaza el valor de un campo con el valor especificado. Si el campo no existe, "$set" agregará un nuevo campo con el valor especificado. Si especifica varios pares de campo-valor, "$set" actualizará o creará cada campo.
+
+Ejemplo: si tenemos la colección llamada "products", con el siguiente documento:
+
+	{
+		_id: 100,
+		sku: "abc123",
+		quantity: 250,
+		instock: true,
+		reorder: false,
+		details: { model: "14Q2", make: "xyz" },
+		tags: [ "apparel", "clothing" ],
+		ratings: [ { by: "ijk", rating: 4 } ]
+	}
+
+Vamos a usar el comando "update()", con el operador "$set", para actualizar los campos "quantity", "details" y "tags":
+
+	db.products.update(
+		{ _id: 100 },
+		{ $set:
+			{
+				quantity: 500,
+				details: { model: "14Q3", make: "xyz" },
+				tags: [ "coats", "outerwear", "clothing" ]
+			}
+		}
+	);
+
+Después de hacer la actualización, el documento queda así:
+
+	{
+		"_id" : 100,
+		"sku" : "abc123",
+		"quantity" : 500,
+		"instock" : true,
+		"reorder" : false,
+		"details" : {
+				"model" : "14Q3",
+				"make" : "xyz"
+		},
+		"tags" : [
+				"coats",
+				"outerwear",
+				"clothing"
+		],
+		"ratings" : [ { "by" : "ijk", "rating" : 4 } ]
+	}
+
+_______________________________________________________
+
+	[5.4.1.3]. Operador $unset:
+_______________________________________________________
+
+El operador "$unset", elimina campos del documento.
+
+Ejemplo: usamos la colección y el documento vistos en el ejemplo del modificador "$set":
+
+	db.products.update(
+		{ "_id": 100 },
+		{ $unset:
+			{
+				"reorder": "",
+				"details": {},
+				"tags.0": ""
+			}
+		}
+	);
+
+Con el anterior comando, eliminamos los campos "reorder", "details", y en el campo "tags", que es un array, en el índice "0", eliminamos su contenido, quedando su valor en "null".
+
+El documento con la actualización queda:
+
+	{
+		"_id" : 100,
+		"sku" : "abc123",
+		"quantity" : 500,
+		"instock" : true,
+		"tags" : [
+				null,
+				"outerwear",
+				"clothing"
+		],
+		"ratings" : [ { "by" : "ijk", "rating" : 4 } ]
+	}
+
+_______________________________________________________
+
+	[5.4.1.4]. Operador $rename:
+_______________________________________________________
+
+El operador "$rename" actualiza el nombre de un campo.
+
+Ejemplo: renombramos el campo "amigo" en el siguiente documento:
+
+	{
+		"nombre": "Juan",
+		"amigo": 22,
+		"enemigos': 2
+	}
+
+	db.personas.update( {"nombre": "Juan"}, { $rename: {"amigo": "amigos"} });
+
+_______________________________________________________
+
+	[5.4.2]. Operadores de actualización de arrays:
+_______________________________________________________
+
+Existen operadores de actualización para arrays.
+
+Para ver todos los operadores y modificadores de arrays:
+
+	https://docs.mongodb.com/manual/reference/operator/update/#array
+
+_______________________________________________________
+
+$push --> Agrega un elemento a un array. Si el campo no existe en el documento para actualizar, se agrega el campo de array con el valor como su elemento. Si el campo no es un array, la operación fallará.
+
+	Ejemplo: si tenemos el siguiente documento en una colección llamada "blog":
+
+		{
+			"_id": 1,
+			"titulo": "titulo del post",
+			"contenido": "Contenido del post"
+		}
+
+	Si ejecutamos el siguiente comando, creamos en el documento el array "comentarios", y en el índice [0], quedaría el primer elemento del array (en este caso el comentario de Juan).
+
+		db.blog.update( {"_id": 1}, 
+			{ "$push": 
+				{"comentarios":
+					{
+						"nombre":"Juan",
+						"email": "juan@ejemplo.com",
+						"contenido": "Comentario de Juan"
+					}					
+				} 
+			} );
+
+	Si el valor es un array, "$push" agrega todo el array como un solo elemento. Para agregar cada elemento del valor por separado, use el modificador "$each" con "$push".
+_______________________________________________________
+
+$each --> Agrega varios valores al campo array.
+
+	Ejemplo: en el documento que se usó en el ejemplo de "push", usamos el comando:
+
+		db.blog.update( {"_id": 1}, 
+			{ "$push": 
+				{"comentarios":
+					{ "$each": [
+							{
+								"nombre":"Pablo",
+								"email": "pablo@ejemplo.com",
+								"contenido": "Comentario de Pablo"
+							},
+							{
+								"nombre":"Pedro",
+								"email": "pedro@ejemplo.com",
+								"contenido": "Comentario de Pedro"
+							},
+							{
+								"nombre":"Maria",
+								"email": "maria@ejemplo.com",
+								"contenido": "Comentario de Maria"
+							}
+						]
+					}
+				} 
+			} );
+
+	En el ejemplo anterior, agregamos 3 nuevos elementos al array "comentarios" (en este caso los elementos del array son los comentarios de Pablo, Pedro y Maria).
+_______________________________________________________
+
+$slice --> Limita el número de elementos del array. Requiere el uso del modificador "$each".
+
+	Ejemplo: Tenemos el siguiente documento en la colección llamada "peliculas":
+
+		{
+			"genero": "accion"
+		}
+
+	Ahora ejecutamos el siguiente comando:
+
+		db.peliculas.update( {"genero": "accion"}, 
+			{ "$push": 
+				{"top10":
+					{ "$each": [
+							{ "nombre":"Infinity War" },
+							{ "nombre":"Iron Man" },
+							{ "nombre":"Civil War" },
+							{ "nombre":"Star Wars" },
+							{ "nombre":"Spiderman" }
+						],
+					  "$slice": -3
+					}
+				} 
+			} );
+
+	Con el modificador "$slice": -3, solo guardamos en el array "top10" las 3 últimas películas, es decir solo quedan los elementos "Civil War", "Star Wars" y "Spiderman".
+
+	Si indicamos un valor positivo, selecciona los "X" primeros elementos del array.
+	Si indicamos un valor negativo (como en el ejemplo), selecciona los "X" últimos elementos del array.
+
+_______________________________________________________
+
+$sort --> Ordena los elementos del array. Requiere el uso del modificador "$each".
+
+	El modificador "$sort" ordena los elementos de un array durante una operación "$push".
+
+	Para usar el modificador "$sort", debe aparecer con el modificador "$each". Puede pasar un array vacío [] al modificador "$each" de modo que solo el modificador "$sort" tenga efecto.
+
+	El modificador "$sort", junto con el valor "1", ordena de forma ascendente (de menor a mayor), y con "-1" de forma descendente.
+
+	Ejemplo: en la colección "peliculas", eliminamos el documento anterior, y ejecutamos los siguientes comandos:
+
+		{
+			"genero": "accion"
+		}
+
+		db.peliculas.update( {"genero": "accion"}, 
+			{ "$push": 
+				{"top10":
+					{ "$each": [
+							{ "nombre":"Infinity War", "valoracion":5 },
+							{ "nombre":"Iron Man", "valoracion":4 },
+							{ "nombre":"Civil War", "valoracion":2 },
+							{ "nombre":"Star Wars", "valoracion":5 },
+							{ "nombre":"Spiderman", "valoracion":3 }
+						],
+					  "$slice": 5,
+					  "$sort": { "valoracion": -1 }
+					}
+				} 
+			} );
+
+	Con el comando anterior, actualizamos el documento, agregando el array "top10", y ordenando ese array de forma descendente, quedando en la última posición del array "Civil War".
+
+	Este ejemplo también sirve para el modificador "$slice", ya que en este caso indicamos que se incluyan los 5 elementos del array.
+
+	Si no se indica un campo para ordenar el array, se puede ordenar todo el array con el modificador "$sort", ejemplo:
+
+		db.peliculas.update( {"genero": "accion"}, 
+			{ "$push": 
+				{"top10":
+					{ "$each": [
+							{ "nombre":"Infinity War", "valoracion":5 },
+							{ "nombre":"Iron Man", "valoracion":4 },
+							{ "nombre":"Civil War", "valoracion":2 },
+							{ "nombre":"Star Wars", "valoracion":5 },
+							{ "nombre":"Spiderman", "valoracion":3 }
+						],
+					  "$slice": 5,
+					  "$sort": 1
+					}
+				} 
+			} );
+
+		En este caso el array "top10" se ordena de forma alfabética, quedando como primer elemento "Civil War" y de último elemento "Star Wars".
+_______________________________________________________
+
+	[5.4.3]. Parámetro "upsert":
+_______________________________________________________
+
+Dentro de los parámetros que recibe el comando "update", se encuentra este parámetro opcional "upsert", el cual es un booleano (recibe "true" o "false"), en donde podemos indicarle a MongoDB una consulta para actualizar un documento, si al hacer esa consulta de actualización MongoDB no encuentra un documento para actualizar, crea ese documento y le añade el campo valor de la actualización.
+
+	db.peliculas.update( {"genero": "ciencia ficcion"},
+		{ $set:
+			{ "top10": [ 
+					{ "nombre":"Interestelar", "valoracion":5 },
+					{ "nombre":"Alien", "valoracion":2 }
+				] 
+			}
+		},
+		true
+	);
+
+En este caso el parámetro "upsert", esta indicado en "true", y al no existir el documento con el campo "genero" igual "ciencia ficcion", se crea el documento nuevo, y se actualiza añadiendo el array "top10" con sus 2 elementos.
+
+Nota: para ver más parámetros del comando "update" ir a:
+
+	https://docs.mongodb.com/manual/reference/method/db.collection.update/#mongodb-method-db.collection.update
+_______________________________________________________
+
+	[5.5]. Consultas:
+_______________________________________________________
+
+Existen diferentes comandos que nos sirven para realizar consultas a la base de datos.
+
+Podemos consultar la documentación en:
+
+	https://docs.mongodb.com/manual/tutorial/query-documents/
+
+_______________________________________________________
+
+	[5.5.1]. Consultar Documentos:
+_______________________________________________________
+
+Para hacer búsquedas de datos y visualizar los documentos usamos los comandos "find()" y "findOne()", entre otros.
+_______________________________________________________
+
+	[5.5.1.1]. find():
+_______________________________________________________
+
+Con el comando "find()" podemos consultar los campos de los documentos de una colección.
+
+	db.nombreColeccion.find({});
+
+Ejemplo:
+
+	db.personas.find({});
+
+Para que se cumplan varias condiciones al hacer la consulta usamos:
+
+	db.personas.find({ "nombre": "Ana", "edad": 28});
+
+El comando anterior es equivalente al siguiente en bases de datos relacionales:
+
+	select * from personas where "nombre"="Ana" and "edad"=28;
+
+Para traer solo algunos campos de una consulta usamos:
+
+	db.personas.find({ "nombre": "Luis" }, { "nombre":1, "telefono":1});
+
+En este caso solo nos muestra los campos "_id", "nombre" y "telefono", omite los campos "edad" y "direccion", es equivalente al siguiente comando SQL:
+
+	select nombre, telefono from personas where "nombre"="Luis"
+
+También podemos excluir campos de la consulta igualando a cero (0), ejemplo:
+
+	db.personas.find({ "nombre": "Luis" }, { "telefono":0});
+
+De esta forma nos muestra todos los campos excepto el campo "telefono".
+_______________________________________________________
+
+	[5.5.1.2]. findOne():
+_______________________________________________________
+
+Con el comando "findOne()", hacemos una consulta, pero solo nos retorna un documento, es decir, si hay varios documentos que cumplan la condición, solo nos trae la primera coincidencia que encuentre.
+
+	db.nombreColeccion.findOne(condicion);
+
+Ejemplo:
+
+	db.personas.findOne({"nombre": "Juan"});
+
+En este caso si hay varias personas con el nombre "Juan", solo nos muestra el primer documento que encuentre.
+
+_______________________________________________________
+
+	[5.5.2]. Operadores de Consulta:
+_______________________________________________________
+
+Existen una serie de operadores que nos ayudan a que las consultas hacia la BD sean más específicas y precisas.
+
+_______________________________________________________
+
+	[5.5.2.1]. Operadores Condicionales:
+_______________________________________________________
+
+Existen una serie de operadores condicionales, los cuales junto con el comando "find()", nos ayudan a hacer búsquedas más eficaces. Los operadores son:
+
+	$lt --> menor que (<).
+
+	$lte --> menor o igual que (<=).
+
+	$gt --> mayor que (>).
+
+	$gte --> mayor o igual que (>=).
+
+	$ne --> no igual o diferente (!=).
+
+Para mayor información de estos operadores:
+
+	https://docs.mongodb.com/manual/reference/operator/query-comparison/#std-label-query-selectors-comparison
+
+Ejemplo 1: buscamos los documentos en la colección "personas", cuya edad sea mayor o igual a 18 y menor o igual a 30:
+
+	db.personas.find({ "edad": {"$gte":18, "$lte":30} });
+
+Ejemplo 2: buscamos todos los documentos cuyo nombre no sea "Juan":
+
+	db.personas.find({ "nombre": {"$ne":"Juan"} });
+
+_______________________________________________________
+
+	[5.5.2.2]. Operadores $not, $and y $or:
+_______________________________________________________
+
+Estos operadores booleanos funcionan igual que en programación.
+
+Ejemplo 1: Mostrar todos los documentos cuyo nombre no sea diferente a "Juan":
+
+	db.personas.find({ "nombre": {"$not": {"$ne":"Juan"} } });
+
+En el ejemplo anterior tenemos doble negación, por lo que nos muestra todos los documentos cuyo nombre sea "Juan".
+
+Ejemplo 2: mostrar los documentos cuyo nombre empiece por la letra "J" y su edad sea mayor o igual a 30:
+
+	db.personas.find({ "$and":[ {"nombre":/^J/}, {"edad": {"$gte":30} } ] });
+
+En este ejemplo su usa una expresión regular.
+
+Ejemplo 3: mostrar los documentos cuyo nombre empiece por la letra "J" o su edad sea mayor o igual a 30:
+
+	db.personas.find({ "$or":[ {"nombre":/^J/}, {"edad": {"$gte":30} } ] });
+
+En este caso, nos muestra los documentos cuyo campo nombre empiece por "J" o los documentos en donde la edad sea mayor o igual a 30.
+_______________________________________________________
+
+	[5.5.2.3]. Expresiones Regulares:
+_______________________________________________________
+
+Podemos usar expresiones regulares para las consultas.
+Ejemplo:
+
+	db.personas.find({"nombre": /ua/i});
+
+En este caso buscamos en la colección "personas" todos los documentos cuyo nombre tengan el patrón "ua", la "i" es un modificador para que realice una coincidencia que no distinga entre mayúsculas y minúsculas.
+
+Esto nos traería todos los documentos de nombre "Juan".
+
+MongoDB utiliza la librería Perl Compatible Regular Expression(PCRE), para las expresiones regulares.
+
+Para más info. de expresiones regulares:
+
+	https://www.w3schools.com/jsref/jsref_obj_regexp.asp
+
+	https://platzi.com/tutoriales/1339-fundamentos-javascript/1770-expresiones-regulares-te-enseno-todo-lo-basico-con-un-solo-ejemplo/?utm_source=google&utm_medium=cpc&utm_campaign=12915366154&utm_adgroup=&utm_content=&gclid=Cj0KCQjw5JSLBhCxARIsAHgO2SdSzEH_O1dZrPULy4neI8en2i4bSHx4q3G70f_mSc-1Qozot6d8fkMaAoA0EALw_wcB&gclsrc=aw.ds
+
+_______________________________________________________
+
+	[5.5.3]. Consultas sobre Arrays:
+_______________________________________________________
+
+Para hacer consultas de los datos dentro de un array, se hace de una forma muy similar a como ya se habían consultado.
+
+Ejemplo 1: Creamos colección "comida", y dentro de esta un campo "frutas" el cual es un array:
+
+	db.comida.insert({"frutas":["manzana","platano","melocoton"]});
+
+Consultamos, buscando dentro del arreglo "frutas", el elemento "platano":
+
+	db.comida.find({"frutas":"platano"});
+
+La consulta nos va a traer todo el documento porque el arreglo tiene en uno de sus valores "platano".
+
+Ahora insertamos un segundo documento:
+
+	db.comida.insert({"frutas":["pera","coco","platano"]});
+
+También tiene un arreglo "frutas", pero este tiene además de "platano" dos frutas más "pera" y "coco".
+
+Al realizar la consulta, ahora va a devolver los dos documentos, ya que ambos tienen un arreglo "frutas", y ambos arreglos tienen en sus valores a "platano":
+
+	db.comida.find({"frutas":"platano"});
+
+Pero si cambiamos la consulta por:
+
+	db.comida.find({"frutas":"pera"});
+
+Sólo nos va devolver el segundo documento, ya que este tiene en sus elementos uno con el valor de "pera".
+_______________________________________________________
+
+Ejemplo 2: Tenemos los siguientes documentos en una colección llamada "prueba":
+
+	{"x": 5}
+	{"x": 15}
+	{"x": 25}
+	{"x": [5, 25] }
+
+Como podemos ver, en el último documento "x" es un array.
+
+Si ahora realizamos la siguiente consulta:
+
+	db.prueba.find({"x":{"$gt":10, "$lt":20}});
+
+Estamos buscando valores de "x" mayores que 10 y menores que 20, sin embargo, el resultado de esta consulta nos devuelve lo siguiente:
+
+	{"x": 15}
+	{"x": [5, 25] }
+
+Como podemos ver nos devuelve el documento donde "x" tiene el valor "15" y el documento donde "x" tiene el array con "5" y "25".
+
+Debería devolvernos valores entre "10" y "20", ¿entonces porque nos devuelve el último documento? en este caso "25" cumple con la condición de ser mayor que "10", y "5" cumple con la condición de ser menor que "20".
+
+Por eso concluimos que las consultas sobre rangos en arrays no son efectivas.
+
+Se puede pensar que al usar un operador lógico como "$and", podríamos hacer efectiva la consulta, sin embargo, al hacer las siguientes consultas:
+
+	db.prueba.find({ $and: [ {"x":{"$gt":10, "$lt":20}} ]});
+
+	db.prueba.find({ $and: [ {"x":{"$gt":10}}, {"x":{"$lt":20}} ]});
+
+Nos arroja el mismo resultado, comprobando nuevamente que no hay efectividad en consultas sobre rangos en arrays.
+_______________________________________________________
+
+	[5.5.4]. Consultas sobre Documentos Embebidos:
+_______________________________________________________
+
+Podemos realizar consultas sobre documentos que se encuentran dentro de otros documentos.
+
+Ejemplo: Creamos una colección llamada "alumnos" y dentro de esta los siguientes documentos:
+
+	{
+		"datos-personales" : {
+			"nombre" : "Pablo",
+			"apellido" : "Vasquez",
+			"edad" : 20
+		},
+		"ciclo" : 4,
+		"puesto" : 15
+	}
+	{
+		"datos-personales" : {
+			"nombre" : "Pedro",
+			"apellido" : "Ramirez",
+			"edad" : 22
+		},
+		"ciclo" : 3,
+		"puesto" : 9
+	}
+	{
+		"datos-personales" : {
+			"nombre" : "Ana",
+			"apellido" : "Lopez",
+			"edad" : 19
+		},
+		"ciclo" : 3,
+		"puesto" : 19
+	}
+	{
+		"datos-personales" : {
+			"nombre" : "Luisa",
+			"apellido" : "Rodriguez",
+			"edad" : 22
+		},
+		"ciclo" : 3,
+		"puesto" : 14
+	}
+
+En donde "datos-personales" es un sub documento o documento embebido.
+
+Ahora realizamos la consulta:
+
+	db.alumnos.find({"datos-personales": {"nombre":"Pedro", "apellido":"Ramirez", "edad":22} });
+
+Esto nos muestra el segundo documento, el cual tiene embebido el documento de la consulta.
+
+Las coincidencias de igualdad en todo el documento embebido requieren una coincidencia exacta (valor) del documento especificado, incluido el orden de los campos.
+
+Por ejemplo, la siguiente consulta no coincide con ningún documento:
+
+	db.alumnos.find({"datos-personales": { "apellido":"Ramirez", "nombre":"Pedro", "edad":22} });
+
+Esto es como la forma implícita de las BD relacionales.
+
+Para especificar una condición de consulta en campos en un documento embebido, usamos la notación de puntos:
+
+	"campo.campoEmbebido"
+
+	db.alumnos.find({"datos-personales.nombre":"Pedro", "datos-personales.apellido":"Ramirez"});
+
+En este caso el orden de los "campos embebidos" no importa, funcionando de la misma forma así:
+
+	db.alumnos.find({"datos-personales.apellido":"Ramirez", "datos-personales.nombre":"Pedro"});
+
+Esta notación de punto es como la forma explícita de las Bd relacionales.
+_______________________________________________________
+
+	[5.5.5]. Consultas $where:
+_______________________________________________________
+
+El operador "$where" se usa para pasar una cadena que contenga una expresión de JavaScript o una función de JavaScript completa al sistema de consulta.
+
+Ejemplo: en la colección "comida", insertamos los siguientes documentos:
+
+	{"manzana":1, "platano":4, "melocoton":3}
+	{"manzana":8, "platano":4, "melon":4}
+
+Ahora hacemos la consulta, que en este caso busca el o los documentos donde se tenga la misma cantidad de frutas diferentes:
+
+	db.comida.find({"$where":
+		function(){
+			for(var a in this){
+				for(var b in this){
+					if(a != b && this[a] == this[b]){
+						return true;
+					}
+				}
+			}
+			return false;
+		}
+	});
+
+En este caso nos busca en la colección "comida", los documentos en donde dos campos sean diferentes (a != b) y además tengan el mismo valor (this[a] == this[b]), en este caso nos muestra el último documento:
+
+	{"manzana":8, "platano":4, "melon":4}
+
+En el ciclo compara los campos uno a uno, hasta que llega a "platano" y "melon", luego compara sus valores y como son iguales, nos devuelve "true".
+
+Nota: Las consultas que usan el operador "$where" son más lentas, ya que se tiene que procesar la expresión JavaScript.
+
+Para más info. del operador:
+
+	https://docs.mongodb.com/manual/reference/operator/query/where/
+
+_______________________________________________________
+
+	[5.5.6]. Configuración de Consultas:
+_______________________________________________________
+
+La base de datos retorna los resultados que genera el método "find()" usando un cursor, de manera que se puede controlar con gran detalle la salida de una consulta: limitar el número de resultados, saltarse un número de resultados, ordenar los resultados por alguna combinación en algún tipo de orden y otras operaciones. Para ello la consulta debe ser configurada antes de ser enviada.
+_______________________________________________________
+Limitar el número de resultados:
+
+	Para conseguir limitar los resultados se encadena la función "limit()" sobre la llamada a "find()". Por ejemplo, para retornar solo tres resultados se haría de la siguiente forma:
+		
+		db.colección.find().limit(3)
+		
+	Si existen menos de 3 elementos que encajan con la consulta, entonces solo se retornan los documentos que encajan.
+_______________________________________________________
+Saltarse un número de resultados:
+
+	La función "skip()" permite saltarse resultados encadenándose a la llamada a "find()", por ejemplo:
+	
+		db.colección.find().skip(3)
+		
+	Se saltará los tres primeros documentos que encajen y retornará el resto de resultados. Si existen menos de tres documentos, no retorna ningún documento.
+_______________________________________________________
+Ordenar resultados:
+
+	La función "sort()" se encadena a la llamada a "find()" tomando como entrada un objeto formado por pares clave-valor, en donde las claves son nombre de claves y los valores indican un sentido de la ordenación: 1(ascendente) o -1(descendente).
+_______________________________________________________
+
+	[6]. Frameworks de Agregación:
+_______________________________________________________
+
+Los Frameworks de Agregación, son un conjunto de operaciones que permiten procesar los datos, de forma que sus resultados se obtienen mediante la combinación de sus valores. Se usan en altos volúmenes de datos.
+
+Existen 3 modalidades de aplicación del Framework de agregación:
+
+- Agregación mediante tuberías.
+- Map Reduce.
+- Operaciones de propósito único.
+_______________________________________________________
+
+	[6.1]. Agregación mediante tuberías:
+_______________________________________________________
+
+Los datos son procesados como si atravesaran por unas tuberías, de forma que en cada tubería se aplica una determinada función, y la salida de la misma es la entrada de la siguiente, en la que se realiza otra operación.
+
+La llamada al framework se realiza mediante la función "aggregate", que recibe un array de operaciones separadas por coma.
+
+	db.usgs.aggregate([
+		$project,
+		$match,
+		$group,
+		$sort
+	]);
+
+Nota: estos son algunas operaciones de tubería, para consultar otras ir a:
+
+	https://docs.mongodb.com/manual/reference/operator/aggregation-pipeline/
+
+Para ver la documentación oficial de agregaciones en MongoDB:
+
+	https://docs.mongodb.com/manual/reference/command/aggregate/
+_______________________________________________________
+
+	[6.1.1]. Operación $project:
+_______________________________________________________
+
+Se utiliza para modificar el conjunto de datos de entrada, añadiendo, eliminando o recalculando campos para que la salida sea diferente.
+
+	{"$project": {<campo>:1, <campo>:1} }
+
+Crear nuevos campos usando los valores de otros campos mediante la notación $ y el nombre:
+
+	{"$project": {<campo_nuevo>: "$otro_campo", <campo_nuevo>: <expresion>} }
+_______________________________________________________
+
+	[6.1.2]. Operación $match:
+_______________________________________________________
+
+Filtra la entrada para reducir el número de documentos, dejando solo los que cumplan las condiciones establecidas.
+
+	{"$match":<expresion>}
+
+Nota: esta operación es muy similar al "where" que se usa en BD relacionales.
+_______________________________________________________
+
+	[6.1.3]. Operación $group:
+_______________________________________________________
+
+Agrupa documentos según una determinada condición. Se puede elegir varios campos como identificador.
+
+	{"$group": {"_id":{<campo_1>:<expresion>,...}, <campo>:{<operador>:<expresion>},...} }
+
+Nota: es muy utilizada cuando se necesitan hacer campos totalizados, por ejemplo sumar, etc.
+_______________________________________________________
+
+	[6.1.4]. Operación $sort:
+_______________________________________________________
+
+Ordena un conjunto de documentos según el campo especificado.
+
+	{"$sort":<expresion>}
+
+Operadores de Agrupación: Aquellos que se utilizan cuando se agrupa información con "$group":
+
+	$first
+	$last
+	$max
+	$min
+	$avg
+	$sum
+_______________________________________________________
+
+	[6.1.5]. Ejemplo:
+_______________________________________________________
+
+Creamos una colección "ordenes" (la cual tendrá datos de unas órdenes de compra o pedidos de unos clientes).
+
+Insertamos en la colección "ordenes" los siguientes documentos:
+
+	{
+		"cliente_id":"A123",
+		"cantidad":500,
+		"estado":"A"
+	}
+	{
+		"cliente_id":"A123",
+		"cantidad":250,
+		"estado":"A"
+	}
+	{
+		"cliente_id":"B212",
+		"cantidad":200,
+		"estado":"A"
+	}
+	{
+		"cliente_id":"B212",
+		"cantidad":600,
+		"estado":"D"
+	}
+	{
+		"cliente_id":"C510",
+		"cantidad":150,
+		"estado":"A"
+	}
+	{
+		"cliente_id":"C510",
+		"cantidad":320,
+		"estado":"A"
+	}
+	{
+		"cliente_id":"C510",
+		"cantidad":400,
+		"estado":"D"
+	}
+_______________________________________________________
+
+Se nos pide resolver el siguiente problema mediante una consulta:
+
+- Obtener los documentos de la colección "ordenes" en los que el campo "estado" sea igual a "A". Para ello utilice el operador "match".
+
+- La salida de la operación anterior (documentos que cumplan con la condición indicada), es ordenada mediante el operador "$group", utilizando el campo "cliente_id" de la salida anterior.
+
+- Para cada tipo de documento se obtiene el total de cada tipo mediante el operador "$sum", que suma los valores del campo "cantidad", de los documentos agrupados y los guarda en un nuevo campo denominado "total".
+_______________________________________________________
+
+Ahora realizamos la consulta que resuelve el problema mediante tuberías:
+
+	db.ordenes.aggregate(
+		[
+			{ $match: {"estado": "A"} },
+			{ $group: {_id: "$cliente_id", total: {$sum:"$cantidad"} } }
+		]
+	);
+
+Como podemos ver en la consulta, vamos a buscar los documentos cuyo campo "estado" sea igual a "A". Luego agrupamos todos los documentos que tengan el mismo "$cliente_id", y creamos el campo "total", el cual es la sumatoria de los campos "$cantidad" de todos los documentos que cumplen con la condición anterior.
+
+La consulta anterior nos devuelve los siguientes 3 documentos:
+
+	/* 1 */
+	{
+		"_id" : "B212",
+		"total" : 200
+	}
+
+	/* 2 */
+	{
+		"_id" : "A123",
+		"total" : 750
+	}
+
+	/* 3 */
+	{
+		"_id" : "C510",
+		"total" : 470
+	}
+
+_______________________________________________________
+
+	[6.2]. Map Reduce:
+_______________________________________________________
+
+Framework de agregación creado por Google, y pensado para realizar operaciones de forma paralela sobre grandes colecciones de datos.
+
+Las operaciones map-reduce constan de tres pasos:
+
+- Etapa map.
+- Etapa reduce.
+- Etapa finalize(opcional).
+_______________________________________________________
+
+	[6.2.1]. Etapa map:
+_______________________________________________________
+
+Se procesa cada documento y se emite uno o varios objetos por cada documento procesado.
+
+Se implementa mediante una función que mapea los datos de origen, de manera que, para cada dato de origen, se genera una tupla clave-valor, que son unidas en una lista que se pasa a la etapa reduce.
+_______________________________________________________
+
+	[6.2.2]. Etapa reduce:
+_______________________________________________________
+
+En la que se combinan las salidas de la etapa anterior.
+
+Se implementa mediante una función reduce, que trata cada elemento de la lista de pares y realiza operaciones sobre ella para devolver un dato concreto.
+_______________________________________________________
+
+	[6.2.3]. Etapa finalize:
+_______________________________________________________
+
+Es una etapa opcional, en la que se permite realizar algunas modificaciones adicionales a las salidas de la etapa reduce.
+_______________________________________________________
+
+	[6.2.4]. Sintaxis:
+_______________________________________________________
+
+db.runCommand({
+	mapReduce:<colección>, map:<función>, reduce:<función>, out:<salida>,
+	query:<documento>, limit:<número>, finalize:<función>, scope:<documento>,
+	jsMode:<booleano>, verbose:<booleano>
+});
+
+db.coleccion.mapReduce( 
+	mapFunction,
+	reduceFunction,
+	{
+		out:<salida>, query:<documento>, sort:<documento>, limit:<número>, finalize:<función>, scope:<documento>, jsMode:<booleano>, verbose:<booleano>
+	}
+);
+
+En donde "mapFunction" y "reduceFunction" son funciones JavaScript.
+_______________________________________________________
+
+	[6.2.5]. Ejemplo:
+_______________________________________________________
+
+Se va a resolver el mismo problema trabajado sobre la colección "ordenes" del ejemplo de agregación mediante tuberías (sección [6.1.5]).
+
+	db.ordenes.mapReduce(
+		function(){
+			emit(this.cliente_id, this.cantidad);
+		},
+		function(key, values){
+			return Array.sum(values);
+		},
+		{
+			query: {estado:"A"},
+			out: "Totales_Pedidos"
+		}
+	);
+
+En donde la primera función:
+
+	function(){
+		emit(this.cliente_id, this.cantidad);
+	}
+
+Es la función "Map", y la función:
+
+	function(key, values){
+		return Array.sum(values);
+	}
+
+Es la función "Reduce".
+
+Al ejecutar el comando en el shell, el resultado es un nuevo documento, si usamos Robo3T, en la izquierda en "Collections", hacemos clic izquierdo y "Refresh", y allí veremos el nuevo documento o colección llamado "Totales_Pedidos".
+
+Primero se hace la "query", lo que nos devuelve documentos con los campos "estado", "cliente_id" y "cantidad", en donde el "estado" sea igual a "A".
+
+Después ejecuta la función "map", la cual emite o trae los documentos realizando un filtrado que genera documentos con una clave que coincide con los "cliente_id" y cuyo valor es un arreglo(array) de las cantidades.
+
+Es un array de las cantidades, ya que son varios valores, pero el "cliente_id" es el mismo que se repite.
+
+En la función "reduce" se toman esos key-values, y los devuelve, pero sumando los elementos del arreglo.
+_______________________________________________________
+
+	[6.3]. Operaciones de propósito único:
+_______________________________________________________
+
+Son un conjunto de comandos que forman parte del framework de agregación.
+
+Todas estas operaciones agregan documentos de una sola colección. Si bien estas operaciones brindan acceso simple a procesos de agregación comunes, carecen de la flexibilidad y las capacidades de una canalización de agregación.
+
+Creamos una colección llamada "ventas", con los siguientes documentos:
+
+	{
+		"_id":1,
+		"item":"abc",
+		"precio":10,
+		"cantidad":2,
+		"fecha":ISODate("2014-03-01")
+	}
+	{
+		"_id":2,
+		"item":"jkl",
+		"precio":20,
+		"cantidad":1,
+		"fecha":ISODate("2014-03-01")
+	}
+	{
+		"_id":3,
+		"item":"xyz",
+		"precio":5,
+		"cantidad":10,
+		"fecha":ISODate("2014-03-15")
+	}
+	{
+		"_id":4,
+		"item":"xyz",
+		"precio":5,
+		"cantidad":20,
+		"fecha":ISODate("2014-04-04")
+	}
+	{
+		"_id":5,
+		"item":"abc",
+		"precio":10,
+		"cantidad":10,
+		"fecha":ISODate("2014-04-04")
+	}
+
+_______________________________________________________
+
+	[6.3.1]. Comando "count":
+_______________________________________________________
+
+Devuelve el recuento de documentos que coincidirían con una consulta "find()" para la colección o vista. El método "db.collection.count()" no realiza la operación "find()" sino que cuenta y devuelve el número de resultados que coinciden con una consulta.
+
+	db.ventas.count({"item":"abc"});
+
+Al ejecutar este comando, nos retorna el número 2, ya que hay dos documentos que tienen el campo "item" igual a "abc".
+
+Para más info. del comando:
+
+	https://docs.mongodb.com/manual/reference/method/db.collection.count/#mongodb-method-db.collection.count
+_______________________________________________________
+
+	[6.3.2]. Comando "distinct":
+_______________________________________________________
+
+Busca los valores distintos para un campo especificado en una sola colección o vista y devuelve los resultados en un array.
+
+	db.collection.distinct(field, query, options)
+
+Ejemplo:
+
+	db.ventas.distinct("item");
+
+Esto nos devuelve el siguiente array:
+
+	[
+		"abc",
+		"jkl",
+		"xyz"
+	]
+
+Como vemos cada elemento del array corresponde a los diferentes campos "item" de los documentos, aunque tenemos 5 documentos, solamente hay 3 ítems diferentes.
+
+También podemos indicar una condición para la operación:
+
+	db.ventas.distinct("item", {"precio":10});
+
+En este caso solicitamos los items cuyo precio sea igual a "10", esto nos devuelve un solo elemento en el array:
+
+	[
+		"abc"
+	]
+
+Nota: para más información ir a:
+
+	https://docs.mongodb.com/manual/reference/method/db.collection.distinct/#mongodb-method-db.collection.distinct
+_______________________________________________________
+
+	[6.3.3]. Comando "group":
+_______________________________________________________
+
+Vamos a agrupar los ítems por año, mes y día, y calcular el precio total de las ventas realizadas en esa fecha.
+
+	db.ventas.aggregate([
+		{
+			$group:{
+				_id:{
+					mes: {$month: "$fecha"},
+					dia: {$dayOfMonth: "$fecha"},
+					año: {$year: "$fecha"}
+				},
+				precioTotal:{
+					$sum: { $multiply: [ "$precio", "$cantidad" ] }
+				}
+			}
+		}
+	]);
+
+Acá vemos que el "precioTotal" se obtiene de multiplicar el precio de cada ítem, por la cantidad de los mismos, y luego se hace la sumatoria de acuerdo a la agrupación de fecha.
+
+	/* 1 */
+	{
+		"_id" : {
+			"mes" : 3,
+			"dia" : 1,
+			"año" : 2014
+		},
+		"precioTotal" : 40
+	}
+
+	/* 2 */
+	{
+		"_id" : {
+			"mes" : 4,
+			"dia" : 5,
+			"año" : 2014
+		},
+		"precioTotal" : 200
+	}
+
+	/* 3 */
+	{
+		"_id" : {
+			"mes" : 3,
+			"dia" : 15,
+			"año" : 2014
+		},
+		"precioTotal" : 50
+	}
+
+Ahora podemos sacar el promedio o cantidad media de los ítems:
+
+	db.ventas.aggregate([
+		{
+			$group:{
+				_id:{
+					mes: {$month: "$fecha"},
+					dia: {$dayOfMonth: "$fecha"},
+					año: {$year: "$fecha"}
+				},
+				precioTotal:{
+					$sum: { $multiply: [ "$precio", "$cantidad" ] }
+				},
+				cantidadMedia:{
+					$avg: "$cantidad"
+				}
+			}
+		}
+	]);
+
+También podemos saber cuántos documentos está agrupando:
+
+	db.ventas.aggregate([
+		{
+			$group:{
+				_id:{
+					mes: {$month: "$fecha"},
+					dia: {$dayOfMonth: "$fecha"},
+					año: {$year: "$fecha"}
+				},
+				precioTotal:{
+					$sum: { $multiply: [ "$precio", "$cantidad" ] }
+				},
+				cantidadMedia:{
+					$avg: "$cantidad"
+				},
+				cantidadDocumentos:{
+					$sum:1
+				}
+			}
+		}
+	]);
+
+El resultado es:
+
+	/* 1 */
+	{
+		"_id" : {
+			"mes" : 3,
+			"dia" : 15,
+			"año" : 2014
+		},
+		"precioTotal" : 50,
+		"cantidadMedia" : 10.0,
+		"cantidadDocumentos" : 1.0
+	}
+
+	/* 2 */
+	{
+		"_id" : {
+			"mes" : 4,
+			"dia" : 5,
+			"año" : 2014
+		},
+		"precioTotal" : 200,
+		"cantidadMedia" : 15.0,
+		"cantidadDocumentos" : 2.0
+	}
+
+	/* 3 */
+	{
+		"_id" : {
+			"mes" : 3,
+			"dia" : 1,
+			"año" : 2014
+		},
+		"precioTotal" : 40,
+		"cantidadMedia" : 1.5,
+		"cantidadDocumentos" : 2.0
+	}
+
+Nota: para más info. del comando "$group":
+
+	https://docs.mongodb.com/manual/reference/operator/aggregation/group/#mongodb-pipeline-pipe.-group
+_______________________________________________________
+
+	[7]. Indexación en MongoDB:
+_______________________________________________________
+
+Un índice es una estructura de datos que mantiene información acerca de los valores de campos específicos en los documentos de una colección.
+
+Un índice es una consulta predefinida que fue ejecutada y los resultados de la misma se almacenan; de esta forma, la consultade información se hace rápida al no tener que recorrer toda la base de datos para recopilar información.
+
+Cuando creamos un índice, aumenta la velocidad de las consultas, pero se reduce la velocidad de las inserciones y las eliminaciones debido a que el sistema debe mantener y actualizar el índice por cada operación.
+
+Cuando se trabajan con índices, de vez en cuando hay que borrar algunos o reconstruirlos debido a varias razones:
+
+- Limpiar irregularidades que aparecen en los índices.
+- Aumento del tamaño de la base de datos.
+- Espacio excesivo ocupado por los índices. Solo se pueden definir como máximo 40 índices por colección.
+
+En general los índices se usan con las consultas "find" y "findOne".
+_______________________________________________________
+
+	[7.1]. Consultar y crear índices:
+_______________________________________________________
+
+Creamos la colección "posts", con los siguientes documentos:
+
+	{
+		"titulo":"Tutorial de JavaScript",
+		"contenido":"Contenido del primer post del blog sobre JavaScript",
+		"etiquetas":["javascript","programacion"],
+		"autor":{
+			"nombre":"Grover",
+			"email":"grover@mail.com"
+		}
+	}
+	{
+		"titulo":"Tutorial de MongoDB",
+		"contenido":"Contenido del segundo post del blog sobre MongoDB",
+		"etiquetas":["bd","programacion"],
+		"autor":{
+			"nombre":"Grover",
+			"email":"grover@mail.com"
+		}
+	}
+	{
+		"titulo":"Tutorial de Java",
+		"contenido":"Contenido del tercer post del blog sobre Java",
+		"etiquetas":["java","programacion"],
+		"autor":{
+			"nombre":"Carlos",
+			"email":"carlos@mail.com"
+		}
+	}
+	{
+		"titulo":"Tutorial de Photoshop",
+		"contenido":"Contenido del cuarto post del blog sobre Photoshop",
+		"etiquetas":["photoshop","diseño"],
+		"autor":{
+			"nombre":"Karen",
+			"email":"karen@mail.com"
+		}
+	}
+	{
+		"titulo":"Tutorial de Marketing en Facebook",
+		"contenido":"Contenido del quinto post del blog sobre Marketing",
+		"etiquetas":["facebook","marketing"],
+		"autor":{
+			"nombre":"Karen",
+			"email":"karen@mail.com"
+		}
+	}
+
+El campo "etiquetas" es un array y el campo "autor" es un subdocumento.
+
+Para consultar los índices de la colección usamos el comando:
+
+	db.posts.getIndexes();
+
+Esto nos da como resultado el siguiente arreglo:
+
+	[
+		{
+			"v" : 2,
+			"key" : {
+				"_id" : 1
+			},
+			"name" : "_id_"
+		}
+	]
+
+Nos indica que tenemos un índice que se llama "_id", este se creó automáticamente al crear los documentos.
+
+Para crear nuestros propios índices
+
+	db.posts.createIndex({"etiquetas":1});
+
+Con el número "1" indicamos el orden del índice (1-->Ascendente, -1-->Descendente).
+
+Al consultar nuevamente los índices nos da como resultado:
+
+	[
+		{
+			"v" : 2,
+			"key" : {
+				"_id" : 1
+			},
+			"name" : "_id_"
+		},
+		{
+			"v" : 2,
+			"key" : {
+				"etiquetas" : 1.0
+			},
+			"name" : "etiquetas_1"
+		}
+	]
+
+En este caso, se creó un multi-índice, ya que el campo "etiquetas" es un array, y podemos buscar por cualquiera de sus elementos:
+
+	db.posts.find({
+		"etiquetas": {
+			"$all":["programacion"]
+		}
+	});
+
+En este caso buscamos por la etiqueta "programacion", pero también podemos buscar por otras etiquetas.
+_______________________________________________________
+
+	[7.2]. Crear índice de documento embebido:
+_______________________________________________________
+
+Podemos crear un índice dentro de un documento embebido o subdocumento, para ello usamos el metodo "createIndex()".
+
+	db.posts.createIndex({"autor.email":1});
+
+En este caso en el subdocumento o campo "autor", se crea el índice "email", ya que es único.
+
+Ahora podemos realizar búsquedas por el nuevo índice creado:
+
+	db.posts.find({"autor.email":"grover@mail.com"});
+
+_______________________________________________________
+
+	[7.3]. Crear índice único:
+_______________________________________________________
+
+Para crear índice único, usamos el método "createIndex()", pasándole como segundo parámetro la instrucción "unique:true".
+
+Ejemplo: En la colección "personas", eliminamos los documentos, y creamos los siguientes:
+
+	{
+		"nombre": "Grover",
+		"email": "grover@mail.com",
+		"edad": 35
+	}
+	{
+		"nombre": "Carlos",
+		"email": "carlos@mail.com",
+		"edad": 40
+	}
+	{
+		"nombre": "Karen",
+		"email": "karen@mail.com",
+		"edad": 30
+	}
+
+Ahora usaremos el campo "email" como id único:
+
+	db.personas.createIndex({"email":1}, {unique:true});
+
+_______________________________________________________
+
+	[7.4]. Índice compuesto:
+_______________________________________________________
+
+En documentos embebidos se puede crear un índice compuesto, en estos casos todo el sub documento o documento embebido es el índice.
+
+Ejemplo: en la colección "posts" creamos el índice compuesto:
+
+	db.posts.createIndex({"autor":1});
+
+Ahora podemos consultar los documentos por todo el campo "autor", es decir "nombre" y "email":
+
+	db.posts.find({"autor":{"nombre":"Grover", "email":"grover@mail.com"}});
+_______________________________________________________
+
+	[7.5]. Opciones sobre los índices:
+_______________________________________________________
+
+Recordemos la sintaxis para crear un índice:
+
+	coleccion.createIndex({campo:1}, {opcion1:true, opcion2:true, ...});
+
+En las opciones tenemos:
+
+1- Reindexado en Background.
+2- Índices únicos.
+
+El reindexado en background, es útil cuando estamos creando un índice un una colección con muchos documentos, ya que MongoDB bloquea el acceso a la base de datos mientras crea los índices. Si usamos esta instrucción, crea los índices en segundo plano y no bloquea el acceso a la BD.
+
+Ejemplo:
+
+	db.posts.createIndex({"autor.nombre":1}, {"background":true});
+_______________________________________________________
+
+	[7.6]. Eliminar índices:
+_______________________________________________________
+
+Para eliminar los índices de una colección, se usan las siguientes instrucciones:
+
+	db.coleccion.dropIndex({nombreCampo:1});
+
+	db.colección.dropIndexes();
+
+Ejemplo: en la colección "personas", eliminamos el índice único que habíamos creado:
+
+	db.personas.dropIndex({"email":1});
+
+Ahora en la colección "posts", eliminamos todos los índices:
+
+	db.posts.dropIndexes();
+
+Nota: en la colección "posts", al consultar los índices, vemos que el índice "_id" que crea MongoDB aún existe.
+_______________________________________________________
+
+	[8]. Administración de una BD:
+_______________________________________________________
+
+En esta sección veremos instrucciones para la administración de una BD en MongoDB, como la creación de usuarios, etc.
+_______________________________________________________
+
+	[8.1]. Creación de usuarios:
+_______________________________________________________
+
+Para crear usuarios en MongoDB, mediante su shell, usamos la siguiente sintaxis:
+
+	db.createUser({
+		user:"usuario",
+		pwd:"password",
+		roles:[rol1, rol2, ...]
+	});
+
+En donde:
+
+	"rol" --> { role: "rol", db:"database" }
+
+Es decir, se asigna el rol, y se indica en que base de datos va a tener ese rol. Si no se indica la base de datos, se le asigna el rol a la base de datos actual en uso.
+_______________________________________________________
+
+	[8.1.1]. Roles:
+_______________________________________________________
+
+Los principales roles que tenemos son:
+
+- "read" --> Lectura sobre todas las colecciones que no son del sistema y las colecciones del sistema "system.indexes", "system.js" y "system.namespaces".
+
+- "readWrite" --> Los mismos privilegios que "read", y modificación de todas las colecciones que no son del sistema "system.js".
+
+- "dbAdmin" --> Privilegios sobre las colecciones del sistema "system.indexes", "system.namespaces" y "system.profile", y algunos privilegios sobre colecciones que no son del sistema (entre ellos no se incluye la lectura completa).
+
+- "userAdmin" --> Permite crear y modificar roles de la base de datos actual. Indirectamente proporciona acceso superusuario a la base de datos o a un clúster. Es posible otorgar cualquier privilegio a cualquier usuario.
+
+- "dbOwner" --> Combina los privilegios de los roles "readWrite", "dbAdmin" y "userAdmin".
+
+_______________________________________________________
+
+	[8.1.2]. Ejemplo creación de usuarios:
+_______________________________________________________
+
+En la consola de Mongo "mongo.exe", cambiamos a la BD de administración:
+
+	use admin;
+
+Creamos un usuario que tiene permisos de lectura y escritura en la base de datos "cursoMongo", y tiene permisos de "dbAdmin" en la base de datos "admin":
+
+	db.createUser({
+		user:"grover",
+		pwd:"12345",
+		roles:[ {"role":"readWrite", "db":"cursoMongo"}, "dbAdmin" ]
+	});
+
+Salimos de la consola(ctrl+c), y en la consola que está corriendo el servicio "mongod.exe" terminamos el servicio (ctrl+c). Ejecutamos "mongod" con opción de autenticación con:
+
+	mongod --auth
+
+De regreso en la shell "mongo.exe" ejecutamos los comandos:
+
+	use admin;
+
+	show collections;
+
+Al ejecutar el último comando para ver las colecciones de la BD "admin", nos da un error ya que no estamos autenticados.
+
+Para autenticarnos escribimos el comando:
+
+	db.auth("grover", "12345");
+
+Nota: En Robo3T también podemos crear usuarios, vamos a nuestro panel izquierdo y buscamos la carpeta llamada "Users", y al hacer clic derecho, ponemos la opción "Add user...".
+_______________________________________________________
+
+	[8.2]. Realizar Backups:
+_______________________________________________________
+
+Para hacer un backup de la BD, usamos el comando "mongodump", el cual tiene la siguiente sintaxis:
+
+	mongodump --host <hostname> --username <username> --password <password> --authenticationDatabase <authDb>
+
+En donde "hostname" es el servidor de la base de datos, y "authDb" la base de datos en la cual nos vamos a autenticar.
+_______________________________________________________
+Ejemplo 1: Para hacer un backup local:
+
+1) La aplicaicón de Mongodump ya no forma parte del instalador de MongoDB server, para usarla se debe instalar aparte "MongoDb DatabaseTools", del siguiente enlace:
+
+	https://www.mongodb.com/try/download/database-tools?tck=docs_databasetools
+
+2) En la carpeta de la instalación de MongoDB (C:\Program Files\MongoDB\Server\5.0\bin), debe haber un archivo llamado "mongodump.exe", abrimos una consola en esa ubicación y escribimos el siguiente comando:
+
+	mongodump.exe --db cursoMongo
+
+En este caso "cursoMongo" es la base de datos a la que se le hace el backup, luego en el explorador de archivos podemos ver que se creó una carpeta llamada "dump", y dentro de esta, una carpeta llamada "cursoMongo", en donde encontramos dos tipos de archivos:
+
+	*.bson
+	*.json
+
+Los archivos "*.bson", es el de los datos y los archivos "*.json" es la metadata(índices, etc. de las colecciones de MongoDB).
+_______________________________________________________
+Backup base de datos remoto, indicando base de datos y colección:
+
+	mongodump --host <hostname> --username <username> --password <password> --authenticationDatabase <authDb> --db <dumpDatabase> --collection <dumpCollection> --out <directoryName>
+
+Sintaxis para guardar el backup en un archivo comprimido:
+
+	mongodump --host <hostname> --username <username> --password <password> --authenticationDatabase <authDb> --db <dumpDatabase> --collection <dumpCollection> --archivo <nombreArchivo> --gzip
+
+Ejemplo 2: hacemos un backup en local de la base de datos "admin" y la BD "cursoMongo":
+
+	mongodump --host localhost --username grover --password 12345 --authenticationDatabase admin --db cursoMongo
+
+Nota: en este caso es en local, pero si fuera en otro servidor, en localhost se indicaría el servidor externo.
+_______________________________________________________
+
+	[8.3]. Restauración de una copia de seguridad:
+_______________________________________________________
+
+Para restaurar una base de datos que se ha borrado (drop database), pero la cual se le ha hecho backup (mongodump) anteriormente, usamos el comando "mongorestore".
+
+Para ello tenemos que estar ubicados donde se encuentra instalado MongoDB, y donde este la carpeta "dump" con el backup.
+
+De forma LOCAL usamos:
+
+	mongorestore 
+
+	mongorestore --host localhost --username xxxx --password xxx --authenticationDatabase admin
+_______________________________________________________
+De forma REMOTA usamos:
+
+	mongorestore --host <hostname> --username <username> --password <password> --authenticationDatabase <authDb>
+
+REMOTO desde directorio específico:
+
+	mongorestore --host <hostname> --username <username> --password <password> --authenticationDatabase <authDb> --dir <directoryName>
+
+REMOTO desde Archivo comprimido:
+
+	mongorestore --host <hostname> --username <username> --password <password> --authenticationDatabase <authDb> --archive=<fileName> --gzip
+_______________________________________________________
+
+	[8.4]. Exportación de datos:
+_______________________________________________________
+
+Para exportar los datos de una colección usamos el comando "mongoexport", se pueden exportar en formato JSON o CSV(Excel).
+
+La sintaxis para exportar datos de forma local es:
+
+	mongoexport --db cursoMongo --collection posts --out posts.json
+
+Nota: debemos tener permiso de escritura en la carpeta en donde hacemos la exportación, ya que, en este caso, se crea el archivo "posts.json".
+_______________________________________________________
+También tenemos la opción de exportar los datos en un array de JSON:
+
+	mongoexport --db cursoMongo --collection posts --out posts_2.json --jsonArray
+_______________________________________________________
+Otra opción es exportar en CSV (Excel):
+
+	mongoexport --db cursoMongo --collection posts --out posts_csv.csv --type=csv --fields "titulo,contenido"
+
+Nota: con el parámetro "--fields" indicamos los campos que deseamos exportar.
+_______________________________________________________
+Para exportar datos de forma remota:
+
+	mongoexport --host localhost --username grover --password 12345 --authenticationDatabase admin --db cursoMongo --collection posts --out posts.json
+_______________________________________________________
+IMPORTAR:
+
+Con un archivo JSON, para importar datos a una base de datos Mongo, usamos:
+
+	mongo import -h host -d database -c colección -u user -p password --file archivo.json

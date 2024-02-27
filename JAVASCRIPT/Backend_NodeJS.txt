@@ -1,0 +1,1368 @@
+
+	Backend NodeJS:
+_______________________________________________________
+
+INDICE:
+
+[1]. Instalación
+	[1.1]. NPM
+[2]. Crear proyecto Node
+	[2.1]. Descripción del proyecto Node
+[3]. Instalar Dependencias
+	[3.1]. Dependencias de desarrollo
+[4]. Conectar NodeJS con MongoDB
+[5]. Crear Servidor con NodeJS
+[6]. Probar API REST con Postman
+[7]. Arquitectura Backend MVC
+	[7.1]. Creando Modelos
+	[7.2]. Controladores y rutas
+		[7.2.1]. Acción para guardar artículos y validación de datos
+			[7.2.1.1]. Guardar artículos en la BD
+		[7.2.2]. Método para devolver todos los artículos de la BD
+			[7.2.2.1]. Devolver últimos artículos de la BD
+		[7.2.3]. Devolver un artículo especifico
+		[7.2.4]. Actualizar un artículo
+		[7.2.5]. Eliminar un artículo
+		[7.2.6]. Subir Archivo con NodeJS
+		[7.2.7]. Obtener Archivo imagen
+		[7.2.8]. Buscador de articulos API REST
+[8]. Configurar el CORS en el API RESTful de NodeJS
+
+_______________________________________________________
+
+	[1]. Instalación:
+_______________________________________________________
+
+Node.js es un entorno de ejecución para JavaScript construido con el motor de JavaScript V8 de Chrome. Nos permite ejecutar codigo JavaScript no solo en el navegador web, sino tambien en sistemas de escritorio o servidores.
+
+1) Para instalar Node:
+
+	https://nodejs.org/es/
+
+Nota: Se recomienda la versión LTS(Long Term Service).
+
+2) Luego en consola (windows cmd o powershell), escribimos el comando:
+
+	node -v
+
+Esto nos mostrara la version de Node instalada.
+
+Si queremos ejecutar codigo JavaScript en la conmsola de node escribimos:
+
+	node
+
+Y luego el codigo JavaScript como:
+
+	console.log("Hola!!!");
+_______________________________________________________
+
+	[1.1]. NPM:
+_______________________________________________________
+
+NPM son las siglas de Node Package Manager, es decir, gestor de paquetes de NodeJS.
+
+Para ver la versión de "npm" instalada usamos:
+
+	npm -v
+_______________________________________________________
+
+	[2]. Crear proyecto Node:
+_______________________________________________________
+
+1) Crear una carpeta para el proyecto, para el nombre del proyecto, seguimos las siguientes recomendaciones:
+
+	A) Utiliza siempre minúsculas.
+	B) No utilices espacios en el nombre. Usa guiones en su lugar.
+	C) Evita el uso de carácteres especiales, signos de puntuación, etc...
+
+2) Para llevar el control de versiones del proyecto con "Git", en consola de comandos, nos ubicamos en la carpeta del proyecto y usamos el comando:
+
+	git init
+
+Luego añadimos la URL de GitHub (u otro servicio) como repositorio remoto:
+
+	git remote add origin https://github.com/landinezrichard/backend.git
+
+Creamos un archivo ".gitignore", para ignorar archivos y carpetas que no se deben subir a github (Como la carpeta node_modules, ya que allí van las dependencias del proyecto y no se deben subir a github, ya que estas dependencias son binarios y su compilación depende del sistema operativo):
+
+	node_modules
+	*.log
+
+3) En la consola, ubicados en la carpeta del proyecto, escribimos el comando "npm init", el cual va a crear el archivo "package.json":
+
+	npm init
+
+El comando "npm init", hará algunas preguntas iniciales sobre nuestro proyecto:
+
+	name: nombreproyecto
+	version: 1.0
+	description: Api RESTful para frameworks JavaScript
+	entry point: index.js
+	test comand:
+	git repository:
+	keywords:
+	autor: Ricardo Landínez <landinezrichard@gmail.com>
+	license: BSD
+
+Nota: en licencia tambien pódemos usar MIT.
+
+IMPORTANTE: para que npm init no falle al momento del nombre del proyecto, no usar letras mayusculas, no usar espacios, evitar el uso de carácteres especiales, signos de puntuación, etc..
+_______________________________________________________
+
+	[2.1]. Descripción del proyecto Node:
+_______________________________________________________
+
+Vamos a desarrollar una API RESTful, servicio web que se le hace una petición y devuelve un JSON.
+
+Tiene diferentes urls, o endpoints, a los cuales se les hace diferentes peticiones AJAX(asincronas), o peticiones HTTP,  con cualquier tipo de cliente (aplicación rest instalada en el equipo, app movil, o aplicación web SPA (Single Page Aplication) ).
+
+En este caso se desarrolla una aplicación web SPA (Single Page Aplication), con Angular, React y Vue.
+_______________________________________________________
+
+	[3]. Instalar Dependencias:
+_______________________________________________________
+
+Podremos instalar paquetes de NPM en nuestros proyectos y/o en nuestro sistema. Se pueden instalar de dos formas:
+
+- A nivel de proyecto: usar NPM como un gestor de dependencias de un proyecto, esto es, un sistema con el que controlamos que paquetes o librerías Javascript están instalados (y que versión), de modo que quedan asociados al proyecto en sí. Esto facilita que si un usuario diferente se descarga el proyecto, pueda gestionarlo fácil y rápidamente (instalar paquetes, actualizarlos, etc...).
+
+- A nivel global: hay paquetes que son realmente utilidades que no se utilizan en proyectos, muy común en aplicaciones de línea de comandos (CLI) que usamos desde terminal. En esta modalidad, los paquetes se instalan a nivel del sistema (no en la carpeta del proyecto), por lo que están disponibles siempre que el usuario quiera utilizarlos, sin necesidad de tenerlo en cada proyecto.
+
+Nota: para ver comandos de instalación de paquetes globales ir a:
+
+	https://lenguajejs.com/npm/introduccion/instalaciones-globales/
+_______________________________________________________
+
+En este caso vamos a instalar paquetes a nivel de proyecto. Nos ubicamos dentro de la carpeta del proyecto, y usamos los comandos:
+
+	npm install --save express
+
+	npm install --save body-parser
+
+	npm install --save mongoose
+
+	npm install --save connect-multiparty
+
+	npm install --save validator
+
+Con el flag "--save", indicamos que es una dependencia de nuestro proyecto, es decir, que el proyecto necesita la libreria para funcionar. Tambien hace que en el archivo "package.json" se grabe como dependencia y aparezca la versión instalada.
+
+En nuestra carpeta de proyecto, aparece una carpeta llamada "node-modules", que es donde se descargan las librerias instaladas y las dependencias de estas.
+
+Nota 1: para buscar algun paquete o ver más información de los paquetes:
+
+	https://www.npmjs.com/
+
+"Express" es una libreria que nos proporciona herramientas pequeñas y sólidas para servidores HTTP, lo que la convierte en una gran solución para aplicaciones de una sola página, sitios web, híbridos o API HTTP públicas. Nos va a servir para crear las diferentes rutas de nuestro proyecto.
+
+"body-parser" nos permite tomar los datos que se envian a través de un formulario, y convertirlos a JSON.
+
+"mongoose" ORM para utilizar con MongoDB.
+
+"connect-multiparty" nos ayuda a subir archivos (mandarlos a través del formulario).
+
+"validator" nos ayuda a validar y sanitizar los datos enviados por un formulario.
+
+Nota 2: Si descargamos algun proyecto de otra persona, y necesitamos instalar sus dependencias (el proyecto debe tener el archivo "package.json"), usamos el comando:
+
+	npm install
+_______________________________________________________
+
+	[3.1]. Dependencias de desarrollo:
+_______________________________________________________
+
+Podemos instalar dependencias de desarrollo, con el flag "--save-dev":
+
+	npm install --save-dev nodemon
+
+"nodemon" es una herramienta que ayuda a desarrollar aplicaciones basadas en node.js al reiniciar automáticamente la aplicación de node cuando se detectan cambios de archivo en el directorio.
+
+Para usar "nodemon", agregamos un nuevo script al archivo "package.json":
+
+	"scripts": {
+		"start": "nodemon index.js",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+
+Luego en la consola corremos el script con:
+
+	npm start
+
+De esta forma, al hacer cambios en "index.js" (que se creara más adelante), se recarga automaticamente el script en ejecución, sin necesidad de pausarlo (ctrl + C) y volverlo a correr.
+_______________________________________________________
+
+	[4]. Conectar NodeJS con MongoDB:
+_______________________________________________________
+
+(1) Ir a la carpeta donde instalamos MongoDB:
+
+	C:\Program Files\MongoDB\Server\4.4\bin
+
+Allí ejecutamos el archivo "mongod.exe".
+
+(2) En la carpeta de nuestro proyecto creamos el archivo principal "index.js":
+
+	'use strict';
+
+	const mongoose = require('mongoose');
+
+	// desactivar metodos viejos de mongoose
+	mongoose.set('useFindAndModify', false);
+
+	// habilitamos las promesas para MongoDB
+	mongoose.Promise = global.Promise;
+
+	//conexion BD
+	//mongoose.connect('url', {opciones})
+	mongoose.connect('mongodb://localhost:27017/api_rest_blog', {useNewUrlParser: true, useUnifiedTopology: true})
+		.then( () =>{
+			console.log("La conexión a la BD se ha realizado!!!");
+		});
+
+En la url de conexion a MongoDB, usamos "localhost", porque tenemos MongoDB en local, y el puerto "27017", que lo podemos ver en la consola de ejecución de "mongod.exe". "api_rest_blog" corresponde al nombre de la BD que se va a crear.
+El JSON de opciones "{useNewUrlParser: true}", nos permite usar las funciones de Mongoose para MongoDB.
+
+(3) Para ejecutar el script, en la consola usamos:
+
+	node index.js
+_______________________________________________________
+
+	[5]. Crear Servidor con NodeJS:
+_______________________________________________________
+
+En la carpeta del proyecto, creamos el archivo "app.js":
+
+	'use strict';
+
+	// Cargar modulos de node para crear el servidor
+	let express = require('express');
+	let bodyParser = require('body-parser');
+
+
+	// Ejecutar express (http)
+	let app = express();
+
+	// Middlewares
+
+		// usar el body-parser
+	app.use(bodyParser.urlencoded({extended:false}));
+	app.use(bodyParser.json());
+	
+	// Añadir prefijos a rutas
+
+		// ruta o metodo de prueba para el API REST
+	app.get('/probando', (req, res) => {
+		console.log('Hola mundo!!!');
+		return res.status(200).send(
+			`
+			<ul>
+				<li>NodeJS</li>
+				<li>Angular</li>
+				<li>React</li>
+				<li>Vue</li>
+			</ul>
+			`
+		);
+	});
+
+	// Exportar modulo (fichero actual)
+	module.exports = app;
+
+Primero requerimos los modulos que vamos a usar.
+
+Tambien creamos una ruta de prueba ("/probando"). Cuando nos dirijamos en el navegador a esa ruta, imprimira por la consola donde estamos ejecutando "npm start" (es diferente a la consola del navegador). Luego en la pág. web, imprimira el codigo HTML que enviamos (en este caso la lista no ordenada).
+
+Si en vez de codigo HTML, queremos devolver un JSON ponemos:
+
+	return res.status(200).send(
+		{
+			curso: "Master Frameworks JS",
+			autor: "Víctor Robles",
+			url: "victorroblesweb.es"
+		}
+	);
+
+Por ultimo exportamos el modulo, para poderlo usar en el archivo "index.js":
+
+	let app = require("./app");
+	let port = 3900;
+
+	...
+
+	.then( () =>{
+		console.log("La conexión a la BD se ha realizado!!!");
+		//crear servidor y escuchar peticiones HTTP
+		app.listen(port, () => {
+			console.log("Servidor corriendo en http://localhost:" + port);
+		});
+	});
+
+Ahora en el navegador vamos a la url:
+
+	http://localhost:3900/probando
+
+_______________________________________________________
+
+	[6]. Probar API REST con Postman:
+_______________________________________________________
+
+Para probar las rutas, y los datos enviados y recibidos, descargamos el cliemte REST "Postman":
+
+	https://www.postman.com/
+
+Hacemos click en (+), seleccionamos el metodo HTTP (por ejemplo "GET"), y en url podemos usar:
+
+	http://localhost:3900/probando
+
+Luego hacemos click en "Send", podremos ver la respuesta en JSON:
+
+	{
+		"curso": "Master en Frameworks JS",
+		"autor": "Víctor Robles",
+		"url": "victorroblesweb.es"
+	}
+
+Si modificamos "app.js", para que tambien reciba parametros enviados por el metodo "POST":
+
+	// ruta o metodo de prueba para el API REST
+	app.post("/datos-curso", (req, res) => {
+		let hola = req.body.hola;
+
+		return res.status(200).send(
+			{
+				curso: "Master Frameworks JS",
+				autor: "Víctor Robles",
+				url: "victorroblesweb.es",
+				hola
+			}
+		);
+	});
+
+Ahora en "Postman", seleccionamos el metodo "POST", en url escribimos "http://localhost:3900/datos-curso".
+
+Abajo, seleccionamos la pestaña "Body", escogemos el radio button "x-www-form-urlencoded", en "KEY" escribimos "hola" (sin las comillas), y en "VALUE" "Hola Ricardo!!!" (sin las comillas).
+
+Hacemos click en el boton "Send", y vemos la respuesta en JSON:
+
+	{
+		"curso": "Master en Frameworks JS",
+		"autor": "Víctor Robles",
+		"url": "victorroblesweb.es",
+		"hola": "Hola Ricardo!!!"
+	}
+_______________________________________________________
+
+	[7]. Arquitectura Backend MVC:
+_______________________________________________________
+
+Arquitectura MVC Modelo Vista Controlador.
+
+Modelos, encargados de la comunicación a la BD.
+
+Controladores, mediante las rutas reciben los datos, los procesan y devuelven.
+
+Vistas, en este caso los JSON.
+_______________________________________________________
+
+	[7.1]. Creando Modelos:
+_______________________________________________________
+
+Un "modelo", es una clase que nos sirve como "molde" para crear diferentes objetos.
+
+En este caso crearemos el modelo "article.js", que definira que propiedades tendra cada objeto, que estructura tendra al guardarse en la colección de MongoDB. Este modelo tambien se conectara a la colección de articulos de la BD.
+
+En conclusión, el modelo, se encargara de definir el tipo de datos (estructura o esquema), que se guardaran en la BD, así como de ofrecer distintos metodos y funciones para interactuar con la BD.
+
+(1) Creamos dentro de la carpeta del proyecto, una nueva carpeta llamada "models".
+
+(2) Dentro de esta carpeta creamos el archivo "article.js":
+
+	"use strict";
+
+	const mongoose = require("mongoose");
+	let Schema = mongoose.Schema;
+
+	// Definimos el esquema
+	let ArticleSchema = Schema({
+		title: String,
+		content: String,
+		date: { type: Date, default: Date.now },
+		image: String
+	});
+
+	// Definimos el modelo
+	// "Article" es el nombre del modelo
+	module.exports = mongoose.model("Article", ArticleSchema);
+	// articles --> guarda documentos de tipo y estructura "Article" dentro de la colección.
+_______________________________________________________
+
+	[7.2]. Controladores y rutas:
+_______________________________________________________
+
+El controlador sera encargado de las rutas del API.
+
+(1) Creamos dentro de la carpeta de nuestro proyecto, una nueva carpeta llamada "controllers".
+
+(2) Dentro de esta carpeta creamos el archivo "article.js":
+
+	"use strict";
+
+	let controller = {
+
+		// Metodo o acción "datosCurso"
+		datosCurso: (req, res) => {
+			let hola = req.body.hola;
+
+			return res.status(200).send({
+				curso: "Master en Frameworks JS",
+				autor: "Víctor Robles",
+				url: "victorroblesweb.es",
+				hola
+			});
+		},
+
+		// Metodo o acción "test"
+		test: (req, res) => {
+			return res.status(200).send({
+				message: "Soy la acción 'test' de mi controlador de articulos"
+			});
+		}
+	}; // end controller
+
+	module.exports = controller;
+
+Como se puede ver, el controlador es un objeto, con diferentes metodos.
+
+(3) Dentro de la carpeta de nuestro proyecto, creamos la carpeta "routes".
+
+(4) Dentro de la carpeta "routes", creamos el archivo "article.js":
+
+	"use strict";
+
+	let express = require("express");
+	// Cargamos el controlador
+	let ArticleController = require("../controllers/article");
+
+	// llamamos al router de express
+	let router = express.Router();
+
+	// creamos las rutas
+	router.post("/datos-curso", ArticleController.datosCurso);
+	router.get("/test-de-controlador", ArticleController.test);
+
+	module.exports = router;
+
+Cuando creamos las rutas por "post" y "get", en vez de usar la "arrow function", usamos los metodos del controlador.
+
+(5) Cargamos las rutas en "app.js":
+
+	"use strict";
+
+	// Cargar modulos de node para crear el servidor
+	let express = require("express");
+	let bodyParser = require("body-parser");
+
+	// Ejecutar express (http)
+	let app = express();
+
+	// Cargar ficheros rutas
+	let article_routes = require("./routes/article");
+
+	// Middlewares
+
+		// usar el body-parser
+	app.use(bodyParser.urlencoded({extended:false}));
+	app.use(bodyParser.json());
+
+	// CORS
+
+	// Añadir prefijos a rutas / Cargar Rutas
+	app.use("/", article_routes);
+
+	// Exportar modulo (fichero actual)
+	module.exports = app;
+
+(6) Probamos nuestras rutas con "Postman".
+
+- Seleccionamos el metodo "POST", escribimos la url "http://localhost:3900/datos-curso" y damos click en "Send", podemos ver la respuesta en JSON:
+
+	{
+		"curso": "Master en Frameworks JS",
+		"autor": "Víctor Robles",
+		"url": "victorroblesweb.es"
+	}
+
+- Para probar la otra ruta, seleccionamos el metodo "GET", escribimos la url "http://localhost:3900/test-de-controlador" y damos click en "Send", podemos ver la respuesta en JSON:
+
+	{
+		"message": "Soy la acción 'test' de mi controlador de articulos"
+	}
+
+(7) Como estamos creando una API, sobre-escribimos la ruta en "app.js":
+
+	// Añadir prefijos a rutas / Cargar Rutas
+	app.use("/api", article_routes);
+
+De esta forma, indicamos que es una api, y ahora para probar las rutas escribimos:
+
+	http://localhost:3900/api/datos-curso
+
+	http://localhost:3900/api/test-de-controlador
+_______________________________________________________
+
+	[7.2.1]. Acción para guardar artículos y validación de datos:
+_______________________________________________________
+
+(1) En el archivo "controllers/article.js", creamos rutas de utilidad para nuestra API:
+
+	"use strict";
+
+	let validator = require("validator");
+	let Article = require("../models/article");
+
+	...
+
+	// Metodo para crear un nuevo articulo
+	save: (req, res) => {
+		// Recoger parametros por POST
+		let params = req.body;
+		let validate_title, validate_content;
+
+		// Validar datos (libreria "validator")
+		try{
+			validate_title = !validator.isEmpty(params.title); // da "true" cuando el parametro "title" no este vacio
+			validate_content = !validator.isEmpty(params.content);
+		}catch(err){
+			return res.status(200).send({
+				message: "Faltan datos por enviar !!!"
+			});
+		}
+
+		// si validación correcta
+		if( validate_title && validate_content){
+			
+			// Crear el objeto (articulo) a guardar
+
+			// Asignar valores
+
+			// Guardar el articulo
+
+			// Devolver Respuesta
+			return res.status(200).send({
+				article: params
+			});
+		}else{
+			return res.status(200).send({
+				message: "Los datos no son válidos !!!"
+			});
+		}
+
+	}
+
+Como vemos, tambien importamos la libreria "validator", y el modelo "article.js", para poder crear y guardar los datos en la BD.
+
+La validación de los datos puede causar excepciones, por lo que usamos el "try" y "catch".
+
+Nota: la libreria "validator", contiene muchos metodos utiles para validar, y tambien se puede usar del lado del cliente:
+
+	https://www.npmjs.com/package/validator
+
+(2) En el archivo "routes/article.js", creamos la ruta para crear articulos:
+
+	// Rutas para artículos
+	router.post("/save", ArticleController.save);
+
+(3) Probamos la ruta con "Postman", seleccionamos el metodo "POST", en url escribimos "http://localhost:3900/api/save".
+
+Abajo, seleccionamos la pestaña "Body", escogemos el radio button "x-www-form-urlencoded", en "KEY" y en "VALUE" escribimos:
+
+	"title": "Primer Articulo"
+	"content": "Contenido primer articulo"
+	
+Nota: Estos datos los escribimos sin las comillas.
+
+Hacemos click en el boton "Send", y vemos la respuesta en JSON:
+
+	{
+		"article": {
+			"title": "Primer Articulo",
+			"content": "Contenido primer articulo"
+		}
+	}
+
+En este caso entramos a ver la respuesta si la validación ha sido correcta.
+
+Para generar una excepción, en "Postman", delante de alguna pareja "clave:valor", desmarcamos el checkbox con el chulo, de esta forma solo enviamos un dato (o ninguno si desmarcamos los dos) al servidor, y obtendremos la respuesta:
+
+	{
+		"message": "Faltan datos por enviar !!!"
+	}
+_______________________________________________________
+
+	[7.2.1.1]. Guardar artículos en la BD:
+_______________________________________________________
+
+Hasta el momento se creo la ruta para guardar articulos, pero aún no se guardan en la BD.
+
+(1) Vamos a crear el articulo a guardar en la BD, esto lo hacemos gracias a la importación del modelo, en el archivo "controllers/article.js":
+
+	// Crear el objeto (articulo) a guardar
+	let article = new Article();
+
+	// Asignar valores
+	article.title = params.title;
+	article.content = params.content;
+	article.image = null;
+
+	// Guardar el articulo
+	article.save( (err, articleStored) => {
+		if(err || !articleStored){
+			return res.status(404).send({
+				status: "error",
+				message: "El articulo no se ha guardado !!!"
+			});
+		}
+
+		// Devolver Respuesta
+		return res.status(200).send({
+			status: "success",
+			article: articleStored
+		});
+		
+	});
+
+Por el momento en el campo "image" del articulo, enviamos un null.
+
+(2) Probamos la ruta con "Postman", seleccionamos el metodo "POST", en url escribimos "http://localhost:3900/api/save".
+
+Abajo, seleccionamos la pestaña "Body", escogemos el radio button "x-www-form-urlencoded", en "KEY" y en "VALUE" escribimos:
+
+	"title": "Primer Articulo"
+	"content": "Contenido primer articulo"
+	
+Nota: Estos datos los escribimos sin las comillas.
+
+Hacemos click en el boton "Send", y vemos la respuesta en JSON:
+
+	{
+		"status": "success",
+		"article": {
+			"_id": "5f498b506ea72b10d462aca0",
+			"date": "2020-08-28T22:55:12.859Z",
+			"title": "Primer Articulo",
+			"content": "Contenido primer articulo",
+			"image": null,
+			"__v": 0
+		}
+	}
+
+Esto significa que ya se a guardado el articulo en la BD.
+
+(3) Para comprobar realmente si se guardo el articulo, vamos a Robo3T (o Robomongo), nos conectamos a la BD, a la izquierda vemos la base de datos creada "api_rest_blog", hacemos click en ella, luego en "Collections" y luego doble click en "articles".
+
+Luego en la parte superior derecha de los datos que se nos despliegan, hacemos clcik en el icono parecido a una hoja de word, que si le ponemos el mouse encima se nos despliega el tooltip "View results in text mode".
+
+Nota: si creamos otro articulo, para que se actualicen los datos en Robo3T, hacemos click en el boton con el icono de "play", en el menú superior izquierdo.
+_______________________________________________________
+
+	[7.2.2]. Método para devolver todos los artículos de la BD:
+_______________________________________________________
+
+Vamos a crear un metodo nuevo, que haga una consulta  a la BD y nos devuelva todos los articulos.
+
+(1) Creamos el nuevo metodo en el archivo "controllers/article.js":
+
+	// Metodo para devolver todos los articulos
+	getArticles: (req, res) => {
+		// Busqueda de articulos con "find"
+		Article.find({}).exec( (err, articles) => {
+			if(err){
+				return res.status(500).send({
+					status: "error",
+					message: "Error al devolver los artículos !!!"
+				});
+			}
+
+			if(!articles){
+				return res.status(404).send({
+					status: "error",
+					message: "No hay artículos para mostrar !!!"
+				});
+			}
+
+			return res.status(200).send({
+				status: "success",
+				articles
+			});
+
+		});		
+	}
+
+Cuando hacemos la busqueda en la BD con "find", no le enviamos nada ({}), para que nos devuelva todos los artículos, sin embargo, allí podemos enviarle una condición, para que nos devuelva un registro de la BD en especifico, por ejemplo cuando la fecha sea XX o el titulo del artículo sea XX etc.
+
+(2) Creamos la ruta, con el metodo "GET", en el archivo "routes/article.js":
+
+	router.get("/articles", ArticleController.getArticles);
+
+(3) Probamos en "Postman", podemos abrir una nueva pestaña haciendo click en (+), seleccionamos el metodo "GET", en url escribimos "http://localhost:3900/api/articles".
+
+Hacemos click en el boton "Send", y vemos la respuesta en JSON:
+
+	{
+		"status": "success",
+		"articles": [
+			{
+				"_id": "5f498b506ea72b10d462aca0",
+				"date": "2020-08-28T22:55:12.859Z",
+				"title": "Primer Articulo",
+				"content": "Contenido primer articulo",
+				"image": null,
+				"__v": 0
+			},
+			{
+				"_id": "5f498e406ea72b10d462aca1",
+				"date": "2020-08-28T23:07:44.947Z",
+				"title": "Segundo Articulo",
+				"content": "Contenido Segundo articulo",
+				"image": null,
+				"__v": 0
+			}
+		]
+	}
+
+Podemos ver que "articles" es un array de objetos, con todos los artículos de la BD.
+
+Los articulos aparecen ordenados de más antiguos a más nuevo, para mostrarlos de más nuevo a más antiguo, podemos modificar la busqueda en el archivo "controllers/article.js":
+
+	// Busqueda de articulos con "find"
+		Article.find({}).sort("-_id").exec( (err, articles)
+
+En este caso ordenamos los artículos por el campo "_id" de forma descendente (para eso es el simbolo menos "-" adelante del "_id").
+_______________________________________________________
+
+	[7.2.2.1]. Devolver últimos artículos de la BD:
+_______________________________________________________
+
+Para obtener los últimos 5 articulos, vamos a modificar un poco el metodo que nos retorna todos los articulos.
+
+(1) Modificamos el archivo "routes/article.js":
+
+	router.get("/articles/:last?", ArticleController.getArticles);
+
+De está forma, usamos el mismo metodo para obtener todos los articulos. en este caso, le pasamos el parametro "last", con el signo de interrogación (?) indicamos que es un parametro opcional.
+
+(2) Ahora en el archivo "controllers/article.js":
+
+	// Metodo para devolver todos los articulos
+	getArticles: (req, res) => {
+		let last = req.params.last;
+		let query = Article.find({});
+ 
+		if (last || last != undefined) {
+			query.limit(parseInt(last));
+		}
+		// Busqueda de articulos con "find"
+		query.sort("-_id").exec( (err, articles) => {
+
+Primero obtenemos el parametro obcional "last". Como vamos a usar la consulta, la guardamos en la variable "query".
+
+Si "last" existe, y es diferente a "undefined", convertimos ese parametro "last" a el número de articulos que vamos a devolver. Limitamos la consulta a ese número de articulos.
+
+(3) Probamos en Postman, seleccionamos el metodo "GET", en url escribimos "http://localhost:3900/api/articles/2".
+
+Hacemos click en el boton "Send", y vemos la respuesta en JSON:
+
+	{
+		"status": "success",
+		"articles": [
+			{
+				"_id": "5f5fc60218038d18b4a6aebc",
+				"date": "2020-09-14T19:35:30.169Z",
+				"title": "Sexto Articulo",
+				"content": "Contenido Sexto articulo",
+				"image": null,
+				"__v": 0
+			},
+			{
+				"_id": "5f5fc5ef18038d18b4a6aebb",
+				"date": "2020-09-14T19:35:11.473Z",
+				"title": "Quinto Articulo",
+				"content": "Contenido Quinto articulo",
+				"image": null,
+				"__v": 0
+			}
+		]
+	}
+
+Como podemos ver, en la URL, enviamos el parametro "last", que en este caso es "2", y esto nos retorna los ultimos 2 articulos.
+_______________________________________________________
+
+	[7.2.3]. Devolver un artículo especifico:
+_______________________________________________________
+
+Vamos a crear la ruta y el metodo que retorne la información de un articulo especifico, el cual vamos a pasar su "_id" por get.
+
+(1) Creamos la ruta en el archivo "routes/article.js":
+
+	router.get("/article/:id", ArticleController.getArticle);
+
+En este caso el pareametro "id" que vamos a pasar por la url, no es opcional.
+
+(2) Vamos al archivo "controllers/article.js":
+
+	//Metodo para devolver un articulo por "_id"
+	getArticle: (req, res) => {
+		// Tomar el "id" de la URL
+		let articleId = req.params.id;
+		// Comprobar que el "id" existe
+		if(!articleId || articleId == null || articleId == undefined){
+			return res.status(404).send({
+				status: "error",
+				message: "No existe el artículo !!!"
+			});
+		}
+		// Buscar el articulo
+		Article.findById(articleId, (err, article) => {
+			if(err || !article){
+				return res.status(404).send({
+					status: "error",
+					message: "No existe el artículo !!!"
+				});
+			}
+			// Devolver respuesta JSON
+			return res.status(200).send({
+				status: "success",
+				article
+			});
+		});
+	}
+
+(3) Probamos con Postman, seleccionamos el metodo "GET", en url escribimos "http://localhost:3900/api/article/5f5fc5c518038d18b4a6aeb9".
+
+En este caso, todo lo que pasamos despues de "/article/" es el "_id" del articulo en la BD.
+
+Hacemos click en el boton "Send", y vemos la respuesta en JSON:
+
+	{
+		"status": "success",
+		"article": {
+			"_id": "5f5fc5c518038d18b4a6aeb9",
+			"date": "2020-09-14T19:34:29.003Z",
+			"title": "Tercer Articulo",
+			"content": "Contenido Tercer articulo",
+			"image": null,
+			"__v": 0
+		}
+	}
+_______________________________________________________
+
+	[7.2.4]. Actualizar un artículo:
+_______________________________________________________
+
+Los metodos HTTP que usamos son:
+
+Para obtener datos de la BD, usamos el metodo "GET".
+
+Para guardar o enviar datos a la BD usamos "POST".
+
+Para actualizar los datos de un articulo, lo hacemos a través del metodo "PUT".
+
+Para borrar se usa el metodo "DELETE"
+
+(1) Para actualizar los datos de un articulo, creamos la ruta en el archivo "routes/article.js":
+
+	router.put("/article/:id", ArticleController.update);
+
+Como vemos, la ruta es muy parecida a la ruta para obtener un articulo por "id", a diferencia del metodo "PUT", y la accion "update".
+
+(2) Definimos el metodo "update", en el archivo "controllers/article.js":
+
+	//Metodo para actualizar datos de un articulo
+	update: (req, res) => {
+		// Recoger el "id" del articulo por la URL
+		let articleId = req.params.id;
+
+		// Recoger los datos que llegan por PUT
+		let params = req.body;
+
+		// Validar datos
+		let validate_title, validate_content;
+
+		try {
+			validate_title = !validator.isEmpty(params.title);
+			validate_content = !validator.isEmpty(params.content);
+		} catch (err) {
+			return res.status(200).send({
+				status: "error",
+				message: "Faltan datos por enviar !!!"
+			});
+		}
+
+		if( validate_title && validate_content){
+			// Find and update
+			Article.findOneAndUpdate({_id: articleId}, params, {new: true}, (err, articleUpdated) => {
+				if(err){
+					return res.status(500).send({
+						status: "error",
+						message: "Error al actualizar !!!"
+					});
+				}
+
+				if(!articleUpdated){
+					return res.status(404).send({
+						status: "error",
+						message: "No existe el artículo !!!"
+					});
+				}
+
+				// Devolver respuesta
+				return res.status(200).send({
+					status: "success",
+					article: articleUpdated
+				});
+			});
+		}else{
+			return res.status(200).send({
+				status: "error",
+				message: "Los datos no son válidos !!!"
+			});
+		}
+	}
+
+Aca usamos el metodo del modelo "findOneAndUpdate", como primer parametro indicamos el "_id" del articulo a actualizar, luego le pasamos los datos nuevos "params". Con "{new: true}", indicamos que nos devuelva el articulo ya actualizado, y no la versión sin actualizar. Por ultimo pasamos la función callback, que manejara el error, o retornara el articulo actualizado.
+
+(3) Probamos con Postman, seleccionamos el metodo "PUT", en url escribimos "http://localhost:3900/api/article/5f498e406ea72b10d462aca1".
+
+En la pestaña "Body", escogemos el radio button "x-www-form-urlencoded", Escribimos los siguientes datos pareja "Key" : "Value":
+
+	"title" : "Segundo Articulo Actualizado" 
+	"content" : "Contenido Segundo articulo Actualizado"
+
+Lo escribimos sin las comillas ni los dos puntos.
+
+Hacemos click en el boton "Send", y vemos la respuesta en JSON:
+
+	{
+		"status": "success",
+		"article": {
+			"_id": "5f498e406ea72b10d462aca1",
+			"date": "2020-08-28T23:07:44.947Z",
+			"title": "Segundo Articulo Actualizado",
+			"content": "Contenido Segundo articulo Actualizado",
+			"image": null,
+			"__v": 0
+		}
+	}
+_______________________________________________________
+
+	[7.2.5]. Eliminar un artículo:
+_______________________________________________________
+
+Para borrar un articulo, usamos el metedo "DELETE".
+
+(1) Creamos la ruta en el archivo "routes/article.js":
+
+	router.delete("/article/:id", ArticleController.delete);
+
+(2) Creamos el metodo "delete", en el archivo "controllers/article.js":
+
+	//Metodo para eliminar un articulo
+	delete: (req, res) => {
+		// Recoger el "id" de la URL
+		let articleId = req.params.id;
+
+		// Find and delete
+		Article.findOneAndDelete({_id: articleId}, (err, articleRemoved) => {
+			if(err){
+				return res.status(500).send({
+					status: "error",
+					message: "Error al borrar !!!"
+				});
+			}
+			if(!articleRemoved){
+				return res.status(404).send({
+					status: "error",
+					message: "No se ha borrado el articulo, posiblemente no exista !!!"
+				});
+			}
+			return res.status(200).send({
+				status: "success",
+				article: articleRemoved
+			});
+		});
+	}
+
+(3) Probamos con Postman, seleccionamos el metodo "DELETE", en url escribimos "http://localhost:3900/api/article/5f5fc60218038d18b4a6aebc".
+
+Hacemos click en el boton "Send", y vemos la respuesta en JSON.
+
+Una vez borrado, si volvemos a hacer click en "Send", veremos el mensaje de error: "No se ha borrado el articulo, posiblemente no exista !!!".
+_______________________________________________________
+
+	[7.2.6]. Subir Archivo con NodeJS:
+_______________________________________________________
+
+Vamos a subir una imagen al servidor, que estara relacionada a un articulo.
+
+(1) Creamos la ruta para subir la imagen en el archivo "routes/article.js":
+
+	// Configurar modulo connect-multiparty
+	let multipart = require("connect-multiparty");
+	let md_upload = multipart({ uploadDir: "./upload/articles" });
+
+	// ...
+
+	router.post("/upload-image/:id", md_upload, ArticleController.upload);
+
+Para subir el archivo al servidor, usamos el metodo "POST".
+
+El modulo "connect-multiparty", nos da un "middleware", es decir, una funcionalidad que se ejecuta antes de ejecutarse el metodo de nuestro controlador. Luego pasamos por parametro ese middleware a la ruta ("md_upload").
+
+(2) Es necesario crear la carpeta "upload", y dentro de está la carpeta "articles", que es donde se alojaran las imagenes subidas.
+
+Nota: si usamos "GIT", incluir la carpeta "upload" al archivo ".gitignore".
+
+(3) En el controlador "controllers/article.js", creamos el metodo para subir las imagenes al servidor:
+
+	//Metodo para subir imagenes
+	upload: (req, res) => {
+		
+		// Recoger el fichero de la petición
+		let file_name = "Imagen no subida...";
+
+		if(!req.files){
+			return res.status(404).send({
+				status: "error",
+				message: file_name
+			});
+		}
+
+		// Conseguir nombre y extensión del archivo
+		let file_path = req.files.file0.path;
+		let file_split = file_path.split("\\");
+
+		// ADVERTENCIA * en Linux o MAC
+		// let file_split = file_path.split("/");
+
+		// Nombre del archivo
+		file_name = file_split[2];
+
+		// Extensión del fichero
+		let extension_split = file_name.split("\.");
+		let file_ext = extension_split[1].toLowerCase();
+
+		// Comprobar la extensión (solo imagenes), si no es valido, borrar fichero
+		if(file_ext != "png" && file_ext != "jpg" && file_ext != "jpeg" && file_ext != "gif"){
+			// borrar archivo subido
+		}else{
+			// Si todo es válido
+
+			// Buscar articulo, asignarle el nombre de la imagen y actualizarlo
+
+			return res.status(200).send({
+				fichero: req.files
+			});
+		}
+		
+	}
+
+"file0", es el nombre del campo que contiene la imagen que subimos al servidor, escogimos este nombre en vez de "image", ya que las librerias Angular, React y Vue, usan ese nombre.
+
+(4) Probamos con Postman, seleccionamos el metodo "POST", en url escribimos "http://localhost:3900/api/upload-image/5f498b506ea72b10d462aca0".
+
+En la pestaña "Body", escogemos el radio button "form-data", y escribimos en "KEY":
+
+	"file0"
+
+Lo escribimos sin las comillas. Luego hacemos click en el "KEY" de abajo, pero no escribimos nada, y nos devolvemos a la esquina derecha de donde escribimos "file0", y en la flecha del dropdown, escogemos "File".
+
+En "VALUE", nos aparece un boton que dice "Select Files", hacemos click, y escogemos una imagen para subir.
+
+Hacemos click en el boton "Send", y vemos la respuesta en JSON:
+
+	{
+		"fichero": {
+			"file0": {
+				"fieldName": "file0",
+				"originalFilename": "IMG_4176.JPG",
+				"path": "upload\\articles\\Uht-wuMOQdvCRqEE1L0xxwQW.JPG",
+				"headers": {
+					"content-disposition": "form-data; name=\"file0\"; filename=\"IMG_4176.JPG\"",
+					"content-type": "image/jpeg"
+				},
+				"size": 293406,
+				"name": "IMG_4176.JPG",
+				"type": "image/jpeg"
+			}
+		}
+	}
+
+(5) Hasta el momento, no tenemos completo el metodo, ya que si enviamos un archivo con una extensión diferente a la imagen, tambien se guarda en el servidor.
+
+Para solucionar esto, en el controlador "controllers/article.js":
+
+	let fs = require("fs");
+	let path = require("path");
+
+	// ...
+
+	//Metodo para subir imagenes
+	upload: (req, res) => {
+		
+		// ...
+
+		// Comprobar la extensión (solo imagenes), si no es valido, borrar fichero
+		if(file_ext != "png" && file_ext != "jpg" && file_ext != "jpeg" && file_ext != "gif"){
+			// borrar archivo subido
+			fs.unlink(file_path, (err) => {
+				return res.status(200).send({
+					status: "error",
+					message: "La extensión de la imagen no es válida !!!"
+				});
+			});
+		}else{
+			// Si todo es válido
+			// Sacar el "id" de la URL
+			let articleId = req.params.id;
+
+			// Buscar articulo, asignarle el nombre de la imagen y actualizarlo
+
+			Article.findOneAndUpdate({_id: articleId}, {image: file_name}, {new: true}, (err, articleUpdated) => {
+				if(err || !articleUpdated){
+					return res.status(500).send({
+						status: "error",
+						message: "Error al guardar la imagen del articulo !!!"
+					});
+				}
+
+				return res.status(200).send({
+					status: "success",
+					article: articleUpdated
+				});
+			});
+		}
+
+La libreria "fs" (file system), nos permite eliminar los archivos del sistema.
+
+El otro modulo de Node, "path", nos permite obtener la ruta del archivo en el sistema de archivos del servidor.
+
+Cuando usamos la función del modelo "Article.findOneAndUpdate", le pasamos como primer parametro el "id" del articulo a actualizar, con "{image: file_name}" indicamos el campo que queremos que se actualice en la BD, y el valor a actualizar. Con "{new: true}", indicamos que queremos que nos devuelva el articulo de la BD ya actualizado. Y como ultimo parametro, pasamos la función callback, encargada de manejar el error, o devolver el JSON con el articulo actualizado.
+
+(6) Probamos con Postman, seleccionamos el metodo "POST", en url escribimos "http://localhost:3900/api/upload-image/5f498b506ea72b10d462aca0".
+
+En la pestaña "Body", escogemos el radio button "form-data", y escribimos en "KEY":
+
+	"file0"
+
+Lo escribimos sin las comillas. Luego hacemos click en el "KEY" de abajo, pero no escribimos nada, y nos devolvemos a la esquina derecha de donde escribimos "file0", y en la flecha del dropdown, escogemos "File".
+
+En "VALUE", nos aparece un boton que dice "Select Files", hacemos click, y escogemos una imagen para subir.
+
+Hacemos click en el boton "Send", y vemos la respuesta en JSON:
+
+	{
+		"status": "success",
+		"article": {
+			"_id": "5f498b506ea72b10d462aca0",
+			"date": "2020-08-28T22:55:12.859Z",
+			"title": "Primer Articulo",
+			"content": "Contenido primer articulo",
+			"image": "6TN_0ZWHGUjXyCJypW3iomjj.JPG",
+			"__v": 0
+		}
+	}
+
+(7) Ahora, si volvemos a probar con Postman, tenemos un problema, que actualiza la imagen, pero no borra la anterior del servidor, generando basura.
+
+	// Si todo es válido
+	// Sacar el "id" de la URL
+	let articleId = req.params.id;
+
+	// Borrar imagen antigua (si la hay)
+	Article.findById({_id: articleId}, (err, article) => {
+		if(err || !article){
+			return res.status(404).send({
+				status: 'error',
+				message: 'Error no hay articulo para actualizar'
+			});
+		}
+		if(article.image !== null){
+			let old_image = "upload\\articles\\" + article.image;
+			console.log("Borrando Imagen Antigua");
+			fs.unlink(old_image, (err) => {
+				if (err) {
+					return res.status(400).send({
+						status: 'error',
+						message: 'Error al borrar imagen antigua / fs unlink'
+					});
+				}
+			});
+		}
+		return;
+	});
+
+	// Buscar articulo, asignarle el nombre de la imagen y actualizarlo
+	Article.findOneAndUpdate({_id: articleId}, {image: file_name}, {new: true}, (err, articleUpdated) => {
+		if(err || !articleUpdated){
+			return res.status(500).send({
+				status: "error",
+				message: "Error al guardar la imagen del articulo !!!"
+			});
+		}
+
+		return res.status(200).send({
+			status: "success",
+			article: articleUpdated
+		});
+	});
+_______________________________________________________
+
+Nota: Ejemplos de uso del modulo de node "multiparty":
+
+	https://github.com/Aaaaaaaty/blog/blob/master/fsPathSys/server.js#L48
+
+	https://github.com/ownik/node-file-uploads/blob/master/routes/index.js#L11
+
+	https://github.com/ownik/node-file-uploads/blob/master/routes/index.js
+
+	https://stackoverflow.com/questions/20735429/form-upload-in-node-js-express-via-multiparty
+_______________________________________________________
+
+	[7.2.7]. Obtener Archivo imagen:
+_______________________________________________________
+
+Vamos a hacer un metodo y ruta para obtener la imagen del servidor.
+
+(1) Creamos la ruta en "routes/article.js":
+
+	router.get("/get-image/:image", ArticleController.getImage);
+
+(2) Creamos el metodo "getImage" en "controllers/article.js":
+
+	//Metodo para obtener imagen
+	getImage: (req, res) => {
+		//obtener el fichero que se pide por URL
+		let file = req.params.image;
+		let path_file = "./upload/articles/" + file;
+
+		// comprobar si el archivo existe
+		fs.access(path_file, fs.constants.F_OK, (err) => {
+			if (err) {
+				return res.status(404).send({
+					status: "error",
+					message: "La imagen no existe !!!"
+				});
+			} else {
+				//devolvemos el fichero, para incrustarlo en etiquetas de imagen
+				return res.sendFile(path.resolve(path_file));
+			}
+		});
+	}
+
+(3) Probamos con Postman, seleccionamos el metodo "GET", en url escribimos "http://localhost:3900/api/get-image/HWFVS0ETrtAddOhx8mN5-Th6.JPG".
+
+Hacemos click en el boton "Send", y vemos la respuesta, en este caso nos mostrara la imagen que se pidio.
+_______________________________________________________
+
+	[7.2.8]. Buscador de articulos API REST:
+_______________________________________________________
+
+Para crear un buscador de articulos para la API REST:
+
+(1) Creamos la ruta, con el metodo "GET", ya que va a obtener información del API, esto lo hacemos en el archivo "routes/article.js":
+
+	router.get("/search/:search", ArticleController.search);
+
+(2) Creamos el metodo "search" en "controllers/article.js":
+
+	//Metodo para buscar entre los articulos
+	search: (req, res) => {
+		// sacar el string a buscar
+		let searchString = req.params.search;
+
+		//find or
+		Article.find({
+			"$or": [
+				{"title": {"$regex": searchString, "$options": "i"}},
+				{"content": {"$regex": searchString, "$options": "i"}}
+			]
+		})
+		.sort([["date", "descending"]]) //ordenamos de manera descendente por la fecha
+		.exec( (err, articles)=> {
+			if(err){
+				return res.status(500).send({
+					status: "error",
+					message: "Error en la petición !!!"
+				});
+			}
+
+			if(!articles || articles.length <= 0){
+				return res.status(404).send({
+					status: "error",
+					message: "No hay articulos que coincidan con la busqueda !!!"
+				});
+			}
+
+			return res.status(200).send({
+				status: "success",
+				articles
+			});
+		});
+	}
+
+Hacemos una busqueda "$or" de MongoDB, para que se cumpla una u otra condición.
+
+La primera condicion de busqueda que pasamos:
+
+	{"title": {"$regex": searchString, "$options": "i"}}
+
+En esta condicion/objeto, indicamos que cuando "searchString" esta incluido ("$options": "i") como expresión regular en el campo "title".
+
+Con el metodo ".exec()" ejecutamos la query a la BD.
+
+(3) Probamos con Postman, seleccionamos el metodo "GET", en url escribimos "http://localhost:3900/api/search/actualizado".
+
+Hacemos click en el boton "Send", y vemos la respuesta en JSON:
+
+	{
+		"status": "success",
+		"articles": [
+			{
+				"_id": "5f498e406ea72b10d462aca1",
+				"date": "2020-08-28T23:07:44.947Z",
+				"title": "Segundo Articulo Actualizado",
+				"content": "Contenido Segundo articulo Actualizado",
+				"image": "pZcz678V1hCuc07OzQMXsKwn.JPG",
+				"__v": 0
+			}
+		]
+	}
+_______________________________________________________
+
+	[8]. Configurar el CORS en el API RESTful de NodeJS:
+_______________________________________________________
+
+Tenemos que configurar el CORS, que es el acceso cruzado entre dominios ("Cross Origin" (origen cruzado) ), para permitir el acceso, llamadas HTTP y peticiones AJAX al API desde cualquier Frontend.
+
+Si no se configura esto, nuestra API bloqueara las peticiones y no devolvera ningun resultado al Frontend.
+
+Vamos al archivo "app.js":
+
+	// CORS
+	//Configurar cabeceras
+	app.use((req, res, next) => {
+		res.header('Access-Control-Allow-Origin', '*');
+		res.header('Access-Control-Allow-Headers', 'Authorization, X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Allow-Request-Method');
+		res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+		res.header('Allow', 'GET, POST, OPTIONS, PUT, DELETE');
+		next();
+	});
+
+Aquí usamos un middleware, que se ejecuta antes de cada ruta y metodo que tengamos. El metodo "next()", es el que permite pasar a lo siguiente que se debe hacer.
+
+
+
+
+Enlace Proyecto MEAN, revisar despues del curso:
+
+	https://jolugama.com/blog/2018/12/01/mean-mongodb-expressjs-angular-node/

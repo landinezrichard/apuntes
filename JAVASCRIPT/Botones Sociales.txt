@@ -1,0 +1,53 @@
+﻿______________________________________________________
+			
+
+			BOTONES SOCIALES:
+
+______________________________________________________
+
+No es más que poner un enlace con la url que envía el tweet, publicación o lo que sea.
+<a target="_blank" href="https://twitter.com/intent/tweet?text=TEXTODELTWEET&via=NICKENTWITTER">Twitter</a>
+<a target="_blank" href="https://plus.google.com/share?url=URLPARACOMPARTIR">Google+</a>
+<a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=URLPARACOMPARTIR">Facebook</a>
+
+Le añades tu CSS y listo. No tienes que cargar contenido externo, por lo que es mucho mejor para la carga. Y puedes diseñarlos al gusto.
+
+¿Como se hace para que haya una previsualización del contenido (Link + Imagen + Texto introductorio)?
+
+http://www.maestrosdelweb.com/como-usar-y-configurar-twitter-cards-paso-a-paso/
+
+https://dev.twitter.com/cards/overview
+https://developers.facebook.com/docs/opengraph/getting-started?locale=es_LA
+
+
+_______________________________________________________
+
+
+cargar de forma asincrónica aquellos JavaScripts que consideremos mejoras, o bien, que sean de terceros (redes sociales, analytics, trackers):
+
+<script>
+  var script = document.createElement('script');
+  var head = document.getElementsByTagName("head")[0];
+  script.async = true;
+  script.src = url;
+  head.appendChild(script);
+</script>
+
+
+Por ejemplo, podemos mencionar como mejoras:
+
+Fuentes.
+Imágenes de fondo.
+Imágenes y videos no relacionados con el contenido.
+Algunos estilos.
+Algunos scripts.
+Para cargar las mejoras, podemos utilizar aload.js. Una libreria de JavaScript, muy fácil de usar, que nos permite cargar scripts, styles, iframes, imágenes, videos y audios de forma asincrónica.
+
+A modo de ejemplo, veamos como podemos cargar una imágen:
+
+<img data-async="https://getmango.com/foo.png" width="400" height="300" >
+<script>
+  window.onload = function() {
+    aload();
+  };
+</script>

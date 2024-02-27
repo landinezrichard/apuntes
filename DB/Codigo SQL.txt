@@ -1,0 +1,256 @@
+Crear tabla:
+
+CREATE TABLE nombreTabla
+(atributo1 tipoDato(tamaño)
+CONSTRAINT nomTabla_atri_pk Primary Key,
+atributo2 tipoDato(tamaño)
+Constraint nomTabla_atri_nn not null,
+atributo_OtraTabla tipoDato(tamaño)
+CONSTRAINT nomTabla_atri_nn not null
+CONSTRAINT nomTabla_atri_fk references
+OtraTabla(atributoDeEsaTabla)
+);
+
+_________________________
+
+
+Ver atributos tabla:
+
+
+DESCRIBE NombreTabla;
+
+
+_________________________
+
+
+Ver tablas Creadas:
+
+SELECT TABLE_NAME FROM USER_TABLES;
+
+
+__________________________
+
+
+LLENAR datos Tablas:
+
+BEGIN
+INSERT INTO nombreTabla VALUES(valorAtributo1,valorAtributo2);
+INSERT INTO nombreTabla--------------------------------------;
+END
+
+__________________________
+
+Borrar Tabla:
+
+DROP TABLE nombreTabla;
+
+
+__________________________
+
+
+Consultar datos de diferentes tablas:
+
+SELECT atributo1,atributo2,atributoN FROM tabla1,tabla2,tablaN;
+
+
+___________________________
+
+Mostrar datos en orden ascendente O Descendente:
+
+
+SELECT atributo1,atributo2,atributoN FROM tabla1,tabla2,tablaN
+ORDER By atributo ASC,atributo DESC;
+
+___________________________
+
+Mostrar datos concretos con condicionales:
+
+SELECT atributo1,atributo2,atributoN FROM tabla1,tabla2,tablaN
+WHERE condicion1 AND condicion2 AND condicionN
+ORDER By atributo;
+
+Signos de Comparacion:
+
+> mayor que
+< menor que
+>= mayor o igual
+<= menor o igual
+= igual
+
+!= diferente
+^= diferente
+<> diferente
+
+__________________________
+
+
+Mostrar datos que esten entre dos valores concretos:
+
+SELECT * FROM tabla
+WHERE atributo BETWEEN Valor1 AND Valor2;
+
+
+__________________________
+
+Mostrar datos que NO esten entre dos valores concretos:
+
+SELECT * FROM tabla
+WHERE atributo NOT BETWEEN Valor1 AND Valor2;
+
+__________________________
+
+Listar los datos que cumplan tales condiciones:
+similar al comando WHERE atributo1=valor1 AND atributo1=valor2
+solo que se pueden colocar todas esas comparaciones con el comando IN, 
+y los valores separados por comas
+
+SELECT * FROM tabla
+WHERE atributo IN(Valor1,Valor2);
+
+excluir ciertos valores:
+
+SELECT * FROM tabla
+WHERE atributo NOT IN(Valor1,Valor2);
+
+_______________________________
+
+ 
+
+LIKE es otra palabra clave que se utiliza en la cláusula WHERE. 
+LIKE le permite hacer una búsqueda basada en un patrón en vez de 
+especificar exactamente lo que se desea (como en IN) 
+o determinar un rango (como en BETWEEN). 
+
+SELECT "nombre_columna"
+FROM "nombre_tabla"
+WHERE "nombre_columna" LIKE {patrón}
+
+Patrones:
+
+% reemplaza varios caracteres
+_ reemplaza 1 solo caracter
+
+
+Listar tales datos que terminen con la letra A:
+
+SELECT * FROM tabla
+WHERE atributo LIKE('%A');
+
+
+Listar los datos que no tengan dos letras A:
+
+SELECT * FROM tabla
+WHERE atributo NOT LIKE('%A%A%');
+
+________________________________
+
+Mostrar varios datos de varias tablas:
+
+SELECT tabla1.atributo1 ALIASoPCIONAL, tabla2.atributo2 ALIASoPCIONAL
+FROM tabla1,tabla2,tabla3
+WHERE tabla1.atributo1=tabla3.atributo3 AND tabla2.atributo2=tabla3.atributo4;
+
+En este ejemplo, la tabla3 es la tabla resultante de la relacion de (muchos a muchos)
+atributo4 es otro atributo de tabla3, diferente a atributo3.
+
+Los atributos que se igualan son las llaves primarias-foraneas de las tablas.
+
+________________________________
+
+Alterar una tabla que ya esta llena, poniendole un atributo adicional, 
+ese atributo es llave primaria en otra tabla:
+
+ALTER TABLE nombreTabla ADD
+(atributo ...
+constraint ..... fk references otraTabla(NombreAtributoOtraTabla)
+);
+
+luego llenamos esosatributos con datos o valores:
+
+Begin
+UPDATE nombreTabla set atributo=.... where atributo=...;
+uPDATE nombreTabla set ;
+end
+
+Si queremos modificar para que esa informacion no quede vacia:
+
+ALTER TABLE nombreTabla MODIFY
+(atributo ....
+constraint ---- nn not null
+);
+
+_______________________________
+
+Comandos Modificar Tablas:
+
+ADD     Agrega un atributo
+MODIFY  Modifica un atributo
+DROP    Borra un atributo
+RENAME  cambia el nombre de un atributo
+
+______________________________
+
+Comandos Modificar atributos(o columnas):
+
+UPDATE va con SET y con WHERE
+DELETE va con FROM  y WHERE   
+
+______________________________
+
+Borrar un dato en una tabla que cumpla con dos condiciones:
+
+DELETE FROM nombreTabla
+WHERE atributo IN(-,-);
+
+______________________________
+
+Si quitamos el Autocommit, para que no guarde modificaciones de los atributos,
+con el comando:
+
+ROLLBACK;
+
+recupera los registros(datos ingresados) hasta el ultimo autocommit
+
+si se borran tablas, o atributos PAILAS no se puede recuperar.
+
+_______________________________
+
+Instrucciones de Agrupamiento:
+
+Maximo MAX
+Minimo MIN
+Promedio AVG
+Contar COUNT
+
+________________________________
+
+Subconsulta:
+
+SELECT atrib1,atrib2, atribn FROM tabla1,tabla2
+WHERE cond1 AND cond2 AND atrib IN(SELECT atrib FROM tabla,tabla WHERE cond1 AND cond2)
+ORDER BY atrib1,atrib2 DESC;
+
+la consulta interna solo selecciona un solo atributo o dato.
+
+_________________________________
+
+GROUP BY
+
+SELECT atrib1,atrib2,Funcion(atrib),Funcion(atrib)
+FROM tabla1,tabla2
+WHERE condición1 AND condición2
+GROUP BY atrib1,atrib2
+HAVING condición1 AND condición2
+ORDER BY atrib1,atrib2;
+
+En la cláusula GROUP BY se colocan las columnas(atributos) por las que vamos a agrupar. 
+Y en la cláusula HAVING se especifica la condición que han de cumplir los grupos para pasar al resultado.
+El having es igual que el where pero del group by.
+
+La evaluación de las diferentes cláusulas en tiempo de ejecución se efectúa en el siguiente orden:
+
+WHERE filtra las filas
+GROUP BY crea una tabla de grupo nueva
+HAVING filtra los grupos
+ORDER BY clasifica la salida
+
