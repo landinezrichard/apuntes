@@ -1,0 +1,39 @@
+
+	API REST EXPRESS:
+_______________________________________________________
+
+INDICE:
+
+[1]. Configuración inicial
+	[1.1]. Git
+
+_______________________________________________________
+
+	[1]. Configuración inicial:
+_______________________________________________________
+
+Debemos tener instalado Node en nuestro equipo:
+
+	https://nodejs.org/es/
+
+Nota: Se recomienda la versión LTS(Long Term Service).
+
+_______________________________________________________
+
+	[1.1]. Git:
+_______________________________________________________
+
+1) Iniciar control versiones del proyecto con Git:
+
+	git init
+
+2) Añadir repo remoto, URL de GitHub (u otro servicio):
+
+	git remote add origin https://github.com/landinezrichard/api-rest-express.git
+
+3) Crear archivo ".gitignore", podemos usar una herramienta online como:
+
+	https://www.toptal.com/developers/gitignore
+
+Y checkeamos: "Node", "Windows", "Linux" y "MacOS".
+

@@ -1,0 +1,278 @@
+
+	DOCKER:
+_______________________________________________________
+
+INDICE:
+
+[1]. Qué es Docker
+    [1.1]. Conceptos
+[2]. Instalación
+    [2.1]. Hola mundo con Docker
+[3]. Contenedores
+    [3.1]. Comandos básicos
+    [3.2]. Contenedora en segundo plano
+    [3.3]. Modo interactivo
+    [3.4]. Puertos
+    [3.5]. Logs
+    [3.6]. Variables de entorno
+    [3.7]. Contenedores sin servicios
+
+_______________________________________________________
+
+	[1]. Qué es Docker:
+_______________________________________________________
+
+Docker es parecido a una maquina vitual, crea contenedoras (imagenes), que una vez configuradas nos aseguran que nuestros archivos y nuestro entorno de desarollo se va a ejecutar de la misma forma, ya sea en local o en el servidor.
+
+A diferencia de una maquina virtual, Docker no simula hardware(procesador, memoria ram, etc).
+
+Docker solo se ejecuta en Linux.
+
+_______________________________________________________
+
+	[1.1]. Conceptos:
+_______________________________________________________
+
+Dockerfile --> archivo de texto plano con las instrucciones para construir una imagen. No tiene extensión.
+
+Imagen --> se genera a través del Dockerfile.
+
+Contenedor --> es un objeto que se instancia a través de la imagen.
+
+Docker Hub --> repositorio oficial (parecido a Github y Gitlab) donde se almacenan imagenes.
+
+Docker Daemon/cli --> servicio en segundo plano para gestionar docker.
+
+_______________________________________________________
+
+	[2]. Instalación:
+_______________________________________________________
+
+Para instalar Docker, como solo corre en Linux, es necesario tener una maquina virtual o un WSL.
+
+En Windows podemos seguir las siguientes instrucciones, y descargar su instalador:
+
+    https://www.docker.com/get-started/
+
+    https://docs.docker.com/desktop/install/windows-install/
+
+_______________________________________________________
+
+	[2.1]. Hola mundo con Docker:
+_______________________________________________________
+
+1) Vamos a correr una imagen de Apache, la cual podemos buscar en el Hub:
+
+    https://hub.docker.com/
+
+Al buscar "Apache", encontramos la siguiente imagen:
+
+    https://hub.docker.com/_/httpd
+
+2) En una consola, podemos ver que comandos usa docker ejecutando:
+
+    docker
+
+Nota: si da error anteponer: sudo
+
+3) En el hub, copiamos el comando para la imagen de Apache, y lo ejecutamos en consola:
+
+    docker pull httpd
+
+4) Para ver las imagenes que tenemos corriendo usamos:
+
+    docker image ls
+
+5) Para crear el contenedor a partir de la imagen, usamos el comando "run":
+
+    docker run -p 8080:80 httpd
+
+En donde:
+
+    "-p" --> corresponde al flag para indicar un puerto. "8080" es el puerto de la maquina local, y "80" es el puerto del contenedor.
+    
+    "httpd" --> es el nombre de la imagen.
+
+Para ver que nuestra imagen esta corriendo, podemos ir al navegador a:
+
+    localhost:8080
+
+Nota: para dejar de correr la contenedora y poder ejecutar otros comanos en consola, usamos:
+
+    ctrl + C
+
+6) Para ver ayuda del comando que se quiere ejecutar usamos:
+
+    docker run --help
+
+_______________________________________________________
+
+	[3]. Contenedores:
+_______________________________________________________
+
+Para manipular las contenedoras usamos unos comandos definidos, que podemos ver mejor si ejecutamos:
+
+    docker container --help
+
+_______________________________________________________
+
+	[3.1]. Comandos básicos:
+_______________________________________________________
+
+- Descargar imagen y correr contenedora:
+
+    docker run -p 8080:80 nginx
+
+Si la imagen no esta de forma local, hace un "docker pull".
+
+- Listar contenedores que se estan ejecutando:
+
+    docker container ls
+
+- Listar todos los contenedores:
+
+    docker container ls -a
+
+- Asignar un nombre a la contenedora:
+
+    docker run -p 8080:80 --name test nginx
+
+Nota 1: este nombre es como un id, si no lo asignamos Docker le asigna uno aleatoriamente. El nombre lo podemos ver al listar (docker container ls -a).
+
+Nota 2: si se intenta asignar a una contenedora un nombre ya usado da error.
+
+- Ver información detallada de un contenedor:
+
+    docker container inspect nombreOidContenedora
+
+- Eliminar contenedora (deb estar detenida):
+
+    docker container rm nombreOidContenedora
+
+- Eliminar todos los contenedores detenidos:
+
+    docker container prune
+
+_______________________________________________________
+
+	[3.2]. Contenedora en segundo plano:
+_______________________________________________________
+
+Para correr una contenedora en segundo plano y que se libere la consola para seguir corriendo comandos usamos:
+
+    docker container run -p 8080:80 -d nginx
+
+Este comando es la forma estandar, el siguiente es un alias:
+
+    docker run -p 8080:80 nginx
+
+El comando para listar contenedoras:
+
+    docker container ls
+
+Tambien tiene un alias:
+
+    docker ps
+
+_______________________________________________________
+
+	[3.3]. Modo interactivo:
+_______________________________________________________
+
+El modo interactivo, es un modo el cual nos permite interactuar (ejecutar comandos) dentro de nuestra contenedora.
+
+Acá tenemos un comando para ejecutar otros comandos dentro de nuestra contenedora:
+
+    docker exec nombreOidContenedora ls
+
+En este caso estamos ejecutando el comano "ls" dentro de la contenedora, el cual nos va a listar los archivos y carpetas que esten dentro de está.
+
+Sin embargo, hay algunos comandos que pueden ser dificil usarlos con el comando anterior, por lo que es mejor entrar a usar el modo interactivo, lo cual es acceder a una terminal(consola) de la contenedora:
+
+    docker exec -it nombreOidContenedora bash
+
+En este caso se escogio "bash", pero allí se puede cambiar a cualquier shell.
+
+Nota: para slir de la terminal usamos el comando:
+    
+    exit
+
+_______________________________________________________
+
+	[3.4]. Puertos:
+_______________________________________________________
+
+Ya habiamos usado el flag "-p" para indicar el puerto de la contenedora 
+
+    docker run -p 8080:80 httpd
+
+Para ver que nuestra imagen esta corriendo, podemos ir al navegador a:
+
+    localhost:8080
+
+Si queremos que docker asigne un puerto random usamos el flag "-P":
+
+    docker run -d -P nginx
+
+Luego, para ver en que puerto se esta ejecutando la contenedora usamos:
+
+    docker ps
+
+Y la primera fila corresponde al ultimo contenedor corriendo.
+
+Si sabemos el id o nombre del conetendor y queremos saber el puerto usamos:
+
+    docker container port nombreOidContenedora
+
+Luego para ver nuestra contenedora corriendo en el navegador nos dirigimos al puerto allí indicado, por ejemplo:
+
+    localhost:32768
+
+Nota: algunas tecnologias  exponen un puerto por defecto, el cual podemos consultar en el hub de docker.
+
+_______________________________________________________
+
+	[3.5]. Logs:
+_______________________________________________________
+
+Para poder ver los mensajes de consola (logs) de nuestra contenedora usamos el siguiente comando:
+
+    docker logs nombreOidContenedora
+
+Esto es muy utilo, por ejemplo si ejecutamos una contenedora en segundo plano, y esta genera algun tipo de error, entonces podremos ver esos errores.
+
+Por ejemplo al ejecutar mysql sin establecer password, ni usuario:
+
+    docker run -d mysql
+
+Para ver los logs en tiempo real usamos el flag "-f":
+
+docker logs -f nombreOidContenedora
+
+_______________________________________________________
+
+	[3.6]. Variables de entorno:
+_______________________________________________________
+
+Para algunas contenedoras se necesita definir variables de entorno para que se puedan ejecutar correctamente, como es le caso de mysql.
+
+Para definir variables de entorno usamos el flag "-e":
+
+    docker container run -d -p 3309:3306 -e MYSQL_ROOT_PASSWORD=testroot -e MYSQL_DATABASE=test mysql
+
+En este ejemplo definimos dos variables de entorno, concatenandolas con el falg "-e".
+
+_______________________________________________________
+
+	[3.7]. Contenedores sin servicios:
+_______________________________________________________
+
+Hay unos contenedores que esponen un servicio en un puerto especifico, como nginx, apache, mysql, sin embargo, hay contenedores que exponen un binario, como python o ubuntu.
+
+Para correr la imagen de ubuntu y que tenga un servicio ejecutandose en la contenedora usamos:
+
+    docker run -d -i -t ubuntu
+
+Nota: cuando tenemos varios flags en nuestro comando los podemos unir así:
+
+    docker run -dit ubuntu

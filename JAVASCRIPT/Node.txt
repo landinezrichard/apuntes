@@ -1,0 +1,90 @@
+
+	NODE:
+_______________________________________________________
+
+Si tenemos un archivo, por ejemplo, "index.js", en donde leemos variables de entorno:
+
+    let nombre = process.env.NOMBRE || 'sin nombre';
+    let web = process.env.MI_WEB || 'no tengo web';
+
+    console.log('Hola ' + nombre);
+    console.log('Mi web es ' + web);
+
+Aca accedemos a las variables de entorno que se encuentran en "process".
+
+Con el or "||" definimos un valor por defecto, en caso que desde la consola no definamos la variable de entorno imprimiria este valor, si no usamos el or, saca un undefined.
+
+Para pasarle las variables de entorno a nuestro archivo desde consola usamos:
+
+    NOMBRE=Ricardo MI_WEB=loquesea.com node index.js
+
+En consola nos sale:
+
+    Hola Ricardo
+    Mi web es loquesea.com
+
+Si ejecutamos sin pasarle variable:
+
+    node index.js
+
+Sale en consola:
+
+    Hola sin nombre
+    Mi web es no tengo web
+
+NOta: en PowerShell hay que definir primero las variables de entorno:
+
+    $env:NOMBRE="Ricardo"
+
+Y luego ejecutar:
+
+    node index.js
+_______________________________________________________
+
+Para estar ejecutando node, en consola y vea cambios, se instala un paquete llamado "nodemon".
+
+Se puede instalar de forma global.
+
+    npm install -g nodemon
+
+Luego ejecutamos:
+
+    nodemon index.js
+
+Para tener algo similar a "nodemon" en producción usamos "pm2":
+
+    https://pm2.keymetrics.io/
+
+Para instalarlo:
+
+    npm install -g pm2
+
+Para ejecutar nuestras apps:
+
+    pm2 start index.js
+
+Para balancear 4 instancias de la app:
+
+    pm2 start api.js -i 4
+
+Este ultimo comando es muy util por ejemplo para una API, para crear una isntancia por cada nucleo del procesador del servidor.
+
+Para monitorizar la app:
+
+    pm2 monitor
+
+Para ver todas las apps que estan corriendo:
+
+    pm2 status
+
+Para ver los "logs":
+
+    pm2 logs
+
+Nota: para salir de ver los "logs" (ctrl + C).
+
+Parar la app:
+
+    pm2 stop id
+
+Nota: el id del proceso de la app que esta corriendo es el que vemos con "pm2 status"
