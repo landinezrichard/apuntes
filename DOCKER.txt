@@ -16,6 +16,15 @@ INDICE:
     [3.5]. Logs
     [3.6]. Variables de entorno
     [3.7]. Contenedores sin servicios
+[4]. Redes y Volúmenes
+    [4.1]. Volúmenes de Docker
+    [4.2]. Compartir archivos entre contenedores
+    [4.3]. Volúmenes manuales
+    [4.4]. Redes
+[5]. Imágenes
+    [5.1]. Crear Imágen
+    [5.2]. Copiar archivos
+    [5.3]. Variables de Entorno
 
 _______________________________________________________
 
@@ -276,3 +285,250 @@ Para correr la imagen de ubuntu y que tenga un servicio ejecutandose en la conte
 Nota: cuando tenemos varios flags en nuestro comando los podemos unir así:
 
     docker run -dit ubuntu
+
+_______________________________________________________
+
+	[4]. Redes y Volúmenes:
+_______________________________________________________
+
+Un volúmen es un espacio en disco duro para compartir archivos y guardar recursos del contenedor. Sirven para que los datos persistan, así se elimine la contenedora.
+
+_______________________________________________________
+
+	[4.1]. Volúmenes de Docker:
+_______________________________________________________
+
+- Listar volumenes:
+
+    docker volume ls
+
+- Creamos un volumen con el comando:
+
+    docker volume create docker-curso
+
+- inspeccionar volumen:
+
+    docker volume inspect docker-curso
+
+- Crear contenedora usando volumen:
+
+    docker run -d --name mysql-volumen -v docker-curso:/var/lib/mysql -p 3311:3306 -e MYSQL_ROOT_PASSWORD=testroot mysql
+
+Con el flag "-v" creamos el volumen.
+
+docker-curso --> es el nombre del volumen.
+
+"/var/lib/mysql" --> es la ruta donde se almacena el volumen.
+
+De esta forma, si creamos una base de datos, y llegamos a remover la contenedora, luego volviendo a correr el comando, la contenedora recupera los datos del volumen.
+
+_______________________________________________________
+
+	[4.2]. Compartir archivos entre contenedores:
+_______________________________________________________
+
+Creamos otro contenedor, que comparte el mismo volumen:
+
+    docker run -dit -v docker-curso:/docker-curso --name ubuntu-volumen ubuntu
+
+En este caso como estamos usando el mismo volumen anterior "docker-curso",la ruta que le indicamos que sea la raíz, y que todo lo que tenia de mysql(de la contenedora anterior) lo guarde en la carpeta "/docker-curso".
+
+_______________________________________________________
+
+	[4.3]. Volúmenes manuales:
+_______________________________________________________
+
+Los volumenes manuales, a diferencia de los de docker, son los que creamos indicando una ruta del sistema:
+
+    docker run -dit -v /Users/ricardo/documents:/docker-curso
+
+Ahora si entramos a la contenedora:
+
+    docker exec nombreOidContenedora ls
+
+Al listar, veremos que nos creo la carpeta "/docker-curso".
+
+_______________________________________________________
+
+	[4.4]. Redes:
+_______________________________________________________
+
+Docker nos permite crear redes, para que las contenedoras tengan acceso a internet.
+
+- Listar redes:
+
+    docker network ls
+
+Existen diferentes tipos de drivers de redes:
+
+    null --> por defecto, la contenedora no tiene acceso a internet.
+
+    bridge --> permite acceso a internet, hay que exponer sus puertos.
+
+    host --> permite acceso a internet, comparte los puertos con el local.
+
+- Para crear una red:
+
+    docker network create docker-curso
+
+En este caso, por defecto se crea la red de tipo "bridge" llamada "docker-curso".
+
+- Al crear cualquier contenedora, automaticamente docker le asigna una ip, para ver esa ip usamos:
+
+    docker inspect nombreOidContenedora
+
+En el json impreso buscamos "Gateway".
+
+Luego podemos en consola probar la conexión haciendo ping hacia ese gateway, por ejemplo:
+
+    ping 172.24.0.1
+
+- Ahora con el flag "--network", podemos poner a correr una contenedora conectandola a la red creada:
+
+    docker run -dit --network docker-curso ubuntu
+
+Si inspeccionamos esa contenedora (docker inspect nombreOidContenedora), podemos ver que en el json, en "Networks" sale "docker-curso".
+
+- Crear red con driver host:
+
+    docker run -d --network host nginx
+
+Al usar el diver "host" no es necesario indicar el puerto con "-p 8080:80", ya que se usa la red host.
+
+Si listamos los contenedores (docker ps), en puertos no nos sale nada.
+
+_______________________________________________________
+
+	[5]. Imágenes:
+_______________________________________________________
+
+Una imágen de Docker, si utilizamos la analogia de Programación Orientada a Objetos, es como una clase, podemos crear (instanciar) varios contenedores de esa imágen, pero en cada contenedor podemos realizar algunas variaciones, las cuales espeficamos en un archivo de configuración llamado "Dockerfile".
+
+_______________________________________________________
+
+	[5.1]. Crear Imágen:
+_______________________________________________________
+
+1) En nuestro editor de texto, cremaos un archivo llamado "Dockerfile", no tiene ninguna extensión:
+
+    FROM ubuntu
+
+    RUN apt-get update && apt-get install -y \
+        python3 \
+        curl \
+        nano
+
+En donde:
+
+    "FROM", "RUN" --> son directivas
+
+    "FROM" --> indicamos la imagen que vamos a usar, podemos indicar una versión de la siguiente manera: FORM ubuntu:24.04
+
+    "RUN" --> indicamos comandos para ejecutar dentro de la contenedora.
+
+Usamos "\" para poder instalar varios paquetes y no escribirlos todos en la misma línea, para que el comando sea más legible.
+
+Con el flag "-y", aeptamos los terminos y condiciones de la instalación de cada paquete.
+
+2) Para ejecutar nuestra imágen:
+
+    docker build -t ubuntu-with-python .
+
+Con el flag "-t" indicamos un nombre y de foma opcional un tag.
+
+Con el punto ".", indicmos el path de nuestro archivo Dockerfile, en este caso como se encuentra en la misma ruta usamos el punto.
+
+Nota: no olvidar que podemos ver todas las opciones y descripción de un comando usando "--help":
+
+    docker build --help
+
+3) Para entrar a nustra contenedora y usar comandos:
+
+    docker run -it ubuntu-with-python
+
+Y luego si queremos usar python:
+
+    python3
+
+O usar curl:
+
+    curl localhost
+
+O usar nano:
+
+    nano archivo.txt
+
+_______________________________________________________
+
+	[5.2]. Copiar archivos:
+_______________________________________________________
+
+1) Para copiar archivos o carpetas en nuestro Dockerfile usamos la directiva COPY:
+
+    FROM ubuntu
+
+    RUN apt-get update && apt-get install -y \
+        python3 \
+        curl \
+        nano
+
+    COPY . /app
+
+    WORKDIR /app
+
+Acá con "COPY . /app", indicamos que lo que este en nuestro directorio actual (donde tenemos el Dockerfile), lo copie a la ruta de la contenedora "/app".
+
+"WORKDIR" --> es una directiva que nos permite indicar el area de trabajo de nuestra contenedora, util por ejemplo si usamos mucho ubuntu, para ubicarnos en nuestra carpeta de documentos o donde necesitemos.
+
+2) Ejecutamos una contenedora con tag:
+
+    docker build -t ubuntu-with-python:v2 .
+
+3) Si ejecutamos nustra contenedora: 
+
+    docker run -it ubuntu-with-python:v2
+
+Veremos que en la consola, en donde se imprem el path en donde estamos, ya nos ubica en "/app"
+
+_______________________________________________________
+
+	[5.3]. Variables de Entorno:
+_______________________________________________________
+
+1) En nuestro archivo Dockerfile, tambien podemos definir variables de entorno con la directiva "ENV":
+
+    FROM ubuntu
+
+    ENV DEBIAN_FRONTEND=noninteractive
+    ENV VERSION=1.0
+
+    ARG TEXT_EDITOR=nano
+
+    RUN apt-get update && apt-get install -y \
+        python3 \
+        curl \
+        $TEXT_EDITOR
+
+    COPY . /app
+
+    WORKDIR /app
+
+En este ejemplo tenemos definidas dos variables de entorno "DEBIAN_FRONTEND" y "VERSION".
+
+Ahora tambien usamos la directiva "ARG", que a diferencia de las variables de entorno, nos permiten cambiar su valor al momento de ejecutar la contenedora.
+
+Para usar el valor definido en el argumento, usamos un signo pesos y el nombre del argumento: "$TEXT_EDITOR".
+
+2) Ejecutamos una contenedora con tag:
+
+    docker build -t ubuntu-with-python:v3 --build-arg="TEXT_EDITOR=vim" .
+
+Aca podemos ver que al ejecutar la contenedora, modificamos el argumento "TEXT_EDITOR", y en vez de instalarse en la contenedora "nano" se instala "vim"
+
+3) Si ejecutamos nuestra contenedora: 
+
+    docker run -it ubuntu-with-python:v3
+
+4) Dentro de la contenedora, imprimimos la variable de entorno:
+
+    echo $DEBIAN_FRONTEND
