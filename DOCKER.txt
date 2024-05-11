@@ -25,6 +25,17 @@ INDICE:
     [5.1]. Crear Imágen
     [5.2]. Copiar archivos
     [5.3]. Variables de Entorno
+    [5.4]. Ejecutar servicios
+    [5.5]. Entrypoint vs CMD
+    [5.6]. Dockerizar script python
+    [5.7]. Docker hub
+    [5.8]. Dockerizar script node
+[6]. Docker Compose
+    [6.1]. Servicios
+    [6.2]. Redes
+    [6.3]. Volúmenes
+    [6.4]. Variables de Entorno
+    [6.5]. Stack Local
 
 _______________________________________________________
 
@@ -430,7 +441,7 @@ Usamos "\" para poder instalar varios paquetes y no escribirlos todos en la mism
 
 Con el flag "-y", aeptamos los terminos y condiciones de la instalación de cada paquete.
 
-2) Para ejecutar nuestra imágen:
+2) Para compilar nuestra imágen:
 
     docker build -t ubuntu-with-python .
 
@@ -442,7 +453,7 @@ Nota: no olvidar que podemos ver todas las opciones y descripción de un comando
 
     docker build --help
 
-3) Para entrar a nustra contenedora y usar comandos:
+3) Para ejecutar nuestra contenedora y usar comandos:
 
     docker run -it ubuntu-with-python
 
@@ -480,11 +491,11 @@ Acá con "COPY . /app", indicamos que lo que este en nuestro directorio actual (
 
 "WORKDIR" --> es una directiva que nos permite indicar el area de trabajo de nuestra contenedora, util por ejemplo si usamos mucho ubuntu, para ubicarnos en nuestra carpeta de documentos o donde necesitemos.
 
-2) Ejecutamos una contenedora con tag:
+2) Compilar una contenedora con tag:
 
     docker build -t ubuntu-with-python:v2 .
 
-3) Si ejecutamos nustra contenedora: 
+3) Si ejecutamos nuestra contenedora: 
 
     docker run -it ubuntu-with-python:v2
 
@@ -519,7 +530,7 @@ Ahora tambien usamos la directiva "ARG", que a diferencia de las variables de en
 
 Para usar el valor definido en el argumento, usamos un signo pesos y el nombre del argumento: "$TEXT_EDITOR".
 
-2) Ejecutamos una contenedora con tag:
+2) Compilar una contenedora con tag:
 
     docker build -t ubuntu-with-python:v3 --build-arg="TEXT_EDITOR=vim" .
 
@@ -532,3 +543,574 @@ Aca podemos ver que al ejecutar la contenedora, modificamos el argumento "TEXT_E
 4) Dentro de la contenedora, imprimimos la variable de entorno:
 
     echo $DEBIAN_FRONTEND
+
+_______________________________________________________
+
+	[5.4]. Ejecutar servicios:
+_______________________________________________________
+
+1) Para poder ejecutar comandos a la hora de ejecutar nesutro contenedor, lo hacemos con la directiva "CMD":
+
+    FROM ubuntu
+
+    ENV DEBIAN_FRONTEND=noninteractive
+    ENV VERSION=1.0
+
+    ARG TEXT_EDITOR=nano
+
+    RUN apt-get update && apt-get install -y \
+        python3 \
+        curl \
+        nginx
+
+    COPY . /app
+
+    WORKDIR /app
+
+    CMD ["nginx", "-g", "daemon off;"]
+
+2) Compilar una contenedora con tag:
+
+    docker build -t ubuntu-with-python:v4 .
+
+Aca podemos ver que al ejecutar la contenedora, modificamos el argumento "TEXT_EDITOR", y en vez de instalarse en la contenedora "nano" se instala "vim"
+
+3) Si ejecutamos nuestra contenedora: 
+
+    docker run -it ubuntu-with-python:v4
+
+En consola no no sale nada, pero ya se esta ejecutando nginx, lo podemos comprobar si hacemos:
+
+    docker exec -it nombreOidContenedora bash
+
+Y luego:
+
+    curl localhost
+
+_______________________________________________________
+
+	[5.5]. Entrypoint vs CMD:
+_______________________________________________________
+
+Los comandos definidos con CMD se pueden sobre escribir, por ejemplo si ejecutamos:
+
+    docker run -d -p 8082:80 ubuntu-with-python:v5 ls -al
+
+En vez de ejeutarse el comando de "nginx":
+
+    CMD ["nginx", "-g", "daemon off;"]
+
+Se esta ejecutando el comando:
+
+    ls -al
+
+Esto lo podemos verificar con "docker ps -a". Esto sucede porque el comando "docker run" permite pasar un comando.
+
+Si se quiere evitar que se sobre escriba el comando definido dentro del Dockerfile con CMD, usamos "ENTRYPOINT":
+
+    FROM ubuntu
+
+    ENV DEBIAN_FRONTEND=noninteractive
+    ENV VERSION=1.0
+
+    ARG TEXT_EDITOR=nano
+
+    RUN apt-get update && apt-get install -y \
+        python3 \
+        curl \
+        nginx
+
+    COPY . /app
+
+    WORKDIR /app
+
+    ENTRYPOINT ["nginx", "-g", "daemon off;"]
+
+_______________________________________________________
+
+	[5.6]. Dockerizar script python:
+_______________________________________________________
+
+1) Creamos un archivo sencillo de python, llamado "main.py":
+
+    print("Hola mundo")
+
+2) Creamos un script de bash, con un archivo llamado "entrypoint.sh":
+
+    #!/bin/bash
+
+    python3 /app/main.py
+
+3) Creamos nuestro Dockerfile:
+
+    FROM ubuntu
+
+    RUN apt-get update && apt-get install -y \
+        python3
+
+    COPY . /app
+
+    WORKDIR /app
+
+    RUN chmod +x entrypoint.sh
+
+    ENTRYPOINT ./entrypoint.sh
+
+4) Compilar la contenedora:
+
+    docker build -t ubuntu-with-python:v6 .
+
+5) Corremos la contenedora en segundo plano:
+
+    docker run -d ubuntu-with-python:v6
+
+Y para ver nuestro mensaje:
+
+    docker logs nombreOidContenedora
+
+Nota: Si lo corremos directamente y no en segundo plano, vemos el mensaje en consola "Hola mundo", pero la contenedora se apaga automaticamente:
+
+    docker run ubuntu-with-python:v6
+
+_______________________________________________________
+
+	[5.7]. Docker hub:
+_______________________________________________________
+
+Podemos subir una imagen al repositorio de Docker Hub, para poderla compartir con otras personas.
+
+1) Creamos una cuenta en Docker Hub:
+
+    https://hub.docker.com/
+
+2) Creamos un repositorio en Docker Hub.
+
+El namespace que aparece allí es nuestro usuario. En el nombre del repositorio colocamos el nombre que se quiera, por ejemplo:
+
+    ubuntu-with-node
+
+Opcionalmente podemos definir una descripción corta.
+
+3) Iniciamos sesión desde consola en el local:
+
+    docker login
+
+4) Tagueamos la imagen:
+
+    docker image tag ubuntu-with-python usuarioDockerHub/ubuntu-with-python:v1
+
+Nota: la imagen debe haber sido compilada previamente (docker build).
+
+5) Hacemos push:
+
+    docker push usuarioDockerHub/ubuntu-with-python:v1
+
+Ya podemos ver la imágen en Doicker Hub.
+
+_______________________________________________________
+
+	[5.8]. Dockerizar script node:
+_______________________________________________________
+
+1) Suponiendo que ya tenemos nuestra aplicación de node (con dependencias en el "package.json", el "index.js", carpeta "node_modules", etc.), "index.js":
+
+    const express = require('express');
+    const app = express();
+    const port = 3000;
+
+    app.get('/', (req, res) => res.send('Hello World!'));
+
+    app.listen(port, () => console.log(`Àplicación corriendo en el puerto ${port}`));
+
+2) Configuramos el Dockerfile:
+
+    FROM node
+
+    COPY . /app
+
+    WORKDIR /app
+
+    RUN npm install
+
+    RUN chmod +x entrypoint.sh
+
+    ENTRYPOINT ./entrypoint.sh
+
+3) Como vamos a copiar todo dentro de "/app", y ya tenemos la carpeta "node_modules", pero dentro de la contenedora vamos a instalar las dependencias y generar nuevamente esta carpeta, creamos un archivo ".dockerignore":
+
+    node_modules
+
+Con esto ignoramos el copiado de la carpeta "node_modules".
+
+4) Creamos el "entrypoint.sh":
+
+    #!/bin/bash
+
+    node /app.index.js
+
+5) Compilamos la contenedora:
+
+    docker build -t node-with-express:v1 .
+
+6) Corremos la contendora:
+
+    docker run -d -p 3000:3000 node-with-express:v1
+
+7) Para ver el mensaje "Hello World!" usamos:
+
+    curl localhost:3000
+
+_______________________________________________________
+
+	[6]. Docker Compose:
+_______________________________________________________
+
+Docker compose es un orquestador local, que nos permite tener varias contenedoras corriendo al mismo tiempo, útil para apliaciones complejas en donde cada contenedor debe correr 1 solo servicio, pero se necesitan varios servicios.
+
+En Windows y Mac al instalar el Docker Desktop ya viene con Dockler Compose, pero en Linux se debe instalar ya que es un paquete aparte.
+
+- Para ver los comandos que tenemos usamos:
+
+    docker-compose --help
+
+Los comandos que ya hemos usados ahora los definiremos en un archivo de configuración de formato ".yml".
+
+_______________________________________________________
+
+	[6.1]. Servicios:
+_______________________________________________________
+
+1) Creamos el archivo "docker-copose.yml":
+
+    version: "3.8"
+
+    services:
+        ubuntu: 
+            image: ubuntu
+            tty: true
+            container_name: ubuntu
+        
+        redis:
+            image: redis
+            container_name: redis
+
+Acá tenemos varias similitudes con el siguiente comando:
+
+    docker run -d -it --name ubuntu ubuntu
+
+En donde:
+
+    "version" --> indicamos la versión a usar de docker-compose    
+
+    "services" --> acá definimos los servicios (contenedoras), en este caso tenemos dos llamadas "ubuntu" y "redis".
+
+    "container_name" --> reemplaza al flag "--name".
+
+    "tty: true" --> reemplaza a los flags "-it".
+
+2) Ahora para ejecutar las contenedoras usamos:
+
+    docker-compose up -d
+
+En este caso la ejecutamos en segundo plano, y el comando no solo crea las contenedoras, sino que de una vez le asigna red.
+
+Nota: si hacemos alguna modificación en el archivo "docker-copose.yml", y volvemos a ajecutar el comando anterior, no crea una nueva contenedora, sino que la recrea, y sigue usando la red creada anteriormente.
+
+- Eliminar contendoras y red:
+
+    docker-compose down
+
+- Podemos ver los servicios corriendo con:
+
+    docker ps
+
+_______________________________________________________
+
+	[6.2]. Redes:
+_______________________________________________________
+
+Creamos el archivo "docker-copose.yml":
+
+    version: "3.8"
+
+    services:
+        ubuntu: 
+            image: ubuntu
+            tty: true
+            container_name: ubuntu
+
+        nginx:
+            image: nginx
+            container_name: nginx
+            ports: 
+              - "80:80"
+              - "443:443"
+            networks:
+              - test-tutorial
+        
+        redis:
+            image: redis
+            container_name: redis
+            ports:
+              - "6379:6379"
+
+    networks:
+        test-tutorial:
+            external: true
+
+En este ejemplo tenemos lo siguiente:
+
+    En ports, la sintaxis que se usa es la de arreglos en "yml". Y en "nginx" definimos varios puertos.
+
+    El apartado "networks", usamos la red creada previamente "test-tutorial" e indicamos que es externa. Esto puede ser útil en caso de necesitarlo, pero la verdad es algo que podremos obviar, ya que sin esa configuración se crea la red correctamente.
+
+    El unico servicio que usa la red es "nginx".
+_______________________________________________________
+
+	[6.3]. Volúmenes:
+_______________________________________________________
+
+Para definir volumenes para que persistan los datos de nuestra contendora:
+
+Creamos el archivo "docker-copose.yml":
+
+    version: "3.8"
+
+    services:
+        ubuntu: 
+            image: ubuntu
+            tty: true
+            container_name: ubuntu
+            volumes:
+              - ./main.py:/main.py
+
+        nginx:
+            image: nginx
+            container_name: nginx
+            ports: 
+              - "80:80"
+              - "443:443"
+            networks:
+              - test-tutorial
+        
+        redis:
+            image: redis
+            container_name: redis
+            ports:
+              - "6379:6379"
+
+        mysql:
+            image: mysql
+            container_name: mysql
+            ports:
+              - "3312:3306"
+            volumes:
+              - db-data:/var/lib/mysql
+
+    volumes:
+        db-data:
+
+    networks:
+        test-tutorial:
+            external: true
+
+Tenemos dos ejemplos, el volumen dde ubuntu es manual, y el volumen "db-data" es un volumen de Docker.
+
+_______________________________________________________
+
+	[6.4]. Variables de Entorno:
+_______________________________________________________
+
+1) Creamos el archivo "docker-copose.yml" y usamos "environment" en el servicio de "mysql":
+
+    version: "3.8"
+
+    services:
+        ubuntu: 
+            image: ubuntu
+            tty: true
+            container_name: ubuntu
+            volumes:
+              - ./main.py:/main.py
+
+        nginx:
+            image: nginx
+            container_name: nginx
+            ports: 
+              - "80:80"
+              - "443:443"
+            networks:
+              - test-tutorial
+        
+        redis:
+            image: redis
+            container_name: redis
+            ports:
+              - "6379:6379"
+
+        mysql:
+            image: mysql
+            container_name: mysql
+            ports:
+              - "3312:3306"
+            volumes:
+              - db-data:/var/lib/mysql
+            environment:
+              - MYSQL_ROOT_PASSWORD=123456
+
+    volumes:
+        db-data:
+
+    networks:
+        test-tutorial:
+            external: true
+
+2) Para poder subir este archivo a un repositorio, mejor dejamos las variables de entorno (info sensible), definidas en un archivo aparte ".env":
+
+    MYSQL_ROOT_PASSWORD=123456
+
+3) Y ahora en el archivo "docker-copose.yml":
+
+    version: "3.8"
+
+    services:
+        ubuntu: 
+            image: ubuntu
+            tty: true
+            container_name: ubuntu
+            volumes:
+              - ./main.py:/main.py
+
+        nginx:
+            image: nginx
+            container_name: nginx
+            ports: 
+              - "80:80"
+              - "443:443"
+            networks:
+              - test-tutorial
+        
+        redis:
+            image: redis
+            container_name: redis
+            ports:
+              - "6379:6379"
+
+        mysql:
+            image: mysql
+            container_name: mysql
+            ports:
+              - "3312:3306"
+            volumes:
+              - db-data:/var/lib/mysql
+            environment:
+              - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+
+    volumes:
+        db-data:
+
+    networks:
+        test-tutorial:
+            external: true
+
+_______________________________________________________
+
+	[6.5]. Stack Local:
+_______________________________________________________
+
+1) Creamos el archivo "docker-copose.yml":
+
+    version: "3.8"
+
+    services:
+        python: 
+            image: python
+            tty: true
+            container_name: python
+            volumes:
+              - .:/scripts
+        
+        redis:
+            image: redis
+            container_name: redis
+            ports:
+              - "6379:6379"
+
+        mysql:
+            image: mysql
+            container_name: mysql
+            ports:
+              - "3312:3306"
+            volumes:
+              - db-data:/var/lib/mysql
+            environment:
+              - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+
+        phpmyadmin:
+            image: phpmyadmin/phpmyadmin
+            ports:
+              - "8085:80"
+            environment:
+              - PMA_HOST=mysql
+
+    volumes:
+        db-data:
+
+2) Creamos las contenedoras con:
+
+    docker-compose up -d
+
+3) Ingresamos a "phpmyadmin" en en navegador, en la ruta:
+
+    localhost:8085
+
+_______________________________________________________
+
+	[6.6]. Docker Compose Build:
+_______________________________________________________
+
+Para compilar una imagen desde un archivo Dockerfile, usamos "build" dentro del archivo "docker-copose.yml":
+
+    version: "3.8"
+
+    services:
+        node:
+            build:
+              context: .
+
+        python: 
+            image: python
+            tty: true
+            container_name: python
+            volumes:
+              - .:/scripts
+        
+        redis:
+            image: redis
+            container_name: redis
+            ports:
+              - "6379:6379"
+
+        mysql:
+            image: mysql
+            container_name: mysql
+            ports:
+              - "3312:3306"
+            volumes:
+              - db-data:/var/lib/mysql
+            environment:
+              - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+
+        phpmyadmin:
+            image: phpmyadmin/phpmyadmin
+            ports:
+              - "8085:80"
+            environment:
+              - PMA_HOST=mysql
+
+    volumes:
+        db-data:
+
+Con "context" indicamos el path donde se encuentra el archivo "Dockerfile".
+
+Nota: se esta usando el archivo Dockerfile creado en el aprtado ([5.8]. Dockerizar script node).
