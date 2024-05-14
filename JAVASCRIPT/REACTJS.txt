@@ -1,0 +1,861 @@
+
+	REACTJS:
+_______________________________________________________
+
+INDICE:
+
+[1]. Qué es ReactJs
+    [1.1]. JSX
+    [1.2]. Componentes
+    [1.3]. State
+    [1.4]. Props
+    [1.5]. Renderizado condicional
+    [1.6]. Renderizado de listas
+    [1.7]. Manejando Eventos
+[2]. Vite
+    [2.1]. Archivos Principales
+[3]. Proyecto
+    [3.1]. Scaffolding Proyecto
+    [3.2]. Creando primer componente
+    [3.3]. Renderizado Lista Eventos
+    [3.4]. Manejando evento buscador
+
+_______________________________________________________
+
+	[1]. Qué es ReactJs:
+_______________________________________________________
+
+- ReactJs es una librería para el desarrollo de Frontend moderno. 
+- No es un framework. 
+- Se basa en componentes. 
+- Es declarativa, se le indica que renderizar.
+- Funciona usando el Virtual DOM.
+
+_______________________________________________________
+
+	[1.1]. JSX:
+_______________________________________________________
+
+JSX es una nueva sintaxis que nos permite combinar HTML y JavaScript, esto es util si queremeos aadir un pco de lógica al código HTML, por ejemplo si esta logueado imprima X elemento, etc.
+
+Algunas propiedades de HTML, se escriben con camelCase, como por ejemplo "class" pasa a ser "className".
+
+Nota: para más info de JSX ir a:
+
+    https://react.dev/learn/writing-markup-with-jsx
+
+Para convertir HTML a JSX, debemos seguir las siguientes reglas:
+
+1) Retornar un solo elemento raíz, esto quiere decir que no podemos devolver varios elementos HTML sueltos, sino que deben estar todos envuieltos en un contenedor, por ejemplo:
+
+    <div>
+        <h1>Hedy Lamarr's Todos</h1>
+        <img 
+            src="https://i.imgur.com/yXOvdOSs.jpg" 
+            alt="Hedy Lamarr" 
+            class="photo"
+        >
+        <ul>
+            <li>Invent new traffic lights
+            <li>Rehearse a movie scene
+            <li>Improve the spectrum technology
+        </ul>
+    </div>
+
+Si no se quiere crear el "div" que envuelve todo se puede usar un Fragmento (<> y </>):
+
+    <>
+        <h1>Hedy Lamarr's Todos</h1>
+        <img 
+            src="https://i.imgur.com/yXOvdOSs.jpg" 
+            alt="Hedy Lamarr" 
+            class="photo"
+        >
+        <ul>
+            <li>Invent new traffic lights
+            <li>Rehearse a movie scene
+            <li>Improve the spectrum technology
+        </ul>
+    </>
+
+2) Toca cerrar todos los tags HTML, incluso si no tienen cierre, como las imagenes:
+
+    <>
+        <h1>Hedy Lamarr's Todos</h1>
+        <img 
+            src="https://i.imgur.com/yXOvdOSs.jpg" 
+            alt="Hedy Lamarr" 
+            class="photo"
+        />
+        <ul>
+            <li>Invent new traffic lights
+            <li>Rehearse a movie scene
+            <li>Improve the spectrum technology
+        </ul>
+    </>
+
+3) Usar camelCase en los atributos HTML:
+
+    <img 
+        src="https://i.imgur.com/yXOvdOSs.jpg" 
+        alt="Hedy Lamarr" 
+        className="photo"
+    />
+
+Nota: podemos usar una herramienta online de conversión para pasar de HTML a JSX:
+
+    https://transform.tools/html-to-jsx
+
+_______________________________________________________
+
+	[1.2]. Componentes:
+_______________________________________________________
+
+Un componente es una función tradicional, que devuelve código de JSX.
+
+El nombre del componente por convensión se define en PascalCase.
+
+Nota: Para empezar, podemos usar la siguiente herramienta online para probar Vite +  React:
+
+    https://stackblitz.com/edit/vitejs-vite-lataab?file=index.html&terminal=dev
+
+- Creamos el archivo "MyFirstComponent.jsx" dentro de la carpeta "src":
+
+    const MyFirstComponent = () => {
+        const hola = 'Hola';
+        return {
+            <div>
+                {hola} este es un componente!!!
+            </div>
+        };
+    };
+
+    export default MyFirstComponent;
+
+O tambien podemos declarar un componente de la siguiente manera:
+
+    function MyFirstComponent(){
+        const hola = 'Hola';
+        return {
+            <div>
+                {hola} este es un componente!!!
+            </div>
+        };
+    }
+
+    export default MyFirstComponent;
+
+Nota 1: para usar variables o código JS dentro del HTML que retornamos usamos {}.
+
+Nota 2: un archivo de JSX solo puede exportar una función.
+
+- Para incluir el componente lo importamos y llamamos como una etiqueta HTML, en el componente principal "App.jsx":
+
+    import { useState } from 'react';
+    import './App.css';
+    import MyFirstComponent from './MyFirstComponent';
+
+    function App() {
+        return (
+            <>
+                <MyFirstComponent />
+            </>
+        );
+    }
+
+_______________________________________________________
+
+	[1.3]. State:
+_______________________________________________________
+
+Para que un componente sea reactivo, podemos declarar estados, usando "useState" podemos obtener un valor o setearlo
+
+    import { useState } from 'react';
+
+    const MyFirstComponent = () => {
+
+        const [value, setValue] = useState(0);
+        const [hola, setHola] = useState('Hola');
+
+        setTimeout(() => {
+            setValue(value + 1);
+        }, 3000);
+
+
+        return {
+            <div>
+                {hola} este es un componente!!! valor: {value}
+            </div>
+        };
+    };
+
+    export default MyFirstComponent;
+
+Se usa desestructuración de arrays para obtener los dos valores de "useState", el primer elemento es el valor, y el segundo es el setter. 
+
+Lo que le pasemos como argumento a la función "useState", es el valor inicial, en este ejemplo "0". Pero como valor inicial podemos asignar números, strings, objetos u otro valor que necesitemos.
+
+Con el setter de "useState", React usa inmutabilidad, hace una copia de objeto inicial y reemplaza solo el valor que debe cambiar. Cuando se actualiza el valor, se re renderiza todo el componente.
+
+_______________________________________________________
+
+	[1.4]. Props:
+_______________________________________________________
+
+Los componentes de React, pueden tener propiedades, similares a los atributos HTML en una etiqueta, pero en React se llaman "props".
+
+1) En el componente principal enviamos las props al componente hijo:
+
+    import { useState } from 'react';
+    import './App.css';
+    import MyFirstComponent from './MyFirstComponent';
+
+    function App() {
+
+        const [value, setValue] = useState(0);
+
+        setTimeout(() => {
+            setValue(value + 1);
+        }, 3000);
+
+        return (
+            <>
+                <MyFirstComponent propOne={value} propTwo={2} propThree={{}} />
+            </>
+        );
+    }
+
+En este caso enviamos tres propiedades ( propOne={value} propTwo={2} propThree={{}} ), la ultima propiedad es un objeto vacio. Y como curiosidad en la propOne enviamos el valor del estado del componente principal.
+
+Al actualizarse el estado del compennete principal, tambein se actualizan sus componentes hijos.
+
+2) En el componnete hijo recibimos las props como argumentos de la función:
+
+    import { useState } from 'react';
+
+    const MyFirstComponent = ({
+        propOne,
+        propTwo,
+        propThree
+    }) => {
+
+        const [value, setValue] = useState(0);
+        const [hola, setHola] = useState('Hola');
+
+        setTimeout(() => {
+            setValue(value + 1);
+        }, 3000);
+
+        console.log( propOne,
+        propTwo,
+        propThree );
+
+        return {
+            <div>
+                {hola} este es un componente!!! valor: {value}
+            </div>
+        };
+    };
+
+    export default MyFirstComponent;
+
+Como argumento del componente recibimos un objeto con las 3 propiedades, usamos desestructuración de objetos(solo encerramos las propiedades en {}), para que sea más sencillo acceder a las propiedades.
+
+_______________________________________________________
+
+	[1.5]. Renderizado condicional:
+_______________________________________________________
+
+El renderizado condicional es para mostrar determinados elementos si se cumple unma condición, o sino mostrar otros:
+
+- Usando "if else":
+
+    if (isPacked) {
+        return <li className="item">{name} ✔</li>;
+    }
+    return <li className="item">{name}</li>;
+
+- Usando "operador ternario":
+
+    return (
+        <li className="item">
+            {isPacked ? name + ' ✔' : name}
+        </li>
+    );
+
+En JSX, {cond ? <A /> : <B />} significa: si cond, renderiza <A />, si no <B />.
+
+- Usando operador lógico AND:
+
+    return (
+        <li className="item">
+            {name} {isPacked && '✔'}
+        </li>
+    );
+
+En JSX, {cond && <A />} significa: si cond, renderiza <A />, si no, nada.
+
+- No mostrar nada con "null":
+
+    if (isPacked) {
+        return null;
+    }
+    return <li className="item">{name}</li>;
+
+Nota: Para más info de renderizado condicional ir a:
+
+    https://es.react.dev/learn/conditional-rendering
+
+_______________________________________________________
+
+	[1.6]. Renderizado de listas:
+_______________________________________________________
+
+Para el renderizado de listas (varios ítems), usamos dos metodos de Arrays de JavaScript: 
+
+    filter()
+    map()
+
+Estos metodos retornan un array.
+
+    const MyFirstComponent = () => {
+
+        const arrayOfNumbers = [1, 2, 3, 4, 5, 6, 7, 8];
+
+        const numberItems = arrayOfNumbers.map((item) => <li key={`array-number-item-${item}`} >{item}</li>);
+
+        /*
+        let numberItems = [];
+
+        for(const item of arrayOfNumbers){
+            items.push(<li>{item}</li>);
+        }
+        */
+
+        const arrayOfPeople = [
+            {
+                "id": 1,
+                "name": "Uriel",
+                "age": 20,
+            },
+            {
+                "id": 2,
+                "name": "Juan",
+                "age": 24,
+            },
+            {
+                "id": 3,
+                "name": "Jose",
+                "age": 21,
+            },
+            {
+                "id": 4,
+                "name": "Ismael",
+                "age": 30,
+            }
+        ];
+
+        const peopleItems = arrayOfPeople.map((person) => <li key={`array-person-item-${person.id}`} >{`${person.id}: ${person.name}`}</li>);
+
+        return {
+            <>
+                <ul>
+                    {numberItems}
+                </ul>
+
+                <ul>
+                    {peopleItems}
+                </ul>
+            </>
+        };
+    };
+
+    export default MyFirstComponent;
+
+En React a c/u de los elementos que cremos de la lista le debemos asignar un id unico, ya que tiene que estar vigilandolos en caso de querer actualizar alguno.
+
+Podemos usar un ciclo "for" de siempre para generar la lista de ítems, pero lo más usado es el método "map".
+
+Nota: para más info del renderizado de listas ir a:
+
+    https://es.react.dev/learn/rendering-lists
+
+_______________________________________________________
+
+	[1.7]. Manejando Eventos:
+_______________________________________________________
+
+Para manejar eventos, definimos dentro del componente la función que maneja el evento, la sintaxis para manejar el evento es muy similar a la que ya usa JavaScript, y usa camelCase:
+
+    export default function Button() {
+        function handleButtonClick() {
+            alert('¡Me hiciste clic!');
+        }
+
+        return (
+            <button onClick={handleButtonClick}>
+                Hazme clic
+            </button>
+        );
+    }
+
+Nota 1: todos los eventos empiezan con el prefijo "on".
+
+Nota 2: por convenciones la función manejadora del evento debemos nombrarla "handleElementoEvento", para que sea más descriptiva e indique que es un manejador de eventos.
+
+Nota 3: para más info del manejo de ventos ir a:
+
+    https://es.react.dev/learn/responding-to-events
+
+    https://es.react.dev/reference/react-dom/components/common
+
+Algunas veses se desea desde el componente padre pasarle el manejador de eventos al componente hijo, esto de puede hacer desde las propiedades:
+
+En el componente hijo:
+
+    function Button({ onClick, children }) {
+        return (
+            <button onClick={onClick}>
+                {children}
+            </button>
+        );
+    }
+
+En el componente padre:
+
+    function UploadButton() {
+        return (
+            <Button onClick={() => alert('¡Subiendo!')}>
+                Subir imagen
+            </Button>
+        );
+    }
+
+Nota: para más info ir a:
+
+    https://es.react.dev/learn/responding-to-events#passing-event-handlers-as-props
+_______________________________________________________
+
+	[2]. Vite:
+_______________________________________________________
+
+Vamos a usar Vitejs como module bundler, para generar nustro proyecto de react.
+
+Para usarlo es necesario tener instalado node y npm.
+
+1) En consola usamos:
+
+    npm create vite@latest
+
+2) Nos va a preguntar el nombre del proyecto:
+
+    ticketmaster-events
+
+3) Escogemos "React" cuando pregunte por framework.
+
+4) En "variant" podemos escoger entre typescript y javaScript, escogemos javaScript.
+
+5) Seguimos los comandos sugeridos en consola para instalar dependencia y correr el proyecto:
+
+    cd ticketmaster-events
+    npm install
+    npm run dev
+
+_______________________________________________________
+
+	[2.1]. Archivos Principales:
+_______________________________________________________
+
+El archivo principal de nuestro proyecto es "main.jsx":
+
+    import React from 'react'
+    import ReactDOM from 'react-dom/client'
+    import App from './App.jsx'
+    import './index.css'
+
+    ReactDOM.createRoot(document.getElementById('root')).render(
+        <React.StrictMode>
+            <App />
+        </React.StrictMode>,
+    )
+
+Al metodo "createRoot" le pasamos como parametro el elemento del DOM donde se va a renderizar (con id root) toda la aplicación, y le indicamos que se renderice nuestra aplicación. 
+Con "StrictMode" indicamos que nos muestre warnings de rendimiento o errores en nuestra aplicación.
+
+Despues tenemos el archivo "App.jsx", que es nuestra aplicación.
+
+Tenemos un solo archivo HTML llamado "index.html":
+
+    <!doctype html>
+    <html lang="en">
+        <head>
+            <meta charset="UTF-8" />
+            <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>Vite + React</title>
+        </head>
+        <body>
+            <div id="root"></div>
+            <script type="module" src="/src/main.jsx"></script>
+        </body>
+    </html>
+
+Acá llamamos al archivo principal indicando que es un modulo.
+
+_______________________________________________________
+
+	[3]. Proyecto:
+_______________________________________________________
+
+Creación del proyecto el cual iremos construyendo la boletera con la API de ticketmaster.
+
+API:
+
+    https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/
+
+_______________________________________________________
+
+	[3.1]. Scaffolding Proyecto:
+_______________________________________________________
+
+Dentro de la carpets "src", creamos las siguientes carpetas:
+
+    - components --> donde crearemos los componentes generales que se comparten en toda la aplicación (algunas veses llamada shared-components).
+    - views --> donde va c/u de las rutas o páginas del proyecto (algunas veses llamada pages).
+    - routes --> guarda c/u de las rutas o configuraciónes del enrutador del proyecto.
+    - utils --> archivos con funciones de utileria, es decir que podemos importar en cualquier parte para realizar lo que necesitemos por ejemoplo llamadas a la API, etc.
+    - state --> donde se hace referencia a la información global del proyecto
+
+_______________________________________________________
+
+	[3.2]. Creando primer componente:
+_______________________________________________________
+
+1) Dentro de la carpeta "/components", creamos una carpeta llamada "Navbar".
+
+2) Dentro de la carpeta "/Navbar" creamos un archivo "index.jsx":
+
+    const Navbar = () => {
+        return (
+            <div>
+                <p>Mi Boletera</p>
+                <input placeholder="Busca tu evento favorito" />
+            </div>
+        );
+    };
+
+    export default Navbar;
+
+3) Importamos y usamos nuestro componente en el componente principal "App.jsx":
+
+    import Navbar from './components/Navbar';
+    import './App.css'
+
+    function App() {
+
+        return (
+            <>
+                <Navbar />
+            </>
+        )
+    }
+
+    export default App
+
+_______________________________________________________
+
+	[3.3]. Renderizado Lista Eventos:
+_______________________________________________________
+
+Como aún no consumimos información desde la API, vamos a consumir información desde en archivo JSON.
+
+1) Creamos dentro de "/src" una carpeta llamada "/data", y adentro colocamos el archivo JSON.
+
+Link Json:
+
+    https://github.com/codigofacilito/ticketmaster-events-react/blob/main/src/data/events.json
+
+2) Dentro de la carpeta "/components" creamos una nueva carpeta llamada "/Events", que alojara un componente con el mismo nombre.
+
+3) Dentro de la carpeta "/Events", creamos un archivo "index.jsx":
+
+    const Events = () => {
+
+        return (
+            <div>
+                <p>Eventos</p>
+            </div>
+        );
+    };
+
+    export default Events;
+
+4) Lo importamos y usamos desde al archivo "App.jsx":
+
+    import Navbar from './components/Navbar';
+    import Events from './components/Events';
+    import './App.css'
+
+    function App() {
+
+        return (
+            <>
+            <Navbar />
+            <Events />
+            </>
+        )
+    }
+
+    export default App
+
+5) Dentro de la carpeta "/Events", creamos una carpeta llamada "/components", para crear allí los componentes hijos del componente "Events".
+
+6) Dentro de "/Events/components" creamos la carpeta "/EventItem".
+
+7) Dentro de la carpeta "/EventItem", creamos un archivo "index.jsx":
+
+    const EventItem = () => {
+        return(
+            <div>
+                Event ítem
+            </div>
+        )
+    };
+
+    export default EventItem;
+
+8) Importamos el componente "EventItem" dentro del componente "Events":
+
+    import EventItem from "./components/EventItem";
+    import data from "../../data/events.json";
+
+    console.log(data);
+
+    const events = data._embedded.events;
+
+    const Events = () => {
+
+        return (
+            <div>
+                <p>Eventos</p>
+
+                <EventItem />
+            </div>
+        );
+    };
+
+    export default Events;
+
+Tambien importamos el archivo JSOn con la data, y hacemos una impresión en consola para ver como viene la data.
+
+La siguiente línea:
+
+    const events = data._embedded.events;
+
+La podemos cambiar por la siguiente usando "desestructuración de objetos":
+
+    const { _embedded: {events} } = data;
+
+9) Usamos los conocimientos de renderizado de listas para renderizar los EventItem:
+
+    const Events = () => {
+
+    const eventsComponent = events.map((eventItem) => <EventItem key={`event-item-${eventItem.id}`} />);
+
+        return (
+            <div>
+                <p>Eventos</p>
+
+                { eventsComponent }
+            </div>
+        );
+    };
+
+Acá en el método "map", devolvemos un "EventItem", indicandole el id unico en el argumento "key".
+
+10) En "EventItem", recibimos las propiedades que se van a enviar desde el componente padre, para mostrar la información del evento:
+
+    const EventItem = ({
+        info,
+        name,
+        image
+    }) => {
+        return(
+            <div>
+                <img src={image} alt={name} width="200px"/>
+                <h4>{name}</h4>
+                <p>{info}</p>
+            </div>
+        )
+    };
+
+    export default EventItem;
+
+De momento solo recibimos 3 datos del evento, el nombre, una descripción y la url de la imagen.
+
+11) Ahora en el componente padre "Events", enviamos las propiedades al componente hijo:
+
+    import EventItem from "./components/EventItem";
+    import data from "../../data/events.json";
+
+    console.log(data);
+
+    const events = data._embedded.events;
+
+    const Events = () => {
+
+        const eventsComponent = events.map((eventItem) => (
+            <EventItem 
+                key={`event-item-${eventItem.id}`}
+                name={eventItem.name}
+                info={eventItem.info}
+                image={eventItem.images[0].url}
+            />
+        ));
+
+        return (
+            <div>
+                <p>Eventos</p>
+
+                { eventsComponent }
+            </div>
+        );
+    };
+
+    export default Events;
+
+12) La información de momento es estatica, pero podemos almacenarla en un estado, por si cambia en un futuro:
+
+    import { useState } from "react";
+
+    import EventItem from "./components/EventItem";
+    import eventsJSON from "../../data/events.json";
+
+    // console.log(data);
+
+    const Events = () => {
+        const [data] = useState(eventsJSON);
+
+        const events = data._embedded.events;
+        const eventsComponent = events.map((eventItem) => (
+            <EventItem 
+                key={`event-item-${eventItem.id}`}
+                name={eventItem.name}
+                info={eventItem.info}
+                image={eventItem.images[0].url}
+            />
+        ));
+
+        return (
+            <div>
+                <p>Eventos</p>
+
+                { eventsComponent }
+            </div>
+        );
+    };
+
+    export default Events;
+
+_______________________________________________________
+
+	[3.4]. Manejando evento buscador:
+_______________________________________________________
+
+En el componente "Navbar", añadimos un manejador de eventos en el input de busqueda:
+
+    import { useState } from "react";
+
+    const Navbar = () => {
+        const [search, setSearch] = useState('');
+
+        const handleInputChange = (event) => {
+            setSearch(event.target.value);
+        };
+
+        console.log(search);
+
+        return (
+            <div>
+                <p>Mi Boletera</p>
+                <input 
+                    placeholder="Busca tu evento favorito"
+                    onChange={handleInputChange} 
+                    value={search}
+                />
+            </div>
+        );
+    };
+
+    export default Navbar;
+
+Para el input tambien manejamos un estado, su valor inicial lo definimos como un string vacio, o sino el estado inicial seria "undefined" y nos saldria un warning en consola.
+
+En el atributo "value" del input le asignamos el valor de search, y en el manejador de eventos seteamos esa propiedad con el nuevo valor ingresado, si no lo hacemos, al escribir en el input no se actualiza el valor, y es como si no escribieramos nada, no se ve.
+
+_______________________________________________________
+
+	[3.5]. Evento como Props:
+_______________________________________________________
+
+1) En el componente "Events", vamos a manejar el click de cada evento social, y se lo pasaremos al componente hijo a través de sus propiedades:
+
+    import { useState } from "react";
+
+    import EventItem from "./components/EventItem";
+    import eventsJSON from "../../data/events.json";
+
+    const Events = () => {
+        const [data] = useState(eventsJSON);
+
+        const handleEventItemClick = (id) => {
+            console.log('Evento clickeado: ', id);
+        };
+
+        const events = data._embedded.events;
+        const eventsComponent = events.map((eventItem) => (
+            <EventItem 
+                key={`event-item-${eventItem.id}`}
+                name={eventItem.name}
+                info={eventItem.info}
+                image={eventItem.images[0].url}
+                onEventClick={handleEventItemClick}
+                id={eventItem.id}
+            />
+        ));
+
+        return (
+            <div>
+                <p>Eventos</p>
+
+                { eventsComponent }
+            </div>
+        );
+    };
+
+    export default Events;
+
+La propiedad que se le pasa al componente hijo para manejar el evento click es "onEventClick".
+
+2) En el componente hijo "EventItem" recibimos las props y asignamos al evento click la función manejadora que recibimos desde el padre:
+
+    const EventItem = ({
+        info,
+        name,
+        image,
+        onEventClick,
+        id
+    }) => {
+        return(
+            <div onClick={ () => onEventClick() }>
+                <img src={image} alt={name} width="200px"/>
+                <h4>{name}</h4>
+                <p>{info}</p>
+            </div>
+        )
+    };
+
+    export default EventItem;
+
+Como la función manejadora del padre recibe como parámetro el id, donde asignamos el evento click, le asignamos una función anonima, para que nos permita enviar el parametro, si no lo hacemos cometemos un error y se empieza a ejecutar la función manejadora sin necesidad de hacer click e infinitamente y se bloquea la aplicación.
+
