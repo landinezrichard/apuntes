@@ -36,7 +36,7 @@ _______________________________________________________
 	[1.1]. JSX:
 _______________________________________________________
 
-JSX es una nueva sintaxis que nos permite combinar HTML y JavaScript, esto es util si queremeos aadir un pco de lógica al código HTML, por ejemplo si esta logueado imprima X elemento, etc.
+JSX es una nueva sintaxis que nos permite combinar HTML y JavaScript, esto es util si queremeos añadir un poco de lógica al código HTML, por ejemplo si esta logueado imprima X elemento, etc.
 
 Algunas propiedades de HTML, se escriben con camelCase, como por ejemplo "class" pasa a ser "className".
 
@@ -227,9 +227,9 @@ Los componentes de React, pueden tener propiedades, similares a los atributos HT
 
 En este caso enviamos tres propiedades ( propOne={value} propTwo={2} propThree={{}} ), la ultima propiedad es un objeto vacio. Y como curiosidad en la propOne enviamos el valor del estado del componente principal.
 
-Al actualizarse el estado del compennete principal, tambein se actualizan sus componentes hijos.
+Al actualizarse el estado del compennete principal, tambien se actualizan sus componentes hijos.
 
-2) En el componnete hijo recibimos las props como argumentos de la función:
+2) En el componente hijo recibimos las props como argumentos de la función:
 
     import { useState } from 'react';
 
@@ -266,7 +266,7 @@ _______________________________________________________
 	[1.5]. Renderizado condicional:
 _______________________________________________________
 
-El renderizado condicional es para mostrar determinados elementos si se cumple unma condición, o sino mostrar otros:
+El renderizado condicional es para mostrar determinados elementos si se cumple una condición, o si no mostrar otros:
 
 - Usando "if else":
 
@@ -372,7 +372,7 @@ Estos metodos retornan un array.
 
     export default MyFirstComponent;
 
-En React a c/u de los elementos que cremos de la lista le debemos asignar un id unico, ya que tiene que estar vigilandolos en caso de querer actualizar alguno.
+En React a c/u de los elementos que cremos de la lista le debemos asignar un id unico(key), ya que tiene que estar vigilandolos en caso de querer actualizar alguno.
 
 Podemos usar un ciclo "for" de siempre para generar la lista de ítems, pero lo más usado es el método "map".
 
