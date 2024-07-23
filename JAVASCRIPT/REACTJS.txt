@@ -19,6 +19,8 @@ INDICE:
     [3.2]. Creando primer componente
     [3.3]. Renderizado Lista Eventos
     [3.4]. Manejando evento buscador
+    [3.5]. Evento como Props
+    [3.6]. Filtrando Eventos
 
 _______________________________________________________
 
@@ -123,11 +125,11 @@ Nota: Para empezar, podemos usar la siguiente herramienta online para probar Vit
 
     const MyFirstComponent = () => {
         const hola = 'Hola';
-        return {
+        return (
             <div>
                 {hola} este es un componente!!!
             </div>
-        };
+        );
     };
 
     export default MyFirstComponent;
@@ -791,7 +793,7 @@ En el componente "Navbar", añadimos un manejador de eventos en el input de busq
 
 Para el input tambien manejamos un estado, su valor inicial lo definimos como un string vacio, o sino el estado inicial seria "undefined" y nos saldria un warning en consola.
 
-En el atributo "value" del input le asignamos el valor de search, y en el manejador de eventos seteamos esa propiedad con el nuevo valor ingresado, si no lo hacemos, al escribir en el input no se actualiza el valor, y es como si no escribieramos nada, no se ve.
+En el atributo "value" del input le asignamos el valor de "search", y en el manejador de eventos seteamos esa propiedad con el nuevo valor ingresado, si no lo hacemos, al escribir en el input no se actualiza el valor, y es como si no escribieramos nada, no se ve.
 
 _______________________________________________________
 
@@ -847,15 +849,117 @@ La propiedad que se le pasa al componente hijo para manejar el evento click es "
         id
     }) => {
         return(
-            <div onClick={ () => onEventClick() }>
+            <div>
                 <img src={image} alt={name} width="200px"/>
                 <h4>{name}</h4>
                 <p>{info}</p>
+                <button onClick={ () => onEventClick(id) }>Ver más</button>
             </div>
         )
     };
 
     export default EventItem;
 
-Como la función manejadora del padre recibe como parámetro el id, donde asignamos el evento click, le asignamos una función anonima, para que nos permita enviar el parametro, si no lo hacemos cometemos un error y se empieza a ejecutar la función manejadora sin necesidad de hacer click e infinitamente y se bloquea la aplicación.
+Como la función manejadora del padre recibe como parámetro el "id", donde asignamos el evento click, le asignamos una función anonima, para que nos permita enviar el parametro, si no lo hacemos cometemos un error y se empieza a ejecutar la función manejadora sin necesidad de hacer click e infinitamente y se bloquea la aplicación.
+
+3) Cuando tenemos una función muy larga, podemos tenerla aparte para tener más limpio el código del "return":
+
+    const EventItem = ({
+        info,
+        name,
+        image,
+        onEventClick,
+        id
+    }) => {
+
+        const handleSeeMoreClick = (event) => {
+            event.stopPropagation();
+            onEventClick(id);
+        };
+
+        return(
+            <div onClick={ () => console.log('padre clickeado') }>
+                <img src={image} alt={name} width="200px"/>
+                <h4>{name}</h4>
+                <p>{info}</p>
+                <button onClick={ handleSeeMoreClick }>Ver más</button>
+            </div>
+        )
+    };
+
+    export default EventItem;
+
+En este caso creamos la función "handleSeeMoreClick", que recibe el paramentro "event", para evitar el "event bubbling", y no se haga click tambien en el padre.
+
+_______________________________________________________
+
+	[3.6]. Filtrando Eventos:
+_______________________________________________________
+
+Para poder filtrar los eventos a través del input de busqueda que tenemos en el navbar, es necesario hacer una comunicación del padre de los componentes de "Navbar" y "Events", esto lo logramos gracias a las props, desde el padre obtenemos la busqueda escrita en el input del "Navbar", y luego enviamos esa busqueda al listado "Events", donde filtraremos.
+
+1) En el componente padre "App.jsx":
+
+    import { useState } from 'react';
+
+    import Navbar from './components/Navbar';
+    import Events from './components/Events';
+    import './App.css'
+
+    function App() {
+        const [searchTerm, setSearchTerm] = useState('');
+
+        const handleNavbarSearch = (term) => {
+            setSearchTerm(term);
+        };
+
+        return (
+            <>
+            <Navbar onSearch={handleNavbarSearch} />
+            <Events searchTerm={searchTerm} />
+            </>
+        )
+    }
+
+    export default App
+
+Creamos un estado "searchTerm" con su respectivo setter. Al "Navbar", le pasamos por las props la función para setear la busqueda, y al componente "Events", se le envia esa busqueda una vez seteada en el estado "searchTerm".
+
+2) En el componente "Navbar":
+
+    import { useState } from "react";
+
+    const Navbar = ({onSearch}) => {
+        const [search, setSearch] = useState('');
+
+        const handleInputChange = (event) => {
+            setSearch(event.target.value);
+        };
+
+        const handleInputKeyDown = (event) => {
+            if(event.key === 'Enter'){
+                onSearch(search);
+            }
+        };
+
+        // console.log(search);
+
+        return (
+            <div>
+                <p>Mi Boletera</p>
+                <input 
+                    placeholder="Busca tu evento favorito"
+                    onChange={handleInputChange} 
+                    value={search}
+                    onKeyDown={handleInputKeyDown}
+                />
+            </div>
+        );
+    };
+
+    export default Navbar;
+
+Acá des estructuramos e las props la función "onSearch", la cual usamos en la función que va a escuchar cuando presionamos en el teclado la tecla "Enter" para enviar la busqueda, con esto se actualiza el estado del padre.
+
+3) Filtramos la busqueda en el componente "Events":
 
