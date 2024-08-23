@@ -1,0 +1,1455 @@
+
+	FLUTTER MOVIL:
+_______________________________________________________
+
+INDICE:
+
+[1]. Intalaciones necesarias
+    [1.1]. Android Studio
+    [1.2]. Flutter SDK
+    [1.3]. Emulador de Android
+        [1.3.1]. Probar Emulador
+    [1.4]. Probar en Dispositivo
+[2]. Que es Dart
+    [2.1]. Hola mundo en Dart
+    [2.2]. Tipos de variables
+        [2.2.1]. Dynamic type
+        [2.2.2]. Mapas
+        [2.2.3]. List, Iterables y Sets
+    [2.3]. Funciones y parámetros
+        [2.3.1]. Parámetros con nombre
+    [2.4]. Clases
+        [2.4.1]. @override
+        [2.4.2]. Name contructors
+        [2.4.3]. Getters y setters
+        [2.4.4]. Aserciones
+        [2.4.5]. Clases abstractas y enumeraciones
+        [2.4.6]. Extends
+        [2.4.7]. Implements
+        [2.4.8]. Mixins
+    [2.5]. Futures
+        [2.5.1]. Async / Await
+        [2.5.2]. Try, on, catch y finally
+    [2.6]. Streams
+        [2.6.1]. Async* / Await
+[3]. Que es Flutter
+    [3.1]. Estructura carpetas Flutter
+    [3.2]. Hola mundo en Flutter
+        [3.2.1]. Scaffold Widget
+
+_______________________________________________________
+
+	[1]. Intalaciones necesarias:
+_______________________________________________________
+
+Para ver los enlaces de las instalaciones y otras herramientas importantes ir a:
+
+    https://gist.github.com/Klerith/2917b2a21ea9c4bfa5d1070c89a89ec7
+
+_______________________________________________________
+
+	[1.1]. Android Studio:
+_______________________________________________________
+
+1) Descargar e instalar Android Studio:
+
+    https://developer.android.com/studio?hl=es-419
+
+    https://www.youtube.com/watch?v=0a0IGoNVo5k&list=PLCKuOXG0bPi0sIn-nDsi7ma9OV6MEMkxj&index=31&pp=iAQB
+
+2) Una vez descargado e instalado, lo abrimos y vamos a kla opción:
+
+    "More Actions" --> SDK Manager
+
+3) Allí en el tab "SDK Platforms" buscamos la ultima versión eestable de Android y la seleccionamos.
+
+Los que dicen Sandbox son previews antes de sacar una nueva versión(no instalar).
+
+Nota 1: Para ver las versiones de Android:
+
+    https://es.wikipedia.org/wiki/Anexo:Historial_de_versiones_de_Android
+
+Nota 2: Para instalar el SDK, mejor seleccionar una carpeta que en su nombre no tenga espacios. Por ejemplo podemos crear las siguientes carpetas:
+
+    C:\Android\Sdk
+
+4) En el tab "SDK Tools", seleccionamos o verificamos que este seleccionado lo siguiente:
+
+    - Android SDK Build-Tools
+    - Android SDK Command-line Tools (latest)
+    - Android Emulator
+    - Android SDK Platform-Tools
+    - Google USB Driver
+
+_______________________________________________________
+
+	[1.2]. Flutter SDK:
+_______________________________________________________
+
+1) Descargar e instalar Flutter SDK:
+
+    https://docs.flutter.dev/get-started/install/windows/mobile
+
+    https://www.youtube.com/watch?v=ZlmuGrBE628&list=PLCKuOXG0bPi0sIn-nDsi7ma9OV6MEMkxj&index=32&pp=iAQB
+
+Allí podemos ir al siguiente enlace:
+
+    https://docs.flutter.dev/get-started/install/windows/mobile#install-the-flutter-sdk
+
+Y hacemos click en el tab "Download and install"
+
+    https://docs.flutter.dev/get-started/install/windows/mobile#download-then-install-flutter
+
+2) Una vez descargado, lo descomprimimos en una ruta que cumpla las siguientes caracteristicas:
+
+    - No tenga caracteres espoeciales ni espacios.
+    - No requiera permisos de administrador.
+
+Por ejemplo:
+
+    C:\flutter
+
+3) Configuramos variables de entorno para Flutter:
+
+    1. Presionar tecla: 
+    
+        Windows + Pause
+
+    Se abre ventana "Acerca de" (System > About dialog).
+
+    2. Vamos a:
+
+        "Configuración Avanzada del Sistema" --> "Opciones Avanzadas" --> "Variables de entorno"
+
+        ( Advanced System Settings > Advanced > Environment Variables...)
+
+    3. En "Variables de usuario para nombreUsuario", buscamos la entrada "Path" (In the User variables for (username) section, look for the Path entry.):
+
+        - If the entry exists, double-click on it. The Edit Environment Variable dialog displays.
+
+            1- Double-click in an empty row.
+
+            2- Escribimos C:\flutter\bin.
+
+            3- Click en C:\flutter\bin.
+
+            4- Click Move Up until the Flutter entry sits at the top of the list.
+
+            5- Click OK three times.
+
+        - If the entry doesn't exist, click New.... The Edit Environment Variable dialog displays.
+
+            1- In the Variable Name box, type Path.
+
+            2- In the Variable Value box, type C:\flutter\bin
+
+            3- Click OK three times.
+
+4) Abrimos una cosola de Power Shell y escribimos el comando:
+
+    flutter doctor
+
+Esto verifica la instalación de flutter en el equipo.
+
+Deberia salir algo como lo siguiente:
+
+    Doctor summary (to see all details, run flutter doctor -v):
+    [√] Flutter (Channel stable, 3.24.0, on Microsoft Windows [Versi¢n 10.0.19045.4780], locale es-CO)
+    [√] Windows Version (Installed version of Windows is version 10 or higher)
+    [√] Android toolchain - develop for Android devices (Android SDK version 35.0.0)
+    [√] Chrome - develop for the web
+    [!] Visual Studio - develop Windows apps (Visual Studio Build Tools 2022 17.3.4)
+        X Visual Studio is missing necessary components. Please re-run the Visual Studio installer for the "Desktop
+        development with C++" workload, and include these components:
+            MSVC v142 - VS 2019 C++ x64/x86 build tools
+            - If there are multiple build tool versions available, install the latest
+            C++ CMake tools for Windows
+            Windows 10 SDK
+    [√] Android Studio (version 2024.1)
+    [√] VS Code, 64-bit edition (version 1.92.1)
+    [√] Connected device (3 available)
+    [√] Network resources
+
+    ! Doctor found issues in 1 category.
+
+La alerta de "Visual Studio" la obviamos, ya que es para desarrollo de palicaciones de flutter para escritorio.
+
+Nota: si nos marca error en "Android toolchain", puede ser por las licencias de Android, este error lo solucionamos con el comando:
+
+    flutter doctor --android-licenses
+
+Y a todo lo que salga escogemos YES.
+
+_______________________________________________________
+
+	[1.3]. Emulador de Android:
+_______________________________________________________
+
+1) Abrir Android Studio.
+
+2) Ir a: "More Actions" --> "Virtual Device Manager".
+
+3) Click en "Create Virtual Device" --> ""New Hardware Profile".
+
+4) Llenamos las opciones como si crearamos un celular:
+
+    Device Name: S23
+    Screen size: 6,9
+    Resolution: 1440 x 3088
+    RAM: 6 GB
+
+Nota: importante darle buena RAM al emulador, obviamente de acuerdo a nuestro PC.
+
+5) Click en "Finish" y luego lo seleccionamos y click en "Next". 
+
+6) Seleccionamos la versión de Android para el dispositivo (si aparece icono flecha hacia abajo, damos click para que se descargue).
+
+7) Click en "Next".
+
+Si tenemos Tarjeta Grafica independiente, en "Emulated Performance", escogemos en "Graphics": "Hardware".
+
+8) Click en "Show Advanced Settings".
+
+En "Memory and Storage":
+
+    - RAM: 6 GB
+    - Internal Storage: 4GB o más
+
+Click en "Finish".
+
+Nota: importante darle buena RAM al emulador, obviamente de acuerdo a nuestro PC.
+
+9) Podemos dar click en icono de "play" para iniciar el emulador.
+
+_______________________________________________________
+
+	[1.3.1]. Probar Emulador:
+_______________________________________________________
+
+1) Con el emulador corriendo, abrimos "Visual Studio Code".
+
+Nota: podemos instalar las extensiones de Dart y Flutter para el editor:
+
+    https://marketplace.visualstudio.com/items?itemName=Dart-Code.dart-code
+    https://marketplace.visualstudio.com/items?itemName=Dart-Code.flutter
+    https://marketplace.visualstudio.com/items?itemName=jeroen-meijer.pubspec-assist
+
+2) En "Visual Studio Code", vamos a "Ver" --> "Paleta de comandos" (Ctrl + Shift + P). Seleccionamos:
+
+    - Flutter: New Project
+
+    - Application
+
+Seleccionamos carpeta para instalación del proyecto.
+
+Nos pide nombre para el proyecto.
+
+Esto genera un proyecto de prueba.
+
+3) Nuevamente abrimos la paleta de comandos (Ctrl + Shift + P) y escribimos:
+
+    Flutter: select device
+
+Nos debe aparecer el emulador de Android que tenemos corriendo (el nombre del dispositivo creado), lo seleccionamos.
+
+En la barra inferior de "Visual Studio Code", debe aparecer el nombre del dispositivo(emulador Android).
+
+4) Presionamos en el teclado "F5".
+
+Esto instala y corre la apliacación de Flutter en el emulador.
+
+_______________________________________________________
+
+	[1.4]. Probar en Dispositivo:
+_______________________________________________________
+
+Para probar en un dispositivo físico:
+
+1) Vamos a "Settings" y en "Build number" y tocamos varias veses hasta que se desbloque el desarrollador.
+
+Nota: en Xiaomi es en la versión de MIUI que hay que tocar.
+
+2) Ir a "Settings" --> "System" --> "Developer Options" y activamos "USB debugging"
+
+Nota en Xiaomi estea en "Ajustes Adicionales" --> "Opciones de desarrollador" --> "Depuración USB"
+
+3) Conectamos el dispositivo al PC, y seguimos los mismos pasos de la sección [1.3.1]. Probar Emulador.
+_______________________________________________________
+
+	[2]. Que es Dart:
+_______________________________________________________
+
+Dart es un lenguaje de programación de desarrollo optimizado para el cliente(UI), de código abierto y orientado a objetos. Tiene sintaxis de estilo C. Se utiliza para crear una interfaz de usuario atractiva para dispositivos móviles y la web. Es la base de Flutter.
+
+Permite Hot Reload.
+_______________________________________________________
+
+	[2.1]. Hola mundo en Dart:
+_______________________________________________________
+
+1) Para ejecutar código de Dart online ir a:
+
+    https://dartpad.dev/
+
+2) Allí escribimos:
+
+    void main() {
+        var myName = 'Ricardo';
+        
+        print('Hola $myName');
+    }
+
+Acá tenemos lo siguiente, un metodo principal "main", el cual no devuelve nada "void".
+
+Se declaro una variable con "var", la cual, según lo que le asignamos, es de tipo "String".
+
+Se uso "print" y el "$" para poder interpolar la variable.
+
+Todas las sentencias deben terminar con punto y coma ";".
+
+3) Tambien podemos difinir la variable con su tipo directamente:
+
+    String myName = 'Ricardo';
+
+4) Una forma de definir una variable de valor final (de forma similar a una constante) es la siguiente:
+
+    final myName = 'Ricardo';
+
+    myName = "Mundo";
+
+Al intentar asignarle otro valor arrojaria error.
+
+Podemos asignar a una variable de valor final, un valor tardio, de la siguiente manera: 
+
+    late final myName;
+
+    myName = 'Ricardo';
+
+5) Para definir una constante:
+
+    const myName = 'Ricardo';
+
+6) Para interpolar un string que se le hace algun metodo(osea es una expresión):
+
+    print('Hola ${ myName.toUpperCase() }');
+    //imprime: RICARDO
+
+    print('Hola ${ 1 + 1 }');
+    // imprime: 2
+
+_______________________________________________________
+
+	[2.2]. Tipos de variables:
+_______________________________________________________
+
+Existen muchos tipos de variables en Dart, pero los más usados son:
+
+    void main() {
+        // String
+        final String pokemon = 'Ditto';
+        // int
+        final int hp = 100;
+        // bool
+        final bool isAlive = true;
+        //listado
+        final abilities = ['impostor'];
+        final List<String> sprites = ['ditto/front.png', 'ditto/back.png'];
+
+        print("""
+        $pokemon
+        $hp
+        $isAlive
+        $abilities
+        $sprites
+        """);
+    }
+
+Definimos las variables como "final", para que al igual que las contantes, solo tengan getters y no setter y esto las hace más rápidas.
+
+En la impresión, usamos un String multilínea (similar a un template literal de JavaScript), para tener en varias líneas un string, lo definimos con triple comillas dobles.
+
+El listado tambien lo podemos definir de las siguientes formas:
+
+    final abilities = <String>['impostor'];
+
+O tambien se puede definir así:
+
+    final List<String> abilities = ['impostor'];
+
+_______________________________________________________
+
+	[2.2.1]. Dynamic type:
+_______________________________________________________
+
+El tipo dinámico, es un tipo que se debe evitar usar, ya que permite cualquier tipo de valor (como el any de typescript):
+
+Su valor por defecto es "null".
+
+    // dynamic == null
+    dynamic errorMessage = 'Hola';
+    errorMessage = true;
+    errorMessage = [1.2,3,4,5,6];
+    errorMessage = {1.2,3,4,5,6};
+    errorMessage = () => true;
+    errorMessage = null;
+
+_______________________________________________________
+
+	[2.2.2]. Mapas:
+_______________________________________________________
+
+Los mapas son parecidos a objetos de JavaScript, con parejas clave valor (key-value pairs), las llaves y valores pueden ser de cualquier tipo de dato.
+
+En el siguiente ejemplo se define el mapa llamado "pokemon", indicamos que las "claves' son de tipo "String", y el valor es de tipo "dynamic".
+
+    void main() {
+        final Map<String, dynamic> pokemon = {
+            'name': 'Ditto',
+            'hp': 100,
+            'isAlive': true,
+            'abilities': <String>['impostor'],
+            'sprites': {
+                1: 'ditto/front.png', 
+                2: 'ditto/back.png'
+            }
+        };
+
+        print(pokemon);
+        print('Name: ${pokemon['name']}');
+        print('Sprites: ${pokemon['sprites']}');
+        print('Sprite 1: ${pokemon['sprites'][1]}');
+    }
+
+En los sprites, definimos otro mapa, no indicamos el tipo de la clave ni el valor, ya que Dart lo infiere.
+
+Para acceder al valor de una clave, se usan llaves cuadradas "[]".
+
+_______________________________________________________
+
+	[2.2.3]. List, Iterables y Sets:
+_______________________________________________________
+
+En el siguiente ejemplo tenemos un listado, el cual le aplicamos un metodo para reorganizarlo, y en ese momento deja de ser una lista y se convierte en un "iterable":
+
+    void main() {
+        final numbers = [1, 2, 3, 4, 5, 5, 5, 6, 7, 8, 9, 9, 10];
+
+        print('List original $numbers');
+        print('Length: ${numbers.length}');
+        print('Index 0: ${numbers[0]}');
+        print('First: ${numbers.first}');
+        // Acá devuelve un iterable
+        print('Reversed: ${numbers.reversed}');
+
+        final reversedNumbers = numbers.reversed;
+        print('Iterable: $reversedNumbers');
+        print('List: ${reversedNumbers.toList()}');
+        print('Set: ${reversedNumbers.toSet()}');
+
+        final numbersGreaterThan5 = numbers.where((int num) {
+            return num > 5; //true
+        });
+        
+        print('Iterable # > 5: $numbersGreaterThan5');
+        print('Set # > 5: ${numbersGreaterThan5.toSet()}');
+    }
+
+La impresión del código anterior es:
+
+    List original [1, 2, 3, 4, 5, 5, 5, 6, 7, 8, 9, 9, 10]
+    Length: 13
+    Index 0: 1
+    First: 1
+    Reversed: (10, 9, 9, 8, 7, 6, 5, 5, 5, 4, 3, 2, 1)
+
+    Iterable: (10, 9, 9, 8, 7, 6, 5, 5, 5, 4, 3, 2, 1)
+    List: [10, 9, 9, 8, 7, 6, 5, 5, 5, 4, 3, 2, 1]
+    Set: {10, 9, 8, 7, 6, 5, 4, 3, 2, 1}
+
+    Iterable # > 5: (6, 7, 8, 9, 9, 10)
+    Set # > 5: {6, 7, 8, 9, 10}
+
+Acá tenemos lo siguiente:
+
+- Lista []: Es una colección de objetos con un largo e indice.
+
+- Iterable (): la primera diferencia contra la lista, es en la impresión, el iterable tiene parentesis, mientras que la lista llaves cuadradas.
+
+    La segunda diferencia es que en el iterable no podemos acceder con indice, por ejemplo:
+    
+        reversedNumbers[0]; // NO HACER
+
+    Los iterables tienen métodos propios para recorrerlos y controlarlos, como por ejemplo los usadsos para convertilos nuevamente a lista o Set.
+
+- Set {}: es una colección no ordenada de elementos únicos (por eso en el ejemplo nos sirve para eliminar números repetidos). La diferencia con un mapa es que no tiene pares clave:valor.
+
+_______________________________________________________
+
+	[2.3]. Funciones y parámetros:
+_______________________________________________________
+
+En Dart pordemos definir funciones de dos tipos, normales con código en bloque y funciones flecha.
+
+    void main() {
+        print( greetEveryone() );
+        print('Suma: ${ addTwoNumbers(10, 20) }');
+    }
+
+    String greetEveryone() => 'Hello everyone!';
+
+    int addTwoNumbers(int a, int b){
+        return a + b;
+    }
+
+    int sumFlecha(int a, int b) => a + b;
+
+    int addTwoNumbersOptional(int a, [int? b]){
+        b ??= 0;
+        return a + b;
+    }
+
+    int addTwoNumbersOptionalBetter(int a, [int b = 0]){
+        return a + b;
+    }
+
+Acá tenemos lo siguiente:
+
+- Es necesario indicar el tipo de dato que retorna la función.
+
+- Las funciones flecha no pueden tener código en bloque (si tiene código en bloque mejor usar función normal), lo que se pone justo despues de la flecha es lo que retorna.
+
+- En los parámetros que recibe la función es mejor indicar el tipo de dato.
+
+- Para los parámetros que son opcionales se indican entre llaves cuadradas "[]", allí mismo se le indica el tipo de dato y su valor por defecto.
+
+Nota: si requerimos enviar otro parámetro opcional, podemos especificarlo de la siguiente forma:
+
+    int addTwoNumbersOptionalBetter(int a, [int b = 0, int c = 0]){
+
+_______________________________________________________
+
+	[2.3.1]. Parámetros con nombre:
+_______________________________________________________
+
+Al definir una función, podemos especificarle a un parámetro un nombre, esto nos permite enviarlo en el llamado de la funcón en cualquier orden.
+
+    void main() {
+        print( greetPerson(name: 'Ricardo') );
+        print( greetPerson(message: 'Adios ', name: 'Lina') );
+    }
+
+    String greetPerson({ required String name, String message = 'Hola, ' }){
+        return '$message$name';
+    }
+
+En la definición de la función, encerramos los parametros entre llaves "{}" para indicar que son opcionales. el párametro "name", le ponemos la palabra reservada "required", para hacerlo requerido.
+
+En el primer llamado de la función solo enviamos el nombre porque es requerido.
+
+En el segundo llamado de la función, enviamos los parametros en diferente orden en el que los recibe la función.
+
+Nota: en "https://dartpad.dev/" cuando hacemos el llamado de la función, en el momento de enviar el parámetro, podemos presionar en el teclado (Ctrl + space) para que nos salga un dropdown de autocompletado con los parámetros que recibe la función.
+
+_______________________________________________________
+
+	[2.4]. Clases:
+_______________________________________________________
+
+En Dart podemos definir una clase de la siguiente manera:
+
+    void main() {
+        final Hero wolverine = Hero('Logan', 'Regeneración');
+        
+        print(wolverine); // imprime: Instance of 'Hero'
+        print(wolverine.name); // imprime: Logan
+        print(wolverine.power); // imprime: Regeneración
+    }
+
+    class Hero {
+        String name;
+        String power;
+
+        Hero(String pName, String pPower)
+            : name = pName,
+                power = pPower;
+    }
+
+En el constructor de la clase, podemos hacerla de dos formas, recibiendo los parametros en nuevas variables y asignandolas a los atributos de la clase, o usando "this" para asignar directamente a los atributos de la clase:
+
+    class Hero {
+        String name;
+        String power;
+
+        Hero(this.name, this.power);
+    }
+
+Nota 1: Cuendo se instancia el objeto, no es necesaria la palabra reservada "new":
+
+    final Hero wolverine = new Hero('Logan', 'Regeneración');
+
+    final Hero wolverine = Hero('Logan', 'Regeneración');
+
+Nota 2: el constructortiene el mismo nombre que la clase.
+
+Al usar:
+
+    print(wolverine);
+
+Es igual que si hicieramos:
+
+    print( wolverine.toString() );
+
+_______________________________________________________
+
+	[2.4.1]. @override:
+_______________________________________________________
+
+1) Podemos indicar los parametros(del constructor) de una clase por nombre (requeridos o no, y con valores por defecto) de la siguiente manera:
+
+    void main() {
+        final Hero wolverine = Hero(power: 'garras', name: 'Logan');
+        
+        print(wolverine);
+        print(wolverine.name);
+        print(wolverine.power);
+    }
+
+    class Hero {
+        String name;
+        String power;
+
+        Hero({
+            required this.name, 
+            this.power = 'Sin poder'
+        });
+    }
+
+De esta forma al instanciar un objeto, podemos cambiar el orden en el que reciben los parametros, o sino obviar los opcionales y darles un valor por defecto.
+
+2) Usamos el @override para sobre-escribir el comportamiento por defecto de un metodo de la clase.
+
+Por ejemplo podemos sobre escribir el metodo "toString()" para poder ver las propiedades o lo que se quiera al momento de imprimir la instancia del objeto:
+
+    print( wolverine.toString() ); // imprime: Instance of 'Hero'
+
+Usamos el @override:
+
+    void main() {
+        final Hero wolverine = Hero(power: 'garras', name: 'Logan');
+        
+        print(wolverine); // imprime: Logan - garras
+    }
+
+    class Hero {
+        String name;
+        String power;
+
+        Hero({
+            required this.name, 
+            this.power = 'Sin poder'
+        });
+        
+        @override
+        String toString() {
+            return '$name - $power';
+        }
+    }
+
+Acá tenemos varias cosas interesantes:
+
+- no es necesario llamar el metodo "toString()" dentro del "print", ya que al llamarlo dentro del "print" al objeto se auto-invoca como si fuera un "String":
+
+    print(wolverine.toString()); //no es necesario
+
+- por buenas practicas se usa el "@override" para indicar que estamos sobre-escribiendo.
+
+- en el retorno de "toString()", no usamos "this.name", porque ya sabe a que atributos nos referimos.
+
+_______________________________________________________
+
+	[2.4.2]. Name contructors:
+_______________________________________________________
+
+Los "Name contructors" o contructores con nombre, son como metodos especiales que nos sirven para definir un constructor especial para nuestra clase.
+
+Por ejemplo, si recibimos un jSON de alguna petición HTTP, y queremos a partir de ese JSOn crear un objeto:
+
+    void main() {
+        final Map<String, dynamic> rawJson = {
+            'name': 'Spiderman',
+            'power': 'Trepar paredes',
+            'isAlive': true
+        };
+
+        final Hero spiderman = Hero.fromJson(rawJson);
+
+        print(spiderman);
+    }
+
+    class Hero {
+        String name;
+        String power;
+        bool isAlive;
+
+        Hero({
+            required this.name, 
+            required this.power, 
+            required this.isAlive
+        });
+
+        Hero.fromJson(Map<String, dynamic> json)
+            : name = json['name'] ?? 'No name found',
+            power = json['power'] ?? 'No power found',
+            isAlive = json['isAlive'] ?? 'No isAlive found';
+
+        @override
+        String toString() {
+            return '$name, $power, isAlive: ${isAlive ? 'YES!' : 'Nope'}';
+        }
+    }
+
+Primero tenemos el mapa "rawJson", que simula los datos obtenidos de la petición HTTP.
+
+En el contructor, cremos el "Name contructor" "Hero.fromJson", que en este caso, segun el "rawJson" que definimos, va a recibir un parametro llamado "json". Allí manejamos las validaciones, con el operador "??", para que si llega "null", le asigne el string indicado(ejemplo 'No name found').
+
+Nuevamnete sobre-escribimos el metodo "toString()", y usamos un operador ternario para imprimir si esta vivo o no.
+
+_______________________________________________________
+
+	[2.4.3]. Getters y setters:
+_______________________________________________________
+
+Para la clases podemos definir metodos getters y setters de los atributos.
+
+    void main() {
+        final mySquare = Square(side: 10);
+
+        print('área: ${mySquare.calculateArea()}');
+
+        // mySquare.side = -5; // saca el error del throw
+
+        mySquare.side = 5;
+
+        print('área: ${mySquare.area}');
+    }
+
+    class Square {
+        double _side;
+
+        Square({required double side}) 
+            : _side = side;
+
+        double calculateArea() {
+            return _side * _side;
+        }
+
+        double get area {
+            return _side * _side;
+        }
+
+        set side(double value) {
+            print('setting new value $value');
+            if (value < 0) throw 'Value must be > 0';
+
+            _side = value;
+        }
+    }
+
+Acá definimos un atributo privado "_side", se define como privado con "_".
+
+"throw" es como en return, pero lo que hace es que genera un error, osea genera una excepción.
+
+_______________________________________________________
+
+	[2.4.4]. Aserciones:
+_______________________________________________________
+
+Las aserciones permiten definir condiones o reglas que se deben cumplior en nuestra clase.
+
+En el ejemplo anterior desde que instanciamos el objeto se puede definir un lado negativo:
+
+    final mySquare = Square(side: -10);
+
+Para evitar esto, usamos el 'assert' en el constructor:
+
+    void main() {
+        final mySquare = Square(side: -10);
+
+        print('área: ${mySquare.calculateArea()}');
+    }
+
+    class Square {
+        double _side;
+
+        Square({required double side}) 
+            : assert(side >= 0, 'side must be >= 0'),
+            _side = side;
+
+        double calculateArea() {
+            return _side * _side;
+        }
+
+        double get area {
+            return _side * _side;
+        }
+
+        set side(double value) {
+            print('setting new value $value');
+            if (value < 0) throw 'Value must be > 0';
+
+            _side = value;
+        }
+    }
+
+En el segundo parametro(opcional) del "assert" indicamos el mensaje de error.
+_______________________________________________________
+
+	[2.4.5]. Clases abstractas y enumeraciones:
+_______________________________________________________
+
+Una clase abstracta es como un molde que nos sirve para crear otras clases. No se puede instanciar.
+
+    enum PlantType { nuclear, wind, water }
+
+    abstract class EnergyPlant {
+    
+        double energyLeft;
+        final PlantType type; // nuclear, wind, water
+        
+        EnergyPlant({
+            required this.energyLeft, 
+            required this.type
+        });
+        
+        void consumeEnergy(double amount);
+    }
+
+Creamos una clase abstracta "EnergyPlant", esta clase no la instanciamos(creamos un objeto de ella) en el "main", porque da error.
+
+Tambien le definimos un metodo "consumeEnergy", pero no hacemos la implementación del mismo, es decir, se define el metodo, pero no definimos el código de lo que hace, por ejemplo si le resta de la energia que tiene, etc.
+
+El "enum", nos sirve para crear un tipo de dato especifico, en el ejemplo definimos que el tipo de planta de energia solo puede ser de alguna de las 3 opciónes definidas "nuclear", "wind" o "water".
+
+_______________________________________________________
+
+	[2.4.6]. Extends:
+_______________________________________________________
+
+Con "extends" podemos heredar atributos y metodos de otra clase.
+
+En el siguiente ejemplo extendemos la clase abstracta de planta de energia, creando una planta de energia aeolica "WindPlant":
+
+
+    void main() {
+        final windPlant = WindPlant(initialEnergy: 100);
+
+        print(windPlant);
+
+        print('Energía viento restante despues de cargar telefono: ${chargePhone(windPlant)}');
+    }
+
+    double chargePhone(EnergyPlant plant) {
+        if (plant.energyLeft < 10) {
+            throw Exception('Not enough energy');
+        }
+
+        return plant.energyLeft - 10;
+    }
+
+    enum PlantType { nuclear, wind, water }
+
+    abstract class EnergyPlant {
+        double energyLeft;
+        final PlantType type; // nuclear, wind, water
+
+        EnergyPlant({
+            required this.energyLeft, 
+            required this.type
+        });
+
+        void consumeEnergy(double amount);
+    }
+
+    // extends
+    class WindPlant extends EnergyPlant {
+        WindPlant({required double initialEnergy})
+            : super(energyLeft: initialEnergy, type: PlantType.wind);
+
+        @override
+        void consumeEnergy(double amount) {
+            energyLeft -= amount;
+        }
+    }
+
+Acá tenemos lo siguiente:
+
+- Primero creamos la nueva clase "WindPlant", que extiende de "EnergyPlant", heredando sus atributos y metodos.
+
+- En el constructor recibimos "initialEnergy", el cual pasamos al constructor de su clase padre "EnergyPlant" a través de la palabra reservada "super".
+
+- En el tipo "type", definimos que es aeolica con "PlantType.wind".
+
+- Gracias a "@override", sobre-escribimos el metodo de la clase padre "consumeEnergy()".
+
+- En el metodo "main", instanciamos una planta de viento, pasandole como en ergia inicial 100.
+
+- La funcíón "chargePhone()", sirve para cargar el telefono, y aplica un principio de "inversión de dependencias", es decir, su código no le afecta que tipo de planta de energía se le pase para su ejecución, siempre va a funcionar.
+
+Nota: con "extends", se heredan TODAS las propiedades y metodos de la clase padre.
+
+_______________________________________________________
+
+	[2.4.7]. Implements:
+_______________________________________________________
+
+Con "implements" tambien heredamos metodos de la clase padre, pero a diferencia de "extends", nos permite heredar solo algunos atributos o metodos, pero nos toca "implementar" lo que requiramos.
+
+    void main() {
+    
+        final nuclearPlant = NuclearPlant(energyLeft: 1000);
+        
+        print('Energía nuclear restante despues de cargar telefono: ${chargePhone(nuclearPlant)}');
+    }
+
+    double chargePhone(EnergyPlant plant) {
+        if (plant.energyLeft < 10) {
+            throw Exception('Not enough energy');
+        }
+
+        return plant.energyLeft - 10;
+    }
+
+    enum PlantType { nuclear, wind, water }
+
+    abstract class EnergyPlant {
+        double energyLeft;
+        final PlantType type; // nuclear, wind, water
+
+        EnergyPlant({
+            required this.energyLeft, 
+            required this.type
+        });
+
+        void consumeEnergy(double amount);
+    }
+
+    // implements
+    class NuclearPlant implements EnergyPlant {
+        @override
+        double energyLeft;
+        
+        @override
+        final PlantType type = PlantType.nuclear;
+        
+        NuclearPlant({ required this.energyLeft});
+        
+        @override
+        void consumeEnergy(double amount){
+            energyLeft -= (amount * 0.5);
+        }
+    }
+
+Enm este caso con "implements" y "@override" implementamos todos los metodos y atributos de la clase padre "EnergyPlant", pero si "EnergyPlant" tueviera más metodos y atributos, "implements" nos permite heredar solo los metodos y propiedades que necesitemos.
+
+_______________________________________________________
+
+	[2.4.8]. Mixins:
+_______________________________________________________
+
+Los Mixins son un tipo de especializacíon a nustras clases.
+
+    abstract class Animal {}
+
+    abstract class Mamifero extends Animal{}
+    abstract class Ave extends Animal{}
+    abstract class Pez extends Animal{}
+
+    mixin class Volador {
+        void volar() => print('estoy volando!');
+    }
+
+    mixin class Caminante {
+        void caminar() => print('estoy caminando!');
+    }
+
+    mixin class Nadador {
+        void nadar() => print('estoy nadando!');
+    }
+
+    class Delfin extends Mamifero with Nadador {}
+    class Murcielago extends Mamifero with Volador, Caminante {}
+    class Gato extends Mamifero with Caminante {}
+
+    class Paloma extends Ave with Volador, Caminante {}
+    class Pato extends Ave with Volador, Caminante, Nadador {}
+
+    class Tiburon extends Pez with Nadador {}
+    class PezVolador extends Pez with Volador, Nadador {}
+
+    void main(){
+        final flipper = Delfin();
+        flipper.nadar();
+        
+        final donald  = Pato();
+        donald.caminar();
+    }
+
+Para usar el mixin empleamos la palabra reservada "with".
+
+_______________________________________________________
+
+	[2.5]. Futures:
+_______________________________________________________
+
+Los "Futures" son como las promesas en JavaScript. Un Future representa principalmente el resultado de una operación asíncrona. Es una promesa de que 
+pronto tendrás un valor. La promesa puede fallar y hay que manejar la excepción. Los futures son un acuerdo de que en el futuro tendrás un valor para ser usado.
+
+    void main() {
+        print('Inicio del programa');
+
+        httpGet('https://www.google.com').then((value) {
+            print(value);
+        }).catchError((err) {
+            print('Error: $err');
+        });
+
+        print('Fin del programa');
+    }
+
+    Future <String> httpGet(String url) {
+        return Future.delayed(const Duration(seconds: 1), () {
+            throw 'Error en la petición http';
+
+            // return 'Respuesta de la petición http';
+        });
+    }
+
+Creamos una función llamada "httpGet()" simulamos una petición http(en realidad no hace ninguna petición).
+
+Con el metodo "Future.delayed" simulamos una demora en la respuesta.
+
+_______________________________________________________
+
+	[2.5.1]. Async / Await:
+_______________________________________________________
+
+La palabra reservada "async" se usa en un metodo o función que va a retornar un "future". El "await" es para que espere al "future", conviertienedo el código como si fuera sincrono y secuencial.
+
+1) En el siguiente ejemplo, hacemos que el código anterior sea más entendible gracias a "async" y "await":
+
+    void main() async {
+        print('Inicio del programa');
+
+        final value = await httpGet('https://www.google.com');
+        print(value);
+
+        print('Fin del programa');
+    }
+
+    Future<String> httpGet(String url) async {
+        await Future.delayed(const Duration(seconds: 1));
+
+        // throw 'Error en la petición http';
+        
+        return 'Respuesta de la petición http';
+    }
+
+La función "httpGet()" y el metodo "main()" los marcamos como "async", para que nos permita esperar("await") al "future".
+
+En "httpGet()" esperamos 1 segundo antes de retornar la respuesta.
+
+En "main()" esperamos a tener la respuesta que retorna la función "httpGet()", antes de ejecutar el siguiente código, en este caso los dos "prints". 
+
+Si ejecutamos el código anterior, imprimira lo siguiente:
+
+    Inicio del programa
+    Respuesta de la petición http
+    Fin del programa
+
+2) Si descomentamos la línea de la excepción "throw ...", y comentamos el "return", hacemos que el Future devuelva una respuesta fallida, pero en el "main" es necesario manejar el caso de que se falle ne la respuesta, esto lo hacemos con el "try" y "catch":
+
+    void main() async {
+        print('Inicio del programa');
+        
+        try {
+            final value = await httpGet('https://www.google.com');
+            print(value);
+        } catch(err){
+            print('Sucedio un Error: $err');
+        }
+
+        print('Fin del programa');
+    }
+
+    Future<String> httpGet(String url) async {
+        await Future.delayed(const Duration(seconds: 1));
+
+        throw 'Error en la petición http';
+
+        //   return 'Respuesta de la petición http';
+    }
+
+Con el "try" manejamos la respuesta correcta sin problemnas del future, y en caso de que haya una excepción, la capturamos con "catch".
+
+_______________________________________________________
+
+	[2.5.2]. Try, on, catch y finally:
+_______________________________________________________
+
+Ademas de "try" y "catch", existen "on" y "finally" que nos permiten manejar diferentes situaciones de nuestro código asincrono:
+
+    void main() async {
+        print('Inicio del programa');
+        
+        try {
+            final value = await httpGet('https://www.google.com');
+            print('Exito!!!: $value');
+        } on Exception catch(err){
+            print('Tenemos una Exception: $err');
+        }catch(err){
+            print('Sucedio un Error: $err');
+        } finally {
+            print('Fin del try y catch');
+        }
+
+        print('Fin del programa');
+    }
+
+    Future<String> httpGet(String url) async {
+        await Future.delayed(const Duration(seconds: 1));
+        
+        throw Exception('No hay parámetros en la URL');
+
+        //   throw 'Error en la petición http';
+
+        //   return 'Respuesta de la petición http';
+    }
+
+En "finally", colocamos todo el código que queremos que se ejecute despues del "try" y "catch", sin importar si fue un exito o error, se va a ejecutar si o si, al obtener la respuesta del "Future".
+
+En la función "httpGet()", generamos una nueva "Exception", para capturarla gracias al "on", que nos permite capturar un tipo de error especifico, en cambio el "catch", nos permite capturar un error que no esperabamos.
+
+En el "on", podemos especificar un nuevo "catch", para capturar el mensaje enviado en la "Exception".
+
+Si ejecutamos el código se imprime:
+
+    Inicio del programa
+    Tenemos una Exception: Exception: No hay parámetros en la URL
+    Fin del try y catch
+    Fin del programa
+
+_______________________________________________________
+
+	[2.6]. Streams:
+_______________________________________________________
+
+Los Streams proporcionan una secuencia asíncrona de datos. Para poder transmitir o hacer stream, es necesario que se este escuchando ("listen").
+
+    void main(){
+        emitNumbers().listen((value) {
+            print('Stream value: $value');
+        });
+    }
+
+
+    Stream<int> emitNumbers(){
+        return Stream.periodic(const Duration(seconds:1), (value){
+            // print('desde periodic $value');
+            return value;
+        });
+    }
+
+La función "emitNumbers()" devuelve un stream de enteros. Usa el metoodo ".periodic" para emitir cada segundo(se puede cambiar el tiempo) lo que le indiquemos.
+
+En el metodo "main" escuchamos con "listen" el stream de datos.
+
+El stream solo se detiene si: 
+
+- El que escucha deja de escuchar.
+- Es un stream limitado.
+
+Por ejemplo para limitar el stream usamos "take":
+
+    Stream<int> emitNumbers(){
+    return Stream.periodic(const Duration(seconds:1), (value){
+            // print('deesde periodica $value');
+            return value;
+        }).take(5);
+    }
+
+De esta forma solo se transmite 5 veses, del número 0 al 4.
+
+_______________________________________________________
+
+	[2.6.1]. Async* / Await:
+_______________________________________________________
+
+Así como el async, transforma una función o método en una función asíncrona que regresa un "Future", el "async*" transforma el retorno a un "stream", y en lugar de un "return", se usa "yield" para emitir un valor del "Stream".
+
+    void main() {
+        emitNumbers().listen((int value) {
+            print('Stream value: $value');
+        });
+    }
+
+
+    Stream<int> emitNumbers() async*{
+        final valuesToEmit = [1,2,3,4,5];
+        
+        for(int i in valuesToEmit) {
+            await Future.delayed( const Duration(seconds:1));
+            yield i;
+        }
+    }
+_______________________________________________________
+
+	[3]. Que es Flutter:
+_______________________________________________________
+
+Flutter es un SDK portable - Open source framework - UI Widget Library. Para crear aplicaciones compiladas de forma nativa, multi-plataforma con un único código base.
+
+Esta inspirado en React con los componentes, en Flutter los componentes se llaman Widgets.
+
+_______________________________________________________
+
+	[3.1]. Estructura carpetas Flutter:
+_______________________________________________________
+
+Creamos un proyecto nuevo, en "Visual Studio Code", vamos a "Ver" --> "Paleta de comandos" (Ctrl + Shift + P). Seleccionamos:
+
+    - Flutter: New Project
+
+    - Application
+
+Seleccionamos carpeta para instalación del proyecto.
+
+Nos pide nombre para el proyecto.
+
+Nota: el nombre del proyecto tiene que ir en minusculas y sin espacios, en vez de espacios se puede usar guión bajo "_".
+
+El proyecto tiene la siguiente estructura:
+
+    /.dart_tool/ --> carpeta usada por cli, normalmente trae configuraciones, pero no se manipula.
+
+    /.idea/ --> carpeta con configuraciones para trabajar con intellige idea(otro editor de código). No se manipula.
+
+    /android/ --> carpeta con el código de la aplicación para android.
+
+    /build/ --> carpeta 
+
+    /ios/ --> carpeta con código xcode de aplicación para iOs.
+
+    /lib/ --> carpeta donde trabajamos, contiene el código fuente de nuestra aplicación. Contiene el archivo "main.dart"
+
+    /linux/ --> carpeta con el código de la aplicación para Linux.
+
+    /macos/ --> carpeta con el código de la aplicación para MacOs.
+
+    /test/ --> carpeta se crean archivos al igual que los que estan en la carpeta "lib", para hacer testeos de la aplicación.
+
+    /web/ --> carpeta con el código de la aplicación para la Web.
+
+    /windows/ --> carpeta con el código de la aplicación para Windows.
+
+    .gitignore --> archivo para ignorar carpetas u otros arcxhivos del control versiones.
+
+    .metadata --> archivo de seguimiento para propiedades del proyecto. La herramienta Flutter lo utiliza para evaluar capacidades y realizar actualizaciones, etc. No debe editarse manualmente.
+
+    analysis_options.yaml --> archivo que configura el analizador, que analiza estáticamente el código Dart para verificar errores, advertencias y lints.
+
+    flutter_application_1.iml --> archivo con el numbre de nuestro proyecto, utilizado por intellige idea.
+
+    pubspec.lock --> archivo para hacer seguimiento de las verionmes usadas en el proyecto. No debe editarse manualmente.
+
+    pubspec.yaml --> archivo de configuración, tener cuidado con los espacios e identaciones. En este archivo podemos configurar "assets"(imagenes, fuentes, carpetas, etc.) para usar en nuestro proyecto.
+
+    README.md --> archivo de documentación para el repositorio.
+
+_______________________________________________________
+
+	[3.2]. Hola mundo en Flutter:
+_______________________________________________________
+
+1) Vamos al archivo principal "lib\main.dart" y borramos el código que trae por defecto:
+
+    import 'package:flutter/material.dart';
+
+    void main() {
+        runApp(MyApp());
+    }
+
+    class MyApp extends StatelessWidget{
+        @override
+        Widget build(BuildContext context) {
+            return MaterialApp(
+            home: Text('Hola mundo'),
+            );
+        }
+    }
+
+En el metodo principal, apenas escribimos el llamado a "runApp()", se importa el paquete de "flutter/material.dart". 
+En el metodo "main", llamamos al Widget principal de nuestra aplicación, en este caso "MyApp", que extiende de "StatelessWidget" (widget sin estado).
+
+Sobre-escribimos el metodo "build" para construir el widget, este metodo retorna un widget y recibe un "BuildContext".
+
+Retornamos nuestra aplicación "MaterialApp".
+
+2) Para ver nuestro "Hola mundo" en el emulador de Android: Abrimos la "Paleta de comandos" de "Visual Studio Code" (Ctrl + Shift + P) y escribimos:
+
+    flutter: Launch Emulator
+
+Luego seleccionamos el dispositivo, y presionamos "F5" en el teclado, que es lo mismo que hacer:
+
+    Ir a menú superior de "Visual Studio Code", Ejecutar --> Iniciar depuración
+
+O en el panel del Explorador de archivos de "Visual Studio Code", click derecho sobre el archivo "lib\main.dart" --> Start Debugging
+
+
+3) Si queremos centrar el texto en toda la pantalla del dispositivo, dejamos el curasor sobre "Text()", y presionamos en el teclado "ctrl + ." --> More Actions --> Wrap with Center, esto envuelve ese widget de texto en otro widget de centrado y queda nuestro código así::
+
+    class MyApp extends StatelessWidget{
+        @override
+        Widget build(BuildContext context) {
+            return MaterialApp(
+            home: Center(child: Text('Hola mundo')),
+            );
+        }
+    }
+
+Nota: Flutter cuenta con "Hot reload", por lo que al hacer culaquier cambio en el archivo "lib\main.dart", lo vemos inmediatamente en el emulador.
+
+_______________________________________________________
+
+	[3.2.1]. Scaffold Widget:
+_______________________________________________________
+
+El "Scaffold Widget", es un widget base para nuestra aplicación, que nos permite tener un esqueleto base, con fondo de acuerdo al tema (claro u oscuro). Este widget implementa un diseño básico de material.
+
+    void main() {
+        runApp(const MyApp());
+    }
+
+    class MyApp extends StatelessWidget{
+        const MyApp({super.key});
+
+        @override
+        Widget build(BuildContext context) {
+            return const MaterialApp(
+                debugShowCheckedModeBanner: false,
+                home: Scaffold(
+                    body: Center(child: Text('Hola mundo')),
+                )
+            );
+        }
+    }
+
+Acá hicimos lo siguiente:
+
+- Añadimos en "MyApp" un constructor con un key, que es necesario para que se nos quiten los warnings de la app, y para identificación del widget, ya que cada widget debe tener su key para identificarlo, porque puede tener otros widgets hijos.
+
+- Como de momento nuestra aplicación no cambia, la convertimos en constante "const".
+
+- Envolvmos el texto centrado que habiamos hecho antes en un widget "Scaffold", y en el "body" de este colocamos esos otros widgets.
+
+- Con "debugShowCheckedModeBanner: false" eliminamos un label de "debug" que aparece en la esquina superior derecha del emulador.
+
+Nota 1: cuando el editor nos mustre warnings en el código, podemos presionar en el teclado "Ctrl + ." para corregir el código.
+
+Nota 2: si en el editor dejamos el cursor dentro de "MaterialApp(" y presionamos en el teclado "Ctrl + space", y escribimos "banner", nos sale el autocompletado de "debugShowCheckedModeBanner: false". Tambien sirve para el widget "Scaffold".
+_______________________________________________________
+
+	[3.3]. Estructura de Directorios:
+_______________________________________________________
+
+La estructura de directorios para nuevas pantallas depoende mucho de la arquitectura de sofware que se va a implementar. Sin embargo, se creara una estructura para que poco a poco podamos migrar a cualquier arquitectura de software(mientras se aprende más de Flutter).
+
+1) Dentro de la carpeta "/lib", creamos una nueva carpeta llamada "presentation", que tendra todo lo que tenga que ver con componentes visuales de nuestra aplicación.
+
+2) Dentro de la carpeta "presentation", creamos la carpeta "screens", que tendra las diferentes pantallas de la aplicación, y estas pantallas tendran un widget "Scaffold".
+
+3) Como tendremos varias pantallas de contadores, creamos dentro de "screens" una carpeta llamada "counter".
+
+4) Dentro de "lib\presentation\screens" creamos el archivo "counter_screen.dart":
+
+    import 'package:flutter/material.dart';
+
+    class CounterScreen extends StatelessWidget {
+        const CounterScreen({super.key});
+
+        @override
+        Widget build(BuildContext context) {
+            return const Scaffold(
+            body: Center(child: Text('Hola mundo')),
+            );
+        }
+    }
+
+Nota: para que "Visual Studio Code" nos genere una base de un StatelessWidget, escribimos: 
+
+    stless
+
+Y debe aparecernos la opción en el popup de autocompletado.
+
+5) En el archivo "main.dart" importamos y usamos la pantalla creada:
+
+    import 'package:flutter/material.dart';
+    import 'package:flutter_application_1/presentation/screens/counter/counter_screen.dart';
+
+    void main() {
+        runApp(const MyApp());
+    }
+
+    class MyApp extends StatelessWidget{
+        const MyApp({super.key});
+
+        @override
+        Widget build(BuildContext context) {
+            return const MaterialApp(
+                debugShowCheckedModeBanner: false,
+                home: CounterScreen()
+            );
+        }
+    }
+_______________________________________________________
+
+	[3.3.1]. Diseño pantalla Contador:
+_______________________________________________________
+
+Dentro del archivo "counter_screen.dart":
+
+    import 'package:flutter/material.dart';
+
+    class CounterScreen extends StatelessWidget {
+        const CounterScreen({super.key});
+
+        @override
+        Widget build(BuildContext context) {
+            return Scaffold(
+            body: const Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                        Text('10', style: TextStyle(fontSize: 160, fontWeight: FontWeight.w100),),
+                        Text('Clicks', style: TextStyle(fontSize: 25),)
+                    ],
+                )
+            ),
+            floatingActionButton: FloatingActionButton(
+                onPressed: (){
+
+                },
+                child: const Icon( Icons.plus_one),
+                ),
+            );
+        }
+    }
+
+Dentro del widget "Center", creamos como sun hijo una columna. La cual centramos con su propiedad "mainAxisAlignment", si no hacemos esto, sale arriba del dispositivo, en la barra donde se ve la hora e infoi de la bateria.
+
+Con "children" definimos sus widgets hijos, que en este caso tiene dos hijos de texto, a los cuales modificas el tamaño de fuente y peso con las propiedades correspondientes.
+
+El "Scaffold" tambien nos permite definir un boton flotante "floatingActionButton", el cual definimos que de hijo tenga un icono.
+
+Nota 1: presionar en el teclado "Ctrl + espacio" dentro de un widget para ver las propieades u opciones que tiene o necesita.
+
+Nota 2: presionar en el teclado "Ctrl + ." sobre un widget para envolverlo con otro widget, eliminar su contenedor, etc..

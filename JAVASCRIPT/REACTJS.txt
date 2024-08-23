@@ -12,6 +12,7 @@ INDICE:
     [1.5]. Renderizado condicional
     [1.6]. Renderizado de listas
     [1.7]. Manejando Eventos
+    [1.8]. Formularios
 [2]. Vite
     [2.1]. Archivos Principales
 [3]. Proyecto
@@ -405,7 +406,18 @@ Nota 1: todos los eventos empiezan con el prefijo "on".
 
 Nota 2: por convenciones la función manejadora del evento debemos nombrarla "handleElementoEvento", para que sea más descriptiva e indique que es un manejador de eventos.
 
-Nota 3: para más info del manejo de ventos ir a:
+Nota 3: si la función que maneja el evento tiene más de una línea de codigo, es mejor crear función, si no es así, se puede manejar ahí mismo:
+
+    export default function Button() {
+
+        return (
+            <button onClick={() => alert('¡Me hiciste clic!')} >
+                Hazme clic
+            </button>
+        );
+    }
+
+Nota 4: para más info del manejo de ventos ir a:
 
     https://es.react.dev/learn/responding-to-events
 
@@ -436,6 +448,150 @@ En el componente padre:
 Nota: para más info ir a:
 
     https://es.react.dev/learn/responding-to-events#passing-event-handlers-as-props
+
+_______________________________________________________
+
+	[1.8]. Formularios:
+_______________________________________________________
+
+Para el uso de formularios podemos hacerlo de una manera facil, como si fuera HTML normal.
+
+1) En un componente creamos la estructura basica del formulario:
+
+    const SignupForm = () => {
+        return (
+            <form>
+                <div className="form-field">
+                    <label>
+                        Name
+                        <input value={} />
+                    </label>
+                </div>
+                <div className="form-field">
+                    <label>
+                        Age
+                        <input value={} />
+                    </label>
+                </div>
+                <div className="form-field">
+                    <label>
+                        Address
+                        <input value={} />
+                    </label>
+                </div>
+                <div className="form-field">
+                    <label>
+                        Zipcode
+                        <input value={} />
+                    </label>
+                </div>
+                <div className="form-field">
+                    <label>
+                        Phone
+                        <input value={} />
+                    </label>
+                </div>
+            </form>
+        );
+    };
+
+    export default SignupForm;
+
+2) Para cada campo del formulario creamos un estado con su respectivo setter, y tambien manejamos el evento "onChange", para poder actualizar los valores de cada input:
+
+    import { useState } from "react";
+
+    const SignupForm = () => {
+        const [name, setName] = useState('');
+        const [age, setAge] = useState('');
+        const [address, setAddress] = useState('');
+        const [zipcode, setZipcode] = useState('');
+        const [phone, setPhone] = useState('');
+
+        return (
+            <form>
+                <div className="form-field">
+                    <label>
+                        Name
+                        <input value={name} onChange={(event) => setName(event.target.value)} />
+                    </label>
+                </div>
+                <div className="form-field">
+                    <label>
+                        Age
+                        <input value={age} onChange={(event) => setAge(event.target.value)} />
+                    </label>
+                </div>
+                <div className="form-field">
+                    <label>
+                        Address
+                        <input value={address} onChange={(event) => setAddress(event.target.value)} />
+                    </label>
+                </div>
+                <div className="form-field">
+                    <label>
+                        Zipcode
+                        <input value={zipcode} onChange={(event) => setZipcode(event.target.value)} />
+                    </label>
+                </div>
+                <div className="form-field">
+                    <label>
+                        Phone
+                        <input value={phone} onChange={(event) => setPhone(event.target.value)} />
+                    </label>
+                </div>
+            </form>
+        );
+    };
+
+3) Para obtener los valores del formulario, manejamos las acciones del formulario con sus botones:
+
+    const handleClearClick = () =>{
+        setName('');
+        setAge('');
+        setAddress('');
+        setZipcode('');
+        setPhone('');
+    };
+
+    const handleSubmitForm = (event) =>{
+        event.preventDefault();
+
+        console.log('submit:', {
+            name,
+            age,
+            address,
+            zipcode,
+            phone
+        });
+    };
+
+    return (
+        <form onSubmit={handleSubmitForm}>
+
+            <div className="form-field">
+                <label>
+                    Name
+                    <input value={name} onChange={(event) => setName(event.target.value)} required/>
+                </label>
+            </div>
+
+            ...
+
+            <div className="form__actions">
+                <button type="button" onClick={handleClearClick} >Clear</button>
+                <button type="submit">Submit</button>
+            </div>
+        </form>
+    );
+
+
+Nota 1: es necesario indicar el type="button" en los botones que realizan otras acciones diferentes a "submit", para evitar que hagan submit del formulario.
+
+Nota 2: Al colocar un boton con type="submit", no se escucha el click de dicho boton, sino que se empieza a manejar el evento "onSubmit" del formulario. En su manejador hacemos "event.preventDefault();" para evitar que se recargue la página.
+
+Nota 3: podemos añadir validaciones sencillas de HTML5, como el atributo "required" en los campos del formulario.
+
 _______________________________________________________
 
 	[2]. Vite:
@@ -959,7 +1115,48 @@ Creamos un estado "searchTerm" con su respectivo setter. Al "Navbar", le pasamos
 
     export default Navbar;
 
-Acá des estructuramos e las props la función "onSearch", la cual usamos en la función que va a escuchar cuando presionamos en el teclado la tecla "Enter" para enviar la busqueda, con esto se actualiza el estado del padre.
+Acá des estructuramos de las props la función "onSearch", la cual usamos en la función que va a escuchar cuando presionamos en el teclado la tecla "Enter" para enviar la busqueda, con esto se actualiza el estado del padre.
 
 3) Filtramos la busqueda en el componente "Events":
 
+    const Events = ({ searchTerm }) => {
+        const [data] = useState(eventsJSON);
+        const events = data._embedded.events;
+        
+        const handleEventItemClick = (id) => {
+            console.log('Evento clickeado: ', id);
+        };
+
+        const renderEvents = () => {
+            let eventsFiltered = events;
+            
+            if(searchTerm.length > 0){
+                eventsFiltered = eventsFiltered.filter((item) => item.name.toLocaleLowerCase().includes(searchTerm));
+            }
+
+            return eventsFiltered.map((eventItem) => (
+                <EventItem 
+                    key={`event-item-${eventItem.id}`}
+                    name={eventItem.name}
+                    info={eventItem.info}
+                    image={eventItem.images[0].url}
+                    onEventClick={handleEventItemClick}
+                    id={eventItem.id}
+                />
+            ));
+        };
+
+        return (
+            <div>
+                <p>Eventos</p>
+
+                { renderEvents() }
+            </div>
+        );
+    };
+
+Recibimos en las props la busqueda, para tener más limpio el return, llamamos la función "renderEvents()", encargada de filtrar y renderizar los ítems. Comprueba si existe la busqueda:
+
+    if(searchTerm.length > 0)
+
+Y luego utiliza la función de arrays "filter", que se usa de manera similar a la función "map". Devuelve el/los ítem(s) que incluyan en su nombre el termino de busqueda "searchTerm". En caso de no existir el termino de busqueda, devuelve todos los ítems.
