@@ -2705,7 +2705,7 @@ De igual forma como expandimos columnas, usamos "grid-row-start", "grid-row-end"
 		grid-row: 2 / 4;
 	}
 
-Nota: en este ejemplo, se le asigna un "grid-column" a la "Caja2"(.green), porque si no s ele asigna, se ubica en la "línea de columna 1", y desplaza la "Caja1"(.red) "Caja4", "Caja5" y "Caja6" hasta la "línea de fila 4 y 5".
+Nota: en este ejemplo, se le asigna un "grid-column" a la "Caja2"(.green), porque si no se le asigna, se ubica en la "línea de columna 1", y desplaza la "Caja1"(.red) "Caja4", "Caja5" y "Caja6" hasta la "línea de fila 4 y 5".
 _______________________________________________________
 
 	[7.5.7]. Plantilla de Área:

@@ -31,7 +31,7 @@ _______________________________________________________
 - ReactJs es una librería para el desarrollo de Frontend moderno. 
 - No es un framework. 
 - Se basa en componentes. 
-- Es declarativa, se le indica que renderizar.
+- Es declarativa, se le indica que renderizar, no como hacerlo (imperativa).
 - Funciona usando el Virtual DOM.
 
 _______________________________________________________
@@ -170,6 +170,8 @@ _______________________________________________________
 
 	[1.3]. State:
 _______________________________________________________
+
+React tiene un conjunto de funciones llamadas ganchos(hooks). Los ganchos te permiten agregar lógica adicional, como el estado(state), a tus componentes. Puedes pensar en el estado como cualquier información en tu interfaz de usuario que cambia con el tiempo, generalmente activado por la interacción del usuario.
 
 Para que un componente sea reactivo, podemos declarar estados, usando "useState" podemos obtener un valor o setearlo
 

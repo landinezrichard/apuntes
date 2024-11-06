@@ -36,6 +36,9 @@ INDICE:
     [3.1]. Estructura carpetas Flutter
     [3.2]. Hola mundo en Flutter
         [3.2.1]. Scaffold Widget
+    [3.3]. Estructura de Directorios
+        [3.3.1]. Diseño pantalla Contador
+            [3.3.1.1]. Material Design
 
 _______________________________________________________
 
@@ -57,7 +60,7 @@ _______________________________________________________
 
     https://www.youtube.com/watch?v=0a0IGoNVo5k&list=PLCKuOXG0bPi0sIn-nDsi7ma9OV6MEMkxj&index=31&pp=iAQB
 
-2) Una vez descargado e instalado, lo abrimos y vamos a kla opción:
+2) Una vez descargado e instalado, lo abrimos y vamos a la opción:
 
     "More Actions" --> SDK Manager
 
@@ -479,7 +482,7 @@ Acá tenemos lo siguiente:
     
         reversedNumbers[0]; // NO HACER
 
-    Los iterables tienen métodos propios para recorrerlos y controlarlos, como por ejemplo los usadsos para convertilos nuevamente a lista o Set.
+    Los iterables tienen métodos propios para recorrerlos y controlarlos, como por ejemplo los usados para convertirlos nuevamente a lista o Set.
 
 - Set {}: es una colección no ordenada de elementos únicos (por eso en el ejemplo nos sirve para eliminar números repetidos). La diferencia con un mapa es que no tiene pares clave:valor.
 
@@ -589,7 +592,7 @@ Nota 1: Cuendo se instancia el objeto, no es necesaria la palabra reservada "new
 
     final Hero wolverine = Hero('Logan', 'Regeneración');
 
-Nota 2: el constructortiene el mismo nombre que la clase.
+Nota 2: el constructor tiene el mismo nombre que la clase.
 
 Al usar:
 
@@ -672,7 +675,7 @@ _______________________________________________________
 
 Los "Name contructors" o contructores con nombre, son como metodos especiales que nos sirven para definir un constructor especial para nuestra clase.
 
-Por ejemplo, si recibimos un jSON de alguna petición HTTP, y queremos a partir de ese JSOn crear un objeto:
+Por ejemplo, si recibimos un JSON de alguna petición HTTP, y queremos a partir de ese JSON crear un objeto:
 
     void main() {
         final Map<String, dynamic> rawJson = {
@@ -712,7 +715,7 @@ Primero tenemos el mapa "rawJson", que simula los datos obtenidos de la petició
 
 En el contructor, cremos el "Name contructor" "Hero.fromJson", que en este caso, segun el "rawJson" que definimos, va a recibir un parametro llamado "json". Allí manejamos las validaciones, con el operador "??", para que si llega "null", le asigne el string indicado(ejemplo 'No name found').
 
-Nuevamnete sobre-escribimos el metodo "toString()", y usamos un operador ternario para imprimir si esta vivo o no.
+Nuevamente sobre-escribimos el metodo "toString()", y usamos un operador ternario para imprimir si esta vivo o no.
 
 _______________________________________________________
 
@@ -764,7 +767,7 @@ _______________________________________________________
 	[2.4.4]. Aserciones:
 _______________________________________________________
 
-Las aserciones permiten definir condiones o reglas que se deben cumplior en nuestra clase.
+Las aserciones permiten definir condiones o reglas que se deben cumplir en nuestra clase.
 
 En el ejemplo anterior desde que instanciamos el objeto se puede definir un lado negativo:
 
@@ -891,7 +894,7 @@ Acá tenemos lo siguiente:
 
 - Gracias a "@override", sobre-escribimos el metodo de la clase padre "consumeEnergy()".
 
-- En el metodo "main", instanciamos una planta de viento, pasandole como en ergia inicial 100.
+- En el metodo "main", instanciamos una planta de viento, pasandole como energia inicial 100.
 
 - La funcíón "chargePhone()", sirve para cargar el telefono, y aplica un principio de "inversión de dependencias", es decir, su código no le afecta que tipo de planta de energía se le pase para su ejecución, siempre va a funcionar.
 
@@ -949,7 +952,7 @@ Con "implements" tambien heredamos metodos de la clase padre, pero a diferencia 
         }
     }
 
-Enm este caso con "implements" y "@override" implementamos todos los metodos y atributos de la clase padre "EnergyPlant", pero si "EnergyPlant" tueviera más metodos y atributos, "implements" nos permite heredar solo los metodos y propiedades que necesitemos.
+En este caso con "implements" y "@override" implementamos todos los metodos y atributos de la clase padre "EnergyPlant", pero si "EnergyPlant" tuviera más metodos y atributos, "implements" nos permite heredar solo los metodos y propiedades que necesitemos.
 
 _______________________________________________________
 
@@ -1066,7 +1069,7 @@ Si ejecutamos el código anterior, imprimira lo siguiente:
     Respuesta de la petición http
     Fin del programa
 
-2) Si descomentamos la línea de la excepción "throw ...", y comentamos el "return", hacemos que el Future devuelva una respuesta fallida, pero en el "main" es necesario manejar el caso de que se falle ne la respuesta, esto lo hacemos con el "try" y "catch":
+2) Si descomentamos la línea de la excepción "throw ...", y comentamos el "return", hacemos que el Future devuelva una respuesta fallida, pero en el "main" es necesario manejar el caso de que se falle en la respuesta, esto lo hacemos con el "try" y "catch":
 
     void main() async {
         print('Inicio del programa');
@@ -1159,7 +1162,7 @@ Los Streams proporcionan una secuencia asíncrona de datos. Para poder transmiti
         });
     }
 
-La función "emitNumbers()" devuelve un stream de enteros. Usa el metoodo ".periodic" para emitir cada segundo(se puede cambiar el tiempo) lo que le indiquemos.
+La función "emitNumbers()" devuelve un stream de enteros. Usa el metodo ".periodic" para emitir cada segundo(se puede cambiar el tiempo) lo que le indiquemos.
 
 En el metodo "main" escuchamos con "listen" el stream de datos.
 
@@ -1257,9 +1260,9 @@ El proyecto tiene la siguiente estructura:
 
     analysis_options.yaml --> archivo que configura el analizador, que analiza estáticamente el código Dart para verificar errores, advertencias y lints.
 
-    flutter_application_1.iml --> archivo con el numbre de nuestro proyecto, utilizado por intellige idea.
+    flutter_application_1.iml --> archivo con el nombre de nuestro proyecto, utilizado por intellige idea.
 
-    pubspec.lock --> archivo para hacer seguimiento de las verionmes usadas en el proyecto. No debe editarse manualmente.
+    pubspec.lock --> archivo para hacer seguimiento de las versiones usadas en el proyecto. No debe editarse manualmente.
 
     pubspec.yaml --> archivo de configuración, tener cuidado con los espacios e identaciones. En este archivo podemos configurar "assets"(imagenes, fuentes, carpetas, etc.) para usar en nuestro proyecto.
 
@@ -1305,7 +1308,7 @@ Luego seleccionamos el dispositivo, y presionamos "F5" en el teclado, que es lo 
 O en el panel del Explorador de archivos de "Visual Studio Code", click derecho sobre el archivo "lib\main.dart" --> Start Debugging
 
 
-3) Si queremos centrar el texto en toda la pantalla del dispositivo, dejamos el curasor sobre "Text()", y presionamos en el teclado "ctrl + ." --> More Actions --> Wrap with Center, esto envuelve ese widget de texto en otro widget de centrado y queda nuestro código así::
+3) Si queremos centrar el texto en toda la pantalla del dispositivo, dejamos el cursor sobre "Text()", y presionamos en el teclado "ctrl + ." --> More Actions --> Wrap with Center, esto envuelve ese widget de texto en otro widget de centrado y queda nuestro código así:
 
     class MyApp extends StatelessWidget{
         @override
@@ -1316,7 +1319,7 @@ O en el panel del Explorador de archivos de "Visual Studio Code", click derecho 
         }
     }
 
-Nota: Flutter cuenta con "Hot reload", por lo que al hacer culaquier cambio en el archivo "lib\main.dart", lo vemos inmediatamente en el emulador.
+Nota: Flutter cuenta con "Hot reload", por lo que al hacer cualquier cambio en el archivo "lib\main.dart", lo vemos inmediatamente en el emulador.
 
 _______________________________________________________
 
@@ -1349,11 +1352,11 @@ Acá hicimos lo siguiente:
 
 - Como de momento nuestra aplicación no cambia, la convertimos en constante "const".
 
-- Envolvmos el texto centrado que habiamos hecho antes en un widget "Scaffold", y en el "body" de este colocamos esos otros widgets.
+- Envolvimos el texto centrado que habiamos hecho antes en un widget "Scaffold", y en el "body" de este colocamos esos otros widgets.
 
 - Con "debugShowCheckedModeBanner: false" eliminamos un label de "debug" que aparece en la esquina superior derecha del emulador.
 
-Nota 1: cuando el editor nos mustre warnings en el código, podemos presionar en el teclado "Ctrl + ." para corregir el código.
+Nota 1: cuando el editor nos muestre warnings en el código, podemos presionar en el teclado "Ctrl + ." para corregir el código.
 
 Nota 2: si en el editor dejamos el cursor dentro de "MaterialApp(" y presionamos en el teclado "Ctrl + space", y escribimos "banner", nos sale el autocompletado de "debugShowCheckedModeBanner: false". Tambien sirve para el widget "Scaffold".
 _______________________________________________________
@@ -1361,7 +1364,7 @@ _______________________________________________________
 	[3.3]. Estructura de Directorios:
 _______________________________________________________
 
-La estructura de directorios para nuevas pantallas depoende mucho de la arquitectura de sofware que se va a implementar. Sin embargo, se creara una estructura para que poco a poco podamos migrar a cualquier arquitectura de software(mientras se aprende más de Flutter).
+La estructura de directorios para nuevas pantallas depende mucho de la arquitectura de software que se va a implementar. Sin embargo, se creara una estructura para que poco a poco podamos migrar a cualquier arquitectura de software(mientras se aprende más de Flutter).
 
 1) Dentro de la carpeta "/lib", creamos una nueva carpeta llamada "presentation", que tendra todo lo que tenga que ver con componentes visuales de nuestra aplicación.
 
@@ -1379,7 +1382,7 @@ La estructura de directorios para nuevas pantallas depoende mucho de la arquitec
         @override
         Widget build(BuildContext context) {
             return const Scaffold(
-            body: Center(child: Text('Hola mundo')),
+                body: Center(child: Text('Hola mundo')),
             );
         }
     }
@@ -1444,12 +1447,97 @@ Dentro del archivo "counter_screen.dart":
         }
     }
 
-Dentro del widget "Center", creamos como sun hijo una columna. La cual centramos con su propiedad "mainAxisAlignment", si no hacemos esto, sale arriba del dispositivo, en la barra donde se ve la hora e infoi de la bateria.
+Dentro del widget "Center", creamos como su hijo una columna. La cual centramos con su propiedad "mainAxisAlignment", si no hacemos esto, sale arriba del dispositivo, en la barra donde se ve la hora e info de la bateria.
 
-Con "children" definimos sus widgets hijos, que en este caso tiene dos hijos de texto, a los cuales modificas el tamaño de fuente y peso con las propiedades correspondientes.
+Con "children" definimos sus widgets hijos, que en este caso tiene dos hijos de texto, a los cuales modifica el tamaño de fuente y peso con las propiedades correspondientes.
 
 El "Scaffold" tambien nos permite definir un boton flotante "floatingActionButton", el cual definimos que de hijo tenga un icono.
 
 Nota 1: presionar en el teclado "Ctrl + espacio" dentro de un widget para ver las propieades u opciones que tiene o necesita.
 
 Nota 2: presionar en el teclado "Ctrl + ." sobre un widget para envolverlo con otro widget, eliminar su contenedor, etc..
+_______________________________________________________
+
+	[3.3.1.1]. Material Design:
+_______________________________________________________
+
+Si nuestra aplicación no esta usando la paariencia de la ultima versión del material Design, podemos hacer lo siguiente:
+
+1) Definimos una barra de titulo en nuestro widget Scaffold "lib\presentation\screens\counter\counter_screen.dart":
+
+    class CounterScreen extends StatelessWidget {
+        const CounterScreen({super.key});
+
+        @override
+        Widget build(BuildContext context) {
+            return Scaffold(
+            appBar: AppBar(title: const Text('Counter Screen'), centerTitle: true,),
+            body: const Center(...
+
+2) En nuestro archivo principal "lib\main.dart", indicamos que theme vamos a usar, así como una paleta de colores:
+
+    class MyApp extends StatelessWidget{
+        const MyApp({super.key});
+
+        @override
+        Widget build(BuildContext context) {
+            return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData(
+                    useMaterial3: true,
+                    colorSchemeSeed: Colors.lightBlue
+                ),
+                home: const CounterScreen()
+            );
+        }
+    }
+
+_______________________________________________________
+
+	[3.4]. Cambiar Estado de la Aplicación:
+_______________________________________________________
+
+Para poder manejar el cambio de texto y los clicks en el "FloatingActionButton", es necesario tener una variable que nos guarde ese estado, pero tambien debemos dejar de usar un "StatelessWidget" y cambiarlo por un "StatefulWidget", ademas de cambiar algunos widgets que indicamos que son constantes, para que ahora puedan variar.
+
+1) Ubicamos el cursor sobre la palabra "StatelessWidget" y presionamos (ctrl + .) para convertirlo en un "StatefulWidget", en el archivo "lib\presentation\screens\counter\counter_screen.dart":
+
+    import 'package:flutter/material.dart';
+
+    class CounterScreen extends StatefulWidget {
+        const CounterScreen({super.key});
+
+        @override
+        State<CounterScreen> createState() => _CounterScreenState();
+    }
+
+    class _CounterScreenState extends State<CounterScreen> {
+        @override
+        Widget build(BuildContext context) {
+            return Scaffold(
+                appBar: AppBar(title: const Text('Counter Screen'), centerTitle: true,),
+                body: const Center(
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                            Text('10', style: TextStyle(fontSize: 160, fontWeight: FontWeight.w100),),
+                            Text('Clicks', style: TextStyle(fontSize: 25),)
+                        ],
+                    )
+                ),
+                floatingActionButton: FloatingActionButton(
+                    onPressed: (){
+
+                    },
+                    child: const Icon( Icons.plus_one),
+                ),
+            );
+        }
+    }
+
+Al hacer eso, aparece dentro de nuestra clase "CounterScreen" un nuevo metodo "createState()", el cual crea el estado invocando la nueva clase que aparece "_CounterScreenState", que es la construcción del widget que ya se tenia.
+
+2) Dentro del estado, creamos la variable para manejar el conteo de clicks:
+
+    class _CounterScreenState extends State<CounterScreen> {
+
+        int clickCounter = 0;

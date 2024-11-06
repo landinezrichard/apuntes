@@ -1,0 +1,79 @@
+
+	NEXTJS:
+_______________________________________________________
+
+INDICE:
+
+[1]. Qué es NextJs
+    [1.1]. Instalación
+
+_______________________________________________________
+
+	[1]. Qué es NextJs:
+_______________________________________________________
+
+Es el framework más popular de ReactJs.
+
+Es un framework de Backend, React sigue manejando el Frontend, y NextJs se encarga de las rutas, el llamado a la API, la conexión a la BD, pero lo que hace es renderizar todos los componentes que pueda desde el servidor, haciendo que la UX sea más optima.
+
+Tiene las siguientes caracteristicas:
+
+- Unrutador, basado en el sistema de archivos, es decir, que si creamos una carpeta productos, crea la ruta "/productos".
+
+- Componentes para optimizar tareas comunes:
+
+    script --> para la carga de scripts.
+
+    image --> remplaza la etiqueta 'img' del navegador y optimiza el peso y el formato de la imagen.
+
+    font --> para cargar las fuentes incluso las de Google fonts.
+
+- Amigable con el SEO.
+
+- Carga rápida del sitio.
+
+- Server Side Rendering (SSR), React Server Components.
+
+- Client Side Rendering (CSR) (el renderizado de React por defecto).
+
+- Static Site Generation (SSG) genera HTML estatico.
+
+- Incremental Static Regeneration (ISR), permite actualizar cada determinado tiempo el contenido estatico SSG.
+
+- Creación de API Routes, ya sean REST o GRAPHQL.
+_______________________________________________________
+
+	[1.1]. Instalación:
+_______________________________________________________
+
+En consola, y con Nodejs instalado ejecutamos:
+
+    npx create-next-app@latest
+
+Esto nos preguntara lo siguiente para la instalación:
+
+    What is your project named? my-app
+    --> indicamos el nombre del proyecto
+
+    Would you like to use TypeScript? No / Yes
+    --> Si queremos usar TypeScript
+
+    Would you like to use ESLint? No / Yes
+    --> Si queremos usar un ESLint para ver errores de JS
+
+    Would you like to use Tailwind CSS? No / Yes
+    --> Usar Tailwind
+
+    Would you like your code inside a `src/` directory? No / Yes
+    --> Para separar el código de la aplicación de los archivos de configuración.
+
+    Would you like to use App Router? (recommended) No / Yes
+    --> Para usar el router basado en las carpetas que se creen
+
+    Would you like to use Turbopack for `next dev`?  No / Yes
+    --> Para usar Turbopack en vez de webpack
+
+    Would you like to customize the import alias (`@/*` by default)? No / Yes
+    -->
+
+    What import alias would you like configured? @/*
