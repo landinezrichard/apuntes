@@ -13,6 +13,9 @@ INDICE:
     [1.6]. Renderizado de listas
     [1.7]. Manejando Eventos
     [1.8]. Formularios
+        [1.8.1]. Dependencias para el Manejo de Formularios
+    [1.9]. Hooks
+        [1.9.1]. Reglas de los hooks
 [2]. Vite
     [2.1]. Archivos Principales
 [3]. Proyecto
@@ -333,7 +336,7 @@ Estos metodos retornan un array.
         let numberItems = [];
 
         for(const item of arrayOfNumbers){
-            items.push(<li>{item}</li>);
+            numberItems.push(<li>{item}</li>);
         }
         */
 
@@ -596,10 +599,143 @@ Nota 3: podemos añadir validaciones sencillas de HTML5, como el atributo "requi
 
 _______________________________________________________
 
+	[1.8.1]. Dependencias para el Manejo de Formularios:
+_______________________________________________________
+
+Existen unas dependencias que podemos usar parea manejar el estado,  las validaciones y el envio de los campos del formulario de una forma más sencilla, entre las cuales tenemos:
+
+    - React Hook Form (https://www.react-hook-form.com/)
+    - FormiK (https://formik.org/)
+
+1) Para usar React Hook Form, desde la raiz del proyecto instalamos la dependencia:
+
+    npm install react-hook-form
+
+2) En nuestro componente de formulario importamos "useForm", y en vez de usar el "useState", y el evento "onChange" en cada campo del formulario, registramos los campos:
+
+    import { useForm } from "react-hook-form";
+
+    const SignupForm = () => {
+        const { register, handleSubmit } = useForm();
+
+        const handleClearClick = () =>{
+            
+        };
+
+        const handleSubmitForm = (data) =>{
+            console.log('submit:', data);
+        };
+
+        return (
+            <form onSubmit={handleSubmit(handleSubmitForm)}>
+                <div className="form-field">
+                    <label>
+                        Name
+                        <input {...register('name')} required/>
+                    </label>
+                </div>
+                <div className="form-field">
+                    <label>
+                        Age
+                        <input {...register('age')} required/>
+                    </label>
+                </div>
+                <div className="form-field">
+                    <label>
+                        Address
+                        <input {...register('address')} required/>
+                    </label>
+                </div>
+                <div className="form-field">
+                    <label>
+                        Zipcode
+                        <input {...register('zipcode')} required/>
+                    </label>
+                </div>
+                <div className="form-field">
+                    <label>
+                        Phone
+                        <input {...register('phone')} required/>
+                    </label>
+                </div>
+
+                <div className="form__actions">
+                    <button type="button" onClick={handleClearClick} >Clear</button>
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+        );
+    };
+
+    export default SignupForm;
+
+Acá hicimos lo siguiente:
+
+    - Instanciamos las funciones que vamos a usar:
+
+        const { register, handleSubmit } = useForm();
+
+    - Registramos los campos del formulario con:
+
+        ...register('nombreCampo')
+
+    - Usamos "handleSubmit" para manejar el envio del formulario, esta función recibe como parametro una función propia para manejar el evento "submit", y esa función recibe como parametro la "data" que se va a enviar.
+
+        handleSubmit(funcionPropia)
+
+3) Para resetear el formulario, instanciamos la función "reset":
+
+    const SignupForm = () => {
+
+        const { register, handleSubmit, reset } = useForm();
+
+        const handleClearClick = () =>{
+            reset();
+        };
+
+4) Para hacer las validaciones más personalizadas usamos "formState":
+
+    const { register, handleSubmit, reset, formState: { errors } } = useForm();
+
+    return (
+        <form onSubmit={handleSubmit(handleSubmitForm)}>
+            <div className="form-field">
+                <label>
+                    Name
+                    <input {...register('name', { required: true })} />
+                    {errors.name && <span>This field is required</span>}
+                </label>
+            </div>
+
+_______________________________________________________
+
+	[1.9]. Hooks:
+_______________________________________________________
+
+Los Hooks son funciones con su código ya encapsulado, que nos permiten inplementar diversas funcionalidades que ya se encuentran desarrolladas, solo tenemos que usarlas.
+
+Uno de los Hooks que ya hemos visto es el de "useState", el cual nos sirve para obtener y setear el estado.
+_______________________________________________________
+
+	[1.9.1]. Reglas de los hooks:
+_______________________________________________________
+
+Los Hooks cumplen dos reglas:
+
+    - Llama Hooks solo en el nivel superior; No llames Hooks dentro de ciclos, condicionales o funciones anidadas.
+
+    - Llama Hooks solo en funciones de React; No llames Hooks desde funciones JavaScript regulares.
+
+Nota: para más info ir a: 
+
+    https://es.legacy.reactjs.org/docs/hooks-rules.html
+
+_______________________________________________________
+
 	[2]. Vite:
 _______________________________________________________
 
-Vamos a usar Vitejs como module bundler, para generar nustro proyecto de react.
+Vamos a usar Vitejs como module bundler, para generar nuestro proyecto de react.
 
 Para usarlo es necesario tener instalado node y npm.
 
@@ -806,7 +942,7 @@ Link Json:
 
     export default Events;
 
-Tambien importamos el archivo JSOn con la data, y hacemos una impresión en consola para ver como viene la data.
+Tambien importamos el archivo JSON con la data, y hacemos una impresión en consola para ver como viene la data.
 
 La siguiente línea:
 
