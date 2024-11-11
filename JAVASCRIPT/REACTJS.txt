@@ -22,6 +22,10 @@ INDICE:
             [1.9.4.1]. Manipulando el DOM con "useRef"
             [1.9.4.2]. Manipulando el DOM Custom Components
             [1.9.4.3]. Exponiendo metodos Custom Components
+    [1.10]. Estilos
+        [1.10.1]. Estilos en Línea
+        [1.10.2]. Hoja de estilos por componente
+        [1.10.3]. Módulos CSS
 [2]. Vite
     [2.1]. Archivos Principales
 [3]. Proyecto
@@ -990,6 +994,133 @@ Si puedes expresar algo como una prop, no deberias usar una ref. Por ejemplo, en
 Nota 2: para mas info del hook "useImperativeHandle" ir a:
 
     https://es.react.dev/reference/react/useImperativeHandle
+
+_______________________________________________________
+
+	[1.10]. Estilos:
+_______________________________________________________
+
+Podemos añadir estilos a los componentes de varias formas:
+
+- En línea.
+- Hoja de estilos por componente.
+- Modulos CSS.
+
+_______________________________________________________
+
+	[1.10.1]. Estilos en Línea:
+_______________________________________________________
+
+En línea, pasandole un objeto con las propiedades CSS:
+
+    <div style={{
+        marginBottom: 14,
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    }}>
+
+Las propiedades CSS se indican en "camelCase".
+
+Los valores de las propiedades se las podemos indicar el solo número sin unidades y por defecto lo toma en pixeles, o si queremos indicar unidades como "em", porcentajes o son más de un valor, lo hacemos en un string entre comillas.
+
+    style={{
+        padding: '4px 8px'
+    }}
+_______________________________________________________
+
+	[1.10.2]. Hoja de estilos por componente:
+_______________________________________________________
+
+1) Dentro de la carpeta del componente en un archivo "styles.css" aparte, donde manejamos los estilos de forma tradicional, por clases o con los selectores que se necesiten:
+
+    .event-item__container{
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin: 24px 0;
+    }
+
+2) En el archivo del componente "index.jsx" importamos la hoja de estilos correspondiente, y en el HTML indicamos las clases con "className":
+
+    import './styles.css';
+
+    const EventItem = ({
+        info,
+        name,
+        image,
+        onEventClick,
+        id
+    }) => {
+
+        const handleSeeMoreClick = (event) => {
+            event.stopPropagation();
+            onEventClick(id);
+        };
+
+        return(
+            <div onClick={ () => console.log('padre clickeado') } className='event-item__container'>
+                <img src={image} alt={name} width="200px"/>
+                <div className='event-item__info'>
+                    <h4 className='event-item__title'>{name}</h4>
+                    <p className='event-item__desc'>{info}</p>
+                    <button onClick={ handleSeeMoreClick } className='event-item__call'>Ver más</button>
+                </div>
+            </div>
+        )
+    };
+
+    export default EventItem;
+_______________________________________________________
+
+	[1.10.3]. Módulos CSS:
+_______________________________________________________
+
+Estos modulos CSS tienen la ventaja que las clases generan un hash, para que el nombre de la clase no colisione con la clase de otro componente, quedando más encapsulados los estilos.
+
+1) En la carpeta del compoente, creamos un archivo con el mismo nombre del compoente:
+
+    NombreComponente.module.css
+
+Por ejemplo:
+
+    EventItem.module.css
+
+2) En el archivo del modulo que creamos "NombreComponente.module.css", indicamos los estilos, pero las clases las indicamos con "camelCase":
+
+    .eventItemContainer{
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin: 24px 0;
+    }
+
+    .eventItemInfo{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+3) En nuestro archivo de compoente, importamos el módulo CSS:
+
+    import nombremodulo from './rutaModulo/NombreComponente.module.css';
+
+Por ejemplo:
+
+    import styles from './EventItem.module.css';
+
+4) Y en el HTML del componente, en el "className" indicamos el modulo y la clase que se requiera:
+
+    <div className={styles.eventItemContainer}>
+
+Nota 1: al inspeccionar los elementos en el navegador, vemos que se aplican los estilos, y fuera de eso, a cada clase se le agrega el hash único, por ejemplo:
+
+    <div class="_eventItemContainer_lkq6q_1" >
+
+Nota 2: para indicarle a un elemento más de una clase, concatenamos con template strings:
+
+    <div className=`${styles.eventItemContainer} ${styles.otraClase}`}>
 
 _______________________________________________________
 
