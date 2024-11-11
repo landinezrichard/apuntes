@@ -16,6 +16,12 @@ INDICE:
         [1.8.1]. Dependencias para el Manejo de Formularios
     [1.9]. Hooks
         [1.9.1]. Reglas de los hooks
+        [1.9.2]. Hook useEffect
+        [1.9.3]. Creando Hooks
+        [1.9.4]. Hooks "useRef"
+            [1.9.4.1]. Manipulando el DOM con "useRef"
+            [1.9.4.2]. Manipulando el DOM Custom Components
+            [1.9.4.3]. Exponiendo metodos Custom Components
 [2]. Vite
     [2.1]. Archivos Principales
 [3]. Proyecto
@@ -25,6 +31,7 @@ INDICE:
     [3.4]. Manejando evento buscador
     [3.5]. Evento como Props
     [3.6]. Filtrando Eventos
+    [3.7]. Creando Hook reusable de Eventos
 
 _______________________________________________________
 
@@ -732,6 +739,260 @@ Nota: para más info ir a:
 
 _______________________________________________________
 
+	[1.9.2]. Hook useEffect:
+_______________________________________________________
+
+El hook "useEffect" permite ejecutar código cada vez que alguna de sus dependencias cambia, se ejecuta cuando se monta el componente y cuando cambia alguna de sus dependencias.
+
+Recibe dos argumentos:
+
+    useEffect(() => {}, []);
+
+El primer argumento es el "callback" o función flecha con el código que queremos que se ejecute.
+
+El segundo argumento(opcional) es un array con sus dependencias, es decir donde le podemos indicar por ejemplo una variable, y si el valor de esa variable cambia, se ejecutaria el código del callback.
+
+Nota 1: si necesitamos tener varios "useEffect", uno con una función y una dependencia, y otro con otra función y otra dependencia, podemos tener "N" cantidad de "useEffect" sin problemas.
+
+Nota 2: en modo desarrollo los "useEffect" se ejecutan 2 veses, pero solo es en desarrollo.
+
+Nota 3: para más info ir a:
+
+    https://es.react.dev/reference/react/useEffect
+
+_______________________________________________________
+
+	[1.9.3]. Creando Hooks:
+_______________________________________________________
+
+Podemos crear hooks con funcionalidades que veamos que podemos reutilizar en diferentes componentes de nuestra app.
+
+Para crear un Hook:
+
+1) Creamos una carpeta llamada "hooks" dentro de la carpeta "src".
+
+2) Dentro de la carpeta "hooks", creamos nuestro "archivoDeHook.js" usando las siguientes buenas practicas:
+
+    - el nombre del archivo va en camelCase.
+
+    - el nombre del archivo empieza con la palabra "use", seguido de lo que hace el hook, por ejemplo:
+
+        usePokemonsData.js
+
+Nota: la extensión del archivo es ".js" y no ".jsx", ya que no retorna un componente sino información.
+
+3) El código del hook es una simple función modulo que puede retornar un objeto, un array o un valor. Por ejemplo:
+
+    import pokemonsJSON from '../ruta/pokemons.json';
+
+    const usePokemonsData = () => {
+
+        ...
+
+        return {
+            pokemons
+        }
+    };
+
+    export default usePokemonsData;
+
+_______________________________________________________
+
+	[1.9.4]. Hooks "useRef":
+_______________________________________________________
+
+El hook "useRef" nos sirve para referenciar un valor que no es necesario para renderizar.
+
+Ejemplo:
+
+    import { useRef } from 'react';
+
+    export default function Counter() {
+        let ref = useRef(0);
+
+        function handleClick() {
+            ref.current = ref.current + 1;
+            alert('You clicked ' + ref.current + ' times!');
+        }
+
+        return (
+            <button onClick={handleClick}>
+                Click me!
+            </button>
+        );
+    }
+
+Las diferencias entre "useRef" y "useState" son las siguientes:
+
+    - useRef(initialValue) retorna { current: initialValue } <-- vs --> useState(initialValue) retorna valor actual de la variable de estado y la función setter del estado ( [value, setValue]).
+
+    - "useRef" No desencadena el render cuando cambia <-- vs --> "useState" Dispara el re renderizado cuando se modifica.
+
+    - "useRef" es Mutable: puede modificar y actualizar el valor actual fuera del proceso de renderizado. <-- vs --> "useState" es "Inmutable": debe usar la función de setter para modificar las variables de estado para poner en cola un nuevo re rendereo.
+
+    - Con "useRef" No debemos leer (ni escribir) el valor actual durante el renderizado. <-- vs --> Con "useState" se puede leer el estado en cualquier momento. Sin embargo, cada render tiene su propia instantánea(snapshot) del estado que no cambia.
+
+Nota 1: Para más info y ejemplos de "useRef":
+
+    https://react.dev/reference/react/useRef
+
+Nota 2: Para ver las diferencias y un ejemplo de "useRef" y "useState":
+
+    https://react.dev/learn/referencing-values-with-refs#differences-between-refs-and-state
+
+_______________________________________________________
+
+	[1.9.4.1]. Manipulando el DOM con "useRef":
+_______________________________________________________
+
+El hook "useRef" lo podemos usar para obtener una referencia a un elemento del DOM(guardar el elemento en una variable), y nos sirve para obtener sus atributos (HTML), modificar su contenido, obtener medidas (width, height, etc.) del elemento.
+
+    import { useRef } from 'react';
+
+    export default function Form() {
+        const inputRef = useRef(null);
+
+        function handleClick() {
+            inputRef.current.focus();
+        }
+
+        return (
+            <>
+                <input ref={inputRef} />
+                <button onClick={handleClick}>
+                    Focus the input
+                </button>
+            </>
+        );
+    }
+
+1) En este ejemplo, primero declaramos un objeto de referencia, con un valor inicial de null:
+
+    const inputRef = useRef(null);
+
+2) Luego pasamos el objeto de referencia como atributo "ref" al JSX del nodo DOM que queremos manipular:
+
+    <input ref={inputRef} />
+
+3) Después de que React crea el nodo DOM y lo coloca en la pantalla, React establecerá la propiedad "current" del objeto de referencia en ese nodo DOM. Ahora se puede acceder al nodo DOM del <input> y llamar a métodos como focus():
+
+    function handleClick() {
+        inputRef.current.focus();
+    }
+
+React volverá a establecer la propiedad "current" en nula cuando se elimine el nodo de la pantalla.
+
+_______________________________________________________
+
+	[1.9.4.2]. Manipulando el DOM Custom Components:
+_______________________________________________________
+
+Si intentamos referenciar un componente custom que hayamos creado para manipularlo, obtendremos un error, para evitar esto, envolvemos el componente hijo al que queremos manipular en el hook "forwardRef":
+
+1) En el componente hijo:
+
+    import { forwardRef } from 'react';
+
+    const MyInput = forwardRef(({ value, onChange }, ref) => {
+        return (
+            <input
+            value={value}
+            onChange={onChange}
+            ref={ref}
+            />
+        );
+    });
+
+    export default MyInput;
+
+Nota: el hook "forwardRef" recibe como primer parametro las "props" del componente y como segundo parametro la referencia "ref":
+
+    forwardRef( (props, ref) => {} );
+
+2) Y en el componente padre:
+
+    const inputRef = useRef(null);
+
+    console.log("Referencia DOM: ", inputRef.current);
+
+    return <MyInput ref={inputRef} />;
+
+Nota: acá en el console.log imprimimos el elemento del DOM que se obtuvo(el componente hijo), pero podemos tenerlo en una función y por ejemplo, manipular sus atributos HTML.
+
+_______________________________________________________
+
+	[1.9.4.3]. Exponiendo metodos Custom Components:
+_______________________________________________________
+
+Con el hook "useImperativeHandle", en vez de devolver al padre la referencia al elementoDOM, podemos exponenr metodos o propiedades propios del componente:
+
+1) En el componente hijo usamos "useImperativeHandle":
+
+    import { useState, forwardRef, useImperativeHandle } from 'react';
+
+    const MyInput = forwardRef((props, ref) => {
+        const [valorInput, setValorInput] = useState(0);
+
+        useImperativeHandle(ref, () => ({
+            valorInput,
+            setValorInput,
+            saludar,
+        }));
+
+        function saludar() {
+            console.log('Hello!!!');
+        }
+
+        return <input {...props} ref={ref} />;
+    });
+
+    export default MyInput;
+
+En este caso al componente padre le estamos enviando "valorInput" y la función para setearlo "setValorInput".
+
+2) En el componente padre:
+
+    import { useRef } from 'react';
+    import MyInput from './MyInput.js';
+
+    export default function Form() {
+        const ref = useRef(null);
+
+        function handleClick() {
+            console.log("Valor del input enviado desde el componente hijo: ", ref.current.valorInput);
+
+            // setear el Valor
+            ref.current.setValorInput(3);
+
+            ref.current.saludar();
+
+
+            //Esto no funcionará porque el nodo DOM no está expuesto
+            // ref.current.style.opacity = 0.5;
+        }
+
+        return (
+            <form>
+                <MyInput placeholder="Enter your name" ref={ref} />
+                <button type="button" onClick={handleClick}>
+                    Editar
+                </button>
+            </form>
+        );
+    }
+
+En el componente padre, podemos usar los metodos y propiedades que definamos en el componente hijo con "useImperativeHandle".
+
+Nota 1: No sobreutilizar las refs. Solo debes usar las refs para comportamientos imperativos que no puedes expresar como props: por ejemplo desplazarse a un nodo, enfocar un nodo, activar una animación, seleccionar texto, etc.
+
+Si puedes expresar algo como una prop, no deberias usar una ref. Por ejemplo, en vez de exponer un identificador imperativo como { open, close } del componente Modal, es mejor tomar isOpen como una prop, algo como <Modal isOpen={isOpen} />.
+
+Nota 2: para mas info del hook "useImperativeHandle" ir a:
+
+    https://es.react.dev/reference/react/useImperativeHandle
+
+_______________________________________________________
+
 	[2]. Vite:
 _______________________________________________________
 
@@ -1298,3 +1559,46 @@ Recibimos en las props la busqueda, para tener más limpio el return, llamamos l
     if(searchTerm.length > 0)
 
 Y luego utiliza la función de arrays "filter", que se usa de manera similar a la función "map". Devuelve el/los ítem(s) que incluyan en su nombre el termino de busqueda "searchTerm". En caso de no existir el termino de busqueda, devuelve todos los ítems.
+
+_______________________________________________________
+
+	[3.7]. Creando Hook reusable de Eventos:
+_______________________________________________________
+
+Vamos a crear un hook que nos devuelva la data de los eventos, este hook lo podremos utilizar en varios componentes.
+
+1) Creamos una carpeta llamada "hooks" dentro de la carpeta "src".
+
+2) Creamos el archivo "useEventsData.js":
+
+    import { useState } from "react";
+
+    import eventsJSON from '../data/events.json';
+
+    const useEventsData = () => {
+
+        const [data] = useState(eventsJSON);
+        const events = data._embedded.events;
+
+        return {
+            events
+        };
+    };
+
+    export default useEventsData;
+
+En este hook extraemos el código que estabamos usando en el componente de "Events" (src\components\Events\index.jsx).
+
+Nota: el uso de "useState", funciona porque usaremos el hook "useEventsData" en un componente de react, si no, no funcionara en una función de js normal.
+
+3) Llamamos nuestro hook en el componente de "Events" (src\components\Events\index.jsx):
+
+    import useEventsData from "../../hooks/useEventsData";
+
+    import EventItem from "./components/EventItem";
+
+    const Events = ({ searchTerm }) => {
+        
+        const { events } = useEventsData();
+
+Como en el hook "useEventsData" retornamos un objeto, acá lo desestructuramos para poder hacer uso simplemente de "events".
