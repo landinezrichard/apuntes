@@ -26,6 +26,12 @@ INDICE:
         [1.10.1]. Estilos en Línea
         [1.10.2]. Hoja de estilos por componente
         [1.10.3]. Módulos CSS
+    [1.11]. Routing
+        [1.11.1]. Configurando Routing
+        [1.11.2]. Rutas Inexistentes
+        [1.11.3]. Parámetros en las Rutas
+        [1.11.4]. Navegación entre Rutas con Link
+        [1.11.5]. Navegación entre Rutas con "useNavigate"
 [2]. Vite
     [2.1]. Archivos Principales
 [3]. Proyecto
@@ -36,6 +42,8 @@ INDICE:
     [3.5]. Evento como Props
     [3.6]. Filtrando Eventos
     [3.7]. Creando Hook reusable de Eventos
+    [3.8]. Creando Router
+    [3.9]. Navegar al detalle de evento
 
 _______________________________________________________
 
@@ -1004,7 +1012,7 @@ Podemos añadir estilos a los componentes de varias formas:
 
 - En línea.
 - Hoja de estilos por componente.
-- Modulos CSS.
+- Módulos CSS.
 
 _______________________________________________________
 
@@ -1077,7 +1085,7 @@ _______________________________________________________
 	[1.10.3]. Módulos CSS:
 _______________________________________________________
 
-Estos modulos CSS tienen la ventaja que las clases generan un hash, para que el nombre de la clase no colisione con la clase de otro componente, quedando más encapsulados los estilos.
+Estos módulos CSS tienen la ventaja que las clases generan un hash, para que el nombre de la clase no colisione con la clase de otro componente, quedando más encapsulados los estilos.
 
 1) En la carpeta del compoente, creamos un archivo con el mismo nombre del compoente:
 
@@ -1121,6 +1129,288 @@ Nota 1: al inspeccionar los elementos en el navegador, vemos que se aplican los 
 Nota 2: para indicarle a un elemento más de una clase, concatenamos con template strings:
 
     <div className=`${styles.eventItemContainer} ${styles.otraClase}`}>
+
+_______________________________________________________
+
+	[1.11]. Routing:
+_______________________________________________________
+
+Para la navegación entre paginas de nuestra app, manejaremos las diferentes rutas, donde cada ruta es un componente, por ejemplo:
+
+    /login --> componente <Login />
+    /signup --> componente <Signup />
+    /home --> componente <Home />
+    /profile --> componente <Profile />
+
+Cada página o componente puede manjar N cantidad de componentes internos.
+
+La forma en como funcionan las rutas, podemos imaginarlas como una pila de libros, por ejemplo, si vamos al "login", el libro de "login" queda sobra la mesa, luego vamos al "home", por lo que el libro del "home" queda encima del libro de "login", luego abrimos "profile", y este se apila sobre "home", etc.
+
+Tambien lo podemos ver como un array, en donde vamos haciendo push(añadir a la pila), y si le damos "atras" en el navegador, hariamos pop del array (eliminar el ultimo elemento).
+
+Para el Routing, usaremos la libreria "React Router":
+
+    https://reactrouter.com/en/main
+
+Esto usa Client Side Routing, que hace que en vez de recargar toda la pagina, permite que la aplicación actualice la URL a partir de un clic en un enlace sin realizar otra solicitud de otro documento desde el servidor. En cambio, la aplicación puede representar inmediatamente una nueva interfaz de usuario y realizar solicitudes de datos con "fetch" para actualizar la página con nueva información.
+
+_______________________________________________________
+
+	[1.11.1]. Configurando Routing:
+_______________________________________________________
+
+1) Instalamos la dependencia con el comando:
+
+    npm install react-router-dom
+
+2) Dentro de "/src", creamos la carpeta "routes".
+
+3) Dentro de "/routes" creamos el archivo "index.jsx":
+
+    import {
+        createBrowserRouter,
+        RouterProvider,
+    } from "react-router-dom";
+
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <div>Home</div>,
+        },
+        {
+            path: "/detail",
+            element: <div>Detail</div>,
+        },
+    ]);
+
+    const MyRoutes = () => {
+        return (
+            <RouterProvider router={router} />
+        );
+    };
+
+    export default MyRoutes;
+
+Primero importamos "createBrowserRouter" y "RouterProvider".
+
+En la constante "router", creamos las rutas con la función "createBrowserRouter()" pasandole como parametro un array de objetos.
+
+Cada objeto de la ruta, tiene dos llaves: el "path", con la ruta y el "element" con el componente o elemento a renderizar.
+
+Tenemos "MyRoutes", que tiene el código base de cualquier modulo o componente. en este caso retorna el componente "RouterProvider", al que le pasamos como atributo la constante "router".
+
+4) Lo ideal es que en la key "element" de cada objeto de la ruta le pasemos el componente de la vista o página a renderizar. Para esto creamos dentro de "/src" una carpeta llamada "views" o "pages" (a elección del desarrollador).
+
+5) En la carpeta "/views", creamos las carpetas "Home" y "Detail" con sus respectivos archivos "index.jsx" para sus componentes:
+
+    - En "src\views\Home\index.jsx":
+
+        const Home = () => {
+            return (
+                <div>Home</div>
+            );
+        };
+
+        export default Home;
+    
+    - En "src\views\Detail\index.jsx":
+
+        const Detail = () => {
+            return (
+                <div>Detail</div>
+            );
+        };
+
+        export default Detail;
+
+6) Importamos y usamos los componentes en el router:
+
+    import Home from "../views/Home";
+    import Detail from "../views/Detail";
+
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <Home />,
+        },
+        {
+            path: "/detail",
+            element: <Detail />,
+        },
+    ]);
+
+7) Importamos en el archivo "src\App.jsx" nuestro componente router:
+
+    import Routes from './routes';
+
+    function App() {
+        return <Routes />
+    }
+
+    export default App
+
+8) Probamos las rutas creadas en el navegador.
+
+_______________________________________________________
+
+	[1.11.2]. Rutas Inexistentes:
+_______________________________________________________
+
+Podemos configurar una ruta para errores 404.
+
+1) En la carpeta "views" creamos la carpeta para el componente llamado "Error404":
+
+    import { useRouteError } from "react-router-dom";
+
+    const Error404 = () => {
+        const error = useRouteError();
+        console.error(error);
+
+        return (
+            <div className="errorPage">
+                <h1 className="errorPageTitle">Oops! {error.status}</h1>
+                <p className="errorPageDesc">No hemos encontrado lo que buscas.</p>
+                <p className="errorPageError">
+                    <i>{error.statusText || error.data}</i>
+                </p>
+            </div>
+        );
+    };
+
+    export default Error404
+
+En este componente importamos y usamos el hook "useRouteError", de nuestra libreria de router, para saber que tipo de error obtenemos.
+
+2) En nuestro componente de router, definimos en la ruta raíz(home) el componente para el error:
+
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <Home />,
+            errorElement: <Error404 />
+        },
+        {
+            path: "/detail",
+            element: <Detail />,
+        },
+    ]);
+
+Para probar nuestra ruta 404, en el navegador escribimos:
+
+    /rutaQueNoExiste
+
+_______________________________________________________
+
+	[1.11.3]. Parámetros en las Rutas:
+_______________________________________________________
+
+Para poder recibir en la ruta parametros de forma dinamica, definimos el "path" de la ruta de la siguiente manera:
+
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <Home />,
+            errorElement: <Error404 />
+        },
+        {
+            path: "/detail/:eventId",
+            element: <Detail />,
+        },
+    ]);
+
+Ahora si accedemos a "/detail", nos renderiza el componente de Error404. Ahora el componente recibe un parametro (numero o string) por la url así: "/detail/algo"
+
+_______________________________________________________
+
+	[1.11.4]. Navegación entre Rutas con Link:
+_______________________________________________________
+
+Para crear links que nos sirvan para navegar entre las rutas que creamos, importamos y usamos el componente "Link" de nuestra libreria de router:
+
+    import { Link } from "react-router-dom";
+
+    return (
+        <div>
+            <Link to={`/detail/${id}`}>Ir al detalle</Link>
+        </div>
+    );
+
+Este componente Link, nos crea una etiqueta de ancla "a" que redirige a la ruta especificada. 
+
+Nota: En este caso la variable "id", la concatenamos a "/detail/", para navegar a esa ruta.
+
+_______________________________________________________
+
+	[1.11.5]. Navegación entre Rutas con "useNavigate":
+_______________________________________________________
+
+Si no queremos crear una etiqueta de ancla "a" para navegar, podemos usar el hook "useNavigate":
+
+    import { useNavigate } from "react-router-dom";
+
+    const navigate = useNavigate();
+    
+    const handleEventItemClick = (id) => {
+        navigate(`/detail/${id}`);
+    };
+
+_______________________________________________________
+
+	[1.11.6]. Rutas Anidadas:
+_______________________________________________________
+
+Hay rutas que podemos crear para que se muestren denbtro de otro componente, como por ejemplo tabs o pestañas, estas rutas son rutas hijas de otro, o rutas anidadas.
+
+1) Definimos en nuestro router la ruta que va a ser padre de las rutas hijas con "children":
+
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <Home />,
+            errorElement: <Error404 />
+        },
+        {
+            path: "/detail/:eventId",
+            element: <Detail />,
+        },
+        {
+            path: "/profile",
+            element: <Profile />,
+            children: [
+                {
+                    path: "my-info",
+                    element: <div>My Info</div>,
+                },
+                {
+                    path: "liked-events",
+                    element: <div>Eventos Favoritos</div>,
+                },
+            ],
+        }
+    ]);
+
+2) En el componente "Profile", usamos el "Outlet" component, para indicar en donde queremos que se rendericen las rutas hijas, qeu en este caso vendrian a ser como el contenido de unos tabs:
+
+    import { Outlet } from "react-router-dom";
+
+    const Profile = () => {
+        return (
+            <div>
+                <h1>Perfil</h1>
+                <Outlet />
+            </div>
+        );
+    };
+
+    export default Profile;
+
+De esta forma, quedamos con 3 rutas:
+
+    /profile --> muestra solo el componente "Profile"
+
+    /profile/my-info --> muestra el componente "Profile" y "MyInfo"
+
+    /profile/liked-events --> muestra el componente "Profile" y  "LikedEvents"
 
 _______________________________________________________
 
@@ -1733,3 +2023,80 @@ Nota: el uso de "useState", funciona porque usaremos el hook "useEventsData" en 
         const { events } = useEventsData();
 
 Como en el hook "useEventsData" retornamos un objeto, acá lo desestructuramos para poder hacer uso simplemente de "events".
+_______________________________________________________
+
+	[3.8]. Creando Router:
+_______________________________________________________
+
+1) Creamos nuestro componente "router", con las rutas de home, detail y sus respectivos componentes.
+
+2) Pasamos el código de "App.jsx" al componente de "src\views\Home\index.jsx":
+
+    import { useState, useRef } from 'react';
+
+    import Navbar from '../../components/Navbar';
+    import Events from '../../components/Events';
+
+    const Home = () => {
+        const [searchTerm, setSearchTerm] = useState('');
+
+        const navbarRef = useRef(null);
+
+        const handleNavbarSearch = (term) => {
+            console.log("Referencia DOM navbar: ", navbarRef.current);
+            setSearchTerm(term);
+        };
+
+        return (
+            <>
+                <Navbar onSearch={handleNavbarSearch} ref={navbarRef} />
+                <Events searchTerm={searchTerm} />
+            </>
+        );
+    };
+
+    export default Home;
+
+Y el archivo "App.jsx" quedaria:
+
+    import Routes from './routes';
+    import './App.css'
+
+    function App() {
+        return <Routes />
+    }
+
+    export default App;
+
+_______________________________________________________
+
+	[3.9]. Navegar al detalle de evento:
+_______________________________________________________
+
+1) En nuestro componente de rutas, definimos la ruta para ver el detalle del evento:
+
+    const router = createBrowserRouter([
+        {
+            path: "/",
+            element: <Home />,
+            errorElement: <Error404 />
+        },
+        {
+            path: "/detail/:eventId",
+            element: <Detail />,
+        },
+    ]);
+
+2) En el componente de listado de eventos "Events", usamos el hook "useNavigate", para navegar al detalle del evento:
+
+    import { useNavigate } from "react-router-dom";
+
+    const Events = ({ searchTerm }) => {
+    
+    const { events, isLoading, error } = useEventsData();
+        const navigate = useNavigate();
+        
+        const handleEventItemClick = (id) => {
+            console.log('Evento clickeado: ', id);
+            navigate(`/detail/${id}`);
+        };
