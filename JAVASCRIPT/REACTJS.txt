@@ -50,6 +50,8 @@ INDICE:
     [2.10]. fetch al API
         [2.10.1]. Enviando parámetros al API
         [2.10.2]. Creando Paginación
+        [2.10.3]. fetch en pantalla de detalle
+            [2.10.3.1]. Manejo de fechas en pantalla de detalle
 
 _______________________________________________________
 
@@ -2528,3 +2530,204 @@ En el componente del Home, importamos el modulo CSS para el paginador, y usamos 
     .disabledLink{
         cursor: not-allowed;
     }
+
+_______________________________________________________
+
+	[2.10.3]. fetch en pantalla de detalle:
+_______________________________________________________
+
+Vamos a usar nuevamente "fetch" en la pantalla de detalle para pedir la info de un solo evento, como solo se va a usar aquí no es necesario crear un hook como se hizo para obtener todos los eventos.
+
+1) importamos "useEffect", para hacer el "fetch" apenas se monte el componente:
+
+    import { useEffect, useState } from "react";
+    import { useParams } from "react-router-dom";
+
+    const Detail = () => {
+        const { eventId } = useParams();
+
+        const [eventData, setEventData] = useState();
+        const [isLoading, setIsLoading] = useState(true);
+        const [error, setError] = useState({});
+
+        useEffect(() => {
+            const fetchEventData = async() =>{
+                try{
+                    const response = await fetch(`https://app.ticketmaster.com/discovery/v2/events/${eventId}.json?apikey=TUAPIKEY`);
+
+                    const data = await response.json();
+
+                    console.log("Data evento: ", data);
+                    setEventData(data);
+                    setIsLoading(false);
+                } catch(error){
+                    setEventData({});
+                    setError(error);
+                    setIsLoading(false);
+                }
+            };
+
+            fetchEventData();
+        },[]);
+
+
+        console.log("Id del evento: ", eventId);
+
+        return (
+            <div>Detail</div>
+        );
+    };
+
+    export default Detail;
+
+Tambien usamos "useState" para guardar en el componente la info del evento, el error en caso de que ocurra y un "isLoading", para indicar que se esta cargando información.
+
+Nota: Para obtener solo la data de un evento en el "fetch" revisamos la documentación de la API:
+
+    https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/#anchor_get
+
+_______________________________________________________
+
+	[2.10.3.1]. Manejo de fechas en pantalla de detalle:
+_______________________________________________________
+
+Vamos a completar la pantalla de detalle, y a usar una libreria para el manejo de fechas llamada "date-fns".
+
+Nota: para más info de la libreria ir a:
+
+    https://date-fns.org/
+
+1) Primero completamos el "isLoading" y el "error", antes de mostrar la info del componente:
+
+    if(isLoading && Object.keys(eventData) === 0){
+        return <div>Cargando evento...</div>
+    }
+
+    if(Object.keys(error) > 0){
+        return <div>Ha ocurrido un error</div>
+    }
+
+    return (
+        <div>Detail</div>
+    );
+
+Utilizamos "Object.keys"", ya que en este caso manejamos esas variables como objetos.
+
+2) Instalamos la libreria para fechas "date-fns":
+
+    npm i --save date-fns
+
+3) Usamos la libreria "date-fns" importando la función "format" en nuestro componente de detalle:
+
+    import { useEffect, useState } from "react";
+    import { useParams } from "react-router-dom";
+    import { format } from "date-fns";
+    import { es } from "date-fns/locale";
+
+    import styles from './Detail.module.css';
+
+    const Detail = () => {
+        const { eventId } = useParams();
+
+        const [eventData, setEventData] = useState({});
+        const [isLoading, setIsLoading] = useState(true);
+        const [error, setError] = useState({});
+
+        useEffect(() => {
+            const fetchEventData = async() =>{
+                try{
+                    const response = await fetch(`https://app.ticketmaster.com/discovery/v2/events/${eventId}.json?apikey=TUAPIKEY`);
+
+                    const data = await response.json();
+
+                    console.log("Data evento: ", data);
+                    setEventData(data);
+                    setIsLoading(false);
+                } catch(error){
+                    setEventData({});
+                    setError(error);
+                    setIsLoading(false);
+                }
+            };
+
+            fetchEventData();
+        },[]);
+
+        if(isLoading && Object.keys(eventData) === 0){
+            return <div>Cargando evento...</div>
+        }
+
+        if(Object.keys(error) > 0){
+            return <div>Ha ocurrido un error</div>
+        }
+
+        // console.log("Id del evento: ", eventId);
+
+        return (
+            <div className={styles.detailContainer}>
+                <div className={styles.detailInfo}>
+                    <img className={styles.detailImage} src={eventData.images?.[4].url} alt={eventData.name} />
+                    <h1 className={styles.detailTitle}>
+                        {eventData.name}
+                    </h1>
+                    <p className={styles.detailDesc}>
+                        {eventData.info}
+                    </p>
+                    {eventData.dates?.start.dateTime ? <p className={styles.detailDate}>
+                        <strong>Fecha del evento: </strong> { format(new Date(eventData.dates?.start.dateTime), "EEEE d 'de ' LLLL yyyy 'Hora ' h:mm aaa", {locale : es}) }
+                    </p> : null}
+                </div>
+
+                <div className={styles.detailSeatContainer}>
+                    <h2 className={styles.detailSeatTitle}>
+                        Ubicación:
+                    </h2>
+                    <img className={styles.detailSeatImage} src={eventData.seatmap?.staticUrl} alt="Mapa de la ubicación" />
+                    <p>{eventData.pleaseNote}</p>
+                    <p><strong>Precios:</strong> Desde {eventData.priceRanges?.[0].min} hasta {eventData.priceRanges?.[0].max} {eventData.priceRanges?.[0].currency}</p>
+                </div>
+
+                <a className={styles.detailCall} href={eventData.url} target="_blank">Ir por tus boletas</a>
+            </div>
+        );
+    };
+
+    export default Detail;
+
+La función "format" recibe 3 parametros, la fecha, el formato que queremos que nos muestre y el tercer parametro(opcional) el "locale" para traducir el día, o mes si se da en letras.
+
+Nota: para más info de los formatos de fecha y hora ir a:
+
+    https://date-fns.org/v4.1.0/docs/format
+
+Cuando mostramos la fecha, primero evaluamosq ue exista "eventData.dates?.start.dateTime" antes de intentar crear con javaScript y formatear la fecha.
+
+Tambien usamos en la obtención de las imagenes, fecha y precio, el "conditional chaining" (?), por si no nos llegan los datos, que no genere errores.
+
+_______________________________________________________
+
+	[2.10.4]. Variables de Entorno:
+_______________________________________________________
+
+Para no exponer datos sensibles como la "apikey", vamos a crear y usar variables de entorno.
+
+1) En la raíz del proyecto creamos un archivo ".env":
+
+    VITE_TICKETMASTER_API_KEY=TUAPIKEY
+
+Nota: es necesario el prefijo "VITE", para que "Vite" nos permita leer la variable de entorno y no nos aparezca un error de cors en consola.
+
+2) En los hooks o componentes donde usemos la "apikey", obtenemos y usamos la variable de entorno creada:
+
+    const apikey = import.meta.env.VITE_TICKETMASTER_API_KEY;
+
+    console.log("Variables de entorno: ", import.meta.env)
+
+    const useEventsData = () => {
+
+        ...
+        
+        const fetchEvents = async(params) =>{
+            try{
+                const response = await fetch(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apikey}&countryCode=MX${params?.length ? params : ''}`);
+                const data = await response.json();
