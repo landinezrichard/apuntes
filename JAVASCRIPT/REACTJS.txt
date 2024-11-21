@@ -60,6 +60,7 @@ INDICE:
     [2.13]. Sub-componentes de Perfil
         [2.13.1]. Creando tabs
             [2.13.1.1]. Formulario Información Usuario
+            [2.13.1.2]. Eventos favoritos
 
 _______________________________________________________
 
@@ -3380,3 +3381,145 @@ En el componente "MyInfo", creamos un formulario que guardara y obtendra los dat
 
 Aca instalamos el componente "ErrorMessage", usamos "useEffect" para montar los datos(si existen) en los campos recien se inicialice el componente. Para setear los valores en los campos usamos "setValue" de "useForm()".
 
+_______________________________________________________
+
+	[2.13.1.2]. Eventos favoritos:
+_______________________________________________________
+
+El componente "LikedEvents", tendra el contenido de la pestaña "Eventos favoritos" del perfil:
+
+    import { useEffect, useState } from "react";
+    import { useNavigate } from "react-router-dom";
+
+    // Key del localStorage
+    import { LIKED_EVENTS_STORAGE_KEY } from '../../../../utils/constants';
+
+    const apikey = import.meta.env.VITE_TICKETMASTER_API_KEY;
+
+    import EventItem from "../../../../components/Events/components/EventItem";
+
+    const LikedEvents = () => {
+
+        const [events, setEvents] = useState([]);
+        const [isLoading, setIsLoading] = useState(false);
+        const [error, setError] = useState({});
+        const navigate = useNavigate();
+
+        useEffect(()=>{
+            const fetchEventsDetail = async () => {
+                try {
+                    setIsLoading(true);
+                    const likedEvents = JSON.parse( localStorage.getItem(LIKED_EVENTS_STORAGE_KEY) ) || [];
+                    // console.log("likedEvents: ", likedEvents);
+                    const results = [];
+                    for(const eventId of likedEvents){
+                        // Pedimos a la API la data del evento
+                        const response = await fetch(`https://app.ticketmaster.com/discovery/v2/events/${eventId}.json?apikey=${apikey}`);
+
+                        const data = await response.json();
+                        console.log("Data evento:", data);
+                        // Vamos armando el array donde cada ítem es un objeto con la data del evento
+                        results.push(data);
+                    }
+                    // Guardamos en el estado local el array con la data de los eventos
+                    setEvents(results);
+                } catch(error){
+                    setError(error);
+                } finally{
+                    setIsLoading(false);
+                }
+            };
+
+            fetchEventsDetail();
+        },[]);
+
+        const handleEventItemClick = (eventId) => {
+            navigate(`/detail/${eventId}`);
+        };
+
+        if(isLoading){
+            return <div>Cargando...</div>
+        }
+        
+        if(Object.keys(error).length > 0){
+            return <div>Ha ocurrido un error</div>
+        }
+
+        return (
+            <div>
+                { events.length <= 0 ? (
+                    <div>Aún no has añadido ningún evento a favoritos.</div>
+                ) : (
+                        events.map((event, index) => (
+                            <EventItem 
+                                key={`liked-event-item-${event.id}-${index}`}
+                                name={event.name}
+                                info={event.info}
+                                image={event.images[0].url}
+                                onEventClick={handleEventItemClick}
+                                id={event.id}
+                            />
+                        ))
+                    )
+                }
+            </div>
+        );
+    };
+
+    export default LikedEvents;
+
+Aca realizamos los siguientes pasos:
+
+1) Para crear el listado de los eventos con "Me gusta", debemos obtenerlos apenas se monta el componente, por lo que vamos a usar el hook "useEffect".
+
+2) Dentro del hook "useEffect", creamos y llamamos la función asincrona "fetchEventsDetail", encargada de obtener del "localStorage" el array con los "ids" de los eventos con "Me gusta".
+
+Como vamos a obtener una llave del "localStorage", que ya habiamos usado en el hook "src\hooks\useLikeEvents.js", lo mejor es crear una carpeta llamada "utils", y allí crear las funciones y constantes que se van a re-utilizar en la app. En este caso seria el archivo "constants.js":
+
+    export const LIKED_EVENTS_STORAGE_KEY = 'likedEvents';
+    
+3) Una vez obtenidos los eventos del "localStorage", creamos un ciclo "for of", para iterar por cada evento likeado, y obtenemos los datos de ese evento directamente desde la API con "fetch":
+
+    const results = [];
+    for(const eventId of likedEvents){
+        // Pedimos a la API la data del evento
+        const response = await fetch(`https://app.ticketmaster.com/discovery/v2/events/${eventId}.json?apikey=${apikey}`);
+
+        const data = await response.json();
+        // Vamos armando el array donde cada ítem es un objeto con la data del evento
+        results.push(data);
+    }
+    // Guardamos en el estado local el array con la data de los eventos
+    setEvents(results);
+
+4) Al igual que habiamos hecho antes en otros componentes manejamos 3 eestados locales:
+
+    const [events, setEvents] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState({});
+
+Estos estados nos ayudaran a mostrar el mensaje de error, el mensaje de "cargando" o el listado de eventos.
+
+5) Con operador ternario mostramos un mensaje si no hay eventos favoritos, o el listado de eventos favoritos usando el componnete "EventItem":
+
+    <div>
+        { events.length <= 0 ? (
+            <div>Aún no has añadido ningún evento a favoritos.</div>
+        ) : (
+                events.map((event, index) => (
+                    <EventItem 
+                        key={`liked-event-item-${event.id}-${index}`}
+                        name={event.name}
+                        info={event.info}
+                        image={event.images[0].url}
+                        onEventClick={handleEventItemClick}
+                        id={event.id}
+                    />
+                ))
+            )
+        }
+    </div>
+
+Nota: En la función flecha de la función "map", estamos usando un retorno"implícito", es decir que al usar paréntesis () después de la flecha =>, todo el contenido dentro de los paréntesis se retorna automáticamente.
+
+Es útil cuando necesitas devolver JSX directamente sin lógica adicional.
