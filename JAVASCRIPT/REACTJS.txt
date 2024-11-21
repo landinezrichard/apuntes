@@ -14,6 +14,7 @@ INDICE:
     [1.7]. Manejando Eventos
     [1.8]. Formularios
         [1.8.1]. Dependencias para el Manejo de Formularios
+            [1.8.1.1]. Validación Formularios
     [1.9]. Hooks
         [1.9.1]. Reglas de los hooks
         [1.9.2]. Hook useEffect
@@ -35,6 +36,7 @@ INDICE:
         [1.11.5]. Navegación entre Rutas con "useNavigate"
         [1.11.6]. Rutas Anidadas
     [1.12]. fetch
+    [1.13]. State Management
 [2]. Proyecto
     [2.0]. Instalación con Vite
         [2.0.1]. Archivos Principales
@@ -52,6 +54,12 @@ INDICE:
         [2.10.2]. Creando Paginación
         [2.10.3]. fetch en pantalla de detalle
             [2.10.3.1]. Manejo de fechas en pantalla de detalle
+        [2.10.4]. Variables de Entorno
+    [2.11]. Implementando State Management Zustand
+    [2.12]. Agregando ícono de like y unlike a los eventos
+    [2.13]. Sub-componentes de Perfil
+        [2.13.1]. Creando tabs
+            [2.13.1.1]. Formulario Información Usuario
 
 _______________________________________________________
 
@@ -736,6 +744,78 @@ Acá hicimos lo siguiente:
 
 _______________________________________________________
 
+	[1.8.1.1]. Validación Formularios:
+_______________________________________________________
+
+Podemos definir diferentes reglas de validación o incluso crear una función de validación propia, podemos ver las reglas ya definidas de "React Hook Form" en:
+
+    https://www.react-hook-form.com/api/useform/register/
+
+Por ejemplo:
+
+    <input
+        {...register("age", {
+            required: true,
+            min: 1,
+            max: 110,
+            valueAsNumber: true,
+        })}
+        className={styles.forminput}
+        type="number"
+    />
+    {errors.age && errors.age.type === "required" && (
+        <span>Este campo es requerido.</span>
+    )}
+    {errors.age && errors.age.type === "min" && (
+        <span>Edad minima 1 año.</span>
+    )}
+
+Tambien podemos definir la validación y el mensaje de error así:
+
+    <input
+        {...register("age", {
+            required: {
+                value: true,
+                message: "Este campo es requerido."
+            },
+            min: {
+                value: 1,
+                message: "Edad minima 1 año."
+            },
+            max: {
+                value: 110,
+                message: "Edad máxima 110 años."
+            },
+            valueAsNumber: true,
+        })}
+        className={styles.forminput}
+        type="number"
+    />
+
+Para luego instalar un componente para manejar de foprma más facil los mensajes de error:
+
+1) lo instalamos:
+
+    npm install @hookform/error-message
+
+2) lo importamos:
+
+    import { ErrorMessage } from '@hookform/error-message';
+
+3) lo usamos:
+
+    <ErrorMessage
+        errors={errors}
+        name="age"
+        render={({ message }) => <p>{message}</p>}
+    />
+
+Nota: Para más info del cmponente de mensajes de error:
+
+    https://www.react-hook-form.com/api/useformstate/errormessage/
+
+_______________________________________________________
+
 	[1.9]. Hooks:
 _______________________________________________________
 
@@ -1138,7 +1218,7 @@ Nota 1: al inspeccionar los elementos en el navegador, vemos que se aplican los 
 
 Nota 2: para indicarle a un elemento más de una clase, concatenamos con template strings:
 
-    <div className=`${styles.eventItemContainer} ${styles.otraClase}`}>
+    <div className={`${styles.eventItemContainer} ${styles.otraClase}`}>
 
 _______________________________________________________
 
@@ -1462,6 +1542,24 @@ Para hacer consultas a la API, vamos a usar "fetch", pero se puede usar alguna l
 Nota: para más info de "fetch" ir a:
 
     https://developer.mozilla.org/es/docs/Web/API/Fetch_API/Using_Fetch
+
+_______________________________________________________
+
+	[1.13]. State Management:
+_______________________________________________________
+
+Un "State Management" o manejador de estados, permite tener centralizados los estados (data) de nuestra aplicación, por si hay varios componentes que requieran esa info, la consultan desde el "State Management".
+
+Esto permite que los componentes se actualicen cuando la información que requieran se actualice.
+
+En donde se centraliza la info lo conocemos como "Store".
+
+Los manejadores de estado más usados en React son:
+
+- Redux
+- Zustand
+- Mobx
+- Recoil
 
 _______________________________________________________
 
@@ -2731,3 +2829,554 @@ Nota: es necesario el prefijo "VITE", para que "Vite" nos permita leer la variab
             try{
                 const response = await fetch(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apikey}&countryCode=MX${params?.length ? params : ''}`);
                 const data = await response.json();
+
+_______________________________________________________
+
+	[2.11]. Implementando State Management Zustand:
+_______________________________________________________
+
+Vamos a implementar Zustand como "State Management", a diferencia de Redux, que centraliza toda la información en un solo "store", Zustand puede crear mini stores, para tener disponibles solo la info que se necesita, es decir, si unos componentes usan un store, y otros componentes otro, pueden haber N stores y no hay problema.
+
+1) Instalamos "Zustand":
+
+    npm i --save zustand
+
+2) Dentro de "/src", creamos una carpeta llamada "state", y dentro un archivo "events-results.js":
+
+    import { create } from "zustand";
+    const apikey = import.meta.env.VITE_TICKETMASTER_API_KEY;
+
+    const useEventsResults = create( (set) => ({
+        data: [],
+        error: null,
+        isLoading: false,
+        fetchEvents: async(params) =>{
+            try{
+                await set(() => ({ isLoading: true }));
+
+                const response = await fetch(`https://app.ticketmaster.com/discovery/v2/events.json?apikey=${apikey}&countryCode=MX${params?.length ? params : ''}`);
+                const data = await response.json();
+
+                await set(() => ({ data, isLoading: false }));
+            } catch (error){
+                await set(() => ({ error }));
+            }
+        },
+    }) );
+
+    export default useEventsResults;
+
+
+La forma en como definmimos el store de Zustand es como un hook, igual que el que ya se habia definido "useEventsData", pero a diferencia de ese, no gurda la data a nivel local(componente) sino global (toda la app).
+
+"create" recibe como parametro una función flecha que recibe "set" y retorna un objeto con toda la información y/o funciones que vamos a usar en los componentes.
+
+El componente que usa nuestro "store" se inscribe a él, y cada vez que cambie la data en el "store", se actualiza el componente.
+
+En este caso, lo que hicimos fue crear un "store" para tener disponible globalmente:
+
+    - la data de los eventos.
+    - isLoading
+    - error del fetch
+    - la acción "fetchEvents"
+
+Por lo que el hook creado anteriormente "useEventsData", ya no lo usaremos más.
+
+En la función "fetchEvents", para setear la "data", el "isLoading" y el "error", usamos ahora la función "set", que recibe una función flecha que retorna los objetos con las variables a setear.
+
+3) En el componente "Home", importamos y usamos el "store" creado:
+
+    import useEventsResults from '../../state/events-results';
+
+    const Home = () => {
+
+        const { data, isLoading, error, fetchEvents} = useEventsResults();
+        const events = data?._embedded?.events || [];
+        const page = data?.page || {};
+
+Nota: es probable que el componente del paginador deje de funcionar mostrando siempre que estamos en la pág. #1, para corregir esto, creamos el siguiente estado en el componente "Home":
+
+    const [pageOffset, setPageOffset] = useState(0);
+
+    ...
+
+    const handlePageClick = ( {selected} ) => {
+        console.log("Pagina seleccionada: ", selected);
+        setPageOffset(selected);
+        fetchEvents(`&keyword=${searchTerm}&page=${selected}`);
+    };
+
+    ...
+
+    return (
+        <div>
+            <Events searchTerm={searchTerm} events={events} />
+            <ReactPaginate
+                breakLabel="..."
+                nextLabel=">"
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={5}
+                pageCount={Math.ceil(page.totalPages)}
+                previousLabel="<"
+                renderOnZeroPageCount={null}
+                className={styles.pagination}
+                pageClassName={styles.pageItem}
+                previousClassName={styles.previous}
+                nextClassName={styles.next}
+                pageLinkClassName={styles.pageLink}
+                nextLinkClassName={styles.pageLink}
+                previousLinkClassName={styles.pageLink}
+                activeClassName={styles.active}
+                disabledLinkClassName={styles.disabledLink}
+                forcePage={pageOffset}
+                marginPagesDisplayed={1}
+            />
+        </div>
+    );
+
+Con la prop "forcePage={pageOffset}" forzamos al paginador a que muestre la pagina en la que estamos.
+
+_______________________________________________________
+
+	[2.12]. Agregando ícono de like y unlike a los eventos:
+_______________________________________________________
+
+Vamos a añadir la funcionalidad para poderle darle like o unlike a un evento.
+
+1) En el componente "EventItem", añadimos el icono de un corazón vacio sobre la imagen (dar estilos).
+
+Nota: el icono lo podemos extraer de:
+
+    https://heroicons.com/outline
+
+Tambien los podemos instalar y usar como un componente de React.
+
+    npm install @heroicons/react --save
+
+Luego para usarlo:
+
+    import { HeartIcon } from '@heroicons/react/24/outline'
+
+    <div className={styles.eventItemImageContainer}>
+        <img src={image} alt={name} width="200px"/>
+        <HeartIcon className={styles.eventItemHearth} />
+    </div>
+
+Nota 1: para más info de como usar los iconos: 
+
+    https://github.com/tailwindlabs/heroicons?tab=readme-ov-file#react
+
+Nota 2: si usamos un archivo estatico, que este ubicado en "src\assets", podemos importarlo en el compomnente y usarlo así:
+
+    import HearthOutline from '../../../../assets/icons/hearth-outline.svg';
+    
+    <img src={HearthOutline} alt="Icono Corazon vacio"/>
+
+2) Creamos un nuevo hook llamado "useLikeEvents.js":
+
+    import { useState } from "react";
+
+    // Key del localStorage
+    const LIKED_EVENTS_STORAGE_KEY = 'likedEvents';
+
+    const checkIsEventLiked = (eventId) => {
+        const likedEvents = JSON.parse(localStorage.getItem(LIKED_EVENTS_STORAGE_KEY) ) || [];
+
+        console.log("Eventos con 'Me gusta': ", likedEvents);
+
+        return likedEvents.includes(eventId);
+    };
+
+    const useLikeEvents = (eventId) => {
+        const [isEventLiked, setIsEventLiked] = useState(checkIsEventLiked(eventId));
+
+        const toggleEventLike = () => {
+            const likedEvents = JSON.parse(localStorage.getItem(LIKED_EVENTS_STORAGE_KEY) ) || [];
+            const eventIndex = likedEvents.indexOf(eventId);
+
+            // si existe
+            if(eventIndex !== -1){
+                // quitar evento del array
+                likedEvents.splice(eventIndex, 1);
+                setIsEventLiked(false);
+            }else {
+                // si no existe se añade al array
+                likedEvents.push(eventId);
+                setIsEventLiked(true);
+            }
+
+            localStorage.setItem(LIKED_EVENTS_STORAGE_KEY, JSON.stringify(likedEvents) );
+        };
+
+        return {
+            isEventLiked,
+            toggleEventLike,
+        };
+    };
+
+    export default useLikeEvents;
+
+Primero creamos una constante llamada "LIKED_EVENTS_STORAGE_KEY", para almacenar el key que vamos a usar en "localStorage" y si se necesita cambiar, solo cambiamos el valor de esta constante, en este caso el key es "likedEvents".
+
+El hook "useLikeEvents", recibe como parametro el "eventId". Luego creamos un estado "isEventLiked" con su respectivo setter, este "state", como valor inicial va a tener lo que nos devuelva la función "checkIsEventLiked".
+
+La función "checkIsEventLiked" se crea por fuera del hook, para que no se re-cree. Esta función recibe el "eventId", obtiene la key del "localStorage", que es un "string", y la convierte a "array" con "JSON.parse". Si no encuentra la clave, le asigna un "array" vacio a "likedEvents";
+
+Con la función "includes", verificamos si en el array existe el evento, si llega a existir devuelve un "true", sino "false".
+
+Volviendo al hook "useLikeEvents", este devuelve "isEventLiked" y la función "toggleEventLike".
+
+La función "toggleEventLike", primero obtiene la key del "localStorage" con los eventos likeados, y los almacena en un "array"(el mismo proceso que se hace al principio de la función "checkIsEventLiked"). Luego buscamos el indice del evento en el array.
+
+Si el indice existe("eventIndex" !== -1 ), quitamos el evento del array, e indicamos que es un evento "unliked" con "setIsEventLiked(false)";
+
+Si el indice no existe, se añade al "array", y luego indicamos que es un evento con "like".
+
+Luego almacenamos en el key del "localStorage" el array convertido en "string" con "JSON.stringify".
+
+3) Usamos el hook creado "useLikeEvents" en el componente "EventItem":
+
+    import useLikeEvents from '../../../../hooks/useLikeEvents';
+
+    ...
+
+    const { isEventLiked, toggleEventLike } = useLikeEvents(id);
+
+    const handleHearthClick = (event) => {
+        event.stopPropagation();
+        toggleEventLike();
+    };
+
+    return(
+        <div onClick={ () => console.log('padre clickeado') } className={styles.eventItemContainer}>
+            <div className={styles.eventItemImageContainer}>
+                <img src={image} alt={name} width="200px"/>
+                <HeartIcon className={`${styles.eventItemHearth} ${isEventLiked ? styles.eventItemHearthFilled : '' }`} onClick={handleHearthClick} />
+                
+            </div>
+
+Acá, desestructuramos "isEventLiked" y la función "toggleEventLike" del hook, pasando el "id" del evento.
+
+En el corazón, escuchamos el "click", y llamamos a la función "handleHearthClick", que a su vez llama la función "toggleEventLike", dandole "like" o "unlike" al evento.
+
+En este caso para llenar de color el corazón, usamos en la "className" un operador ternario, que verifica con "isEventLiked" si le añade la clase "eventItemHearthFilled" o no.
+
+Este estilo lo definimos en el modulo CSS:
+
+    .eventItemImageContainer{
+        position: relative;
+    }
+
+    .eventItemHearth{
+        width: 24px;
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 1;
+        cursor: pointer;
+        stroke: magenta;
+    }
+
+    .eventItemHearth.eventItemHearthFilled{
+        fill: deepskyblue;
+    }
+
+Ya al probar en el navegador, haciendo uso de "localStorage" podemos darle "like" o "unlike" a los eventos.
+
+_______________________________________________________
+
+	[2.13]. Sub-componentes de Perfil:
+_______________________________________________________
+
+Vamos a crear componentes para mostrar la información del usuario y los eventos con "me gusta" del usuario.
+
+1) Creamos en el "Navbar" el enlace hacia la pestaña de "My Info" en el perfil:
+
+    import { Link } from "react-router-dom";
+    import { UserIcon } from "@heroicons/react/24/solid";
+
+    <Link to='/profile/my-info' style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        border: '1px solid white',
+        width: '35px',
+        height: '35px',
+        borderRadius: '50%',
+        color: 'white'
+    }}>
+        
+        <UserIcon style={{width:'20px'}} />
+        
+    </Link>
+
+2) Dentro de la carpeta del componente "src\views\Profile" creamos la carpeta "/components" y dentro de esta las sub-carpetas "Likedevents" y "MyInfo", con sus respectivos archivos de componentes:
+
+    const MyInfo = () => {
+        return (
+            <div>My Info</div>
+        );
+    };
+
+    export default MyInfo;
+
+Y para los eventos con "Me gusta":
+
+    const LikedEvents = () => {
+        return (
+            <div>Eventos Favoritos</div>
+        );
+    };
+
+    export default LikedEvents;
+
+3) Importamos y usamos los nuevos componentes en el "router":
+
+    import MyInfo from "../views/Profile/components/MyInfo";
+    import LikedEvents from "../views/Profile/components/LikedEvents";
+
+    ...
+
+    {
+        path: "/profile",
+        element: <Profile />,
+        children: [
+            {
+                path: "my-info",
+                element: <MyInfo />,
+            },
+            {
+                path: "liked-events",
+                element: <LikedEvents />,
+            },
+        ],
+    }
+
+_______________________________________________________
+
+	[2.13.1]. Creando tabs:
+_______________________________________________________
+
+Para tener tabs dentro del componente de "Profile", que muestren los contenidos correspondientes a "MyInfo" y "Likedevents":
+
+1) Dentro del componente "Profile":
+
+    import { Link, Outlet, useLocation } from "react-router-dom";
+    import styles from './Profile.module.css';
+    import { HomeIcon } from "@heroicons/react/24/solid";
+
+    const Profile = () => {
+        const { pathname } = useLocation();
+
+        return (
+            <div>
+                <header className={styles.profileHeader}>
+                    <h1 className={styles.profileHeaderTitle}>Perfil</h1>
+                    <Link className={styles.profileHeaderLinkHome} to='/'>
+                        <HomeIcon className={styles.profileIconHome}/>
+                    </Link>
+                </header>
+                <nav className={styles.profileTabsContainer}>
+                    <ul className={styles.profileTabsUl}>
+                        <li className={`${styles.profileTabItem} ${pathname.includes('my-info') ? styles.profileTabActive : ''}`}>
+                            <Link to='my-info' className={styles.profileTabItemLink}>
+                                Mi Información
+                            </Link>
+                        </li>
+                        <li className={`${styles.profileTabItem} ${pathname.includes('liked-events') ? styles.profileTabActive : ''}`}>
+                            <Link to='liked-events' className={styles.profileTabItemLink}>
+                                Eventos Favoritos
+                            </Link>
+                        </li>
+                    </ul>
+                </nav>
+                <Outlet />
+            </div>
+        );
+    };
+
+    export default Profile;
+
+Importamos el "Link" y "useLocation" de "react-router-dom" para la navegación.
+
+Desestructuramos "pathname' de "useLocation", fuera del componente "Outlet", creamos los tabs, ya que en el outlet se cargan los contenidos de forma dinámica.
+
+Con "pathname.includes()" revisamos cual es el path en el que estamos, para añadir la clase activa "profileTabActive" a los tabs y setear estilos.
+
+Nota: En vez de usar "Link", tambien podemos realizar la navegación con "useNavigate":
+
+    import { Outlet, useLocation, useNavigate } from "react-router-dom";
+
+    const handleTabClick = (path) => {
+        navigate(`/profile/${path}`);
+    };
+
+    ...
+
+    <span className={styles.profileTabItemLink} onClick={()=> handleTabClick('my-info')}>
+        Mi Información
+    </span>
+
+_______________________________________________________
+
+	[2.13.1.1]. Formulario Información Usuario:
+_______________________________________________________
+
+En el componente "MyInfo", creamos un formulario que guardara y obtendra los datos del usuario desde el "localStorage":
+
+    import { useForm } from "react-hook-form";
+    import { ErrorMessage } from "@hookform/error-message";
+    import { useEffect, useState } from "react";
+
+    import styles from "./MyInfo.module.css";
+
+    import { ArrowPathIcon } from "@heroicons/react/24/outline";
+    import { ArchiveBoxArrowDownIcon } from "@heroicons/react/24/solid";
+
+    const USER_DATA_STORAGE_KEY = "userData";
+
+    const isObjectEmpty = (objectName) => {
+    return (
+        objectName && Object.keys(objectName).length === 0 && objectName.constructor === Object
+    );
+    };
+
+    const MyInfo = () => {
+        const {
+            register,
+            handleSubmit,
+            formState: { errors },
+            setValue,
+        } = useForm();
+
+        const [isUpdateData, setIsUpdateData] = useState(false);
+
+        useEffect(() => {
+            try {
+            const userData = JSON.parse(localStorage.getItem(USER_DATA_STORAGE_KEY)) || {};
+
+            setIsUpdateData(!isObjectEmpty(userData));
+                
+            setValue("name", userData?.name);
+            setValue("age", userData?.age);
+            setValue("email", userData?.email);
+            } catch (error) {
+            console.error("Ha ocurrido un error: ", error);
+            }
+        }, []);
+
+        const handleFormSubmit = (data) => {
+            console.log("submit:", data);
+            try {
+            localStorage.setItem(USER_DATA_STORAGE_KEY, JSON.stringify(data));
+            console.log("Info de usuario actualizada");
+            setIsUpdateData(!isObjectEmpty(data));
+            } catch (error) {
+            console.error("Ha ocurrido un error: ", error);
+            }
+        };
+
+        return (
+            <form
+            className={styles.userInfoform}
+            onSubmit={handleSubmit(handleFormSubmit)}
+            >
+            <div className={styles.formField}>
+                <label className={styles.formLabel}>
+                Nombre
+                <input
+                    {...register("name", {
+                    required: { value: true, message: "Este campo es requerido." },
+                    minLength: {
+                        value: 1,
+                        message: "Minimo un caracter.",
+                    },
+                    maxLength: {
+                        value: 256,
+                        message: "Maximo 256 caracteres.",
+                    },
+                    })}
+                    className={styles.forminput}
+                    type="text"
+                />
+                <ErrorMessage
+                    errors={errors}
+                    name="name"
+                    render={({ message }) => (
+                    <p className={styles.formError}>{message}</p>
+                    )}
+                />
+                </label>
+            </div>
+            <div className={styles.formField}>
+                <label className={styles.formLabel}>
+                Edad
+                <input
+                    {...register("age", {
+                    required: {
+                        value: true,
+                        message: "Este campo es requerido.",
+                    },
+                    min: {
+                        value: 1,
+                        message: "Edad minima 1 año.",
+                    },
+                    max: {
+                        value: 110,
+                        message: "Edad máxima 110 años.",
+                    },
+                    valueAsNumber: true,
+                    })}
+                    className={styles.forminput}
+                    type="number"
+                />
+                <ErrorMessage
+                    errors={errors}
+                    name="age"
+                    render={({ message }) => (
+                    <p className={styles.formError}>{message}</p>
+                    )}
+                />
+                </label>
+            </div>
+            <div className={styles.formField}>
+                <label className={styles.formLabel}>
+                Email
+                <input
+                    {...register("email", {
+                    required: { value: true, message: "Este campo es requerido." },
+                    })}
+                    className={styles.forminput}
+                    type="email"
+                />
+                <ErrorMessage
+                    errors={errors}
+                    name="name"
+                    render={({ message }) => (
+                    <p className={styles.formError}>{message}</p>
+                    )}
+                />
+                </label>
+            </div>
+            <div className={styles.formActions}>
+                <button type="submit" className={styles.formSubmit}>
+                {isUpdateData ? (
+                    <>
+                    <ArrowPathIcon className={styles.formSubmitIcon} /> Actualizar
+                    </>
+                ) : (
+                    <>
+                    <ArchiveBoxArrowDownIcon className={styles.formSubmitIcon} /> 
+                    Guardar
+                    </>
+                )}
+                </button>
+            </div>
+            </form>
+        );
+    };
+
+    export default MyInfo;
+
+Aca instalamos el componente "ErrorMessage", usamos "useEffect" para montar los datos(si existen) en los campos recien se inicialice el componente. Para setear los valores en los campos usamos "setValue" de "useForm()".
+
