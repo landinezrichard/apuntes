@@ -30,19 +30,23 @@ INDICE:
 	[6.8]. Funciones para Números
 [7]. Objetos
 	[7.1]. Acceso a las propiedades del objeto
-	[7.2]. Métodos del objeto
-		[7.2.1]. Acceso a los metodos del objeto
-	[7.3]. JSON
-		[7.3.1]. Convertir JSON a Objeto
-		[7.3.2]. Convertir Objeto a JSON
-	[7.4]. CLASES
-		[7.4.1]. Métodos Estáticos
-		[7.4.2]. Constructores
-		[7.4.3]. Propiedades
-			[7.4.3.1]. Ámbitos en una clase
-			[7.4.3.2]. Getters
-			[7.4.3.3]. Setters
-		[7.4.4]. Herencia
+		[7.1.1]. Agregar o eliminar propiedades del objeto
+		[7.1.2]. Destructuring de objetos
+			[7.1.2.1]. Destructuring de objetos anidados
+	[7.2]. Copiar 2 Objetos
+	[7.3]. Métodos del objeto
+		[7.3.1]. Acceso a los metodos del objeto
+	[7.4]. JSON
+		[7.4.1]. Convertir JSON a Objeto
+		[7.4.2]. Convertir Objeto a JSON
+	[7.5]. CLASES
+		[7.5.1]. Métodos Estáticos
+		[7.5.2]. Constructores
+		[7.5.3]. Propiedades
+			[7.5.3.1]. Ámbitos en una clase
+			[7.5.3.2]. Getters
+			[7.5.3.3]. Setters
+		[7.5.4]. Herencia
 [8]. Elementos DOM
 	[8.1]. Acceso a los Nodos(Métodos Clasicos)
 	[8.2]. Acceso a los Nodos(Métodos Modernos)
@@ -938,7 +942,7 @@ Los objetos de JavaScript se escriben con llaves {}.
 
 Las propiedades de los objetos se escriben como pares "nombre:valor", separados por comas.
 
-	var car = {
+	const car = {
 		type:"Fiat", 
 		model:"500", 
 		color:"white"
@@ -964,7 +968,116 @@ Ejemplo:
 	//imprime "Fiat white"
 _______________________________________________________
 
-	[7.2]. Métodos del objeto:
+	[7.1.1]. Agregar o eliminar propiedades del objeto:
+_______________________________________________________
+
+Para agregar una nueva propiedad al objeto usamos:
+
+	car.imagen = "imagen.jpg";
+
+Para eliminar una propiedad del objeto:
+
+	delete car.color;
+_______________________________________________________
+
+	[7.1.2]. Destructuring de objetos:
+_______________________________________________________
+
+Para acceder a una propiedad de un objeto y guardarla en ena variable, antes se hacia:
+
+	const type = car.type;
+
+Con destructuring de objetos lo hacemos así:
+
+	const { type } = car;
+
+Si necesitamos acceder a más de una propiedad del objeto y guardar estas en variables, lo hacemos en la misma línea:
+
+	const { type, model } = car;
+	console.log(type);
+	console.log(model);
+
+_______________________________________________________
+
+	[7.1.2.1]. Destructuring de objetos anidados:
+_______________________________________________________
+
+Si tenemos el siguiente objeto:
+
+	const car = {
+		type:"Fiat", 
+		model:"500", 
+		color:"white",
+		info: {
+			medidas: {
+				length: "2mts",
+				weight: "800kgs"
+			},
+			fabricacion:{
+				pais:"Italia"
+			}
+		}
+	}
+
+Para desestructurar los objetos anidados hacemos:
+
+	const { type, info: { fabricacion } } = car;
+	console.log(type);
+	console.log(fabricacion);
+
+Nota: accedemos solo a la variable "fabricacion", para crear una variable "info" (objeto con sub-objetos medidas y fabricacion):
+
+	const { type, info, info: { fabricacion } } = car;
+
+Si queremos acceder al valor de "pais":
+
+	const { type, info: { fabricacion: { pais } } } = car;
+	console.log(pais);
+
+_______________________________________________________
+
+	[7.2]. Copiar 2 Objetos:
+_______________________________________________________
+
+1) Si tenemos los siguientes objetos:
+
+	const producto = {
+		nombre: "Monitor 20 pulgadas",
+		precio: "300",
+		disponible: "true"
+	}
+
+	const medidas = {
+		peso: '1kg',
+		medida: '1m'
+	}
+
+Y queremos fusionarlos en un solo objeto, lo hacemos de la siguiente forma:
+
+	const resultado = Object.assign(producto, medidas);
+
+	console.log(resultado);
+
+	/*
+		Imprime:
+			{
+				nombre: 'Monitor 20 pulgadas', 
+				precio: '300', 
+				disponible: 'true', 
+				peso: '1kg', 
+				medida: '1m'
+			}
+	*/
+
+Nota: Al usar el método .assign() para combinar 2 objetos se modifica el objeto original que va como primer argumento. Para evitarlo, mejor usar el "Spread Operator".
+
+2) Otra forma de hacer lo mismo, es usando el "Spread Operator" o "Rest Operator"
+
+	const resultado2 = { ...producto, ...medidas };
+
+_______________________________________________________
+
+	[7.3]. Métodos del objeto:
 _______________________________________________________
 
 Los métodos son acciones que se pueden realizar en objetos.
@@ -988,7 +1101,7 @@ En este ejemplo, "this" es el objeto persona que "posee" la función "fullName".
 En otras palabras, "this.firstName" significa la propiedad firstName de este objeto.
 _______________________________________________________
 
-	[7.2.1]. Acceso a los metodos del objeto:
+	[7.3.1]. Acceso a los metodos del objeto:
 _______________________________________________________
 
 Se puede acceder al metodo del objeto de la siguiente forma:
@@ -1000,7 +1113,7 @@ Ejemplo:
 	document.getElementById("demo").innerHTML = person.fullName(); //imprime "John Doe"
 _______________________________________________________
 
-	[7.3]. JSON:
+	[7.4]. JSON:
 _______________________________________________________
 
 Cuando trabajamos con mucha cantidad de información, se puede volver necesario aislar el código de programación de los datos. De esta forma, podemos guardar información en un fichero independiente, separado del archivo donde tenemos el código de nuestro programa. Así, si necesitamos actualizar o modificar datos, no tenemos que tocar el código de nuestro programa.
@@ -1037,7 +1150,7 @@ El formato JSON es más restrictivo que un objeto de JavaScript:
 Nota: para poner varios objetos JSON en un archivo JSON, los ponemos dentro de un array ([]), es decir cada objeto seria un elemento del array.
 _______________________________________________________
 
-	[7.3.1]. Convertir JSON a Objeto:
+	[7.4.1]. Convertir JSON a Objeto:
 _______________________________________________________
 
 	var str = '{ "name": "Manz", "life": 99 }';
@@ -1048,7 +1161,7 @@ _______________________________________________________
 	obj.life; // 99
 _______________________________________________________
 
-	[7.3.2]. Convertir Objeto a JSON:
+	[7.4.2]. Convertir Objeto a JSON:
 _______________________________________________________
 
 	var obj = {
@@ -1066,7 +1179,7 @@ _______________________________________________________
 Las funciones no están soportadas por JSON, por lo que si intentamos convertir un objeto que contiene métodos o funciones, "JSON.stringify()" devolverá un "string" omitiendo las propiedades que contengan funciones.
 _______________________________________________________
 
-	[7.4]. CLASES:
+	[7.5]. CLASES:
 _______________________________________________________
 
 Aunque Javascript no soporta clases de forma nativa, en ECMAScript 6 se introduce la posibilidad de usar clases como en otros lenguajes, aunque internamente Javascript traduce estas clases al sistema basado en prototipos que usa en realidad.
@@ -1091,7 +1204,7 @@ Una clase es un molde que nos permite crear varios objetos a partir de ese "mold
 Nota: los nombres de las clases deben siempre empezar en mayúsculas.
 _______________________________________________________
 
-	[7.4.1]. Métodos Estáticos:
+	[7.5.1]. Métodos Estáticos:
 _______________________________________________________
 
 Para usar un método de una clase, como por ejemplo" hablar()", debemos crear el objeto basado en la clase haciendo un "new" de la clase. Lo que se denomina crear un objeto o una instancia de la clase. 
@@ -1112,7 +1225,7 @@ En algunos casos, nos puede interesar crear métodos estáticos en una clase por
 Los métodos estáticos se suelen utilizar para crear funciones de apoyo que realicen tareas concretas o genéricas, que queremos incluir en la clase porque están relacionadas con la clase en cuestión.
 _______________________________________________________
 
-	[7.4.2]. Constructores:
+	[7.5.2]. Constructores:
 _______________________________________________________
 
 Se le llama constructor a un tipo especial de método de una clase, que se ejecuta automáticamente a la hora de hacer un "new" de dicha clase. 
@@ -1137,7 +1250,7 @@ Una clase solo puede tener un constructor, y en el caso de que no se especifique
 Nota: En un constructor no se puede utilizar nunca un return, puesto que al hacer un new se devuelve siempre el propio objeto creado.
 _______________________________________________________
 
-	[7.4.3]. Propiedades:
+	[7.5.3]. Propiedades:
 _______________________________________________________
 
 Una propiedad es una variable con información que guarda el objeto.
@@ -1175,7 +1288,7 @@ Las propiedades internas de la clase pueden ser modificadas externamente, simple
 	pato.quienSoy(); // 'Hola, soy Paco'
 _______________________________________________________
 
-	[7.4.3.1]. Ámbitos en una clase:
+	[7.5.3.1]. Ámbitos en una clase:
 _______________________________________________________
 
 Dentro de una clase tenemos dos tipos de ámbitos: ámbito de método y ámbito de clase.
@@ -1223,7 +1336,7 @@ En este caso, podemos comprobar que si se puede acceder a la propiedad desde cua
 Nota: las propiedades también pueden ser modificadas desde fuera de la clase, simplemente asignándole otro valor.
 _______________________________________________________
 
-	[7.4.3.2]. Getters:
+	[7.5.3.2]. Getters:
 _______________________________________________________
 
 Los "getters" son la forma de definir propiedades computadas de lectura en una clase.
@@ -1257,7 +1370,7 @@ Las propiedades computadas son un tipo de propiedades a las que queremos realiza
 Nota: las propiedades con "get" no se pueden cambiar, son de sólo lectura.
 _______________________________________________________
 
-	[7.4.3.3]. Setters:
+	[7.5.3.3]. Setters:
 _______________________________________________________
 
 El "setter", es muy similar al "getter", pero en lugar de leer la información, la modifica:
@@ -1293,7 +1406,7 @@ El "setter", es muy similar al "getter", pero en lugar de leer la información, 
 Podemos realizar tareas sobre los parámetros del "setter" antes de guardarlos en la propiedad interna. En este ejemplo, realizamos un "trim()" para limpiar posibles espacios antes de guardar esa información.
 _______________________________________________________
 
-	[7.4.4]. Herencia:
+	[7.5.4]. Herencia:
 _______________________________________________________
 
 A partir de ECMAScript 6 podemos utilizar las clases y «extender clases»:
