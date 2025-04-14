@@ -15,8 +15,10 @@ INDICE:
 	[5.1]. Acceso a los Elementos del Array
 	[5.2]. Recorrido Arrays
 		[5.2.1]. Recorrido con "forEach"
-		[5.2.2]. Recorrido con ciclo "For In"
+		[5.2.2]. Recorrido con ".map"
+		[5.2.3]. Recorrido con ciclo "For In"
 [6]. Funciones
+	[6.0.1]. Parametros por default
 	[6.1]. Funciones Anónimas
 	[6.2]. Funciones Callbacks
 	[6.3]. Funciones Autoejecutables
@@ -33,20 +35,21 @@ INDICE:
 		[7.1.1]. Agregar o eliminar propiedades del objeto
 		[7.1.2]. Destructuring de objetos
 			[7.1.2.1]. Destructuring de objetos anidados
-	[7.2]. Copiar 2 Objetos
+	[7.2]. Copiar 2 Objetos | "Spread Operator"
 	[7.3]. Métodos del objeto
 		[7.3.1]. Acceso a los metodos del objeto
-	[7.4]. JSON
-		[7.4.1]. Convertir JSON a Objeto
-		[7.4.2]. Convertir Objeto a JSON
-	[7.5]. CLASES
-		[7.5.1]. Métodos Estáticos
-		[7.5.2]. Constructores
-		[7.5.3]. Propiedades
-			[7.5.3.1]. Ámbitos en una clase
-			[7.5.3.2]. Getters
-			[7.5.3.3]. Setters
-		[7.5.4]. Herencia
+	[7.4]. Object .keys, .values y .entries
+	[7.5]. JSON
+		[7.5.1]. Convertir JSON a Objeto
+		[7.5.2]. Convertir Objeto a JSON
+	[7.6]. CLASES
+		[7.6.1]. Métodos Estáticos
+		[7.6.2]. Constructores
+		[7.6.3]. Propiedades
+			[7.6.3.1]. Ámbitos en una clase
+			[7.6.3.2]. Getters
+			[7.6.3.3]. Setters
+		[7.6.4]. Herencia
 [8]. Elementos DOM
 	[8.1]. Acceso a los Nodos(Métodos Clasicos)
 	[8.2]. Acceso a los Nodos(Métodos Modernos)
@@ -429,9 +432,29 @@ Nota: La funcion dentro del "forEach" es una función callback. Tambien es una f
 	nombres.forEach((nombre)=> {
 		document.write(nombre +'<br/>');
 	});
+
 _______________________________________________________
 
-	[5.2.2]. Recorrido con ciclo "For In":
+	[5.2.2]. Recorrido con ".map":
+_______________________________________________________
+
+La función ".map", es casi igual al recorrido de un ciclo "forEach", la diferencia es que ".map" devuelve un nuevo array.
+
+	const carrito = [
+		{ nombre: 'Monitor 20 pulgadas', precio: 500 },
+		{ nombre: 'Tablet', precio: 200 },
+		{ nombre: 'Celular', precio: 700 }
+	]
+
+	const nuevoArreglo = carrito.map( function (producto){
+		return `${producto.nombre} - Precio: ${producto.precio}`;
+	});
+
+	console.log(nuevoArreglo);
+
+_______________________________________________________
+
+	[5.2.3]. Recorrido con ciclo "For In":
 _______________________________________________________
 
 - Recorrido ciclo "For In":
@@ -491,6 +514,22 @@ Otro ejemplo de funciones:
 	imprimir();
 
 Nota: Las comillas invertidas o backticks se introducen en ECMAScript 6.
+
+_______________________________________________________
+
+	[6.0.1]. Parametros por default:
+_______________________________________________________
+
+Podemos indicar valores por defecto para parametros que el usuario no envia como argumentos:
+
+	function saludar(nombre = 'usuario', apellido = '') {
+		console.log(`Hola ${nombre} ${apellido}`);
+	}
+
+	saludar('Ricardo', 'Landinez'); // imprime: "Hola Ricardo Landinez"
+	saludar('Juan'); // imprime: "Hola Juan "
+	saludar(); // imprime: "Hola usuario"
+
 _______________________________________________________
 
 	[6.1]. Funciones Anónimas:
@@ -1036,7 +1075,7 @@ Si queremos acceder al valor de "pais":
 
 _______________________________________________________
 
-	[7.2]. Copiar 2 Objetos:
+	[7.2]. Copiar 2 Objetos | "Spread Operator":
 _______________________________________________________
 
 1) Si tenemos los siguientes objetos:
@@ -1071,9 +1110,11 @@ Y queremos fusionarlos en un solo objeto, lo hacemos de la siguiente forma:
 
 Nota: Al usar el método .assign() para combinar 2 objetos se modifica el objeto original que va como primer argumento. Para evitarlo, mejor usar el "Spread Operator".
 
-2) Otra forma de hacer lo mismo, es usando el "Spread Operator" o "Rest Operator"
+2) Otra forma de hacer lo mismo, es usando el "Spread Operator" o "Rest Operator":
 
 	const resultado2 = { ...producto, ...medidas };
+
+Nota: El "Spread Operator", crea una copia de "producto" y de "medidas", por lo que no altera los objetos originales, tambien lo podemos usar para añadir nuevos elementos en un array.
 
 _______________________________________________________
 
@@ -1113,7 +1154,36 @@ Ejemplo:
 	document.getElementById("demo").innerHTML = person.fullName(); //imprime "John Doe"
 _______________________________________________________
 
-	[7.4]. JSON:
+	[7.4]. Object .keys, .values y .entries:
+_______________________________________________________
+
+Con el siguiente objeto:
+
+	const producto = {
+		nombre: "Monitor 20 pulgadas",
+		precio: "300",
+		disponible: "true"
+	}
+
+1) Usando el metodo estatico "Object.keys", vamos a obtener un array con los nombres de las propiedades(keys|claves) del objeto:
+
+	console.log( Object.keys(producto) );
+	// imprime: ["nombre", "precio", "disponible"]
+
+Nota: este metodo tambien lo podemos usar para saber si un objeto esta vacio.
+
+2) Con el metodo "Object.values" obtenemos un array de sus valores:
+
+	console.log(Object.values(producto));
+	// imprime: ["Monitor 20 pulgadas", "300", "true"]
+
+3) Con el metodo "Object.entries" obtenemos un array de arrays con cada para clave valor:
+
+	console.log(Object.entries(producto));
+	// imprime:  Array [Array ["nombre", "Monitor 20 pulgadas"], Array ["precio", "300"], Array ["disponible", "true"]]
+_______________________________________________________
+
+	[7.5]. JSON:
 _______________________________________________________
 
 Cuando trabajamos con mucha cantidad de información, se puede volver necesario aislar el código de programación de los datos. De esta forma, podemos guardar información en un fichero independiente, separado del archivo donde tenemos el código de nuestro programa. Así, si necesitamos actualizar o modificar datos, no tenemos que tocar el código de nuestro programa.
@@ -1150,7 +1220,7 @@ El formato JSON es más restrictivo que un objeto de JavaScript:
 Nota: para poner varios objetos JSON en un archivo JSON, los ponemos dentro de un array ([]), es decir cada objeto seria un elemento del array.
 _______________________________________________________
 
-	[7.4.1]. Convertir JSON a Objeto:
+	[7.5.1]. Convertir JSON a Objeto:
 _______________________________________________________
 
 	var str = '{ "name": "Manz", "life": 99 }';
@@ -1161,7 +1231,7 @@ _______________________________________________________
 	obj.life; // 99
 _______________________________________________________
 
-	[7.4.2]. Convertir Objeto a JSON:
+	[7.5.2]. Convertir Objeto a JSON:
 _______________________________________________________
 
 	var obj = {
@@ -1179,7 +1249,7 @@ _______________________________________________________
 Las funciones no están soportadas por JSON, por lo que si intentamos convertir un objeto que contiene métodos o funciones, "JSON.stringify()" devolverá un "string" omitiendo las propiedades que contengan funciones.
 _______________________________________________________
 
-	[7.5]. CLASES:
+	[7.6]. CLASES:
 _______________________________________________________
 
 Aunque Javascript no soporta clases de forma nativa, en ECMAScript 6 se introduce la posibilidad de usar clases como en otros lenguajes, aunque internamente Javascript traduce estas clases al sistema basado en prototipos que usa en realidad.
@@ -1204,7 +1274,7 @@ Una clase es un molde que nos permite crear varios objetos a partir de ese "mold
 Nota: los nombres de las clases deben siempre empezar en mayúsculas.
 _______________________________________________________
 
-	[7.5.1]. Métodos Estáticos:
+	[7.6.1]. Métodos Estáticos:
 _______________________________________________________
 
 Para usar un método de una clase, como por ejemplo" hablar()", debemos crear el objeto basado en la clase haciendo un "new" de la clase. Lo que se denomina crear un objeto o una instancia de la clase. 
@@ -1225,7 +1295,7 @@ En algunos casos, nos puede interesar crear métodos estáticos en una clase por
 Los métodos estáticos se suelen utilizar para crear funciones de apoyo que realicen tareas concretas o genéricas, que queremos incluir en la clase porque están relacionadas con la clase en cuestión.
 _______________________________________________________
 
-	[7.5.2]. Constructores:
+	[7.6.2]. Constructores:
 _______________________________________________________
 
 Se le llama constructor a un tipo especial de método de una clase, que se ejecuta automáticamente a la hora de hacer un "new" de dicha clase. 
@@ -1250,7 +1320,7 @@ Una clase solo puede tener un constructor, y en el caso de que no se especifique
 Nota: En un constructor no se puede utilizar nunca un return, puesto que al hacer un new se devuelve siempre el propio objeto creado.
 _______________________________________________________
 
-	[7.5.3]. Propiedades:
+	[7.6.3]. Propiedades:
 _______________________________________________________
 
 Una propiedad es una variable con información que guarda el objeto.
@@ -1288,7 +1358,7 @@ Las propiedades internas de la clase pueden ser modificadas externamente, simple
 	pato.quienSoy(); // 'Hola, soy Paco'
 _______________________________________________________
 
-	[7.5.3.1]. Ámbitos en una clase:
+	[7.6.3.1]. Ámbitos en una clase:
 _______________________________________________________
 
 Dentro de una clase tenemos dos tipos de ámbitos: ámbito de método y ámbito de clase.
@@ -1336,7 +1406,7 @@ En este caso, podemos comprobar que si se puede acceder a la propiedad desde cua
 Nota: las propiedades también pueden ser modificadas desde fuera de la clase, simplemente asignándole otro valor.
 _______________________________________________________
 
-	[7.5.3.2]. Getters:
+	[7.6.3.2]. Getters:
 _______________________________________________________
 
 Los "getters" son la forma de definir propiedades computadas de lectura en una clase.
@@ -1370,7 +1440,7 @@ Las propiedades computadas son un tipo de propiedades a las que queremos realiza
 Nota: las propiedades con "get" no se pueden cambiar, son de sólo lectura.
 _______________________________________________________
 
-	[7.5.3.3]. Setters:
+	[7.6.3.3]. Setters:
 _______________________________________________________
 
 El "setter", es muy similar al "getter", pero en lugar de leer la información, la modifica:
@@ -1406,7 +1476,7 @@ El "setter", es muy similar al "getter", pero en lugar de leer la información, 
 Podemos realizar tareas sobre los parámetros del "setter" antes de guardarlos en la propiedad interna. En este ejemplo, realizamos un "trim()" para limpiar posibles espacios antes de guardar esa información.
 _______________________________________________________
 
-	[7.5.4]. Herencia:
+	[7.6.4]. Herencia:
 _______________________________________________________
 
 A partir de ECMAScript 6 podemos utilizar las clases y «extender clases»:
