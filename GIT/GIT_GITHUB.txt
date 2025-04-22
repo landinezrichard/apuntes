@@ -372,7 +372,7 @@ El Atajo "-am" es la union de los siguientes comandos:
 
 	(git add -A) + (git commit -m "Descripción de lo que se hizo")
 
-Es iagua a:
+Es iagual a:
 
 	git commit -am "Descripción de lo que se hizo"
 

@@ -29,6 +29,7 @@ INDICE:
 		[6.7.1]. Ordenando Arrays
 		[6.7.2]. Filtrando Arrays
 		[6.7.3]. Buscando en Arrays
+		[6.7.4]. Acumulador ".reduce"
 	[6.8]. Funciones para Números
 [7]. Objetos
 	[7.1]. Acceso a las propiedades del objeto
@@ -882,6 +883,21 @@ _______________________________________________________
 	[6.7.3]. Buscando en Arrays:
 _______________________________________________________
 
+- El método "includes()" comprueba si el elemento se encuentra en el array, devuelve "true" o "false":
+
+	const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'. 'Junio'. 'Julio'];
+	console.log( meses.includes('Diciembre') ); //imprime: "false"
+
+- Para comprobar si un elemento se encuentra en un array de objetos, en vez de "includes()" usamos ".some":
+
+	const carrito = [
+		{ nombre: 'Monitor 20 pulgadas', precio: 500 },
+		{ nombre: 'Tablet', precio: 200 },
+		{ nombre: 'Celular', precio: 700 }
+	]
+
+	const existe = carrito.some( producto => producto.nombre === 'Celular'); // devuelve: "true"
+
 - El método "indexOf()" busca en un array un valor de un elemento y devuelve su posición.
 
 	array.indexOf(item, start);
@@ -921,11 +937,47 @@ Este ejemplo encuentra el índice del primer elemento que es mayor que 18:
 	function myFunction(value, index, array) {
 		return value > 18;
 	}
-	//fist = 3
+	//first = 3
+
+Otro ejemplo, encontramos el indice del mes de abril:
+
+	const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo'. 'Junio'. 'Julio'];
+	
+	const indice = meses.findIndex( mes => mes === 'Abril' );
+	console.log(indice); // imprime: "3"
+
+Devuelve "-1" en caso de que no encuentre el elemento.
 
 Nota: para ver más metodos de iteración de arrays ir a:
 
 	https://www.w3schools.com/js/js_array_iteration.asp
+
+_______________________________________________________
+
+	[6.7.4]. Acumulador ".reduce":
+_______________________________________________________
+
+El método ".reduce(ƒ, initial)", ejecuta ƒ con cada elemento (de izq a der), acumulando el resultado. Es un metodo reductor o acumulador, nos sirve por ejemplo para hacer una sumatoria de multiples valores, entregando un unico resultado.
+
+Ejemplo:
+
+	const carrito = [
+		{ nombre: 'Monitor 20 pulgadas', precio: 500 },
+		{ nombre: 'Tablet', precio: 200 },
+		{ nombre: 'Celular', precio: 700 },
+		{ nombre: 'Audifonos', precio: 300 },
+		{ nombre: 'Teclado', precio: 100 },
+	]
+
+	// con un forEach:
+	let total = 0;
+	carrito.forEach( producto => total += producto.precio );\
+	console.log(total);
+
+	// con reduce:
+	let resultado = carrito.reduce( (total, producto) => total + producto.precio, 0 );
+	console.log(resultado);
+
 _______________________________________________________
 
 	[6.8]. Funciones para Números:
