@@ -68,19 +68,27 @@ INDICE:
 		[9.1.1]. Metodo "addEventListener()"
 			[9.1.1.1]. Evento "DOMContentLoaded()"
 		[9.1.2]. Metodo "removeEventListener()"
-[10]. AJAX Peticiones HTTP
-	[10.1]. XHR: "XMLHttpRequest"
-		[10.1.1]. Propiedades XHR
-		[10.1.2]. Métodos XHR
-		[10.1.3]. Eventos XHR
-	[10.2]. PROMESAS (promise)
-	[10.3]. Fetch
-		[10.3.1]. Cabeceras (Headers)
-		[10.3.2]. Respuesta de la petición HTTP
-		[10.3.3]. Métodos del objeto "response"
-		[10.3.4]. Ejemplo usando promesas
-		[10.3.5]. Ejemplo usando "Async/await"
-	[10.4]. Política CORS
+[10]. localStorage
+	[10.1]. Obtener datos de "localStorage"
+	[10.2]. Eliminar y actualizar datos de "localStorage"
+[11]. AJAX Peticiones HTTP
+	[11.1]. XHR: "XMLHttpRequest"
+		[11.1.1]. Propiedades XHR
+		[11.1.2]. Métodos XHR
+		[11.1.3]. Eventos XHR
+	[11.2]. PROMESAS (promise)
+	[11.3]. Fetch
+		[11.3.1]. Cabeceras (Headers)
+		[11.3.2]. Respuesta de la petición HTTP
+		[11.3.3]. Métodos del objeto "response"
+		[11.3.4]. Ejemplo usando promesas
+		[11.3.5]. Ejemplo usando "Async/await"
+	[11.4]. Política CORS
+
+[]. Módulos ECMAScript (ESM)
+	[.1]. Exportación de Módulos
+	[.2]. Importación de Módulos
+	[.3]. Convenciones de módulos ES
 
 _______________________________________________________
 
@@ -2325,7 +2333,80 @@ Elimina los controladores de eventos que se han añadido con el método "addEven
 	*/
 _______________________________________________________
 
-	[10]. AJAX Peticiones HTTP:
+	[10]. localStorage:
+_______________________________________________________
+
+La API web "localStorage", nos permite guardar datos en el navegador del usuario, de forma que cuando cierre el navegador o recargue la página, esos datos persistan.
+
+	localStorage.setItem('clave', 'valor');
+
+Ejemplo:
+
+	localStorage.setItem('nombre', 'Ricardo');
+
+Nota 1: Para ver los datos guardados en el navegador, vamos a :
+
+	Inpector --> Aplicación --> Almacenamiento Local
+
+Nota 2: en "localStorage", solo podemos almacenar "strings", para guardar objetos o arrays, toca convertirlos a "string".
+
+Ejemplo objeto:
+
+	const producto = {
+		nombre: "Monitor 27 pulgadas",
+		precio: 300
+	}
+
+	const productoString = JSON.stringify( producto );
+	
+	localStorage.setItem('producto', productoString);
+
+Ejemplo array:
+
+	const meses = ["Enero", "Febrero", "Marzo"];
+
+	localStorage.setItem('meses', JSON.stringify( meses ) );
+
+_______________________________________________________
+
+	[10.1]. Obtener datos de "localStorage":
+_______________________________________________________
+
+Para obtener los datos almacenados, usamos ".getItem()" con la clave(key) previamente guardada.
+
+	const nombre = localStorage.getItem('nombre'); // 'Ricardo'
+
+Para los objetos y arrays, es necesario parsearlos, ya que estan guardados en "string":
+
+	const producto = localStorage.getItem('producto');
+	console.log(JSON.parse(producto) );
+
+	const meses = localStorage.getItem('meses');
+	const mesesArray = JSON.parse(meses);
+	console.log(mesesArray);
+_______________________________________________________
+
+	[10.2]. Eliminar y actualizar datos de "localStorage":
+_______________________________________________________
+
+- Para eliminar datos usamos el metodo ".removeItem('clave')":
+
+	localStorage.removeItem('nombre');
+
+- Para actualizar, tenemos que obtener la clave, parsearla, actualizar el valor, convertirla nuevamente en "string" y luego almacenarla:
+
+	const mesesArray = JSON.parse( localStorage.getItem('meses') );
+
+	mesesArray.push('Abril');
+
+	localStorage.setItem('meses', JSON.stringify(mesesArray) );
+
+- Para eliminar todas las claves almacenadas en "localStorage" usamos el metodo ".clear()":
+
+	localStorage.clear();
+_______________________________________________________
+
+	[11]. AJAX Peticiones HTTP:
 _______________________________________________________
 
 Una petición HTTP es como suele denominarse a la acción por parte del navegador de solicitar a un servidor web un documento o archivo, ya sea un fichero ".html", una imagen, una tipografía, un archivo ".js", etc. Gracias a dicha petición, el navegador puede descargar ese archivo, almacenarlo en un caché temporal de archivos del navegador y, finalmente, mostrarlo en la página actual que lo ha solicitado.
@@ -2337,7 +2418,7 @@ Actualmente en vez de usar el formato de datos XML se usa JSON.
 Existen varias formas de realizar peticiones HTTP mediante AJAX, pero las principales suelen ser "XMLHttpRequest" y "fetch" (nativas, incluidas en el navegador por defecto), además de liberías como "axios" o "superagent".
 _______________________________________________________
 
-	[10.1]. XHR: "XMLHttpRequest":
+	[11.1]. XHR: "XMLHttpRequest":
 _______________________________________________________
 
 "XMLHttpRequest" (XHR) es un objeto especial de Javascript que permite realizar peticiones HTTP asíncronas (AJAX) de forma nativa desde Javascript. Se trata de la primera implementación que existió en ECMAScript (ES5) antes de surgir fetch, el estándar actual.
@@ -2400,7 +2481,7 @@ Definimos el tipo de petición utilizando el método ".open(method, url)", indic
 El método ".send()", lanza la petición al servidor.
 _______________________________________________________
 
-	[10.1.1]. Propiedades XHR:
+	[11.1.1]. Propiedades XHR:
 _______________________________________________________
 
 Al crear un objeto XHR tenemos acceso a una serie de propiedades que forman parte de nuestra instancia. Entre ellas, se encuentran las siguientes:
@@ -2444,7 +2525,7 @@ Al crear un objeto XHR tenemos acceso a una serie de propiedades que forman part
 	".withCredentials" --> Indica si la petición HTTP se está realizando con credenciales (enviando un usuario y contraseña).
 _______________________________________________________
 
-	[10.1.2]. Métodos XHR:
+	[11.1.2]. Métodos XHR:
 _______________________________________________________
 
 Los metodos del objeto XHR son:
@@ -2468,7 +2549,7 @@ Los metodos del objeto XHR son:
 	".abort()" --> Cancela la petición enviada.
 _______________________________________________________
 
-	[10.1.3]. Eventos XHR:
+	[11.1.3]. Eventos XHR:
 _______________________________________________________
 
 El objeto XHR tiene los siguientes eventos:
@@ -2490,7 +2571,7 @@ El objeto XHR tiene los siguientes eventos:
 	".onreadystatechange" --> Se dispara cuando el valor .readyState cambia.
 _______________________________________________________
 
-	[10.2]. PROMESAS (promise):
+	[11.2]. PROMESAS (promise):
 _______________________________________________________
 
 Usado cuando se hacen peticiones asicronas, una promesa nos permite capturar un valor de respuesta que puede estar disponible ahora, a futuro, o nunca.
@@ -2527,7 +2608,7 @@ Nota: para más info. de las promesas ir a:
 	https://lenguajejs.com/javascript/asincronia/promesas/
 _______________________________________________________
 
-	[10.3]. Fetch:
+	[11.3]. Fetch:
 _______________________________________________________
 
 Basado en promesas de Javascript, para realizar peticiones HTTP asíncronas de una forma más legible y cómoda.
@@ -2582,7 +2663,7 @@ Ejemplo:
 	};
 _______________________________________________________
 
-	[10.3.1]. Cabeceras (Headers):
+	[11.3.1]. Cabeceras (Headers):
 _______________________________________________________
 
 Se puede crear un objeto "Headers":
@@ -2610,7 +2691,7 @@ Como muchos otros objetos iterables, podemos utilizar los métodos ".entries()",
 	}
 _______________________________________________________
 
-	[10.3.2]. Respuesta de la petición HTTP:
+	[11.3.2]. Respuesta de la petición HTTP:
 _______________________________________________________
 
 En el primer ".then()" tenemos un objeto "response". Se trata de la respuesta que nos llega del servidor web al momento de recibir nuestra petición:
@@ -2641,7 +2722,7 @@ Se está utilizando una arrow function que hace un "return" implícito de la pro
 	".url" --> URL completa de la petición HTTP que se ha realizado.
 _______________________________________________________
 
-	[10.3.3]. Métodos del objeto "response":
+	[11.3.3]. Métodos del objeto "response":
 _______________________________________________________
 
 La mayoría de estos métodos, procesan mediante una promesa los datos recibidos y facilitar el trabajo con ellos:
@@ -2690,7 +2771,7 @@ El caso anterior utilizando el método "response.json()" en lugar de "response.t
 Con "response.json()" nos ahorraríamos tener que hacer el "JSON.parse()" de forma manual.
 _______________________________________________________
 
-	[10.3.4]. Ejemplo usando promesas:
+	[11.3.4]. Ejemplo usando promesas:
 _______________________________________________________
 
 - Comprobamos que la petición es correcta con "response.ok".
@@ -2732,7 +2813,7 @@ Podemos optimizar un poco el ejemplo anterior. Creamos la función "isResponseOk
 		.catch(err => console.error("ERROR: ", err.message));
 _______________________________________________________
 
-	[10.3.5]. Ejemplo usando "Async/await":
+	[11.3.5]. Ejemplo usando "Async/await":
 _______________________________________________________
 
 Utilizar "async/await" no es más que lo que se denomina "azúcar sintáctico", es decir, utilizar algo visualmente más agradable, pero que por debajo realiza la misma tarea. Para ello, lo que debemos tener siempre presente es que un "await" sólo se puede ejecutar si esta dentro de una función definida como "async".
@@ -2761,7 +2842,7 @@ En este caso, lo que hacemos es lo siguiente:
 Una vez hecho esto, podemos llamar a nuestra función" request" y almacenar el resultado, usando nuevamente "await". Al final, utilizar ".then()" o "async/await" es una cuestión de gustos y puedes utilizar el que más te guste.
 _______________________________________________________
 
-	[10.4]. Política CORS:
+	[11.4]. Política CORS:
 _______________________________________________________
 
 "Cross Origin" (origen cruzado) es la palabra que se utiliza para denominar el tipo de peticiones que se realizan a un dominio diferente del dominio de origen desde donde se realiza la petición. De esta forma, por una parte tenemos las peticiones de origen cruzado (cross-origin) y las peticiones del mismo origen (same-origin).
