@@ -51,6 +51,7 @@ INDICE:
 			[7.6.3.2]. Getters
 			[7.6.3.3]. Setters
 		[7.6.4]. Herencia
+	[7.7]. Prototypes
 [8]. Elementos DOM
 	[8.1]. Acceso a los Nodos(Métodos Clasicos)
 	[8.2]. Acceso a los Nodos(Métodos Modernos)
@@ -71,19 +72,20 @@ INDICE:
 [10]. localStorage
 	[10.1]. Obtener datos de "localStorage"
 	[10.2]. Eliminar y actualizar datos de "localStorage"
-[11]. AJAX Peticiones HTTP
-	[11.1]. XHR: "XMLHttpRequest"
-		[11.1.1]. Propiedades XHR
-		[11.1.2]. Métodos XHR
-		[11.1.3]. Eventos XHR
-	[11.2]. PROMESAS (promise)
-	[11.3]. Fetch
-		[11.3.1]. Cabeceras (Headers)
-		[11.3.2]. Respuesta de la petición HTTP
-		[11.3.3]. Métodos del objeto "response"
-		[11.3.4]. Ejemplo usando promesas
-		[11.3.5]. Ejemplo usando "Async/await"
-	[11.4]. Política CORS
+[11]. Fechas
+[12]. AJAX Peticiones HTTP
+	[12.1]. XHR: "XMLHttpRequest"
+		[12.1.1]. Propiedades XHR
+		[12.1.2]. Métodos XHR
+		[12.1.3]. Eventos XHR
+	[12.2]. PROMESAS (promise)
+	[12.3]. Fetch
+		[12.3.1]. Cabeceras (Headers)
+		[12.3.2]. Respuesta de la petición HTTP
+		[12.3.3]. Métodos del objeto "response"
+		[12.3.4]. Ejemplo usando promesas
+		[12.3.5]. Ejemplo usando "Async/await"
+	[12.4]. Política CORS
 
 []. Módulos ECMAScript (ESM)
 	[.1]. Exportación de Módulos
@@ -1047,6 +1049,35 @@ Las propiedades de los objetos se escriben como pares "nombre:valor", separados 
 		model:"500", 
 		color:"white"
 	};
+
+Nota 1: Esta forma de crear objetos es un "object literal", y no es reutilizable, hay otra forma llamada "object constructor", creando una función con el nombre de la clase y usando la palabra "new":
+
+	function Car (type, model, color){
+		this.type = type; 
+		this.model = model; 
+		this.color = color;
+	}
+
+	const fiat = new Car("Fiat", "500", "white");
+
+Nota 2: si tenemos una variable cuyo nombre es el mismo nombre de la clave del objeto, podemos solo especificar la variable, por ejemplo:
+
+	let color = 'rojo';
+
+	const car2 = {
+		type:"Audi", 
+		model:"A3", 
+		color
+	}
+
+Es equivalente a:
+
+	const car2 = {
+		type:"Audi", 
+		model:"A3", 
+		color: color
+	}
+
 _______________________________________________________
 
 	[7.1]. Acceso a las propiedades del objeto:
@@ -1612,6 +1643,94 @@ En el caso de que la clase "Hijo" no tuviera método "tarea()" heredaría dicho 
 - Si se indica "super.tarea()" (donde "tarea" es el nombre del método de la clase padre), esto llamará y ejecutará el método de la clase "Padre", y al terminar, continua realizando el código del método de la clase hija. Es el caso del ejemplo anterior.
 
 - Si no se indica "super.tarea()", el método "tarea()" de la clase hijo sobreescribe al de la clase "Padre", ocultándolo y ejecutando sólo el código de la clase hija.
+
+_______________________________________________________
+
+	[7.7]. Prototypes:
+_______________________________________________________
+
+Los prototypes en JavaScript resuelven varios problemas relacionados con la eficiencia y la estructura del código, especialmente cuando se trabaja con objetos y clases. Algunos de los problemas que resuelven son:
+
+- Eficiencia de Memoria: Sin prototypes, cada instancia de un objeto tendría su propia copia de cada método. Esto puede llevar a un uso ineficiente de la memoria, especialmente si hay muchas instancias de un mismo objeto. Con prototypes, los métodos son compartidos entre todas las instancias del objeto, reduciendo el consumo de memoria.
+
+	// Sin prototypes
+	function Persona(nombre) {
+		this.nombre = nombre;
+		this.saludar = function() {
+			console.log(`Hola, soy ${this.nombre}`);
+		}
+	}
+	
+	const persona1 = new Persona('Ana');
+	const persona2 = new Persona('Juan');
+	
+	// Con prototypes
+	function Persona(nombre) {
+		this.nombre = nombre;
+	}
+	
+	Persona.prototype.saludar = function() {
+		console.log(`Hola, soy ${this.nombre}`);
+	}
+	
+	const persona1 = new Persona('Ana');
+	const persona2 = new Persona('Juan');
+
+En el primer caso, cada instancia (persona1 y persona2) tiene su propia copia del método saludar, mientras que en el segundo caso, todas las instancias comparten el mismo método a través del prototype.
+
+- Herencia y Reutilización de Código: Los prototypes permiten una forma más simple y eficiente de heredar propiedades y métodos entre objetos. Esto facilita la reutilización de código y la creación de jerarquías de objetos.
+
+	function Animal(nombre) {
+		this.nombre = nombre;
+	}
+	
+	Animal.prototype.hablar = function() {
+		console.log(`${this.nombre} hace un ruido.`);
+	}
+	
+	function Perro(nombre, raza) {
+		Animal.call(this, nombre); // Hereda el constructor de Animal
+		this.raza = raza;
+	}
+	
+	Perro.prototype = Object.create(Animal.prototype); // Hereda métodos de Animal
+	Perro.prototype.constructor = Perro;
+	
+	Perro.prototype.ladrar = function() {
+		console.log(`${this.nombre} ladra.`);
+	}
+	
+	const rex = new Perro('Rex', 'Labrador');
+	rex.hablar(); // Rex hace un ruido.
+	rex.ladrar(); // Rex ladra.
+
+En este ejemplo, Perro hereda de Animal, lo que permite a los perros usar el método hablar de Animal y también definir su propio método ladrar.
+
+- Organización y Mantenimiento del Código: El uso de prototypes ayuda a organizar mejor el código, especialmente en aplicaciones grandes, al separar la lógica compartida y la específica de las instancias.
+
+	// Definición de la clase
+	function Coche(marca, modelo) {
+		this.marca = marca;
+		this.modelo = modelo;
+	}
+	
+	// Métodos compartidos a través del prototype
+	Coche.prototype.arrancar = function() {
+		console.log(`${this.marca} ${this.modelo} está arrancando.`);
+	};
+	
+	Coche.prototype.detener = function() {
+		console.log(`${this.marca} ${this.modelo} se ha detenido.`);
+	};
+	
+	const coche1 = new Coche('Toyota', 'Corolla');
+	const coche2 = new Coche('Honda', 'Civic');
+	
+	coche1.arrancar(); // Toyota Corolla está arrancando.
+	coche2.arrancar(); // Honda Civic está arrancando.
+
+Aquí, los métodos arrancar y detener están definidos una vez en el prototype y son compartidos por todas las instancias de Coche, lo que facilita la lectura y el mantenimiento del código.
+
 _______________________________________________________
 
 	[8]. Elementos DOM:
@@ -2406,7 +2525,86 @@ _______________________________________________________
 	localStorage.clear();
 _______________________________________________________
 
-	[11]. AJAX Peticiones HTTP:
+	[11]. Fechas:
+_______________________________________________________
+
+Las fechas en JavaScript, las creamos en un objeto gracias a "Date()":
+
+	// Obtiene la fecha del momento actual.
+	const fechaActual = new Date();
+
+	// Obtenemos la fecha 30 de Enero de 2018, a las 23h 30m 14seg
+	// Convierte el texto con formato YYYY/MM/DD HH:MM:SS a una fecha.
+	const date = new Date("2018/01/30 23:30:14");
+
+	// Creamos una fecha pasando cada uno de sus componentes numéricos*
+	// new Date(y, m, d, h, min, s, ms)
+	const date = new Date(2018, 0, 30, 23, 30, 14, 0);
+
+Nota: si se especifica la fecha con formato new Date(y, m, d, h, min, s, ms), el número de mes se indica de 0 a 11 (0 --> Enero, 11 --> Diciembre). 
+
+"Date()" tambien tiene diferentes metodos:
+
+- .getDay() --> Devuelve el día de la semana (0 --> Domingo, 6 --> Sábado).
+
+- .getFullYear() --> Devuelve el año con 4 cifras.
+
+- .getMonth() --> Devuelve la representación interna del mes (0 --> Enero, 11 --> Diciembre).
+
+- .getDate() --> Devuelve el día del mes.
+
+- .getHours() --> Devuelve la hora (Formato militar: 23 en lugar de 11).
+
+- .getMinutes() --> Devuelve los minutos.
+
+- .getSeconds() --> Devuelve los segundos.
+
+- .getMilliseconds() --> Devuelve los milisegundos.
+
+- .getTime() --> Devuelve el UNIX Timestamp: segundos transcurridos desde 1/1/1970.
+
+- .getTimezoneOffset() --> Diferencia horaria (en min) de la hora local respecto a UTC.
+
+Ejemplos:
+
+	const date = new Date("2018/01/30 15:30:10.999");
+
+	date.getDay();            // 2 (Martes)
+	date.getDate();           // 30
+	date.getMonth();          // 0 (Enero)
+	date.getFullYear();       // 2018
+	date.getHours();          // 15
+	date.getMinutes();        // 30
+	date.getSeconds();        // 10
+	date.getMilliseconds();   // 999
+	date.getTimezoneOffset(); // 0
+	date.getTime();           // 1517326210999 (Tiempo Unix)
+
+Nota: tambien se cuentan con metodos "setter", por ejemplo:
+
+	date.setDate(15);           // Cambia a 15/01/2018 15:30:10.999 (Devuelve 1516030210999)
+	date.setMonth(1);           // Cambia a 15/02/2018 15:30:10.999 (Devuelve 1518708610999)
+	date.setFullYear(2020);     // Cambia a 15/02/2020 15:30:10.999 (Devuelve 1581780610999)
+	date.setHours(21);          // Cambia a 15/02/2020 21:30:10.999 (Devuelve 1581802210999)
+	date.setMinutes(00);        // Cambia a 15/02/2020 21:00:10.999 (Devuelve 1581800410999)
+	date.setSeconds(3);         // Cambia a 15/02/2020 21:00:03.999 (Devuelve 1581800403999)
+	date.setMilliseconds(79);   // Cambia a 15/02/2020 21:00:03.079 (Devuelve 1581800403079)
+	date.setTime(872817240000); // Cambia a 29/08/1997 02:14:00.000 (Devuelve 872817240000)
+
+Además de cambiar la fecha del objeto "Date", estos métodos devuelven un numero en tiempo Unix de la fecha modificada.
+
+Nota: Existen librerias que nos permiten formatear y trabajar con fechas de una mejor forma a "Date":
+
+	- Luxon: https://moment.github.io/luxon/#/
+	- Day.js: https://day.js.org/
+
+Para vero otras librerias:
+
+	https://lenguajejs.com/javascript/fechas/date-fechas-nativas/#librer%C3%ADas-para-fechas
+
+_______________________________________________________
+
+	[12]. AJAX Peticiones HTTP:
 _______________________________________________________
 
 Una petición HTTP es como suele denominarse a la acción por parte del navegador de solicitar a un servidor web un documento o archivo, ya sea un fichero ".html", una imagen, una tipografía, un archivo ".js", etc. Gracias a dicha petición, el navegador puede descargar ese archivo, almacenarlo en un caché temporal de archivos del navegador y, finalmente, mostrarlo en la página actual que lo ha solicitado.
@@ -2418,7 +2616,7 @@ Actualmente en vez de usar el formato de datos XML se usa JSON.
 Existen varias formas de realizar peticiones HTTP mediante AJAX, pero las principales suelen ser "XMLHttpRequest" y "fetch" (nativas, incluidas en el navegador por defecto), además de liberías como "axios" o "superagent".
 _______________________________________________________
 
-	[11.1]. XHR: "XMLHttpRequest":
+	[12.1]. XHR: "XMLHttpRequest":
 _______________________________________________________
 
 "XMLHttpRequest" (XHR) es un objeto especial de Javascript que permite realizar peticiones HTTP asíncronas (AJAX) de forma nativa desde Javascript. Se trata de la primera implementación que existió en ECMAScript (ES5) antes de surgir fetch, el estándar actual.
@@ -2481,7 +2679,7 @@ Definimos el tipo de petición utilizando el método ".open(method, url)", indic
 El método ".send()", lanza la petición al servidor.
 _______________________________________________________
 
-	[11.1.1]. Propiedades XHR:
+	[12.1.1]. Propiedades XHR:
 _______________________________________________________
 
 Al crear un objeto XHR tenemos acceso a una serie de propiedades que forman parte de nuestra instancia. Entre ellas, se encuentran las siguientes:
@@ -2525,7 +2723,7 @@ Al crear un objeto XHR tenemos acceso a una serie de propiedades que forman part
 	".withCredentials" --> Indica si la petición HTTP se está realizando con credenciales (enviando un usuario y contraseña).
 _______________________________________________________
 
-	[11.1.2]. Métodos XHR:
+	[12.1.2]. Métodos XHR:
 _______________________________________________________
 
 Los metodos del objeto XHR son:
@@ -2549,7 +2747,7 @@ Los metodos del objeto XHR son:
 	".abort()" --> Cancela la petición enviada.
 _______________________________________________________
 
-	[11.1.3]. Eventos XHR:
+	[12.1.3]. Eventos XHR:
 _______________________________________________________
 
 El objeto XHR tiene los siguientes eventos:
@@ -2571,7 +2769,7 @@ El objeto XHR tiene los siguientes eventos:
 	".onreadystatechange" --> Se dispara cuando el valor .readyState cambia.
 _______________________________________________________
 
-	[11.2]. PROMESAS (promise):
+	[12.2]. PROMESAS (promise):
 _______________________________________________________
 
 Usado cuando se hacen peticiones asicronas, una promesa nos permite capturar un valor de respuesta que puede estar disponible ahora, a futuro, o nunca.
@@ -2608,7 +2806,7 @@ Nota: para más info. de las promesas ir a:
 	https://lenguajejs.com/javascript/asincronia/promesas/
 _______________________________________________________
 
-	[11.3]. Fetch:
+	[12.3]. Fetch:
 _______________________________________________________
 
 Basado en promesas de Javascript, para realizar peticiones HTTP asíncronas de una forma más legible y cómoda.
@@ -2663,7 +2861,7 @@ Ejemplo:
 	};
 _______________________________________________________
 
-	[11.3.1]. Cabeceras (Headers):
+	[12.3.1]. Cabeceras (Headers):
 _______________________________________________________
 
 Se puede crear un objeto "Headers":
@@ -2691,7 +2889,7 @@ Como muchos otros objetos iterables, podemos utilizar los métodos ".entries()",
 	}
 _______________________________________________________
 
-	[11.3.2]. Respuesta de la petición HTTP:
+	[12.3.2]. Respuesta de la petición HTTP:
 _______________________________________________________
 
 En el primer ".then()" tenemos un objeto "response". Se trata de la respuesta que nos llega del servidor web al momento de recibir nuestra petición:
@@ -2722,7 +2920,7 @@ Se está utilizando una arrow function que hace un "return" implícito de la pro
 	".url" --> URL completa de la petición HTTP que se ha realizado.
 _______________________________________________________
 
-	[11.3.3]. Métodos del objeto "response":
+	[12.3.3]. Métodos del objeto "response":
 _______________________________________________________
 
 La mayoría de estos métodos, procesan mediante una promesa los datos recibidos y facilitar el trabajo con ellos:
@@ -2771,7 +2969,7 @@ El caso anterior utilizando el método "response.json()" en lugar de "response.t
 Con "response.json()" nos ahorraríamos tener que hacer el "JSON.parse()" de forma manual.
 _______________________________________________________
 
-	[11.3.4]. Ejemplo usando promesas:
+	[12.3.4]. Ejemplo usando promesas:
 _______________________________________________________
 
 - Comprobamos que la petición es correcta con "response.ok".
@@ -2813,7 +3011,7 @@ Podemos optimizar un poco el ejemplo anterior. Creamos la función "isResponseOk
 		.catch(err => console.error("ERROR: ", err.message));
 _______________________________________________________
 
-	[11.3.5]. Ejemplo usando "Async/await":
+	[12.3.5]. Ejemplo usando "Async/await":
 _______________________________________________________
 
 Utilizar "async/await" no es más que lo que se denomina "azúcar sintáctico", es decir, utilizar algo visualmente más agradable, pero que por debajo realiza la misma tarea. Para ello, lo que debemos tener siempre presente es que un "await" sólo se puede ejecutar si esta dentro de una función definida como "async".
@@ -2842,7 +3040,7 @@ En este caso, lo que hacemos es lo siguiente:
 Una vez hecho esto, podemos llamar a nuestra función" request" y almacenar el resultado, usando nuevamente "await". Al final, utilizar ".then()" o "async/await" es una cuestión de gustos y puedes utilizar el que más te guste.
 _______________________________________________________
 
-	[11.4]. Política CORS:
+	[12.4]. Política CORS:
 _______________________________________________________
 
 "Cross Origin" (origen cruzado) es la palabra que se utiliza para denominar el tipo de peticiones que se realizan a un dominio diferente del dominio de origen desde donde se realiza la petición. De esta forma, por una parte tenemos las peticiones de origen cruzado (cross-origin) y las peticiones del mismo origen (same-origin).
