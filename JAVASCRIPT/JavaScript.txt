@@ -11,6 +11,7 @@ INDICE:
 	[4.1]. Condicional if/else
 	[4.2]. Operador ternario
 	[4.3]. Switch
+	[4.4]. Optional chaining
 [5]. Arrays
 	[5.1]. Acceso a los Elementos del Array
 	[5.2]. Recorrido Arrays
@@ -351,6 +352,66 @@ Permite definir casos específicos a realizar en el caso de que la variable expu
 	}
 
 	console.log("He obtenido un", calificacion);
+_______________________________________________________
+
+	[4.4]. Optional chaining:
+_______________________________________________________
+
+El "Optional chaining" (encadenamiento opcional), es un operador que permite acceder a propiedades o métodos, aunque su elemento padre no exista, ya que realiza una comprobación previa.
+
+Ejemplo 1:
+
+	const alertaPrevia = document.querySelector('.alert');
+	
+	if(alertaPrevia){
+		alertaPrevia.remove();
+	}
+
+Podemos resumirlo usando el "Optional chaining" de la siguiente manera:
+
+	const alertaPrevia = document.querySelector('.alert');
+	// alertaPrevia.remove(); // sin el "Optional chaining", y si el elemento no existe, genera error, ya que intenta acceder al método ".remove()" de "null".
+	
+	alertaPrevia?.remove(); // hace la comprovación igual que el "if", si no existe no marca error
+
+Ejemplo 2: tenemos un objeto y accedemos a una de sus propiedades
+
+	const pokemon1 = {
+		name: "Pikachu",
+		role: "Pokémon ratón",
+		attrs: {
+			life: 100,
+			power: 25
+		},
+		movements: {
+			mov1: "Agilidad",
+			mov2: "Chispazo",
+			mov3: "Impactrueno",
+			mov4: "Bola Voltio"
+		}
+	}
+
+	console.log(pokemon1.movements.mov4); // imprime "Bola Voltio"
+
+Ahora tenemos otro objeto, pero si no hacemos una comprobación de si la propiedad existe, tendriamos un error:
+
+	const pokemon2 = {
+		name: "Magikarp",
+		role: "Pokémon pez",
+		attrs: {
+			life: 100,
+			power: 5
+		},
+		movements: {
+			mov1: "Azote",
+			mov2: "Salpicadura",
+			mov3: "Placaje"
+		}
+	}
+
+	//console.log(pokemon2.movements.mov4); // undefined
+	console.log(pokemon2.movements?.mov4); // tambien undefined, pero no generaria error en caso de querer accceder a la propiedad que no existe
+
 _______________________________________________________
 
 	[5]. Arrays:
@@ -1649,7 +1710,11 @@ _______________________________________________________
 	[7.7]. Prototypes:
 _______________________________________________________
 
-Los prototypes en JavaScript resuelven varios problemas relacionados con la eficiencia y la estructura del código, especialmente cuando se trabaja con objetos y clases. Algunos de los problemas que resuelven son:
+Los prototypes en JavaScript resuelven varios problemas relacionados con la eficiencia y la estructura del código, especialmente cuando se trabaja con objetos y clases. 
+
+Nota: mejor usar "Clases", que son más faciles de usar en vez de prototypes.
+
+Algunos de los problemas que resuelven son:
 
 - Eficiencia de Memoria: Sin prototypes, cada instancia de un objeto tendría su propia copia de cada método. Esto puede llevar a un uso ineficiente de la memoria, especialmente si hay muchas instancias de un mismo objeto. Con prototypes, los métodos son compartidos entre todas las instancias del objeto, reduciendo el consumo de memoria.
 
