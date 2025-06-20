@@ -82,24 +82,26 @@ INDICE:
 	[12.5]. Iteradores
 	[12.6]. Generadores
 	[12.7]. Iteradores "entries", "values", "keys" y "default"
-[13]. AJAX Peticiones HTTP
-	[13.1]. XHR: "XMLHttpRequest"
-		[13.1.1]. Propiedades XHR
-		[13.1.2]. Métodos XHR
-		[13.1.3]. Eventos XHR
-	[13.2]. PROMESAS (promise)
-	[13.3]. Fetch
-		[13.3.1]. Cabeceras (Headers)
-		[13.3.2]. Respuesta de la petición HTTP
-		[13.3.3]. Métodos del objeto "response"
-		[13.3.4]. Ejemplo usando promesas
-		[13.3.5]. Ejemplo usando "Async/await"
-	[13.4]. Política CORS
+[13]. Módulos ECMAScript (ESM)
+	[13.1]. Exportación de Módulos
+	[13.2]. Importación de Módulos
+	[13.3]. Convenciones de módulos ES
+	[13.4]. Ejemplos
+[14]. AJAX Peticiones HTTP
+	[14.1]. XHR: "XMLHttpRequest"
+		[14.1.1]. Propiedades XHR
+		[14.1.2]. Métodos XHR
+		[14.1.3]. Eventos XHR
+	[14.2]. PROMESAS (promise)
+	[14.3]. Fetch
+		[14.3.1]. Cabeceras (Headers)
+		[14.3.2]. Respuesta de la petición HTTP
+		[14.3.3]. Métodos del objeto "response"
+		[14.3.4]. Ejemplo usando promesas
+		[14.3.5]. Ejemplo usando "Async/await"
+	[14.4]. Política CORS
 
-[]. Módulos ECMAScript (ESM)
-	[.1]. Exportación de Módulos
-	[.2]. Importación de Módulos
-	[.3]. Convenciones de módulos ES
+
 
 _______________________________________________________
 
@@ -3137,7 +3139,193 @@ Para los "arrays", los "Sets" y los "Maps", podemos iterarlos con diferentes met
 
 _______________________________________________________
 
-	[13]. AJAX Peticiones HTTP:
+	[13]. Módulos ECMAScript (ESM):
+_______________________________________________________
+
+Permite la importación y exportación de código entre diferentes ficheros Javascript.
+
+Para trabajar con módulos tenemos a nuestra disposición las siguientes palabras clave:
+
+- "export" --> Exporta uno o varios elementos (variables, funciones, clases...) del fichero actual.
+
+- "import" --> Importa uno o varios elementos (variables, funciones, clases...) desde otro fichero ".js".
+
+Mediante la palabra clave "export" crearemos un objeto (módulo de exportación) que contendrá una o varias propiedades. En estas propiedades podremos guardar variables, funciones o clases. Si dicho módulo ya existe, podremos ir añadiendo más propiedades. 
+
+Por otro lado, con la palabra clave "import" podremos leer dichos módulos de otros ficheros y utilizar sus propiedades en nuestro código.
+_______________________________________________________
+
+	[13.1]. Exportación de Módulos:
+_______________________________________________________
+
+Existen varias formas de exportar código mediante la palabra clave export :
+
+	export { name }; --> Añade el elemento name al módulo de exportación.
+
+	export { n1, n2, n3... }; --> Añade los elementos indicados ( n1 , n2 , n3 ...) al módulo de exportación.
+
+	export * from './file.js'; --> Añade todos los elementos del módulo "file.js" al módulo de exportación.
+
+	export declaration; --> Declara una variable, función o clase y la añade al módulo de exportación.
+
+	export default declaration; --> Declara una función o clase y la añade al módulo de exportación.
+
+Es posible renombrar los elementos sobre la marcha utilizando "as" seguido del nuevo nombre. Además, si se indica "default" como nuevo nombre, ese elemento será la exportación por defecto. Sólo puede haber una exportación por defecto por fichero.
+
+	let number = 4;
+	const saludar = () => "¡Hola!";
+	const goodbye = () => "¡Adiós!";
+	class Clase {}
+
+	export {
+		number
+	}; // Se crea un módulo y se añade number
+
+	export {
+		saludar,
+		goodbye as despedir
+	}; // Se añade saludar y despedir al módulo
+
+	export {
+		Clase as
+		default
+	}; // Se añade Clase al módulo (default)
+
+	export {
+		saludar as otroNombre
+	}; // Se añade otroNombre al módulo
+
+También es posible exportar variables, funciones o clases simplemente incluyendo la palabra "export" a la izquierda de la línea de su declaración:
+
+	export const f1 = () => 42; // Se crea un módulo y se añade f1
+
+	export default function f2() {
+		return "Manz";
+	} // Se añade f2 al módulo (default)
+
+Nota: en el caso de utilizar una exportación por defecto en una declaración, no es posible utilizar "var" , "let" o "const" . Tampoco es posible usar "export" dentro de funciones, bucles o contextos específicos.
+_______________________________________________________
+
+	[13.2]. Importación de Módulos:
+_______________________________________________________
+
+Existen varias formas de importar código utilizando "import", con la que podemos cargar un módulo de exportación de otro fichero Javascript, con todos los elementos exportados que contiene.
+
+	import nombre from './file.js'; --> Importa sólo el elemento por defecto de "file.js" en "nombre".
+
+	import { nombre } from './file.js'; --> Importa sólo el elemento "nombre" de "file.js".
+
+	import { n1, n2.. } from './file.js'; --> Importa los elementos indicados desde "file.js".
+
+	import * as obj from './file.js'; --> Importa todos los elementos de "file.js" en el objeto "obj".
+
+	import './file.js'; -->	No importa elementos, pero ejecuta el código de "file.js".
+
+Al igual que con la exportación, también se puede renombrar elementos utilizando "as" seguido del nuevo nombre.
+
+En el primer caso, importamos el elemento por defecto desde el módulo "file.js" y lo guardamos en la variable "nombre". En el segundo y tercer caso, importamos los elementos indicados en el interior de los corchetes, desde el módulo "file.js".
+
+En el cuarto caso, importamos todos los elementos del módulo externo "file.js" en un objeto de nombre "obj" (es obligatorio indicar el nombre) y en el quinto caso, no importamos elementos, pero leemos el código del módulo y lo ejecutamos.
+_______________________________________________________
+
+	[13.3]. Convenciones de módulos ES:
+_______________________________________________________
+
+Si queremos utilizar "import" y "export" desde el navegador directamente, deberemos añadir los archivos con módulos con la etiqueta <script> utilizando el atributo type="module" . Estas etiquetas de módulos se cargan en diferido, o lo que es lo mismo, como si fueran un <script defer> :
+
+	<script type="module" src="file.js"></script>
+
+Por norma general, a los archivos Javascript con módulos se les pone la extensión ".js", aunque también se pueden encontrar con otra extensión como ".es2015" o ".mjs".
+
+Se aconseja utilizar las rutas UNIX en los export e import , ya que son las que tienen mejor soporte, tanto en navegadores como en NodeJS. También se pueden indicar rutas absolutas para cargar directamente desde el navegador:
+
+	// Incorrecto
+	import { elemento } from "module.mjs";
+	import { elemento } from "folder/module.mjs";
+
+	// Correcto
+	import { elemento } from "./module.mjs"; // misma carpeta del .js
+	import { elemento } from "/module.mjs"; // carpeta raíz
+	import { elemento } from "../module.mjs"; // carpeta anterior al .js
+	import { ceil } from "https://unpkg.com/lodash-es@4.17.11/lodash.js";
+
+Se aconseja realizar las exportaciones al final de los ficheros Javascript. Aunque no es obligatorio, esto mejora la legibilidad de código, ya que siempre te esperas que los "export" aparezcan al final del código.
+
+_______________________________________________________
+
+	[13.4]. Ejemplos:
+_______________________________________________________
+
+1) Archivo "js/cliente.js":
+
+	export const nombreCliente = 'Pedro';
+	export const ahorro = 200;
+
+	export function mostrarInformacion() {
+		console.log(`Cliente: ${nombreCliente}, Ahorro: ${ahorro}`);
+	}
+
+	export function tieneSaldo(ahorro){
+		if(ahorro > 0){
+			console.log('Si tiene saldo');
+		}else{
+			console.log('El cliente no tiene saldo');
+		}
+	}
+
+	export class Cliente {
+		constructor(nombre, ahorro){
+			this.nombre = nombre;
+			this.ahorro = ahorro;
+		}
+
+		mostrarInformacion(){
+			return `Cliente: ${this.nombre}, Ahorro: ${this.ahorro}`
+		}
+	}
+
+	export default function nuevaFuncion() {
+		console.log('Este es el export default');
+	}
+
+Archivo "js/app.js":
+
+	import nuevaFuncion, { nombreCliente, ahorro, mostrarInformacion, tieneSaldo, Cliente } from "./cliente.js";
+
+	console.log(nombreCliente);
+	console.log(ahorro);
+
+	mostrarInformacion();
+
+	tieneSaldo(ahorro);
+
+	const cliente = new Cliente('Alejandra', 120);
+
+	console.log(cliente.mostrarInformacion());
+
+	nuevaFuncion();
+
+Archivo "index.html":
+
+	<script src="js/app.js" type="module"></script>
+
+Nota 1: al importar sin usar bundles(webpack, vite, etc.) es necesario indicar la extensión del archivo (.js).
+
+Nota 2: Solo puede existir un "export default" por archivo, y al importarlo debe estar fuera de las llaves ({}).
+
+Nota 3: Cuando en un archivo tenemos una variable global, definida con "let", con los modulos es tratada como una constante, por lo que debemos cambiar su definición a un objeto. Ejemplo:
+
+	export let editando = false;
+
+Lo cambiamos por:
+
+	export let editando = {
+		value: false
+	};
+
+_______________________________________________________
+
+	[14]. AJAX Peticiones HTTP:
 _______________________________________________________
 
 Una petición HTTP es como suele denominarse a la acción por parte del navegador de solicitar a un servidor web un documento o archivo, ya sea un fichero ".html", una imagen, una tipografía, un archivo ".js", etc. Gracias a dicha petición, el navegador puede descargar ese archivo, almacenarlo en un caché temporal de archivos del navegador y, finalmente, mostrarlo en la página actual que lo ha solicitado.
@@ -3149,7 +3337,7 @@ Actualmente en vez de usar el formato de datos XML se usa JSON.
 Existen varias formas de realizar peticiones HTTP mediante AJAX, pero las principales suelen ser "XMLHttpRequest" y "fetch" (nativas, incluidas en el navegador por defecto), además de liberías como "axios" o "superagent".
 _______________________________________________________
 
-	[13.1]. XHR: "XMLHttpRequest":
+	[14.1]. XHR: "XMLHttpRequest":
 _______________________________________________________
 
 "XMLHttpRequest" (XHR) es un objeto especial de Javascript que permite realizar peticiones HTTP asíncronas (AJAX) de forma nativa desde Javascript. Se trata de la primera implementación que existió en ECMAScript (ES5) antes de surgir fetch, el estándar actual.
@@ -3212,7 +3400,7 @@ Definimos el tipo de petición utilizando el método ".open(method, url)", indic
 El método ".send()", lanza la petición al servidor.
 _______________________________________________________
 
-	[13.1.1]. Propiedades XHR:
+	[14.1.1]. Propiedades XHR:
 _______________________________________________________
 
 Al crear un objeto XHR tenemos acceso a una serie de propiedades que forman parte de nuestra instancia. Entre ellas, se encuentran las siguientes:
@@ -3256,7 +3444,7 @@ Al crear un objeto XHR tenemos acceso a una serie de propiedades que forman part
 	".withCredentials" --> Indica si la petición HTTP se está realizando con credenciales (enviando un usuario y contraseña).
 _______________________________________________________
 
-	[13.1.2]. Métodos XHR:
+	[14.1.2]. Métodos XHR:
 _______________________________________________________
 
 Los metodos del objeto XHR son:
@@ -3280,7 +3468,7 @@ Los metodos del objeto XHR son:
 	".abort()" --> Cancela la petición enviada.
 _______________________________________________________
 
-	[13.1.3]. Eventos XHR:
+	[14.1.3]. Eventos XHR:
 _______________________________________________________
 
 El objeto XHR tiene los siguientes eventos:
@@ -3302,7 +3490,7 @@ El objeto XHR tiene los siguientes eventos:
 	".onreadystatechange" --> Se dispara cuando el valor .readyState cambia.
 _______________________________________________________
 
-	[13.2]. PROMESAS (promise):
+	[14.2]. PROMESAS (promise):
 _______________________________________________________
 
 Usado cuando se hacen peticiones asicronas, una promesa nos permite capturar un valor de respuesta que puede estar disponible ahora, a futuro, o nunca.
@@ -3339,7 +3527,7 @@ Nota: para más info. de las promesas ir a:
 	https://lenguajejs.com/javascript/asincronia/promesas/
 _______________________________________________________
 
-	[13.3]. Fetch:
+	[14.3]. Fetch:
 _______________________________________________________
 
 Basado en promesas de Javascript, para realizar peticiones HTTP asíncronas de una forma más legible y cómoda.
@@ -3394,7 +3582,7 @@ Ejemplo:
 	};
 _______________________________________________________
 
-	[13.3.1]. Cabeceras (Headers):
+	[14.3.1]. Cabeceras (Headers):
 _______________________________________________________
 
 Se puede crear un objeto "Headers":
@@ -3422,7 +3610,7 @@ Como muchos otros objetos iterables, podemos utilizar los métodos ".entries()",
 	}
 _______________________________________________________
 
-	[13.3.2]. Respuesta de la petición HTTP:
+	[14.3.2]. Respuesta de la petición HTTP:
 _______________________________________________________
 
 En el primer ".then()" tenemos un objeto "response". Se trata de la respuesta que nos llega del servidor web al momento de recibir nuestra petición:
@@ -3453,7 +3641,7 @@ Se está utilizando una arrow function que hace un "return" implícito de la pro
 	".url" --> URL completa de la petición HTTP que se ha realizado.
 _______________________________________________________
 
-	[13.3.3]. Métodos del objeto "response":
+	[14.3.3]. Métodos del objeto "response":
 _______________________________________________________
 
 La mayoría de estos métodos, procesan mediante una promesa los datos recibidos y facilitar el trabajo con ellos:
@@ -3502,7 +3690,7 @@ El caso anterior utilizando el método "response.json()" en lugar de "response.t
 Con "response.json()" nos ahorraríamos tener que hacer el "JSON.parse()" de forma manual.
 _______________________________________________________
 
-	[13.3.4]. Ejemplo usando promesas:
+	[14.3.4]. Ejemplo usando promesas:
 _______________________________________________________
 
 - Comprobamos que la petición es correcta con "response.ok".
@@ -3544,7 +3732,7 @@ Podemos optimizar un poco el ejemplo anterior. Creamos la función "isResponseOk
 		.catch(err => console.error("ERROR: ", err.message));
 _______________________________________________________
 
-	[13.3.5]. Ejemplo usando "Async/await":
+	[14.3.5]. Ejemplo usando "Async/await":
 _______________________________________________________
 
 Utilizar "async/await" no es más que lo que se denomina "azúcar sintáctico", es decir, utilizar algo visualmente más agradable, pero que por debajo realiza la misma tarea. Para ello, lo que debemos tener siempre presente es que un "await" sólo se puede ejecutar si esta dentro de una función definida como "async".
@@ -3573,7 +3761,7 @@ En este caso, lo que hacemos es lo siguiente:
 Una vez hecho esto, podemos llamar a nuestra función" request" y almacenar el resultado, usando nuevamente "await". Al final, utilizar ".then()" o "async/await" es una cuestión de gustos y puedes utilizar el que más te guste.
 _______________________________________________________
 
-	[13.4]. Política CORS:
+	[14.4]. Política CORS:
 _______________________________________________________
 
 "Cross Origin" (origen cruzado) es la palabra que se utiliza para denominar el tipo de peticiones que se realizan a un dominio diferente del dominio de origen desde donde se realiza la petición. De esta forma, por una parte tenemos las peticiones de origen cruzado (cross-origin) y las peticiones del mismo origen (same-origin).
@@ -3586,114 +3774,3 @@ Las peticiones HTTP asíncronas de origen cruzado no están permitidas, pero exi
 
 	Access-Control-Allow-Origin: https://domain.com/
 
-_______________________________________________________
-
-	[]. Módulos ECMAScript (ESM):
-_______________________________________________________
-
-Permite la importación y exportación de código entre diferentes ficheros Javascript.
-
-Para trabajar con módulos tenemos a nuestra disposición las siguientes palabras clave:
-
-- "export" --> Exporta uno o varios elementos (variables, funciones, clases...) del fichero actual.
-
-- "import" --> Importa uno o varios elementos (variables, funciones, clases...) desde otro fichero ".js".
-
-Mediante la palabra clave "export" crearemos un objeto (módulo de exportación) que contendrá una o varias propiedades. En estas propiedades podremos guardar variables, funciones o clases (a partir de ahora, elementos). Si dicho módulo ya existe, podremos ir añadiendo más propiedades. Por otro lado, con la palabra clave "import" podremos leer dichos módulos de otros ficheros y utilizar sus propiedades en nuestro código.
-_______________________________________________________
-
-	[.1]. Exportación de Módulos:
-_______________________________________________________
-
-Existen varias formas de exportar código mediante la palabra clave export :
-
-	export { name }; --> Añade el elemento name al módulo de exportación.
-
-	export { n1, n2, n3... }; --> Añade los elementos indicados ( n1 , n2 , n3 ...) al módulo de exportación.
-
-	export * from './file.js'; --> Añade todos los elementos del módulo "file.js" al módulo de exportación.
-
-	export declaration; --> Declara una variable, función o clase y la añade al módulo de exportación.
-
-	export default declaration; --> Declara una función o clase y la añade al módulo de exportación.
-
-Es posible renombrar los elementos sobre la marcha utilizando "as" seguido del nuevo nombre. Además, si se indica "default" como nuevo nombre, ese elemento será la exportación por defecto. Sólo puede haber una exportación por defecto por fichero.
-
-	let number = 4;
-	const saludar = () => "¡Hola!";
-	const goodbye = () => "¡Adiós!";
-	class Clase {}
-
-	export {
-		number
-	}; // Se crea un módulo y se añade number
-
-	export {
-		saludar,
-		goodbye as despedir
-	}; // Se añade saludar y despedir al módulo
-
-	export {
-		Clase as
-		default
-	}; // Se añade Clase al módulo (default)
-
-	export {
-		saludar as otroNombre
-	}; // Se añade otroNombre al módulo
-
-También es posible exportar variables, funciones o clases simplemente incluyendo la palabra "export" a la izquierda de la línea de su declaración:
-
-	export const f1 = () => 42; // Se crea un módulo y se añade f1
-
-	export default function f2() {
-		return "Manz";
-	} // Se añade f2 al módulo (default)
-
-Nota: en el caso de utilizar una exportación por defecto en una declaración, no es posible utilizar "var" , "let" o "const" . Tampoco es posible usar "export" dentro de funciones, bucles o contextos específicos.
-_______________________________________________________
-
-	[.2]. Importación de Módulos:
-_______________________________________________________
-
-Existen varias formas de importar código utilizando "import", con la que podemos cargar un módulo de exportación de otro fichero Javascript, con todos los elementos exportados que contiene.
-
-	import nombre from './file.js'; --> Importa sólo el elemento por defecto de "file.js" en "nombre".
-
-	import { nombre } from './file.js'; --> Importa sólo el elemento "nombre" de "file.js".
-
-	import { n1, n2.. } from './file.js'; --> Importa los elementos indicados desde "file.js".
-
-	import * as obj from './file.js'; --> Importa todos los elementos de "file.js" en el objeto "obj".
-
-	import './file.js'; -->	No importa elementos, pero ejecuta el código de "file.js".
-
-Al igual que con la exportación, también se puede renombrar elementos utilizando "as" seguido del nuevo nombre.
-
-En el primer caso, importamos el elemento por defecto desde el módulo "file.js" y lo guardamos en la variable "nombre". En el segundo y tercer caso, importamos los elementos indicados en el interior de los corchetes, desde el módulo "file.js".
-
-En el cuarto caso, importamos todos los elementos del módulo externo "file.js" en un objeto de nombre "obj" (es obligatorio indicar el nombre) y en el quinto caso, no importamos elementos, pero leemos el código del módulo y lo ejecutamos.
-_______________________________________________________
-
-	[.3]. Convenciones de módulos ES:
-_______________________________________________________
-
-Si queremos utilizar "import" y "export" desde el navegador directamente, deberemos añadir los archivos con módulos con la etiqueta <script> utilizando el atributo type="module" . Estas etiquetas de módulos se cargan en diferido, o lo que es lo mismo, como si fueran un <script defer> :
-
-	<script type="module" src="file.js"></script>
-
-Por norma general, a los archivos Javascript con módulos se les pone la extensión ".js", aunque también se pueden encontrar con otra extensión como ".es2015" o ".mjs".
-
-Se aconseja utilizar las rutas UNIX en los export e import , ya que son las que tienen mejor soporte, tanto en navegadores como en NodeJS. También se pueden indicar rutas absolutas para cargar directamente desde el navegador:
-
-	// Incorrecto
-	import { elemento } from "module.mjs";
-	import { elemento } from "folder/module.mjs";
-
-	// Correcto
-	import { elemento } from "./module.mjs"; // misma carpeta del .js
-	import { elemento } from "/module.mjs"; // carpeta raíz
-	import { elemento } from "../module.mjs"; // carpeta anterior al .js
-	import { ceil } from "https://unpkg.com/lodash-es@4.17.11/lodash.js";
-
-Se aconseja realizar las exportaciones al final de los ficheros Javascript. Aunque no es obligatorio, esto mejora la legibilidad de código, ya que siempre te esperas que los "export" aparezcan al final del código.
