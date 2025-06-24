@@ -87,19 +87,23 @@ INDICE:
 	[13.2]. Importación de Módulos
 	[13.3]. Convenciones de módulos ES
 	[13.4]. Ejemplos
-[14]. AJAX Peticiones HTTP
-	[14.1]. XHR: "XMLHttpRequest"
-		[14.1.1]. Propiedades XHR
-		[14.1.2]. Métodos XHR
-		[14.1.3]. Eventos XHR
-	[14.2]. PROMESAS (promise)
-	[14.3]. Fetch
-		[14.3.1]. Cabeceras (Headers)
-		[14.3.2]. Respuesta de la petición HTTP
-		[14.3.3]. Métodos del objeto "response"
-		[14.3.4]. Ejemplo usando promesas
-		[14.3.5]. Ejemplo usando "Async/await"
-	[14.4]. Política CORS
+[14]. IndexedDB
+	[14.1]. Crear IndexedDB
+	[14.2]. Crear tablas en IndexedDB
+	[14.3]. Crear registros
+[15]. AJAX Peticiones HTTP
+	[15.1]. XHR: "XMLHttpRequest"
+		[15.1.1]. Propiedades XHR
+		[15.1.2]. Métodos XHR
+		[15.1.3]. Eventos XHR
+	[15.2]. PROMESAS (promise)
+	[15.3]. Fetch
+		[15.3.1]. Cabeceras (Headers)
+		[15.3.2]. Respuesta de la petición HTTP
+		[15.3.3]. Métodos del objeto "response"
+		[15.3.4]. Ejemplo usando promesas
+		[15.3.5]. Ejemplo usando "Async/await"
+	[15.4]. Política CORS
 
 
 
@@ -2532,6 +2536,8 @@ _______________________________________________________
 
 La API web "localStorage", nos permite guardar datos en el navegador del usuario, de forma que cuando cierre el navegador o recargue la página, esos datos persistan.
 
+"localStorage" tiene limite de 5mb. es una buena solución para almacenar poca información (como un carrito de compras abandonado o un JSON Web Token).
+
 	localStorage.setItem('clave', 'valor');
 
 Ejemplo:
@@ -3322,10 +3328,160 @@ Lo cambiamos por:
 	export let editando = {
 		value: false
 	};
+_______________________________________________________
+
+	[14]. IndexedDB:
+_______________________________________________________
+
+"IndexedDB" es una API en JavaScript para almacenar grandes cantidades de datos estructurados.
+
+A diferencia de "localStorage" puede almacenar strings, booleans, incluso archivos, cualquier tipod e dato soportado por JavaScript.
+
+No tiene limites conocidos, aunque los archivos de más de 50mb va a preguntar por permisos. ("localStorage" tiene limite de 5mb).
+
+"IndexedDB" es una base de datos completa, pero los datos siguen siendo visibles para cualquiera, por lo que no se recomienda lamacenar passwords o tarjetas de crédito.
+
+Para consultar la "IndexedDB" en los navegadores:
+
+- Firefox: Abrir inspector, ir a "Almacenamiento", y buscar "Db indexada".
+- Chrome:  Abrir inspector, ir a "Aplicación", en "Almacenamiento" buscar "IndexedDB".
 
 _______________________________________________________
 
-	[14]. AJAX Peticiones HTTP:
+	[14.1]. Crear IndexedDB:
+_______________________________________________________
+
+Crearemos una base de datos para un CRM:
+
+	document.addEventListener('DOMContentLoaded', () => {
+		crmDB();
+	});
+
+	function crmDB(){
+		//Crear base de datos version 1.0
+		let crmDB = window.indexedDB.open('crm', 1);
+
+		// Si hay un error
+		crmDB.onerror = function () {
+			console.log('Hubo un error a la hora de crear la BD');
+		}
+
+		// Si se creo bien
+		crmDB.onsuccess = function () {
+			console.log('Base de datos creada!!!');
+		}
+
+		// Configuración de la base de datos
+		crmDB.onupgradeneeded = function () {
+			console.log('Este método solo se ejecuta una vez...');
+		}
+	}
+
+Con el método ".open" le indicamos el nombre y la versión de la base de datos.
+
+Con el metodo ".onupgradeneeded" indicamos la configuración de la base de datos (las tablas, los ids, etc). este método solo se ejecuta una vez.
+
+Nota: Al revisar el navegador, vemos la base de datos creada, en eset caso con el nombre 'crm', su versión "1", en almacenamiento de objetos tiene "0", porque aún no se han creado tablas. Y tambien podemos eliminarla o actualizarla.
+
+_______________________________________________________
+
+	[14.2]. Crear tablas en IndexedDB:
+_______________________________________________________
+
+Para crear las tablas y sus campos usamos:
+
+	// Configuración de la base de datos
+	crmDB.onupgradeneeded = function (e) {
+		const db = e.target.result;
+
+		// Crear un objectStore (tabla)
+		const objectStore = db.createObjectStore('crm', {
+			keyPath: 'crm',
+			autoIncrement: true
+		});
+
+		// Definir las columnas
+		objectStore.createIndex('nombre', 'nombre', { unique: false });
+		objectStore.createIndex('email', 'email', { unique: true });
+		objectStore.createIndex('telefono', 'telefono', { unique: false });
+
+		console.log('Columnas creadas!!!');
+	}
+
+Nota: recordar que el método ".onupgradeneeded" se ejecuta una sola vez, entonces si no se ejecuta, toca borrar la base de datos en el inspector del navegador.
+
+"createObjectStore" crea y devuelve un objeto "IDBObjectStore".
+
+El primer parámetro de "createObjectStore" es el nombre del objeto "IDBObjectStore" y no el nombre de la base de datos. Este nombre puede ser cualquier nombre que desees darle.
+
+"keyPath" es una propiedad opcional que define la clave principal del objeto "IDBObjectStore". Esta clave se utiliza para identificar de forma única cada entrada en el almacén de objetos. Puede ser una cadena que representa el nombre de una propiedad en los objetos almacenados, o un array de cadenas si se desea utilizar una combinación de propiedades como clave principal.
+
+En "IndexedDB" un "Object Store" se puede pensar como una tabla en una base de datos relacional, y cada objeto almacenado en el "Object Store" se puede pensar como una fila en la tabla.
+
+El "keyPath" en IndexedDB es similar a una clave primaria en una base de datos relacional. Es una propiedad del objeto almacenado que se usa como clave para identificar de manera única el objeto. Al crear un "Object Store" en "IndexedDB", se especifica una propiedad como "keyPath", lo que significa que esta propiedad se usará como clave para identificar el objeto. También es importante tener en cuenta que el "keyPath" puede ser una propiedad única o una combinación de propiedades que identifiquen de manera única el objeto.
+
+_______________________________________________________
+
+	[14.3]. Crear registros:
+_______________________________________________________
+
+Para crear registros en la tabla, lo hacemos a través de una transacción:
+
+	let DB;
+
+	document.addEventListener("DOMContentLoaded", () => {
+		crmDB();
+
+		setTimeout(() => {
+			crearCliente();
+		}, 5000);
+	});
+
+	function crmDB() {
+
+		...
+
+		// Si se creo bien
+		crmDB.onsuccess = function () {
+			console.log("Base de datos creada!!!");
+
+			DB = crmDB.result;
+		};
+	}
+
+	function crearCliente() {
+		let transaction = DB.transaction(["crm"], "readwrite");
+
+		transaction.oncomplete = function () {
+			console.log("Transacción completada");
+		};
+
+		transaction.onerror = function () {
+			console.log("Hubo un error en la transacción");
+		};
+
+		const objectStore = transaction.objectStore("crm");
+
+		const nuevoCliente = {
+			nombre: "Juan Perez",
+			email: "juanperez@example.com",
+			telefono: "123456789",
+		};
+
+		const peticion = objectStore.add(nuevoCliente);
+
+		console.log("Petición: ", peticion);
+	}
+
+Primero creamos una variable global "DB", para almacenar la base de datos si se creo bien.
+
+Con "setTimeout" llenamos los registros despues de 5 segundos de haber creado la base de datos.
+
+La función "crearCliente" es la encargada de crear la transacción, que en este caso su tipo de "readwrite", pero tambien hay de "readonly".
+
+_______________________________________________________
+
+	[15]. AJAX Peticiones HTTP:
 _______________________________________________________
 
 Una petición HTTP es como suele denominarse a la acción por parte del navegador de solicitar a un servidor web un documento o archivo, ya sea un fichero ".html", una imagen, una tipografía, un archivo ".js", etc. Gracias a dicha petición, el navegador puede descargar ese archivo, almacenarlo en un caché temporal de archivos del navegador y, finalmente, mostrarlo en la página actual que lo ha solicitado.
@@ -3337,7 +3493,7 @@ Actualmente en vez de usar el formato de datos XML se usa JSON.
 Existen varias formas de realizar peticiones HTTP mediante AJAX, pero las principales suelen ser "XMLHttpRequest" y "fetch" (nativas, incluidas en el navegador por defecto), además de liberías como "axios" o "superagent".
 _______________________________________________________
 
-	[14.1]. XHR: "XMLHttpRequest":
+	[15.1]. XHR: "XMLHttpRequest":
 _______________________________________________________
 
 "XMLHttpRequest" (XHR) es un objeto especial de Javascript que permite realizar peticiones HTTP asíncronas (AJAX) de forma nativa desde Javascript. Se trata de la primera implementación que existió en ECMAScript (ES5) antes de surgir fetch, el estándar actual.
@@ -3400,7 +3556,7 @@ Definimos el tipo de petición utilizando el método ".open(method, url)", indic
 El método ".send()", lanza la petición al servidor.
 _______________________________________________________
 
-	[14.1.1]. Propiedades XHR:
+	[15.1.1]. Propiedades XHR:
 _______________________________________________________
 
 Al crear un objeto XHR tenemos acceso a una serie de propiedades que forman parte de nuestra instancia. Entre ellas, se encuentran las siguientes:
@@ -3444,7 +3600,7 @@ Al crear un objeto XHR tenemos acceso a una serie de propiedades que forman part
 	".withCredentials" --> Indica si la petición HTTP se está realizando con credenciales (enviando un usuario y contraseña).
 _______________________________________________________
 
-	[14.1.2]. Métodos XHR:
+	[15.1.2]. Métodos XHR:
 _______________________________________________________
 
 Los metodos del objeto XHR son:
@@ -3468,7 +3624,7 @@ Los metodos del objeto XHR son:
 	".abort()" --> Cancela la petición enviada.
 _______________________________________________________
 
-	[14.1.3]. Eventos XHR:
+	[15.1.3]. Eventos XHR:
 _______________________________________________________
 
 El objeto XHR tiene los siguientes eventos:
@@ -3490,7 +3646,7 @@ El objeto XHR tiene los siguientes eventos:
 	".onreadystatechange" --> Se dispara cuando el valor .readyState cambia.
 _______________________________________________________
 
-	[14.2]. PROMESAS (promise):
+	[15.2]. PROMESAS (promise):
 _______________________________________________________
 
 Usado cuando se hacen peticiones asicronas, una promesa nos permite capturar un valor de respuesta que puede estar disponible ahora, a futuro, o nunca.
@@ -3527,7 +3683,7 @@ Nota: para más info. de las promesas ir a:
 	https://lenguajejs.com/javascript/asincronia/promesas/
 _______________________________________________________
 
-	[14.3]. Fetch:
+	[15.3]. Fetch:
 _______________________________________________________
 
 Basado en promesas de Javascript, para realizar peticiones HTTP asíncronas de una forma más legible y cómoda.
@@ -3582,7 +3738,7 @@ Ejemplo:
 	};
 _______________________________________________________
 
-	[14.3.1]. Cabeceras (Headers):
+	[15.3.1]. Cabeceras (Headers):
 _______________________________________________________
 
 Se puede crear un objeto "Headers":
@@ -3610,7 +3766,7 @@ Como muchos otros objetos iterables, podemos utilizar los métodos ".entries()",
 	}
 _______________________________________________________
 
-	[14.3.2]. Respuesta de la petición HTTP:
+	[15.3.2]. Respuesta de la petición HTTP:
 _______________________________________________________
 
 En el primer ".then()" tenemos un objeto "response". Se trata de la respuesta que nos llega del servidor web al momento de recibir nuestra petición:
@@ -3641,7 +3797,7 @@ Se está utilizando una arrow function que hace un "return" implícito de la pro
 	".url" --> URL completa de la petición HTTP que se ha realizado.
 _______________________________________________________
 
-	[14.3.3]. Métodos del objeto "response":
+	[15.3.3]. Métodos del objeto "response":
 _______________________________________________________
 
 La mayoría de estos métodos, procesan mediante una promesa los datos recibidos y facilitar el trabajo con ellos:
@@ -3690,7 +3846,7 @@ El caso anterior utilizando el método "response.json()" en lugar de "response.t
 Con "response.json()" nos ahorraríamos tener que hacer el "JSON.parse()" de forma manual.
 _______________________________________________________
 
-	[14.3.4]. Ejemplo usando promesas:
+	[15.3.4]. Ejemplo usando promesas:
 _______________________________________________________
 
 - Comprobamos que la petición es correcta con "response.ok".
@@ -3732,7 +3888,7 @@ Podemos optimizar un poco el ejemplo anterior. Creamos la función "isResponseOk
 		.catch(err => console.error("ERROR: ", err.message));
 _______________________________________________________
 
-	[14.3.5]. Ejemplo usando "Async/await":
+	[15.3.5]. Ejemplo usando "Async/await":
 _______________________________________________________
 
 Utilizar "async/await" no es más que lo que se denomina "azúcar sintáctico", es decir, utilizar algo visualmente más agradable, pero que por debajo realiza la misma tarea. Para ello, lo que debemos tener siempre presente es que un "await" sólo se puede ejecutar si esta dentro de una función definida como "async".
@@ -3761,7 +3917,7 @@ En este caso, lo que hacemos es lo siguiente:
 Una vez hecho esto, podemos llamar a nuestra función" request" y almacenar el resultado, usando nuevamente "await". Al final, utilizar ".then()" o "async/await" es una cuestión de gustos y puedes utilizar el que más te guste.
 _______________________________________________________
 
-	[14.4]. Política CORS:
+	[15.4]. Política CORS:
 _______________________________________________________
 
 "Cross Origin" (origen cruzado) es la palabra que se utiliza para denominar el tipo de peticiones que se realizan a un dominio diferente del dominio de origen desde donde se realiza la petición. De esta forma, por una parte tenemos las peticiones de origen cruzado (cross-origin) y las peticiones del mismo origen (same-origin).
