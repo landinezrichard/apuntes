@@ -91,6 +91,9 @@ INDICE:
 	[14.1]. Crear IndexedDB
 	[14.2]. Crear tablas en IndexedDB
 	[14.3]. Crear registros
+	[14.4]. Recorrer registros
+	[14.5]. Actualizar un registro
+	[14.6]. Eliminar un registro
 [15]. AJAX Peticiones HTTP
 	[15.1]. XHR: "XMLHttpRequest"
 		[15.1.1]. Propiedades XHR
@@ -3322,24 +3325,36 @@ Nota 2: Solo puede existir un "export default" por archivo, y al importarlo debe
 Nota 3: Cuando en un archivo tenemos una variable global, definida con "let", con los modulos es tratada como una constante, por lo que debemos cambiar su definición a un objeto. Ejemplo:
 
 	export let editando = false;
+	export let algo;
 
 Lo cambiamos por:
 
 	export let editando = {
 		value: false
 	};
+
+	export let algo = {
+		value: null
+	};
+
+Con la variable "algo", la cual esta declarada, pero aún no se ha definido su valor (undefined), usamos la misma tecniva, pero en el objeto asignamos "null" al "value" del objeto.
+
+Luego donde lo importemos podemos asignarle un valor haciendo referencia a "value":
+
+	editando.value = true;
+	algo.value = "Algun valor";
 _______________________________________________________
 
 	[14]. IndexedDB:
 _______________________________________________________
 
-"IndexedDB" es una API en JavaScript para almacenar grandes cantidades de datos estructurados.
+"IndexedDB" es una API en JavaScript para almacenar grandes cantidades de datos estructurados (es una base de datos local).
 
 A diferencia de "localStorage" puede almacenar strings, booleans, incluso archivos, cualquier tipod e dato soportado por JavaScript.
 
 No tiene limites conocidos, aunque los archivos de más de 50mb va a preguntar por permisos. ("localStorage" tiene limite de 5mb).
 
-"IndexedDB" es una base de datos completa, pero los datos siguen siendo visibles para cualquiera, por lo que no se recomienda lamacenar passwords o tarjetas de crédito.
+"IndexedDB" es una base de datos completa, pero los datos siguen siendo visibles para cualquiera, por lo que no se recomienda almacenar passwords o tarjetas de crédito.
 
 Para consultar la "IndexedDB" en los navegadores:
 
@@ -3352,6 +3367,8 @@ _______________________________________________________
 _______________________________________________________
 
 Crearemos una base de datos para un CRM:
+
+	let DB;
 
 	document.addEventListener('DOMContentLoaded', () => {
 		crmDB();
@@ -3369,6 +3386,7 @@ Crearemos una base de datos para un CRM:
 		// Si se creo bien
 		crmDB.onsuccess = function () {
 			console.log('Base de datos creada!!!');
+			DB = crmDB.result;
 		}
 
 		// Configuración de la base de datos
@@ -3420,6 +3438,10 @@ En "IndexedDB" un "Object Store" se puede pensar como una tabla en una base de d
 
 El "keyPath" en IndexedDB es similar a una clave primaria en una base de datos relacional. Es una propiedad del objeto almacenado que se usa como clave para identificar de manera única el objeto. Al crear un "Object Store" en "IndexedDB", se especifica una propiedad como "keyPath", lo que significa que esta propiedad se usará como clave para identificar el objeto. También es importante tener en cuenta que el "keyPath" puede ser una propiedad única o una combinación de propiedades que identifiquen de manera única el objeto.
 
+Con "objectStore.createIndex", indicamos el nombre de la columna, el 'keyPathColumna' nos sirve para definir como se va a hacer la consulta de esa columna, y finalmente indicamos si es una columna unica(como un id) o no:
+
+	objectStore.createIndex('nombreColumna', 'keyPathColumna', { unique: false });
+
 _______________________________________________________
 
 	[14.3]. Crear registros:
@@ -3433,7 +3455,19 @@ Para crear registros en la tabla, lo hacemos a través de una transacción:
 		crmDB();
 
 		setTimeout(() => {
-			crearCliente();
+			const nuevoCliente = {
+				nombre: "Juan Perez",
+				email: "juanperez@example.com",
+				telefono: "123456789",
+			};
+			crearCliente(nuevoCliente);
+
+			const nuevoCliente2 = {
+				nombre: "Pedro Gomez",
+				email: "pedrogomez@example.com",
+				telefono: "987654321",
+			};
+			crearCliente(nuevoCliente2);
 		}, 5000);
 	});
 
@@ -3449,24 +3483,18 @@ Para crear registros en la tabla, lo hacemos a través de una transacción:
 		};
 	}
 
-	function crearCliente() {
+	function crearCliente(nuevoCliente) {
 		let transaction = DB.transaction(["crm"], "readwrite");
 
 		transaction.oncomplete = function () {
-			console.log("Transacción completada");
+			console.log("Cliente creado correctamente");
 		};
 
 		transaction.onerror = function () {
-			console.log("Hubo un error en la transacción");
+			console.log("Hubo un error al crear el cliente");
 		};
 
 		const objectStore = transaction.objectStore("crm");
-
-		const nuevoCliente = {
-			nombre: "Juan Perez",
-			email: "juanperez@example.com",
-			telefono: "123456789",
-		};
 
 		const peticion = objectStore.add(nuevoCliente);
 
@@ -3479,6 +3507,106 @@ Con "setTimeout" llenamos los registros despues de 5 segundos de haber creado la
 
 La función "crearCliente" es la encargada de crear la transacción, que en este caso su tipo de "readwrite", pero tambien hay de "readonly".
 
+_______________________________________________________
+
+	[14.4]. Recorrer registros:
+_______________________________________________________
+
+Para recorrer los registros de la tabla, en vez de usar "forEach", usamos un 'cursor':
+
+	function leerClientes() {
+		// Leer de indexedDB
+		const objectStore = DB.transaction("crm").objectStore("crm");
+
+		// Validar si hay registros
+		const totalRegistros = objectStore.count();
+		totalRegistros.onsuccess = (e) => {
+			console.log(`Total de registros: ${e.target.result}`);
+		};
+
+		// Recorrer registros
+		objectStore.openCursor().onsuccess = (e) => {
+			const cursor = e.target.result;
+			// console.log(e.target.result);
+
+			if (cursor) {
+				const { nombre, email, telefono } = cursor.value;
+
+				// acá podemos crear HTML o lo que queramos con los datos ya desestructurados
+				console.log(`Nombre: ${nombre}, Email: ${email}, Teléfono: ${telefono}`);
+
+				// Ir al siguiente elemento
+				cursor.continue();
+			}
+		};
+	}
+
+_______________________________________________________
+
+	[14.5]. Actualizar un registro:
+_______________________________________________________
+
+Para actualizar un registro tambien usamos una transacción y el método "put":
+
+	function actualizarCliente(id, clienteActualizado) {
+		let transaction = DB.transaction(["crm"], "readwrite");
+
+		transaction.oncomplete = function () {
+			console.log("Cliente actualizado correctamente");
+		};
+
+		transaction.onerror = function () {
+			console.log("Hubo un error al actualizar el cliente");
+		};
+
+		const objectStore = transaction.objectStore("crm");
+
+		const peticion = objectStore.put({ ...clienteActualizado, crm: id });
+
+		console.log("Petición de actualización: ", peticion);
+	}
+
+	actualizarCliente(1, {
+		nombre: "Juan Perez Actualizado",
+		email: "juanperezactualizado@example.com",
+		telefono: "1234567890",
+    });
+
+Se utiliza el método "put" de un "objectStore" en "IndexedDB" para actualizar o insertar un registro en la base de datos. El objeto que se guarda se crea combinando todas las propiedades del objeto "clienteActualizado" usando el operador spread (...), y luego se le asigna o sobrescribe la propiedad "crm" con el valor de "id".
+
+En detalle, "objectStore.put()" sirve tanto para agregar un nuevo registro como para actualizar uno existente, dependiendo de si la clave primaria ("crm" en este caso) ya existe en la base de datos. Si existe, el registro se actualiza; si no, se crea uno nuevo. El resultado de la operación se almacena en la constante "peticion", que es una solicitud (IDBRequest) que permite manejar eventos como éxito o error de la operación.
+
+Un posible "gotcha" es que si el objeto "clienteActualizado" ya tiene una propiedad "crm", esta será sobrescrita por el valor de "id" debido al orden en que se combinan las propiedades. Además, es importante asegurarse de que el valor de "id" sea válido y único si se espera que actúe como clave primaria.
+
+_______________________________________________________
+
+	[14.6]. Eliminar un registro:
+_______________________________________________________
+
+Para eliminar un registro, es muy parecido a la actualización, pero con el método "delete":
+
+	function eliminarCliente(id) {
+		let transaction = DB.transaction(["crm"], "readwrite");
+
+		transaction.oncomplete = function () {
+			console.log("Cliente eliminado correctamente");
+		};
+
+		transaction.onerror = function () {
+			console.log("Hubo un error al eliminar el cliente");
+		};
+
+		const objectStore = transaction.objectStore("crm");
+
+		const peticion = objectStore.delete(id);
+
+		console.log("Petición de eliminación: ", peticion);
+	}
+
+	eliminarCliente(2);
+
+El "id" es el identificador del registro a eliminar.
+	
 _______________________________________________________
 
 	[15]. AJAX Peticiones HTTP:
