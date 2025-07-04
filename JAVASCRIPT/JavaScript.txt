@@ -49,8 +49,9 @@ INDICE:
 		[7.6.2]. Constructores
 		[7.6.3]. Propiedades
 			[7.6.3.1]. Ámbitos en una clase
-			[7.6.3.2]. Getters
-			[7.6.3.3]. Setters
+			[7.6.3.2]. Propiedades Privadas
+			[7.6.3.3]. Getters
+			[7.6.3.4]. Setters
 		[7.6.4]. Herencia
 	[7.7]. Prototypes
 [8]. Elementos DOM
@@ -1573,10 +1574,76 @@ Nota: la variable "name" solo se muestra cuando se hace referencia a ella dentro
 
 En este caso, podemos comprobar que si se puede acceder a la propiedad desde cualquier lugar de la clase.
 
-Nota: las propiedades también pueden ser modificadas desde fuera de la clase, simplemente asignándole otro valor.
+Nota 1: las propiedades también pueden ser modificadas desde fuera de la clase, simplemente asignándole otro valor.
+
+Ejemplo:
+
+	c.name = "Jorge";
+
 _______________________________________________________
 
-	[7.6.3.2]. Getters:
+	[7.6.3.2]. Propiedades Privadas:
+_______________________________________________________
+
+En una clase podemos indicar propiedades y metodos privados:
+
+	class Cliente {
+
+		constructor(nombre, saldo) {
+			this.nombre = nombre;
+			this.saldo = saldo; 
+			this._tipoSangre = "X";
+		}
+
+		mostrarInformacion() {
+			console.log(`Cliente ${this.nombre}, tu saldo es de $${this.saldo}`);
+		}
+
+		_metodoPrivado() {
+			console.log("Método Privado");
+		}
+	}
+
+	const pedro = new Cliente('Pedro', 400);
+	pedro.mostrarInformacion();
+
+El guion bajo es una convención en JavaScript (y otros lenguajes) para indicar que:
+
+- Atributos o métodos "privados": No deberían ser accedidos ni modificados directamente desde fuera de la clase.
+
+En el ejemplo:
+
+	"_tipoSangre" --> es solo para uso interno de la clase.
+
+	"_metodoPrivado()" --> es un método auxiliar, no parte de la API pública de la clase.
+
+En JavaScript moderno existe la sintaxis de campos privados reales usando "#", pero el guion bajo sigue siendo común por compatibilidad y legibilidad.
+
+	class Cliente {
+
+		#tipoSangre;
+
+		constructor(nombre, saldo) {
+			this.nombre = nombre;
+			this.saldo = saldo; 
+			this.tipoSangre = "X";
+		}
+
+		mostrarInformacion() {
+			console.log(`Cliente ${this.nombre}, tu saldo es de $${this.saldo} y su tipo de sangre es ${this.#tipoSangre}`);
+		}
+
+		_metodoPrivado() {
+			console.log("Método Privado");
+		}
+	}
+
+	const sara = new Cliente('Sara', 300);
+	sara.#tipoSangre; //esto genera error
+
+_______________________________________________________
+
+	[7.6.3.3]. Getters:
 _______________________________________________________
 
 Los "getters" son la forma de definir propiedades computadas de lectura en una clase.
@@ -1610,7 +1677,7 @@ Las propiedades computadas son un tipo de propiedades a las que queremos realiza
 Nota: las propiedades con "get" no se pueden cambiar, son de sólo lectura.
 _______________________________________________________
 
-	[7.6.3.3]. Setters:
+	[7.6.3.4]. Setters:
 _______________________________________________________
 
 El "setter", es muy similar al "getter", pero en lugar de leer la información, la modifica:
@@ -2130,7 +2197,7 @@ El parámetro "new" es el nodo a insertar, mientras que "node" puede ser:
 	-"null" insertando "new" después del último nodo hijo.
 	-un nodo de referencia, insertando "new" antes de dicho "node" de referencia.
 
-Los métodos de la familia "insertAdjacent" son bastante más versátiles. Tenemos tres versiones diferentes: "insertAdjacentElement()" donde insertamos un objeto , "insertAdjacentHTML()" donde insertamos el código HTML directamente (similar a como lo hacemos con "innerHTML") y por último "insertAdjacentText()" donde insertamos un texto específico. En las tres versiones, debemos indicar un  "pos" como primer parámetro para indicar en que posición vamos a insertar el contenido:
+Los métodos de la familia "insertAdjacent" son bastante más versátiles. Tenemos tres versiones diferentes: "insertAdjacentElement()" donde insertamos un objeto, "insertAdjacentHTML()" donde insertamos el código HTML directamente (similar a como lo hacemos con "innerHTML") y por último "insertAdjacentText()" donde insertamos un texto específico. En las tres versiones, debemos indicar un  "pos" como primer parámetro para indicar en que posición vamos a insertar el contenido:
 
 - "beforebegin": El elemento se inserta antes de la etiqueta HTML de apertura.
 - "afterbegin": El elemento se inserta dentro de la etiqueta HTML, antes de su primer hijo.
