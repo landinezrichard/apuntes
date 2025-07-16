@@ -95,19 +95,28 @@ INDICE:
 	[14.4]. Recorrer registros
 	[14.5]. Actualizar un registro
 	[14.6]. Eliminar un registro
-[15]. AJAX Peticiones HTTP
-	[15.1]. XHR: "XMLHttpRequest"
-		[15.1.1]. Propiedades XHR
-		[15.1.2]. Métodos XHR
-		[15.1.3]. Eventos XHR
-	[15.2]. PROMESAS (promise)
-	[15.3]. Fetch
-		[15.3.1]. Cabeceras (Headers)
-		[15.3.2]. Respuesta de la petición HTTP
-		[15.3.3]. Métodos del objeto "response"
-		[15.3.4]. Ejemplo usando promesas
-		[15.3.5]. Ejemplo usando "Async/await"
-	[15.4]. Política CORS
+[15]. API's en JavaScript
+	[15.1]. Notification API
+	[15.2]. Intersection Observer
+	[15.3]. Detectar conexión a internet
+	[15.4]. Ejecutar pantalla completa
+	[15.5]. Detectar cuando se esta viendo la página web
+	[15.6]. Speech API
+[16]. Asincronía
+	[16.0]. AJAX Peticiones HTTP
+	[16.1]. XHR: "XMLHttpRequest"
+		[16.1.1]. Propiedades XHR
+		[16.1.2]. Métodos XHR
+		[16.1.3]. Eventos XHR
+	[16.2]. PROMESAS (promise)
+	[16.3]. Fetch
+		[16.3.1]. Cabeceras (Headers)
+		[16.3.2]. Respuesta de la petición HTTP
+		[16.3.3]. Métodos del objeto "response"
+		[16.3.4]. Ejemplos
+			[16.3.4.1]. Ejemplo usando promesas
+			[16.3.4.2]. Ejemplo usando "Async/await"
+	[16.4]. Política CORS
 
 
 
@@ -692,6 +701,8 @@ Esto nos podría permitir crear varias funciones para utilizar a modo de callbac
 	fA(fB, fError); // Si ejecutamos varias veces, algunas darán error y otras no
 
 Podemos planear ejecutar la función fA() cambiando los callbacks según nos interese, sin necesidad de crear funciones con el mismo código repetido una y otra vez.
+
+Nota: ahora usar mejor "Promesas".
 _______________________________________________________
 
 	[6.3]. Funciones Autoejecutables:
@@ -3673,10 +3684,234 @@ Para eliminar un registro, es muy parecido a la actualización, pero con el mét
 	eliminarCliente(2);
 
 El "id" es el identificador del registro a eliminar.
-	
+
 _______________________________________________________
 
-	[15]. AJAX Peticiones HTTP:
+	[15]. API's en JavaScript:
+_______________________________________________________
+
+Una API, o Interfaz de Programación de Aplicaciones(Application Programming Interface), es un conjunto de reglas y protocolos que permite a diferentes aplicaciones de software comunicarse entre sí para intercambiar datos, funcionalidades y servicios. Es como un intermediario que facilita la interacción entre dos sistemas, permitiendo que uno acceda a las funciones o datos del otro de manera estructurada y eficiente, sin necesidad de conocer los detalles internos de su funcionamiento.
+
+En términos más simples, una API actúa como un menú en un restaurante: el cliente (una aplicación) no necesita saber cómo se cocina cada plato (el funcionamiento interno del sistema), solo necesita saber qué platos están disponibles (las funciones de la API) y cómo pedirlos (los parámetros de la API). 
+
+Nota: para ver todas la API's disponibles de JavaScript ir a:
+
+	https://developer.mozilla.org/en-US/docs/Web/API
+_______________________________________________________
+
+	[15.1]. Notification API:
+_______________________________________________________
+
+Podemos enviar notificaciones desde nuestra web, siempre y cuando el usuario acepte recibirlas. Las notificaciones se envian desde el navegador al sistema nativo del usuario.
+
+	// solicitamos permiso para mostrar notificaciones
+	const notificarBtn = document.querySelector('#notificar');
+
+	notificarBtn.addEventListener('click', () => {
+		Notification
+			.requestPermission()
+			.then((resultado) => {
+				console.log('El resultado es: ', resultado);
+		});
+	});
+
+	const verNotificacionBtn = document.querySelector('#verNotificacion');
+
+	verNotificacionBtn.addEventListener('click', () => {
+		if(Notification.permission === 'granted') {
+			const notificacion = new Notification('¡Hola!', {
+				body: 'Esta es una notificación de prueba',
+				icon: 'img/notification.png'
+			});
+
+			notificacion.onclick = () => {
+				window.open('https://www.google.com');
+			};
+		}
+	});
+
+La "Notification API" retorna una promesa, los posibles valores que duevuelve son:
+
+	denied --> el usuario rechaza que se muestren las notificaciones.
+
+	granted --> el usuario acepta que se muestren las notificaciones.
+
+	default --> la elección del usuario es desconocida y, por lo tanto, el navegador actuará como si el valor fuera denegado.
+
+Podemos incluir una imagen personalizada en la notificación, y tambien redirigir a alguna web, cuando el usuario hace click en la notificación.
+
+En el archivo "index.html" solo hay dos botones:
+
+	<button type="button" id="notificar">
+        Notificarme!!
+    </button>
+
+    <button type="button" id="verNotificacion">
+        Ver Notificación
+    </button>
+
+Para más info de la "Notification API" ir a:
+
+	https://developer.mozilla.org/en-US/docs/Web/API/Notification
+
+_______________________________________________________
+
+	[15.2]. Intersection Observer:
+_______________________________________________________
+
+"Intersection Observer" nos permite crear un observador, el cual nos notificara cuando un elemento sea visible en pantalla, muy util para cargar elementos cuando se haya hecho scroll al final, cargar imagenes con lazy loading, o añadir animaciones cuando el usuario vea una sección en especifico de nuestra app.
+
+	document.addEventListener('DOMContentLoaded', () => {
+
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entrada => {
+				if (entrada.isIntersecting) {
+					console.log('Es visible!!!');
+				}
+			});
+		});
+
+		observer.observe(document.querySelector('.observado'));
+
+	});
+
+_______________________________________________________
+
+	[15.3]. Detectar conexión a internet:
+_______________________________________________________	
+
+Podemos detectar si el usuario tiene o no conexión a internet:
+
+	window.addEventListener('online', actualizarEstado);
+
+	window.addEventListener('offline', actualizarEstado);
+
+	function actualizarEstado() {
+		if(navigator.online){
+			console.log('Si hay conexión a Internet');
+		}else{
+			console.log('No hay conexión a Internet');
+		}
+	}
+
+_______________________________________________________
+
+	[15.4]. Ejecutar pantalla completa:
+_______________________________________________________	
+
+Podemos abrir la app a pantalla completa:
+
+	const abrirBtn = document.querySelector('#abrir-pantalla-completa');
+
+	const salirBtn = document.querySelector('#salir-pantalla-completa');
+
+	abrirBtn.addEventListener('click', pantallaCompleta);
+
+	salirBtn.addEventListener('click', cerrarPantallaCompleta);
+
+	function pantallaCompleta() {
+		document.documentElement.requestFullscreen();
+	}
+
+	function cerrarPantallaCompleta(){
+		document.exitFullscreen();
+	}
+
+_______________________________________________________
+
+	[15.5]. Detectar cuando se esta viendo la página web:
+_______________________________________________________	
+
+Podemos detectar cuando el usuario esta viendo la página web actual, esto es útil por ejemplo, para pausar un vídeo cuando el usuario cambie de pestaña del navegador.
+
+	document.addEventListener('visibilitychange', () => {
+		if(document.visibilityState === 'visible'){
+			console.log('ejecutar la función para reproducir el vídeo');
+		}else {
+			console.log('ejecutar la función para pausar el vídeo');
+		}
+	});
+_______________________________________________________
+
+	[15.6]. Speech API:
+_______________________________________________________	
+
+La API de reconocimeinto de voz nos permite transcribir a texto lo que el usuario hable a través del microfono, requiere que el usuario de permisos.
+
+	const salida = document.querySelector('#salida');
+	const startRecord = document.querySelector('#microfono');
+
+	startRecord.addEventListener('click', ejecutarSpeechAPI);
+
+	function ejecutarSpeechAPI() {
+		const SpeechRecognition = webkitSpeechRecognition || SpeechRecognition;
+		const recognition = new SpeechRecognition();
+
+		recognition.start();
+
+		recognition.onstart = function(){
+			salida.classList.add('mostrar');
+			salida.textContent = 'Escuchando...';
+			console.log('Iniciando reconocimiento de voz...');
+		};
+
+		recognition.onspeechend = function() {
+			// salida.textContent = 'Se dejo de grabar...';
+			console.log('Se dejo de grabar...');
+			recognition.stop();
+		};
+
+		recognition.onresult = function(e){
+			console.log(e.results[0][0]);
+
+			const { confidence, transcript } = e.results[0][0];
+
+			const speech = document.createElement('P');
+			speech.innerHTML = `Grabado: ${transcript}`;
+
+			const seguridad = document.createElement('P');
+			seguridad.innerHTML = `Seguridad: ${Math.round(confidence * 100)}%`;
+
+			salida.appendChild(speech);
+			salida.appendChild(seguridad);
+		}
+	}
+
+En el archivo "index.html" solo tenemos un botón y un div para indicar lo que se dijo:
+
+	<button type="button" id="microfono">
+        Speech Recognition API
+    </button>
+
+    <div id="salida" class="ocultar"></div>
+_______________________________________________________
+
+	[16]. Asincronía:
+_______________________________________________________
+
+Definimos la sincronía como algo secuencial, en la ejecución de código, serian tareas que se ejecutan una detrás de otra, algunas veces con estas tareas podemos tener código bloqueante, es decir código que depende de otros, como por ejemplo un click de ratón del usuario, que hace que se quede en espera en esa tarea, y no ejecuta la tarea que sigue.
+
+Para evitar esto, tenemos la asincronía.
+
+Ejemplos de tareas asincronas:
+
+- Descargarse un archivo .json de otra web.
+- Reproducir un .mp3 desde otra web.
+- Un botón o campo de datos donde el usuario debe activar un mecanismo.
+- Una orden al sintetizador de voz del navegador para que lea un mensaje.
+- Una comunicación con un sensor del smartphone.
+
+Para gestionar la asincronía desde JavaScript, tenemos los siguientes mecanismos:
+
+- "callbacks" --> con funciones callback (evitar callback hell, mejor promesas).
+- "AJAX" --> ya algo viejo, mejor usar "fetch".
+- "promesas" --> Mecanismo moderno para gestionar la asincronía de forma no bloqueante.
+- "async/await" --> Una forma simplificada de manejar promesas, pero bloqueante.
+- "top-level await" --> Una variación de la anterior, donde no es necesario usar async en determinados contextos.
+
+_______________________________________________________
+
+	[16.0]. AJAX Peticiones HTTP:
 _______________________________________________________
 
 Una petición HTTP es como suele denominarse a la acción por parte del navegador de solicitar a un servidor web un documento o archivo, ya sea un fichero ".html", una imagen, una tipografía, un archivo ".js", etc. Gracias a dicha petición, el navegador puede descargar ese archivo, almacenarlo en un caché temporal de archivos del navegador y, finalmente, mostrarlo en la página actual que lo ha solicitado.
@@ -3688,7 +3923,7 @@ Actualmente en vez de usar el formato de datos XML se usa JSON.
 Existen varias formas de realizar peticiones HTTP mediante AJAX, pero las principales suelen ser "XMLHttpRequest" y "fetch" (nativas, incluidas en el navegador por defecto), además de liberías como "axios" o "superagent".
 _______________________________________________________
 
-	[15.1]. XHR: "XMLHttpRequest":
+	[16.1]. XHR: "XMLHttpRequest":
 _______________________________________________________
 
 "XMLHttpRequest" (XHR) es un objeto especial de Javascript que permite realizar peticiones HTTP asíncronas (AJAX) de forma nativa desde Javascript. Se trata de la primera implementación que existió en ECMAScript (ES5) antes de surgir fetch, el estándar actual.
@@ -3751,7 +3986,7 @@ Definimos el tipo de petición utilizando el método ".open(method, url)", indic
 El método ".send()", lanza la petición al servidor.
 _______________________________________________________
 
-	[15.1.1]. Propiedades XHR:
+	[16.1.1]. Propiedades XHR:
 _______________________________________________________
 
 Al crear un objeto XHR tenemos acceso a una serie de propiedades que forman parte de nuestra instancia. Entre ellas, se encuentran las siguientes:
@@ -3795,7 +4030,7 @@ Al crear un objeto XHR tenemos acceso a una serie de propiedades que forman part
 	".withCredentials" --> Indica si la petición HTTP se está realizando con credenciales (enviando un usuario y contraseña).
 _______________________________________________________
 
-	[15.1.2]. Métodos XHR:
+	[16.1.2]. Métodos XHR:
 _______________________________________________________
 
 Los metodos del objeto XHR son:
@@ -3819,7 +4054,7 @@ Los metodos del objeto XHR son:
 	".abort()" --> Cancela la petición enviada.
 _______________________________________________________
 
-	[15.1.3]. Eventos XHR:
+	[16.1.3]. Eventos XHR:
 _______________________________________________________
 
 El objeto XHR tiene los siguientes eventos:
@@ -3841,10 +4076,10 @@ El objeto XHR tiene los siguientes eventos:
 	".onreadystatechange" --> Se dispara cuando el valor .readyState cambia.
 _______________________________________________________
 
-	[15.2]. PROMESAS (promise):
+	[16.2]. PROMESAS (promise):
 _______________________________________________________
 
-Usado cuando se hacen peticiones asicronas, una promesa nos permite capturar un valor de respuesta que puede estar disponible ahora, a futuro, o nunca.
+Usado cuando se hacen peticiones asincronas, una promesa nos permite capturar un valor de respuesta que puede estar disponible ahora, a futuro, o nunca.
 
 	//promesas
 	var saludar = new Promise((resolve, reject) =>{
@@ -3878,7 +4113,7 @@ Nota: para más info. de las promesas ir a:
 	https://lenguajejs.com/javascript/asincronia/promesas/
 _______________________________________________________
 
-	[15.3]. Fetch:
+	[16.3]. Fetch:
 _______________________________________________________
 
 Basado en promesas de Javascript, para realizar peticiones HTTP asíncronas de una forma más legible y cómoda.
@@ -3931,9 +4166,13 @@ Ejemplo:
 		},
 		body: JSON.stringify(jsonData)
 	};
+
+Nota 1: con la "fetch API" solo puede leer texto plano y JSON, no soporta XML. Se puede usar para enviar o recibir datos.
+
+Nota 2: "fetch" ya trae el "resolve" y el "reject" de la promesa definidos, no tenemos que definirlos nosotros.
 _______________________________________________________
 
-	[15.3.1]. Cabeceras (Headers):
+	[16.3.1]. Cabeceras (Headers):
 _______________________________________________________
 
 Se puede crear un objeto "Headers":
@@ -3961,7 +4200,7 @@ Como muchos otros objetos iterables, podemos utilizar los métodos ".entries()",
 	}
 _______________________________________________________
 
-	[15.3.2]. Respuesta de la petición HTTP:
+	[16.3.2]. Respuesta de la petición HTTP:
 _______________________________________________________
 
 En el primer ".then()" tenemos un objeto "response". Se trata de la respuesta que nos llega del servidor web al momento de recibir nuestra petición:
@@ -3992,7 +4231,7 @@ Se está utilizando una arrow function que hace un "return" implícito de la pro
 	".url" --> URL completa de la petición HTTP que se ha realizado.
 _______________________________________________________
 
-	[15.3.3]. Métodos del objeto "response":
+	[16.3.3]. Métodos del objeto "response":
 _______________________________________________________
 
 La mayoría de estos métodos, procesan mediante una promesa los datos recibidos y facilitar el trabajo con ellos:
@@ -4041,7 +4280,150 @@ El caso anterior utilizando el método "response.json()" en lugar de "response.t
 Con "response.json()" nos ahorraríamos tener que hacer el "JSON.parse()" de forma manual.
 _______________________________________________________
 
-	[15.3.4]. Ejemplo usando promesas:
+	[16.3.4]. Ejemplos:
+_______________________________________________________
+
+1) Obtener datos desde un archivo ".txt" al hacer click en un botón:
+
+	const cargarTxtBtn = document.querySelector("#cargarTxt");
+
+	cargarTxtBtn.addEventListener("click", obtenerDatos);
+
+	function obtenerDatos() {
+	const url = "data/datos.txt";
+
+	fetch(url)
+		.then( respuesta => {
+			console.log("Respuesta: ", respuesta);
+			console.log("Status: ", respuesta.status);
+			console.log("Status Text: ", respuesta.statusText);
+			console.log("URL: ", respuesta.url);
+			console.log("Type: ", respuesta.type);
+
+			return respuesta.text();
+		})
+		.then( datos => {
+			console.log("Datos: ", datos);
+		})
+		.catch(  error => {
+			console.log("Error: ", error);
+		})
+	}
+
+2) Obtener datos de un archivo ".json" al hacer click en un botón:
+
+	const cargarJSONBtn = document.querySelector("#cargarJSON");
+
+	cargarJSONBtn.addEventListener("click", obtenerDatos);
+
+	function obtenerDatos() {
+		const url = "data/empleado.json";
+
+		fetch(url)
+			.then( respuesta => respuesta.json() )
+			.then( datos => console.log("Datos: ", datos) )
+			.catch(  error => console.log("Error: ", error) )
+	}
+
+El archivo JSON, es muy parecido a un objeto de JavaScript, pero tiene las claves en strings(comillas dobles):
+
+	{
+		"id" : 1,
+		"nombre" : "Juan",
+		"empresa" : "Código Con Juan",
+		"trabajo" : "Desarrollador Web"
+	}
+
+3) Obtener datos de un archivo ".json" que tiene un array de empleados, e imprimirlos en el HTML:
+
+	const cargarJSONArrayBtn = document.querySelector("#cargarJSONArray");
+
+	cargarJSONArrayBtn.addEventListener("click", obtenerDatos);
+
+	function obtenerDatos() {
+	const url = "data/empleados.json";
+
+	fetch(url)
+		.then( respuesta => respuesta.json() )
+		.then( datos => mostrarHtml(datos) )
+		.catch(  error => console.log("Error: ", error) )
+	}
+
+	function mostrarHtml(empleados){
+		const contenido = document.querySelector('#contenido');
+
+		let html = '';
+		empleados.forEach( empleado => {
+			html += `
+				<p>Id: ${empleado.id}</p>
+				<p>Nombre: ${empleado.nombre}</p>
+				<p>Empresa: ${empleado.empresa}</p>
+				<p>Trabajo: ${empleado.trabajo}</p>
+				<hr>
+			`;
+		});
+		contenido.innerHTML = html;
+	}
+
+El ".json" con los empleados en un array:
+
+	[
+		{
+			"id" : 1,
+			"nombre" : "Juan",
+			"empresa" : "Código con Juan",
+			"trabajo" : "Desarrollador Web"
+		},
+		{
+			"id" : 2,
+			"nombre" : "Alejandra",
+			"empresa" : "Código con Juan",
+			"trabajo" : "Diseñadora"
+		},
+		{
+			"id" : 3,
+			"nombre" : "Pedro",
+			"empresa" : "Código con Juan",
+			"trabajo" : "Aplicaciones Móviles"
+		}
+	]
+
+4) Obtener datos desde una API y cargarlos en el HTML:
+
+	const cargarAPIBtn = document.querySelector("#cargarAPI");
+
+	cargarAPIBtn.addEventListener("click", obtenerDatos);
+
+	function obtenerDatos() {
+	const url = "https://picsum.photos/list";
+
+	fetch(url)
+		.then( respuesta => respuesta.json() )
+		.then( datos => mostrarHtml(datos) )
+		.catch(  error => console.log("Error: ", error) )
+	}
+
+	function mostrarHtml(datos){
+		const contenido = document.querySelector('#contenido');
+
+		let html = '';
+		datos.forEach( perfil => {
+			const { author, post_url } = perfil;
+			html += `
+				<p>Autor: ${author}</p>
+				<a href="${post_url}" target="_blank">ver imágen</a>
+				<hr>
+			`;
+		});
+		contenido.innerHTML = html;
+	}
+
+Nota 1: la API nos devuelve un array de datos en JSON.
+
+Nota 2: al abrir la "url" de la API en el navegador podemos ver el JSON, pero para poderlo visualizar mejor, podemos instalar una extención en el navegador como "JSONView".
+_______________________________________________________
+
+	[16.3.4.1]. Ejemplo usando promesas:
 _______________________________________________________
 
 - Comprobamos que la petición es correcta con "response.ok".
@@ -4083,7 +4465,7 @@ Podemos optimizar un poco el ejemplo anterior. Creamos la función "isResponseOk
 		.catch(err => console.error("ERROR: ", err.message));
 _______________________________________________________
 
-	[15.3.5]. Ejemplo usando "Async/await":
+	[16.3.4.2]. Ejemplo usando "Async/await":
 _______________________________________________________
 
 Utilizar "async/await" no es más que lo que se denomina "azúcar sintáctico", es decir, utilizar algo visualmente más agradable, pero que por debajo realiza la misma tarea. Para ello, lo que debemos tener siempre presente es que un "await" sólo se puede ejecutar si esta dentro de una función definida como "async".
@@ -4112,7 +4494,7 @@ En este caso, lo que hacemos es lo siguiente:
 Una vez hecho esto, podemos llamar a nuestra función" request" y almacenar el resultado, usando nuevamente "await". Al final, utilizar ".then()" o "async/await" es una cuestión de gustos y puedes utilizar el que más te guste.
 _______________________________________________________
 
-	[15.4]. Política CORS:
+	[16.4]. Política CORS:
 _______________________________________________________
 
 "Cross Origin" (origen cruzado) es la palabra que se utiliza para denominar el tipo de peticiones que se realizan a un dominio diferente del dominio de origen desde donde se realiza la petición. De esta forma, por una parte tenemos las peticiones de origen cruzado (cross-origin) y las peticiones del mismo origen (same-origin).
