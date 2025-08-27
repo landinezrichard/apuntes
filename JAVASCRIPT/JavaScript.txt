@@ -115,8 +115,11 @@ INDICE:
 		[16.3.3]. Métodos del objeto "response"
 		[16.3.4]. Ejemplos
 			[16.3.4.1]. Ejemplo usando promesas
-			[16.3.4.2]. Ejemplo usando "Async/await"
-	[16.4]. Política CORS
+	[16.4.0]. Try/catch
+	[16.4]. Async/await
+		[16.4.1]. Manejar múltiples awaits
+		[16.4.2]. Async/await hacia una API con Fetch
+	[16.5]. Política CORS
 
 
 
@@ -1110,11 +1113,13 @@ _______________________________________________________
 	numero1.toFixed(6); // 4564.345670
 	numero1.toFixed(); // 4564
 
-Nota: para más info de variables numericas y metodos pra numeros:
+Nota: para más info de variables numericas y metodos para números:
 
 	https://www.w3schools.com/js/js_numbers.asp
 
 	https://www.w3schools.com/js/js_number_methods.asp
+
+	https://www.w3schools.com/js/js_math_reference.asp
 _______________________________________________________
 
 	[7]. Objetos:
@@ -2627,7 +2632,7 @@ Ejemplo:
 
 Nota 1: Para ver los datos guardados en el navegador, vamos a :
 
-	Inpector --> Aplicación --> Almacenamiento Local
+	Inspector --> Aplicación --> Almacenamiento Local
 
 Nota 2: en "localStorage", solo podemos almacenar "strings", para guardar objetos o arrays, toca convertirlos a "string".
 
@@ -3021,7 +3026,7 @@ Los generadores tienen las siguientes caracteristicas:
 - Tienen un asterisco(*) antes de su nombre.
 - Usa la palabra reservada 'yield' para iterar cada elemento.
 - En su prototype podemos ver el método "next()", el cual itera y retorna un objeto por cada elemento del listado definido con "yield".
-- Accedemos al valor de ccada elemento con ".next().value".
+- Accedemos al valor de cada elemento con ".next().value".
 - En cada iteración el generador esta suspendido, y con "next()" se despierta, itera y se vuelve a suspender.
 - Al terminar de iterar todos los elementos, se cierra el generador.
 
@@ -4465,36 +4470,185 @@ Podemos optimizar un poco el ejemplo anterior. Creamos la función "isResponseOk
 		.catch(err => console.error("ERROR: ", err.message));
 _______________________________________________________
 
-	[16.3.4.2]. Ejemplo usando "Async/await":
+	[16.4.0]. Try/catch:
 _______________________________________________________
 
-Utilizar "async/await" no es más que lo que se denomina "azúcar sintáctico", es decir, utilizar algo visualmente más agradable, pero que por debajo realiza la misma tarea. Para ello, lo que debemos tener siempre presente es que un "await" sólo se puede ejecutar si esta dentro de una función definida como "async".
+JavaScript es un lenguaje que, en caso de existir errores, detiene su ejecución.
 
-En este caso, lo que hacemos es lo siguiente:
+Por ejemplo si tenemos el siguiente código:
 
-- Creamos una función "request(url)" que definimos con "async".
+	console.log(1 + 1);
 
-- Llamamos a "fetch" utilizando "await" para esperar y resolver la promesa.
+	hola();
 
-- Comprobamos si todo ha ido bien usando "response.ok".
+	console.log(2 + 2);
 
-- Llamamos a "response.text()" utilizando "await" y devolvemos el resultado.
+Al ejecutar el código, vemos que se imprime el número "2", y al llamar a la función "hola()" que no existe, nos marca un error y no ejecuta el segundo "console.log".
 
-	const request = async (url) => {
-		const response = await fetch(url);
-		if (!response.ok)
-			throw new Error("WARN", response.status);
-		const data = await response.text();
-		return data;
+Para solucionar esto, usamos "try/catch":
+
+	console.log(1 + 1);
+
+	try{
+		hola();
+	} catch(error){
+		console.log(error);
 	}
 
-	const resultOk = await request("/robots.txt");
-	const resultError = await request("/nonExistentFile.txt");
+	console.log(2 + 2);
 
-Una vez hecho esto, podemos llamar a nuestra función" request" y almacenar el resultado, usando nuevamente "await". Al final, utilizar ".then()" o "async/await" es una cuestión de gustos y puedes utilizar el que más te guste.
+Enb este caso, imprime el número "2", el mensaje de error y el número "4"
+
+"try/catch" es muy útil para usarlo, al consultar una Base de Datos, consultar una API, autenticar un usuario, o acciones que en caso de fallar, nuestra aplicación continue funcionando.
+
+"try/catch" tambien es muy usado con "async/await".
 _______________________________________________________
 
-	[16.4]. Política CORS:
+	[16.4]. Async/await:
+_______________________________________________________
+
+"async/await" nos permite hacer una tarea asincrona, pero que necesitamos bloquear el código, esperando que se realice para continuar con otras operaciones.
+
+Un ejemplo de esto, es por ejemplo si en nuestra aplicación necesitamos que el usuario se autentique correctamente antes de mostrarle su dashboard, o que se descargue un listado de usuarios antes de poder editarlos, etc.
+
+	function descargarClientes() {
+		return new Promise((resolve, reject) => {
+			const error = false;
+
+			setTimeout( () => {
+				if(!error) {
+					resolve('El Listado de Clientes se descargo correctamente'); 
+				} else {
+					reject('No se pudo aplicar el descuento');					
+				}            
+			}, 3000);
+
+		});
+	}
+
+	// Async await
+	async function ejecutar() {
+		try {
+			const respuesta = await descargarClientes(); // Deten la ejecución hasta que sea ejecutado...
+			console.log(respuesta);
+		} catch (error) {
+			console.log(error)
+		}
+
+	}
+	ejecutar();
+
+	console.log( 2 + 2); // Este código se continua ejecutando mientras que el await sigue esperando por su respuesta
+
+En este ejemplo, primero tenemos una función "descargarClientes()", que devuelve una promesa, cuando la constante "error" es "false", la promesa se resuelve despues de 3 segundos.
+
+Luego en nuestra funcion "ejecutar", que es padre de la función a la que vamos a esperar (await) a que se ejecute, la definimos como "async".
+
+Luego usamos el "try/catch", que intenta ejecutar la función "descargarClientes()", esperando (await) hasta que esta se resuelva o se rechace, es decir, en la siguiente línea, se queda esperando:
+
+	const respuesta = await descargarClientes();
+
+Si la promesa se resuelve, se ejecuta el código que sigue dentro del "try", en este ejemplo:
+
+	console.log(respuesta);
+
+En caso de rechazarse la promesa (podemos simularlo cambiando el valor de la constante "error" a "true"), no se ejeucuta "console.log(respuesta)", sino que se va directamente al "catch".
+
+El codigo que este por fuera del "try/catch" (en el ejemplo "console.log( 2 + 2)"), se sigue ejecutando, mientras que el await sigue esperando por su respuesta.
+
+NOTA IMPORTANTE: un "await" sólo se puede ejecutar si esta dentro de una función definida como "async".
+
+- Si quitamos el "async" de la función padre, nos marca un error, indicando que solo se puede usar "await" dentro de una función definida como "async".
+
+- Si quitamos el "await", de la función "async", no se pone a esperar, sino que sigue ejecutando el código, y la promesa quedaria como pendiente.
+
+Al final, utilizar ".then()" o "async/await" es una cuestión de gustos y puedes utilizar el que más te guste.
+
+Si queremos usar "async/await" como "function expression" en vez de "function declaration":
+
+	const ejecutar = async () => {
+		...
+	};
+
+_______________________________________________________
+
+	[16.4.1]. Manejar múltiples awaits:
+_______________________________________________________
+
+Para ejecutar dos funciones simultaneamente (en paralelo), esperando(await) a que se ejecuten, pero que la espera de una, no detenga la espera de otra, usamos "Promise.all":
+
+	//Es muy común tener 2 Async Await,  es probable que quieras en una misma función descargar los últimos 100 clientes y también los últimos 50 pedidos..
+
+	function descargarNuevosClientes() {
+		return new Promise( resolve => {
+			console.log('Descargando Clientes....');
+			setTimeout( () => {
+				resolve('Los clientes fueron descargados');           
+			}, 5000);
+
+		});
+	}
+
+	function descargarUltimosPedidos() {
+		return new Promise( resolve => {
+			console.log('Descargando Pedidos....');
+			setTimeout( () => {
+				resolve('Los pedidos fueron descargados');           
+			}, 3000);
+		});
+	}
+
+	// La solución, Promise.all();
+	const app = async () => {
+		try {
+			const respuesta = await Promise.all([descargarNuevosClientes(), descargarUltimosPedidos() ])
+			console.log(respuesta);
+			console.log(respuesta[0]);
+			console.log(respuesta[1]);
+		} catch (error) {
+			console.log(error)
+		}
+	}
+
+	app();
+
+Si bien mandamos a llamar ambas funciones al mismo tiempo, va a obtener los resultados hasta que se terminen de ejecutar ambas, haciendo que si bien una termine de ejecutarse antes de la otra, se va a mostrar hasta que la promesa mas lenta termine.
+
+Supongamos que el "promise1" consume 5 segundos y "promise 2" consume 10 segundos, resolver "promise1" por un lado y luego "promise 2" llevaria un total de 15 segundos, mientras que hacerlos en un "promise.all" las iniciaria y acabaria cuando la que mas tiempo toma finalice, por lo tanto, tomando solo 10 segundos y ahorrando 5 a la función o funciones que luego emplean, muestran o almacenan esos datos.
+
+_______________________________________________________
+
+	[16.4.2]. Async/await hacia una API con Fetch:
+_______________________________________________________
+
+Lo que haciamos con "fetch" y ".then", lo podemos hacer tambien con "async/await":
+
+	const url = 'https://picsum.photos/list';
+
+	document.addEventListener('DOMContentLoaded', obtenerDatos);
+
+	function obtenerDatos(){
+		fetch(url)
+			.then(respuesta => respuesta.json())
+			.then(resultado => console.log(resultado))
+			.catch(error => console.log(error));
+	}
+
+Lo podemos traducir a "async/await":
+
+	async function obtenerDatos(){
+		try{
+			const respuesta = await fetch(url);
+			const resultado = await respuesta.json();
+			console.log(resultado);
+		} catch(error){
+			console.log(error);
+		}
+	}
+
+_______________________________________________________
+
+	[16.5]. Política CORS:
 _______________________________________________________
 
 "Cross Origin" (origen cruzado) es la palabra que se utiliza para denominar el tipo de peticiones que se realizan a un dominio diferente del dominio de origen desde donde se realiza la petición. De esta forma, por una parte tenemos las peticiones de origen cruzado (cross-origin) y las peticiones del mismo origen (same-origin).
