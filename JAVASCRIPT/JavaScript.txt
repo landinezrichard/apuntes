@@ -54,6 +54,10 @@ INDICE:
 			[7.6.3.4]. Setters
 		[7.6.4]. Herencia
 	[7.7]. Prototypes
+	[7.8]. Binding
+		[7.8.1]. Implicit Binding
+		[7.8.2]. Explicit Binding
+		[7.8.3]. New Binding y Window Binding
 [8]. Elementos DOM
 	[8.1]. Acceso a los Nodos(Métodos Clasicos)
 	[8.2]. Acceso a los Nodos(Métodos Modernos)
@@ -1895,6 +1899,100 @@ En este ejemplo, Perro hereda de Animal, lo que permite a los perros usar el mé
 	coche2.arrancar(); // Honda Civic está arrancando.
 
 Aquí, los métodos arrancar y detener están definidos una vez en el prototype y son compartidos por todas las instancias de Coche, lo que facilita la lectura y el mantenimiento del código.
+_______________________________________________________
+
+	[7.8]. Binding:
+_______________________________________________________
+
+"Binding" se refiere a una vinculación o conexión entre dos cosas. En informática y programación: Es una "ligadura" que asocia un nombre con un valor, dato o recurso.
+_______________________________________________________
+
+	[7.8.1]. Implicit Binding:
+_______________________________________________________
+
+El "Implicit Binding", lo usamos en un objeto con la palabra reservada "this", para indicar de donde tomar los datos que necesita.
+
+Ejemplo:
+
+	// Implicit binding le dira de forma clara a la palabra this donde encontrar sus valores
+	const usuario = {
+		nombre: 'Juan',
+		edad: 20,
+		informacion() {
+			console.log(`Mi Nombre es ${this.nombre} y mi edad es ${this.edad}`);
+		}, 
+		mascota: {
+			nombre: 'Hook',
+			edad: 1, 
+			informacion() {
+				console.log(`Mi Nombre es ${this.nombre} y mi edad es ${this.edad}`);
+			}
+		}
+	}
+
+	usuario.informacion();
+	usuario.mascota.informacion();
+
+_______________________________________________________
+
+	[7.8.2]. Explicit Binding:
+_______________________________________________________
+
+Podemos tambien indicarle a una función ya creada, de donde tomar datos externos para su funcionamiento con "Explicit Binding", esto lo hacemos con los metodos ".call", ".apply" o ".bind".
+
+Ejemplo:
+
+	// Explicit binding
+
+	function persona(el1, el2) {
+		console.log(`Mi Nombre es: ${this.name} & I  listen: ${el1} & ${el2} `);
+	}
+	const informacion = {
+		name: 'Juan',
+		job: 'Developer'
+	}
+	const musicaFavorita = ['Heavy Metal', 'Rock'];
+
+	// (1)
+	persona.call(informacion, musicaFavorita[0], musicaFavorita[1]);
+
+	// (2)
+	persona.apply(informacion, musicaFavorita);
+
+	// (3)
+	const nuevaFn = persona.bind(informacion, musicaFavorita[0], musicaFavorita[1]);
+	nuevaFn();
+
+(1) El método llamado ".call", existe en todas las funciones de Javascript, y se le puede pasar un objeto o arreglo dentro de la función. 
+
+NOTA IMPORTANTE: en ".call" se tiene que pasar cada elemento del array de forma individial, con su posición.
+
+(2) Con ".apply", es exactamente igual a ".call", existe en todas las funciones pero toma un array completo.
+
+(3) Con ".bind" va a ser como ".call" en que se le pasa cada argumento de forma individual, pero crea una nueva función.
+
+_______________________________________________________
+
+	[7.8.3]. New Binding y Window Binding:
+_______________________________________________________
+
+El "new binding", se da cuando se crea un nuevo objeto con el "object constructor", se tiene acceso a la palabra "this" via un nuevo objeto con "new":
+
+	function Auto(model, color) {
+		this.model = model;
+		this.color = color;
+	}
+	const auto = new Auto('Camaro', 'Negro');
+	console.log(auto);
+
+El "Window binding", es cuando al objeto global "window", le aasignamos una nueva propiedad, y esta queda en este objeto de forma global, porque primero intenta obtener la variable con el nombre de esa propiedad, y si no existe la busca en el objeto "window":
+
+	window.color = 'negro';
+	function hola() {
+		console.log(color);
+	}
+
+	hola();
 
 _______________________________________________________
 
