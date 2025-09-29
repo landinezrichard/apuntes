@@ -1,0 +1,14 @@
+ 8 COMANDOS BRUTALES que DEJAN TU WINDOWS NUEVO en 5 MINUTOS 
+(y el #6 es criminalmente poderoso)
+¿Tu PC va lento, se cuelga o da errores?
+Olvídate de formatear. Estos 8 comandos en PowerShell/CMD son el secreto de los sysadmins para revivir cualquier Windows:
+1️⃣ `sfc /scannow` → Repara archivos de sistema corruptos. Tu PC te lo agradecerá.
+2️⃣ `DISM /Online /Cleanup-Image /RestoreHealth` → El “médico” de Windows. Repara la imagen desde servidores oficiales.
+3️⃣ `winget upgrade --all` → Actualiza TODAS tus apps de golpe. Sin instaladores individuales.
+4️⃣ `chkdsk C: /f /r` → Revisa errores físicos y lógicos del disco. ⚠️ Requiere reinicio.
+5️⃣ `Get-Process | Sort-Object CPU -Descending` → El cazador de procesos que devoran tu CPU.
+6️⃣ `Get-EventLog System -Newest 20` → El detective del sistema. Localiza errores críticos recientes.
+7️⃣ `ipconfig /flushdns` → Limpia la caché DNS. Soluciona cortes de red.
+8️⃣ `Stop-Process -Name explorer` → Reinicia la barra de tareas congelada sin reiniciar el equipo.
+💡PRO TIP:Ejecuta el 1, 2, 7 y 8 seguidos. 
+Es el “reset exprés” definitivo.

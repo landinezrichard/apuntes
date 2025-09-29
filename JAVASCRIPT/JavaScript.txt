@@ -129,6 +129,15 @@ INDICE:
 	[17.2]. Crear Service Worker
 	[17.3]. Cachear archivos
 	[17.4]. Actualizar Caché de archivos
+[18]. Patrones de diseño
+	[18.1]. Class Pattern
+	[18.2]. Constructor Pattern
+	[18.3]. Singleton
+	[18.4]. Factory
+	[18.5]. Module
+	[18.6]. Mixin
+	[18.7]. Namespace
+	[18.8]. Mediator
 
 _______________________________________________________
 
@@ -5059,3 +5068,310 @@ Si hacemos algun cambio en la app, ya sea en el titulo, en un archivo "*.html", 
 	...
 
 De esta forma, cada vez que relicemos un cambio, debemos cambiar la versión del caché en el serviceWorker, y esto actualizara el caché del usuario, eliminando los caches previos.
+
+_______________________________________________________
+
+	[18]. Patrones de diseño:
+_______________________________________________________
+
+Son soluciones para resolver problemas de diseño del código. Hay diferentes categorias de patrones de diseño:
+
+- Creación: permiten crear objetos y reutilización del código.
+
+- Estructura: explican como deben comunicarse los objetos y clases en grandes proyectos.
+
+- Comportamiento: se encargan de como se comportan y comunican los objetos.
+
+_______________________________________________________
+
+	[18.1]. Class Pattern:
+_______________________________________________________
+
+Es utilizar clases para la creación de objetos:
+
+	class Persona {
+		constructor(nombre, email) {
+			this.nombre = nombre;
+			this.email = email;
+		}
+	}
+
+	const persona = new Persona('Juan', 'correo@correo.com');
+
+	console.log(persona);
+
+_______________________________________________________
+
+	[18.2]. Constructor Pattern:
+_______________________________________________________
+
+Es cuando utilizamos una clase base:
+
+	class Persona {
+		constructor(nombre, email, empresa) {
+			this.nombre = nombre;
+			this.email = email;
+		}
+	}
+
+	class Cliente extends Persona {
+		constructor(nombre, email, empresa) {
+			super(nombre, email);
+			this.empresa = empresa;
+		}
+	}
+
+	const persona = new Persona('Juan', 'correo@correo.com');
+	console.log(persona);
+
+	const cliente = new Cliente('Miguel', 'cliente@cliente.com', 'Código Con Juan');
+	console.log(cliente);
+
+Nota: en otros lenguajes, no deberia poder instanciarse la clase padre.
+
+_______________________________________________________
+
+	[18.3]. Singleton:
+_______________________________________________________
+
+Es para que solo se pueda crear una instancia de la clase, y retorna el objeto ya instanciado:
+
+	let instancia = null;
+
+	class Persona {
+		constructor(nombre, email) {
+			if(!instancia) {
+				this.nombre = nombre;
+				this.email = email;
+				instancia = this;
+			} else {
+				return instancia;
+			}
+		}
+	}
+
+
+	const persona = new Persona('Juan', 'correo@correo.com');
+	const persona2 = new Persona('Karen', 'karen@karen.com');
+
+	console.log(persona); // imprime: Persona {nombre: 'Juan', email: 'correo@correo.com'}
+	console.log(persona2); // imprime: Persona {nombre: 'Juan', email: 'correo@correo.com'}
+_______________________________________________________
+
+	[18.4]. Factory:
+_______________________________________________________
+
+Es una forma de crear objetos basados en cierta condición:
+
+	class InputHTML {
+		constructor(type, nombre) {
+			this.type = type;
+			this.nombre = nombre;
+		}
+
+		crearInput() {
+			return `<input type="${this.type}" name="${this.nombre}" id="${this.nombre}">`;
+		}
+	}
+
+	class HTMLFactory {
+		crearElemento(tipo, nombre) {
+			switch(tipo) {
+				case 'text':
+					return new InputHTML('text', nombre);
+				case 'tel':
+					return new InputHTML('tel', nombre );
+				case 'email':
+					return new InputHTML('email', nombre);
+				default:
+					return;
+			}
+		}
+	}
+
+	const elemento = new HTMLFactory();
+	const inputText = elemento.crearElemento('text', 'nombre-cliente');
+	console.log(inputText.crearInput());
+
+
+	const elemento2 = new HTMLFactory();
+	const inputText2 = elemento2.crearElemento('tel', 'telefono-cliente');
+	console.log(inputText2.crearInput());
+
+	const elemento3 = new HTMLFactory();
+	const inputText3 = elemento3.crearElemento('email', 'email-cliente');
+	console.log(inputText3.crearInput());
+
+_______________________________________________________
+
+	[18.5]. Module:
+_______________________________________________________
+
+Es un patron de estructura, para organizar y estructurar mejor el código.
+
+Actualmente se hace de la siguiente manera:
+
+	const mostrarCliente = nombre => {
+		console.log(nombre);
+	};
+
+	export default mostrarCliente;
+
+Antes se hacia así:
+
+	const module1 = (function() {
+		const nombre = 'Ricardo';
+
+		function hola() {
+			console.log('Hola');
+		}
+
+		return {
+			nombre,
+			hola
+		}
+
+	})();
+
+_______________________________________________________
+
+	[18.6]. Mixin:
+_______________________________________________________
+
+Es una forma de agregar funciones a una clase una vez que ha sido creada:
+
+	class Persona {
+		constructor(nombre, email) {
+			this.nombre = nombre;
+			this.email = email;
+		}
+	}
+
+	const funcionesPersona = {
+		mostrarInformacion() {
+			console.log(`Nombre Persona: ${this.nombre}, Email: ${this.email}`);
+		}
+	}
+
+	// Añadir funcionesPersona a la clase...
+
+	Object.assign(Persona.prototype, funcionesPersona);
+
+	const cliente = new Persona('Juan', 'correo@correo.com');
+
+	console.log(cliente);
+	cliente.mostrarInformacion();
+
+_______________________________________________________
+
+	[18.7]. Namespace:
+_______________________________________________________
+
+Es un design pattern de organización de código, ayuda a evitar colision con nombres en el scope global de javascript.
+
+La idea del "namespace" es crear un objeto global alrededor de tu aplicación y agregar todas las funciones dentro, en lugar de crear múltiples funciones y objetos que se puedan acceder de forma global.
+
+	const restaurApp = {};
+
+	restaurApp.platillos = [
+		{
+			platillo: 'Pizza',
+			precio: 25
+		},
+		{
+			platillo: 'Hamburguesa',
+			precio: 20
+		},
+		{
+			platillo: 'Hot Dog',
+			precio: 20
+		}
+	];
+
+	restaurApp.funciones = {
+		ordenar: id => {
+			console.log(`Tu platillo: ${restaurApp.platillos[id].platillo} se esta preparando`);
+		},
+		agregarPlatillo: (platillo, precio) => {
+			const nuevo = {
+				platillo,
+				precio
+			}
+			restaurApp.platillos.push(nuevo);
+		},
+		mostrarMenu: platillos => {
+			console.log(`Bienvenidos a nuestro Menú:`)
+			platillos.forEach((platillo, index) => {
+				console.log(`${index})  ${platillo.platillo} $ ${platillo.precio}`)
+			});
+		}
+	}
+
+	restaurApp.funciones.agregarPlatillo('Pastel', 20);
+	// console.log(restaurApp );
+	const { platillos} = restaurApp;
+
+	restaurApp.funciones.mostrarMenu(platillos);
+	restaurApp.funciones.ordenar(1);
+
+_______________________________________________________
+
+	[18.8]. Mediator:
+_______________________________________________________
+
+El patrón Mediator (mediador | intermediario) en diseño de software tiene como objetivo facilitar la comunicación entre objetos o componentes de un sistema, sin que estos tengan que conocerse directamente. En lugar de que los objetos interactúen entre sí, lo hacen a través de un mediador central.
+
+	function Vendedor (nombre) {
+		this.nombre = nombre;
+		this.sala = null;
+	}
+
+	Vendedor.prototype = {
+		oferta: (articulo, precio) => {
+			console.log(`Tenemos el siguiente articulo ${articulo}, iniciamos en ${precio}`);
+		},
+		vendido: comprador => {
+			console.log(`Vendido a ${comprador}`);
+		}
+	}
+
+	function Comprador(nombre) {
+		this.nombre = nombre;
+		this.sala = null;
+	}
+	Comprador.prototype = {
+		oferta: (cantidad, comprador) => {
+			console.log(`${comprador.nombre} : ${cantidad}`);
+		}
+	}
+
+	function Subasta(id) {
+		let compradores = {};
+
+		return {
+			registrar: usuario =>  {
+				compradores[usuario.nombre] = usuario;
+				usuario.sala = id;
+			}
+		}
+	}
+
+	const juan = new Comprador('Juan');
+	const pablo = new Comprador('pablo');
+	const vendedor = new Vendedor('Vendedor de Autos...');
+	const subasta = new Subasta(Date.now());
+
+	subasta.registrar(juan);
+	subasta.registrar(pablo);
+	subasta.registrar(vendedor);
+
+	vendedor.oferta('Mustang 1966', 300);
+	juan.oferta(300, juan);
+	pablo.oferta(400, pablo); // Comentar... y no se podrá ver la oferta porque no fue registrado...
+	vendedor.vendido('Pablo');
+
+En este caso el "mediator" es el objeto "Subasta", que permite que compradores y vendedor se comuniquen en una sala de subastas.
+
+Nota: en este ejemplo, es posible que el código siga funcionando sin necesidad del "mediator" (objeto Subasta) porque el patrón "Mediator" no siempre es necesario en todos los contextos. Sin embargo, en aplicaciones más complejas o cuando hay una gran cantidad de interacciones entre objetos, el uso de un mediador puede ayudar a mantener el código más organizado y reducir la dependencia directa entre los componentes.
+
+El patrón "Mediator" es especialmente útil cuando tienes múltiples objetos que necesitan comunicarse de manera dinámica y no quieres que estén acoplados directamente. Al usar un mediador, puedes centralizar la lógica de comunicación y hacer que el sistema sea más escalable y mantenible en el futuro.
