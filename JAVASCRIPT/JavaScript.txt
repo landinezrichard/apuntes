@@ -138,6 +138,10 @@ INDICE:
 	[18.6]. Mixin
 	[18.7]. Namespace
 	[18.8]. Mediator
+[19]. Debug, Medir Performance y Seguridad
+	[19.1]. Cargar Script con async o defer
+	[19.2]. Utilizar "debugger"
+[20]. Testing
 
 _______________________________________________________
 
@@ -5375,3 +5379,82 @@ En este caso el "mediator" es el objeto "Subasta", que permite que compradores y
 Nota: en este ejemplo, es posible que el código siga funcionando sin necesidad del "mediator" (objeto Subasta) porque el patrón "Mediator" no siempre es necesario en todos los contextos. Sin embargo, en aplicaciones más complejas o cuando hay una gran cantidad de interacciones entre objetos, el uso de un mediador puede ayudar a mantener el código más organizado y reducir la dependencia directa entre los componentes.
 
 El patrón "Mediator" es especialmente útil cuando tienes múltiples objetos que necesitan comunicarse de manera dinámica y no quieres que estén acoplados directamente. Al usar un mediador, puedes centralizar la lógica de comunicación y hacer que el sistema sea más escalable y mantenible en el futuro.
+
+_______________________________________________________
+
+	[19]. Debug, Medir Performance y Seguridad:
+_______________________________________________________
+
+Para medir cuanto tarda determinado código en ejecutarse, podemos usar "performance.now()":
+ 
+    let inicio = performance.now();
+
+	...código al que se le va a medir el performance
+
+	const fin  = performance.now();
+    console.log(fin - inicio);
+
+_______________________________________________________
+
+	[19.1]. Cargar Script con async o defer:
+_______________________________________________________
+
+Podemos cargar los scripts, añadiendo un atributo adicional con "async" o "defer":
+
+	<script src="js/app.js" defer></script>
+
+La diferencia es la siguiente:
+
+async --> descarga y ejecuta el código inmediatamente lo descarga (no usar si se tiene código que manipula el HTML).
+
+defer --> descarga y ejecuta el código del script hasta que el HTML este listo. Gana performance.
+
+Nota: mejor usar "defer".
+
+_______________________________________________________
+
+	[19.2]. Utilizar "debugger":
+_______________________________________________________
+
+Para no estar usando tanto "console.log(variable)", para ver el valor de la variable en determinado punto, podemos usar "debugger":
+
+	function mostrarCotizacionHTML(cotizacion) {
+
+		limpiarHTML();
+
+		console.log(cotizacion);
+		const  { PRICE, HIGHDAY, LOWDAY, CHANGEPCT24HOUR, LASTUPDATE } = cotizacion;
+
+
+		debugger;
+
+		const precio = document.createElement('p');
+		precio.classList.add('precio');
+		precio.innerHTML = `El Precio es: <span> ${PRICE} </span>`;
+
+		const precioAlto = document.createElement('p');
+		precioAlto.innerHTML = `<p>Precio más alto del día: <span>${HIGHDAY}</span> </p>`;
+
+		...
+	}
+
+"debugger" nos permite hacer que en el navegador, en el inspector de elementos se pause la ejecución de código en ese momento, y nos muestre el valor que tienen todas las variables creadas hasta ese punto.
+_______________________________________________________
+
+	[20]. Testing:
+_______________________________________________________
+
+El testing nos sirve para mejorar la calidad del código evitando bugs.
+
+Existen diferentes tipos de Testing:
+
+- End to End: más interactivo, simula algunos clicks, llenar formularios y asegurarse de que se muestre en pantalla lo que se desea.
+
+- Integración: revisar que múltiples partes de nuestro proyecto funcionen bien.
+
+- Unit: revisar que cada parte por si sola funcione bien.
+
+- Static: Revisar por errores en el código mientras se va escribiendo.
+
+Las herramientas para testing que tenemos disponibles son: Jest y Cypress.
+

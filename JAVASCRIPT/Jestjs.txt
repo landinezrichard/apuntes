@@ -1,0 +1,357 @@
+
+	Jest:
+_______________________________________________________
+
+INDICE:
+
+[1]. Instalación
+[2]. Probando Strings
+[3]. Probando Arrays
+[4]. Probando Objetos
+[5]. Probando Funciones
+[6]. Introducción a Snapshots
+[7]. Pruebas Modulos
+[8]. Ejemplo Prueba clase
+
+_______________________________________________________
+
+	[1]. Instalación:
+_______________________________________________________
+
+Jest nos sirve para hacer testing. Para usarlo es necesario usar Node y tener un proyecto ya iniciado (npm init).
+
+Nota: para más info de Jestjs:
+
+	https://jestjs.io/
+
+1) Lo instalamos con el comando:
+
+	pnpm add --save-dev jest
+
+2) En el archivo "package.json", añadimos el script para el test:
+
+	"scripts": {
+		"test": "jest"
+	},
+
+3) En la raíz del proyecto creamos una carpeta llamada "__tests__".
+
+4) En la carpeta "__tests__" creamos el archivo "holamundo.js":
+
+	test('Hola Mundo en Jest', () => {});	
+
+Nota 1: si no se quiere crear la carpeta carpeta "__tests__" ni el archivo "holamundo.js", y se quieren dejar los archivos de test en la misma carpeta de nuestro JS, se les pone un nombre como el siguiente:
+
+	"holamundo.test.js"
+
+Nota 2: el método "test()" de Jest hace lo mismo que el método "it()".
+
+5) Corremos el test de prueba con:
+
+	npm run test
+
+O tambien con:
+
+	npm t
+
+En consola podemos ver si paso la prueba:
+
+	Test Suites: 1 passed, 1 total
+	Tests:       1 passed, 1 total
+	Snapshots:   0 total
+	Time:        0.546 s
+	Ran all test suites.
+
+En el ejemplo no se esta probando nada realmente, ya que es necesario agregar código en el callback.
+
+6) Si se quieren correr varios tests, lo hacemos de la siguiente manera:
+
+	describe('Grupo de pruebas', () => {
+		test('Hola Mundo en Jest', () => {});
+
+		test('otro test en Jest', () => {});
+	});
+
+Nota: tambien podemos tener diferentes archivos con diferentes pruebas, si queremos correr un archivo en especifico usamos:
+
+	npm test --(archivo)
+
+_______________________________________________________
+
+	[2]. Probando Strings:
+_______________________________________________________
+
+Jest tiene una serie de métodos y funciones ya definidas, que nos sirven de utilidad para comprobar si determinadas condiciones se cumplen, por ejemplo si se solicita el valor de una variable en concreto, le indicamos la variable y el valor que esperamos, luego hace comprobaciones, y nos dice si el valor de la variable cumple con el valor esperado.
+
+Ejemplo:
+
+	const password = '123456';
+
+	// Validar que el password no este vacio, y que tenga una extensión de 6 caracteres
+	describe('Grupo de pruebas', () => {
+		test('Password con 6 caracteres', () => {
+			expect( password ).toHaveLength(6);
+		});
+
+		test('Password no vacio', () => {
+			expect( password ).not.toHaveLength(0);
+		});
+	});
+
+Si corremos el test(npm t), lo pasa, pero si cambiamos el valor de la variable "password":
+
+	const password = '12345';
+
+		FAIL  __tests__/holamundo.js
+	Grupo de pruebas
+		× Password con 6 caracteres (4 ms)
+		√ Password no vacio (1 ms)
+
+	● Grupo de pruebas › Password con 6 caracteres
+
+		expect(received).toHaveLength(expected)
+
+		Expected length: 6
+		Received length: 5
+		Received string: "12345"
+
+		4 | describe('Grupo de pruebas', () => {
+		5 |       test('Password con 6 caracteres', () => {
+		> 6 |               expect( password ).toHaveLength(6);
+			|                                  ^
+		7 |       });
+		8 |
+		9 |       test('Password no vacio', () => {
+
+		at Object.toHaveLength (__tests__/holamundo.js:6:22)
+
+	Test Suites: 1 failed, 1 total
+	Tests:       1 failed, 1 passed, 2 total
+	Snapshots:   0 total
+	Time:        0.545 s, estimated 1 s
+	Ran all test suites.
+
+_______________________________________________________
+
+	[3]. Probando Arrays:
+_______________________________________________________
+
+Podemos hacer comprobaciones en los arrays:
+
+	const carrito = ['Producto 1', 'Producto 2', 'Producto 3'];
+
+	describe('Testing al carrito de compras', ()  => {
+		test('Probar que el array tenga 3 elementos', () => {
+			expect(carrito).toHaveLength(3);
+		});
+
+		test('Verificar que el carrito no este vacio', () => {
+			expect(carrito).not.toHaveLength(0);
+		})
+
+	});
+
+En este caso en "expect" le pasamos el array, y luego indicamos que valor esperamos, acá revisamos que tenga 3 elementos y que no este vacio, pero podemos usar otras condiciones, e incluso usar funciones y métodos normales de JavaScript de siempre:
+
+	expect(carrito).toHaveLength(3);
+
+Tambien lo podemos expresar de la siguiente forma:
+
+	expect(carrito.length).toBe(3);
+
+Nota: para ver que otros métodos tenemos disponibles:
+
+	https://jestjs.io/docs/expect
+
+_______________________________________________________
+
+	[4]. Probando Objetos:
+_______________________________________________________
+
+Para probar valores en los objetos, accedemos a sus propiedades con la notación de punto:
+
+	const cliente = {
+		nombre: 'Juan Pablo',
+		balance: 500
+	};
+
+	describe('Testing al Cliente', () => {
+		test('El cliente es premium', () => {
+			expect(cliente.balance).toBeGreaterThan(400);
+		});
+
+		test('Es Juan Pablo', () => {
+			expect(cliente.nombre).toBe('Juan Pablo');
+		});
+
+		test('No es otro cliente', () => {
+			expect(cliente.nombre).not.toBe('Pedro');
+		});
+
+		test('No tiene 400', () => {
+			expect(cliente.balance).not.toBe(400);
+		})
+	});
+_______________________________________________________
+
+	[5]. Probando Funciones:
+_______________________________________________________
+
+Podemos probar funciones, indicando que resultado esperamos de estas o que valores de resultados no deberian de devolvernos:
+
+	function suma(a, b) {
+		return a + b;
+	}
+
+	function restar(a,b) {
+		return a - b;
+	}
+
+	describe('Testing a las funciones de suma y resta', () => {
+		test('Suma de 20 y 30 ', () => {
+			expect( suma(20, 30) ).toBe(50);
+		});
+
+		test('Resta de 10 - 5', () => {
+			expect( restar(10,5) ).toBe(5);
+		}); 
+
+		test('Que la suma 10 y 10, no sea 10', () => {
+			expect(suma(10,10)).not.toBe(10);
+		});
+
+		test('Que la resta de 10 - 5 no sea otro valor ', () => {
+			expect(restar(10,5)).not.toBe(2);
+		})
+
+	});
+
+_______________________________________________________
+
+	[6]. Introducción a Snapshots:
+_______________________________________________________
+
+Un "Snapshot" es como una fotografia o copia del valor o el estado de una variable u objeto, que se guarda para comparar en futuros tests.
+
+Ejemplo:
+
+	const cliente = {
+		nombre: 'Juan',
+		balance: 500,
+		tipo: 'Premium'
+	};
+
+	describe('Testing al cliente', () => {
+		test('Es Juan pablo', () => {
+			expect(cliente).toMatchSnapshot();
+		});
+	});
+
+Luego al correr el test (npm t), dentro de nuestra carpeta "__tests__", se crea otra llamada "__snapshots__", con el archivo "holamundo.js.snap".
+
+Ahora si cambiamos el valor de una propiedad en el archivo "__tests__\holamundo.js":
+
+	const cliente = {
+		nombre: 'Juan 2',
+		balance: 500,
+		tipo: 'Premium'
+	};
+
+Si corremos el test no lo va a pasar, ya que se guardo en el "snapshot" el valor anterior.
+
+Nota: los valores de los archivos de "snapshots", deben ser administrados por Jest, y no se deben manipular directamente. Si queremos actualizar los valores de los "snapshots", por los nuevos usamos el comando:
+
+	npm t -- -u
+
+_______________________________________________________
+
+	[7]. Pruebas Modulos:
+_______________________________________________________
+
+1) Para poder hacer test de funciones creadas previamente en otros archivos, se deben importar, pero como Jest funciona con NodeJs y la forma de importación CommonJs (con "require"), es necesario tambien instalar como dependencia de desarrollo "BabelJs":
+
+	pnpm add --save-dev @babel/preset-env jest-environment-jsdom
+
+Nota: tambien instalamos una configuración de entorno del DOM para Jest "jest-environment-jsdom", para que no genere errores cuando tenemos referencias a "document", "window", etc.
+
+2) Ahora en la raíz del proyecto, creamos un archivo de configuración llamado "babel.config.js":
+
+	module.exports = {
+		presets: [['@babel/preset-env', {targets: {node: 'current'}}]],
+	};
+
+3) En el archivo "package.json", cambiamos el script para el test, usando el entorno del DOM de Jest:
+
+	"scripts": {
+		"test": "jest --env=jsdom"
+	},
+
+4) En nuestro archivo de text, importamos la función que se va a probar:
+
+	import { suma } from '../js/funciones.js';
+
+	describe('Suma 2 números', () => {
+		test('Sumar 10 y 20 y arrojar 30', () => {
+			expect(suma(10,20)).toBe(30);
+		})
+	});
+
+Luego ejecutamos las pruebas (npm t).
+
+_______________________________________________________
+
+	[8]. Ejemplo Prueba clase:
+_______________________________________________________
+
+Un ejemplo probando una clase con snapshot, del gestor de pacientes de veterinaria:
+
+	import Citas from '../js/classes/Citas';
+
+	describe('Probar la clase de Citas', () => {
+
+		const citas = new Citas();
+
+		const id = Date.now();
+
+		test('Agregar una nueva cita', () => {
+			const citaObj = {
+				id,
+				mascota: 'Hook',
+				propietario: 'Juan',
+				telefono: '19030913',
+				fecha: '10-12-2020',
+				hora:'10:30',
+				sintomas: 'Solo duerme'
+			};
+
+			citas.agregarCita(citaObj);
+
+			// Prueba
+			expect(citas).toMatchSnapshot();
+
+		});
+
+
+		test('actualizar cita', () => {
+			const citaActualizada = {
+				id,
+				mascota: 'Nuevo Nombre',
+				propietario: 'Juan',
+				telefono: '19030913',
+				fecha: '10-12-2020',
+				hora:'10:30',
+				sintomas: 'Solo duerme'
+			};
+
+			citas.editarCita(citaActualizada);
+
+			expect(citas).toMatchSnapshot();
+		});
+
+		test('Eliminar Cita', () => {
+			citas.eliminarCita(id);
+
+			expect(citas).toMatchSnapshot();
+		});
+
+	});
