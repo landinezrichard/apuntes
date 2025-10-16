@@ -1,0 +1,416 @@
+
+	Cypress:
+_______________________________________________________
+
+INDICE:
+
+[1]. Instalación
+	[1.1]. Configuración
+[2]. Seleccionar elementos
+[3]. Verificar contenido dinámico
+[4]. Validación de formularios
+	[4.1]. Formulario de creación
+	[4.2]. Formulario de edición
+[5]. Screenshots
+
+_______________________________________________________
+
+	[1]. Instalación:
+_______________________________________________________
+
+Cypress nos sirve para hacer testing End to End, más enfocado a la interfaz de usuario. Para usarlo es necesario usar Node y tener un proyecto ya iniciado (npm init).
+
+Nota: para más info de Cypress ir a:
+
+	https://www.cypress.io/
+
+1) Lo instalamos con el cómando:
+
+	pnpm add --save-dev cypress
+
+2) Corremos Cypress con:
+
+	npx cypress open
+
+O tambien con:
+
+	pnpm cypress open
+
+open --> pruebas en la app de escritorio
+run --> pruebas en el CLI.
+
+3) En la ventana de la app de escritorio de Cypress que se abre, dar click en E2E Testing y configurar los parametros que pide (si a todo) y al final seleccionar el navegador Chrome.
+
+4) Ir a la carpeta que crea Cypress, en la raíz del proyecto:
+
+	/cypress
+		/downloads
+		/fixtures
+		/support
+
+5) Dentro de la carpeta "/cypress", creamos una carpeta llamada "e2e".
+
+6) Dentro de la carpeta "cypress\e2e", creamos un archivo llamado "primer_test.cy.js":
+
+	/// <reference types="cypress" />
+
+	describe('Carga la página principal', () => {
+		it('Carga la página principal', () => {
+			cy.visit('http://127.0.0.1:5500/index.html');
+
+			// Verificar el elemento y su texto
+			cy.contains('h1', 'Administrador de Pacientes de Veterinaria');
+
+			// Verificar que exista el elemento
+			cy.get('h1').should('exist');
+
+			// Verificar que exista el elemento y contenga un texto
+			cy.get('h1')
+				.invoke('text')
+				.should('equal', 'Administrador de Pacientes de Veterinaria');
+		});
+	});
+
+La primera línea de (/// <reference types="cypress" />) sirve para que nuestro editor de código maneje mejor el autocompletado, le indicamos que estamos usando Cypress.
+
+Al igual que con Jest, agrupamos pruebas con "describe()".
+
+Para hacer una oprueba, en Cypress tenemos el método "it".
+
+	cy.visit --> indicamos que primero tiene que ir a esa url para revizar esa interfaz de usuario (es la url que abrimos con la extensión liveserver).
+
+	cy.contains --> indicamos que busque una etiqueta "h1" con el texto indicado.
+
+	cy.get --> le indicamos que obtenga esa etiqueta, y despues que debe existir con ".should('exist')".
+
+Nota: los archivos tienen que tener la extensión ".cy.js"
+
+7) En la app de escritorio de Cypress, en la ventana del navegador que abrio, todas las pruebas saldrán en "Specs", hacemos click en este caso en "primer_test.cy.js" y correrá el testing.
+
+A mano izquierda podemos ver el panel de "acciones" que va ejecutando, en nuestro caso, la visita a la url, la busqueda del "h1" con el texto indicado, y finalmente indica que si existe esa etiqueta.
+
+_______________________________________________________
+
+	[1.1]. Configuración:
+_______________________________________________________
+
+En la raiz de nuestro proyecto, se crea un archivo llamado "cypress.config.js", en el cual podemos definir algunos parametros del test.
+
+Ejemplo:
+
+	const { defineConfig } = require("cypress");
+
+	module.exports = defineConfig({
+		e2e: {
+			setupNodeEvents(on, config) {
+			// implement node event listeners here
+			},
+			viewportHeight: 1080,
+			viewportWidth: 1280,
+		},
+	});
+
+En este caso con "viewportHeight" y "viewportWidth" modificamos el tamaño de la ventana del navegador de pruebas, esto es útil si queremos verificar el responsive.
+
+Nota: para más info de los parámetros de configuración:
+
+	https://docs.cypress.io/app/references/configuration
+
+_______________________________________________________
+
+- Podemos tambien definir "baseUrl":
+
+	module.exports = defineConfig({
+		e2e: {
+			baseUrl: 'http://127.0.0.1:5500',
+
+Y ahora en los archivos de test:
+
+	cy.visit('/index.html');
+
+_______________________________________________________
+
+- Podemos generar videos de nuestras pruebas con:
+
+	module.exports = defineConfig({
+  		video: true,
+
+_______________________________________________________
+
+	[2]. Seleccionar elementos:
+_______________________________________________________
+
+Para seleccionar los elementos, Cypress define que en vez de usar clases o ids, es mejor manipular la etiqueta HTML, y añadir el atributo "data-cy":
+
+	<h1 class="text-center my-5 titulo" data-cy="titulo-proyecto">Administrador de Pacientes de Veterinaria</h1>
+
+Luego en el archivo de test, obtenemos el elemento así:
+
+	// Verificar el elemento y su texto
+	cy.contains('[data-cy="titulo-proyecto"]', 'Administrador de Pacientes de Veterinaria');
+
+	// Verificar que exista el elemento
+	cy.get('[data-cy="titulo-proyecto"]').should('exist');
+
+	// Verificar que exista el elemento y contenga un texto
+	cy.get('[data-cy="titulo-proyecto"]')
+		.invoke('text')
+		.should('equal', 'Administrador de Pacientes de Veterinaria');
+
+Nota: Para más info de buenas practicas y selectores:
+
+	https://docs.cypress.io/app/core-concepts/best-practices#Selecting-Elements
+
+_______________________________________________________
+
+	[3]. Verificar contenido dinámico:
+_______________________________________________________
+
+Podemos verificar el contenido insertado dinámicamente con JavaScript.
+
+	<h2 id="administra" class="mb-4" data-cy="citas-heading"></h2>
+
+Luego en el archivo de test:
+
+	// Verificar el texto de las citas
+	cy.get('[data-cy="citas-heading"]')
+		.invoke('text')
+		.should('equal', 'No hay Citas, comienza creando una');
+
+	cy.get('[data-cy="citas-heading"]')
+		.invoke('text')
+		.should('not.equal', 'Algo que no va');
+
+Nota: para ver todas las "acciones" y comprobaciones que podemos hacer ir a:
+
+	https://docs.cypress.io/api/table-of-contents
+
+_______________________________________________________
+
+	[4]. Validación de formularios:
+_______________________________________________________
+
+Podemos hacer pruebas en formularios, llenando los campos, y hasta observando que las alertas de validación tengan los mensajes correctos, solo basta con agregar los selectores a los elementos del formulario que queremos testear:
+
+	<form id="nueva-cita" data-cy="formulario-citas">
+		<legend class="mb-4">Datos del Paciente</legend>
+		<div class="form-group row">
+			<label class="col-sm-4 col-lg-4 col-form-label">Nombre Mascota:</label>
+			<div class="col-sm-8 col-lg-8">
+				<input type="text" id="mascota" name="mascota" class="form-control" placeholder="Nombre Mascota" data-cy="mascota-input">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-lg-4 col-form-label">Propietario:</label>
+			<div class="col-sm-8 col-lg-8">
+				<input type="text" id="propietario" name="propietario" class="form-control"  placeholder="Nombre Dueño de la Mascota" data-cy="propietario-input">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-lg-4 col-form-label">Teléfono:</label>
+			<div class="col-sm-8 col-lg-8">
+				<input type="tel" id="telefono" name="telefono" class="form-control"  placeholder="Número de Teléfono" data-cy="telefono-input">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label class="col-sm-4 col-lg-4 col-form-label">Fecha:</label>
+			<div class="col-sm-8 col-lg-8">
+				<input type="date" id="fecha" name="fecha" class="form-control" data-cy="fecha-input">
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<label class="col-sm-4 col-lg-4 col-form-label">Hora:</label>
+			<div class="col-sm-8 col-lg-8">
+				<input type="time" id="hora" name="hora" class="form-control" data-cy="hora-input">
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<label class="col-sm-4 col-lg-4 col-form-label">Sintomas:</label>
+			<div class="col-sm-8 col-lg-8">
+				<textarea id="sintomas" name="sintomas" class="form-control" data-cy="sintomas-textarea"></textarea>
+			</div>
+		</div>
+		<div class="form-group">
+			<button type="submit" class="btn btn-success w-100 d-block" data-cy="submit-cita">Crear Cita</button>
+		</div>
+	</form>
+
+Nota: para elementos añadidos dinámicamente con JavaScript, o que no podemos manipular directamente, podemos añadir los atributos de selección de Cypress con código JavaScript de siempre (en el archivo de código que manipula el DOM de nuestra app):
+
+	// Agregar data-cy
+    divMensaje.dataset.cy = "alerta";
+_______________________________________________________
+
+Ahora realizamos las validaciones correspondientes:
+
+- Archivo "cypress\e2e\validar_formulario.cy.js":
+
+	/// <reference types="cypress" />
+
+	describe('Valida el formulario', () => {
+		it('Submit al formulario y mostrar la alerta de error', () => {
+			cy.visit('/index.html');
+
+			cy.get('[data-cy="formulario-citas"')
+				.submit();
+
+			// Seleccionar la alerta
+			cy.get('[data-cy="alerta"]')
+				.invoke('text')
+				.should('equal', 'Todos los campos son Obligatorios');
+
+			cy.get('[data-cy="alerta"]')
+				.should('have.class', 'alert-danger')
+		});
+	});
+
+_______________________________________________________
+
+	[4.1]. Formulario de creación:
+_______________________________________________________
+
+- Archivo "cypress\e2e\crear_cita.cy.js":
+
+	/// <reference types="cypress" />
+
+	describe('Carga la página principal', () => {
+		it('Crea una cita', () => {
+			cy.visit('/index.html');	
+
+			// Llenar los campos
+			cy.get('[data-cy="mascota-input"]')
+				.type('Rufito');
+
+			cy.get('[data-cy="propietario-input"]')
+				.type('Juan Perez');
+
+			cy.get('[data-cy="telefono-input"]')
+				.type('1234567890');
+
+			cy.get('[data-cy="fecha-input"]')
+				.type('2025-10-15');
+
+			cy.get('[data-cy="hora-input"]')
+				.type('07:00');
+
+			cy.get('[data-cy="sintomas-textarea"]')
+				.type('No come y esta decaido');
+
+			// Enviar el formulario
+			cy.get('[data-cy="submit-cita"]')
+				.click();
+
+			// Verificar el texto de las citas
+			cy.get('[data-cy="citas-heading"]')
+				.invoke('text')
+				.should('equal', 'Administra tus Citas');
+
+			// Seleccionar la alerta
+			cy.get('[data-cy="alerta"]')
+				.invoke('text')
+				.should('equal', 'Se agregó correctamente');
+
+			cy.get('[data-cy="alerta"]')
+				.should('have.class', 'alert-success')
+		});
+	});
+
+_______________________________________________________
+
+	[4.2]. Formulario de edición:
+_______________________________________________________
+
+- Archivo "cypress\e2e\editar_cita.cy.js", para editar una cita:
+
+	/// <reference types="cypress" />
+
+	describe('Llena los campos para una nueva cita y la edita', () => {
+		it('Campos nueva cita', () => {
+			cy.visit('/index.html');
+
+			// Llenar los campos
+			cy.get('[data-cy="mascota-input"]')
+				.type('Rufito');
+
+			cy.get('[data-cy="propietario-input"]')
+				.type('Juan Perez');
+
+			cy.get('[data-cy="telefono-input"]')
+				.type('1234567890');
+
+			cy.get('[data-cy="fecha-input"]')
+				.type('2025-10-15');
+
+			cy.get('[data-cy="hora-input"]')
+				.type('07:00');
+
+			cy.get('[data-cy="sintomas-textarea"]')
+				.type('No come y esta decaido');
+
+			// Enviar el formulario
+			cy.get('[data-cy="submit-cita"]')
+				.click();
+
+			// Verificar el texto de las citas
+			cy.get('[data-cy="citas-heading"]')
+				.invoke('text')
+				.should('equal', 'Administra tus Citas');
+
+			// Seleccionar la alerta
+			cy.get('[data-cy="alerta"]')
+				.invoke('text')
+				.should('equal', 'Se agregó correctamente');
+
+			cy.get('[data-cy="alerta"]')
+				.should('have.class', 'alert-success')
+		});
+
+		it('Editar cita', () => {
+			cy.visit('/index.html');
+
+			// Hacer click en editar
+			cy.get('[data-cy="btn-editar"]')
+				.click();
+
+			// Llenar los campos
+			cy.get('[data-cy="mascota-input"]')
+				.clear()
+				.type('Nuevo Rufito');
+
+			// Enviar el formulario
+			cy.get('[data-cy="submit-cita"]')
+				.click();
+
+			// Verificar el texto de la alerta
+			cy.get('[data-cy="alerta"]')
+				.invoke('text')
+				.should('equal', 'Guardado Correctamente');
+		});
+	});
+
+
+Acá tenemos el problema que necesitamos crear una nueva cita, y luego editarla, como tenemos dos "it", se ejecuta el primero, pero luego se borran esos datos e intenta ejecutar el segundo "it", para solucionarlo tenemos dos opciones:
+
+- Poner todo dentro del mismo "it".
+- Agregar en el archivo de configuración "cypress.config.js", el parametro "testIsolation" en "false".
+
+El parámetro `testIsolation` en `cypress.config.js` controla si cada prueba de Cypress se ejecuta en su propio entorno aislado. 
+
+Cuando `testIsolation` está configurado en `true` (que es el valor predeterminado), cada prueba se ejecuta en su propio entorno aislado, lo que significa que los datos y el estado de una prueba no pueden afectar a los de otra prueba. Esto puede ser útil para depurar pruebas y aislar problemas. 
+
+Cuando `testIsolation` está configurado en `false`, todas las pruebas se ejecutan en el mismo entorno, lo que puede mejorar el rendimiento de las pruebas. Sin embargo, esto también significa que los datos y el estado de una prueba pueden afectar a los de otra prueba, lo que puede dificultar la depuración de problemas. En general, se recomienda dejar `testIsolation` configurado en `true` a menos que tenga una razón específica para cambiarlo a `false` .
+
+_______________________________________________________
+
+Al editar, en el input que se está editando ejecutamos primero el método ".clear()" para limpiar el campo, y liego se llena con el nuevo valor, sino se hace esto, queda el valor viejo, y pegado el valor nuevo del campo.
+
+_______________________________________________________
+
+	[5]. Screenshots:
+_______________________________________________________
+
+Se pueden generar screenshots en cualquier parte de nuestras pruebas con el siguiente código:
+
+	cy.screenshot();
