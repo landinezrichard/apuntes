@@ -2,6 +2,249 @@
 	NODE:
 _______________________________________________________
 
+INDICE:
+
+[1]. Qué es Node
+[2]. Qué es npm
+[3]. Instalación
+[4]. Iniciar proyecto Node
+[5]. Instalar Dependencias
+	[5.1]. Dependencias de desarrollo
+		[5.1.1]. "nodemon"
+		[5.1.2]. "pm2"
+[6]. Variables de entorno
+[7]. Qué es "express"
+	[7.1]. Archivo base de "express"
+	[7.2]. Habilitar modulos
+	[7.3]. "Hola mundo!" en "express"
+	[7.4]. "Routing" en "express"
+
+_______________________________________________________
+
+	[1]. Qué es Node:
+_______________________________________________________
+
+Es un entorno de código abierto multiplataforma, que permite crear aplicaciones del lado del servidor en JavaScript.
+
+Permite crear APIS, aplicaciones web e incluso acceder a archivos y leer sus contenidos.
+
+Ventajas: velocidad y rendimiento, excelente para aplicaciones en tiempo real.
+
+_______________________________________________________
+
+	[2]. Qué es npm:
+_______________________________________________________
+
+"npm" o Node Package Manager, es una gran cantidad de paquetes y librerias de código abierto, ya listos para ser utilizados, entrte ellos paquetes para subir archivos, autenticación de usuarios, enviar emails, template engines, seguridad, etc.
+
+Para ver la versión de "npm" instalada usamos:
+
+	npm -v
+_______________________________________________________
+
+	[3]. Instalación:
+_______________________________________________________
+
+1) Para instalar Node:
+
+	https://nodejs.org/es/
+
+Nota: Se recomienda la versión LTS(Long Term Service).
+
+2) Luego en consola (windows cmd o powershell), escribimos el comando:
+
+	node -v
+
+Esto nos mostrara la version de Node instalada.
+
+Si queremos ejecutar codigo JavaScript en la conmsola de node escribimos:
+
+	node
+
+Y luego el codigo JavaScript como:
+
+	console.log("Hola!!!");
+_______________________________________________________
+
+	[4]. Iniciar proyecto Node:
+_______________________________________________________
+
+1) Crear una carpeta para el proyecto, para el nombre del proyecto, seguimos las siguientes recomendaciones:
+
+	A) Utiliza siempre minúsculas.
+	B) No utilices espacios en el nombre. Usa guiones en su lugar.
+	C) Evita el uso de carácteres especiales, signos de puntuación, etc...
+
+2) Para llevar el control de versiones del proyecto con "Git", en consola de comandos, nos ubicamos en la carpeta del proyecto y usamos el comando:
+
+	git init
+
+Luego añadimos la URL de GitHub (u otro servicio) como repositorio remoto:
+
+	git remote add origin https://github.com/landinezrichard/backend.git
+
+Creamos un archivo ".gitignore", para ignorar archivos y carpetas que no se deben subir a github (Como la carpeta node_modules, ya que allí van las dependencias del proyecto y no se deben subir a github, ya que estas dependencias son binarios y su compilación depende del sistema operativo):
+
+	node_modules
+	*.log
+
+Nota: tambien podemos crear el archivo ".gitignore", con una herramienta online:
+
+	https://www.toptal.com/developers/gitignore
+
+3) En la consola, ubicados en la carpeta del proyecto, escribimos el comando "npm init", el cual va a crear el archivo "package.json":
+
+	npm init
+
+El comando "npm init", hará algunas preguntas iniciales sobre nuestro proyecto:
+
+	name: nombreproyecto
+	version: 1.0
+	description: Api RESTful para frameworks JavaScript
+	entry point: index.js
+	test comand:
+	git repository:
+	keywords: 
+	autor: Ricardo Landínez <landinezrichard@gmail.com>
+	license: BSD
+
+Nota: en licencia tambien pódemos usar ISC, MIT.
+
+IMPORTANTE: para que npm init no falle al momento del nombre del proyecto, no usar letras mayusculas, no usar espacios, evitar el uso de carácteres especiales, signos de puntuación, etc..
+
+Tambien podemos iniciarlo con todo en default con:
+
+	npm init -y
+
+_______________________________________________________
+
+	[5]. Instalar Dependencias:
+_______________________________________________________
+
+Podremos instalar paquetes de NPM en nuestros proyectos y/o en nuestro sistema. Se pueden instalar de dos formas:
+
+- A nivel de proyecto: usar NPM como un gestor de dependencias de un proyecto, esto es, un sistema con el que controlamos que paquetes o librerías Javascript están instalados (y que versión), de modo que quedan asociados al proyecto en sí. Esto facilita que si un usuario diferente se descarga el proyecto, pueda gestionarlo fácil y rápidamente (instalar paquetes, actualizarlos, etc...).
+
+- A nivel global: hay paquetes que son realmente utilidades que no se utilizan en proyectos, muy común en aplicaciones de línea de comandos (CLI) que usamos desde terminal. En esta modalidad, los paquetes se instalan a nivel del sistema (no en la carpeta del proyecto), por lo que están disponibles siempre que el usuario quiera utilizarlos, sin necesidad de tenerlo en cada proyecto.
+
+Nota: para ver comandos de instalación de paquetes globales ir a:
+
+	https://lenguajejs.com/npm/introduccion/instalaciones-globales/
+_______________________________________________________
+
+En este caso vamos a instalar paquetes a nivel de proyecto. Nos ubicamos dentro de la carpeta del proyecto, y usamos los comandos:
+
+	npm install --save express
+
+Con el flag "--save", indicamos que es una dependencia de nuestro proyecto, es decir, que el proyecto necesita la libreria para funcionar. Tambien hace que en el archivo "package.json" se grabe como dependencia y aparezca la versión instalada.
+
+Tambien podemos ahorrarnos escribir todo el "install", y si no usamos el flag "--save", igual se instala como dependencia:
+
+	npm i express
+
+En nuestra carpeta de proyecto, aparece una carpeta llamada "node-modules", que es donde se descargan las librerias instaladas y las dependencias de estas.
+
+Nota 1: para buscar algun paquete o ver más información de los paquetes:
+
+	https://www.npmjs.com/
+
+Nota 2: Si descargamos algun proyecto de otra persona, y necesitamos instalar sus dependencias (el proyecto debe tener el archivo "package.json"), usamos el comando:
+
+	npm install
+_______________________________________________________
+
+	[5.1]. Dependencias de desarrollo:
+_______________________________________________________
+
+Podemos instalar dependencias de desarrollo (las que no se necesitan en producción), con el flag "--save-dev":
+
+	npm install --save-dev nodemon
+
+Para ahorrarnos escribir todo el flag "--save-dev":
+
+	npm i -D nodemon
+
+_______________________________________________________
+
+	[5.1.1]. "nodemon":
+_______________________________________________________
+
+"nodemon" es una herramienta que ayuda a desarrollar aplicaciones basadas en node.js al reiniciar automáticamente la aplicación de node cuando se detectan cambios de archivo en el directorio.
+
+	npm install --save-dev nodemon
+
+Tambien se puede instalar de forma global:
+
+    npm install -g nodemon
+
+Luego ejecutamos en consola:
+
+    nodemon index.js
+
+Para usar "nodemon", agregamos un nuevo script al archivo "package.json":
+
+	"scripts": {
+		"dev": "nodemon index.js"
+	},
+
+Luego en la consola corremos el script con:
+
+	npm dev
+
+De esta forma, al hacer cambios en "index.js" (que se creara más adelante), se recarga automaticamente el script en ejecución, sin necesidad de pausarlo (ctrl + C) y volverlo a correr.
+_______________________________________________________
+
+	[5.1.2]. "pm2":
+_______________________________________________________
+
+Para tener algo similar a "nodemon" en producción usamos "pm2":
+
+    https://pm2.keymetrics.io/
+
+Para instalarlo:
+
+    npm install -g pm2
+
+Para ejecutar nuestras apps:
+
+    pm2 start index.js
+
+Para balancear 4 instancias de la app:
+
+    pm2 start api.js -i 4
+
+Este ultimo comando es muy util por ejemplo para una API, para crear una instancia por cada nucleo del procesador del servidor.
+
+Para monitorizar la app:
+
+    pm2 monitor
+
+Para ver todas las apps que estan corriendo:
+
+    pm2 status
+
+Para ver los "logs":
+
+    pm2 logs
+
+Nota: para salir de ver los "logs" (ctrl + C).
+
+Parar la app:
+
+    pm2 stop id
+
+Nota: el id del proceso de la app que esta corriendo es el que vemos con "pm2 status"
+
+_______________________________________________________
+
+	[6]. Variables de entorno:
+_______________________________________________________
+
+Las variables de entorno sirven para almacenar datos de configuración como claves de API, contraseñas o URLs, permitiendo adaptar el comportamiento de un programa sin modificar su código fuente. 
+
+Esto facilita la gestión de aplicaciones en diferentes entornos (como desarrollo y producción), mejora la seguridad al mantener información sensible fuera del código y permite que un programa sea más flexible y portátil. 
+_______________________________________________________
+
 Si tenemos un archivo, por ejemplo, "index.js", en donde leemos variables de entorno:
 
     let nombre = process.env.NOMBRE || 'sin nombre';
@@ -32,7 +275,7 @@ Sale en consola:
     Hola sin nombre
     Mi web es no tengo web
 
-NOta: en PowerShell hay que definir primero las variables de entorno:
+Nota: en PowerShell hay que definir primero las variables de entorno:
 
     $env:NOMBRE="Ricardo"
 
@@ -41,50 +284,196 @@ Y luego ejecutar:
     node index.js
 _______________________________________________________
 
-Para estar ejecutando node, en consola y vea cambios, se instala un paquete llamado "nodemon".
+	[7]. Qué es "express":
+_______________________________________________________
 
-Se puede instalar de forma global.
+Es el framework más popular de Node, es la herramienta sobre la cual están desarrollados otros frameworks como MEAN, SAILS, LOOPBACK, GRAPHQL YOGA y otros.
 
-    npm install -g nodemon
+Soporta los diferentes verbos o acciones de HTTP (POST, GET, PUT, PATCH, DELETE) en las rutas (routing).
 
-Luego ejecutamos:
+Permite creación de aplicaciones MVC (Modelo Vista Controlador) para separar y organizar el código.
 
-    nodemon index.js
+Soporta Middlewares (peticiones que se ejecutan en la tuberia de la petición).
 
-Para tener algo similar a "nodemon" en producción usamos "pm2":
+"express" es una libreria que nos proporciona herramientas pequeñas y sólidas para servidores HTTP, lo que la convierte en una gran solución para aplicaciones de una sola página, sitios web, híbridos o API HTTP públicas. Nos va a servir para crear las diferentes rutas de nuestro proyecto.
 
-    https://pm2.keymetrics.io/
+"express" es como "Apache" en PHP.
 
-Para instalarlo:
+Lo instalamos con:
 
-    npm install -g pm2
+	npm install --save express
+_______________________________________________________
 
-Para ejecutar nuestras apps:
+	[7.1]. Archivo base de "express":
+_______________________________________________________
 
-    pm2 start index.js
+En la raiz del proyecto creamos el archivo "index.js":
 
-Para balancear 4 instancias de la app:
+	const express = require('express');
 
-    pm2 start api.js -i 4
+	// Crear la app
+	const app = express();
 
-Este ultimo comando es muy util por ejemplo para una API, para crear una isntancia por cada nucleo del procesador del servidor.
+	// Definir puerto
+	const port = process.env.PORT || 4000;
 
-Para monitorizar la app:
+	// Arrancar la app
+	app.listen(port, () => {
+		console.log(`Servidor funcionando en el puerto ${port}`);
+	});
 
-    pm2 monitor
+Este archivo usa la sintaxis "CommonJs", que es con la que empezo Node y muchas de sus librerias.
 
-Para ver todas las apps que estan corriendo:
+En el puerto, definimos que en local use el puerto 4000, pero si la variable de entorno del puerto está disponible, la usa. Esto ya queda listo y con soporte tanto en desarrollo como en producción.
 
-    pm2 status
+Al ejecutar en consola:
 
-Para ver los "logs":
+	npm run dev
 
-    pm2 logs
+Podemos ver el mensaje:
 
-Nota: para salir de ver los "logs" (ctrl + C).
+	Servidor funcionando en el puerto 4000
 
-Parar la app:
+_______________________________________________________
 
-    pm2 stop id
+	[7.2]. Habilitar modulos:
+_______________________________________________________
 
-Nota: el id del proceso de la app que esta corriendo es el que vemos con "pm2 status"
+Para cambiar la sintaxis de "CommonJs" y usar "imports" y "exports" (modulois ECMAScript), en el archivo "package.json" agregamos:
+
+	"type": "module",
+
+Y luego en nuestro archivo base de "express", "index.js":
+
+	import express from "express";
+
+_______________________________________________________
+
+	[7.3]. "Hola mundo!" en "express":
+_______________________________________________________
+
+Completamos el archivo "index.js":
+
+	import express from "express";
+
+	const app = express();
+
+	// Definir puerto
+	const port = process.env.PORT || 4000;
+
+	// Routing
+	app.get("/", (req, res) => {
+		res.send("Hello World!");
+	});
+
+	app.listen(port, () => {
+		console.log(`Servidor funcionando en el puerto ${port}`);
+	});
+
+Acá usamos la acción "GET", el callback recibe un "req" ("request" o petición) y un res ("response" o respuesta).
+
+"req" --> la petición que se envia al servidor.
+
+"res" --> la respuesta de "express".
+
+Podemos ver el "Hello World!" en el navegador, en la siguiente ruta:
+
+	http://localhost:4000/
+
+_______________________________________________________
+
+Tambien podemos responder con JSON:
+
+	app.get("/", (req, res) => {
+		res.json({
+			id: 1
+		});
+	});
+
+_______________________________________________________
+
+Y responder con el renderizado de una vista:
+
+	app.get("/", (req, res) => {
+		res.render();
+	});
+
+_______________________________________________________
+
+	[7.4]. "Routing" en "express":
+_______________________________________________________
+
+1) Podemos definir varias rutas:
+
+	// Routing
+	app.get("/", (req, res) => {
+		res.send("Hello World!");
+	});
+
+	app.get("/nosotros", (req, res) => {
+		res.send("Nosotros");
+	});
+
+	app.get("/contacto", (req, res) => {
+		res.send("Contacto");
+	});
+
+2) Cuando ya tenemos varias rutas, lo mejor es separar el Routing en otro archivo, para esto, creamos una carpeta llamada "routes", y dentro de esta un archivo "index.js":
+
+	import express from "express";
+
+	const router = express.Router();
+
+	router.get("/", (req, res) => {
+		res.send("Hello World!");
+	});
+
+	router.get("/nosotros", (req, res) => {
+		res.send("Nosotros");
+	});
+
+	router.get("/contacto", (req, res) => {
+		res.send("Contacto");
+	});
+
+	export default router;
+
+Importamos "express", pero solo usamos el "Router" de esté, ya que solo puede existir una instancia de "express".
+
+Nota: el archivo "index.js" lo podemos nombrar como queramos, por ejemplo "usuarioRoutes.js".
+
+3) Ahora en nuestro archivo principal, importamos y usamos el "router":
+
+	import express from "express";
+	import router from "./routes/index.js";
+
+	// Crear la app
+	const app = express();
+
+	// Definir puerto
+	const port = process.env.PORT || 4000;
+
+	// Routing
+	app.use("/", router);
+
+	// Arrancar la app
+	app.listen(port, () => {
+		console.log(`Servidor funcionando en el puerto ${port}`);
+	});
+
+Aca el método "use", soporta todos los verbos o acciones HTTP(GET, POST, etc.), resuelve cualquier petición a "/", buscando en el archivo de "routing".
+
+Nota: como el "router" es un archivo que nosotros creamos y no una dependencia, es necesario indicar la extensión y la ruta del archivo para importarlo.
+
+Podemos probar las rutas en el navegador, por ejemplo:
+
+	http://localhost:4000/nosotros
+
+
+
+Los métodos HTTP que usamos son:
+
+- GET --> Utilizado para mostrar información.
+- POST --> Utilizado para enviar información.
+- PUT / PATCH --> Utilizado para actualizar información.
+- DELETE --> Utilizado para eliminar información.
