@@ -1,13 +1,23 @@
-	PUG oldJADE:
+	PUG:
 _______________________________________________________
+
+PUGjs es un "template engine", que nos permite re organizar y simplificar la forma en la que escribimos código HTML, permitiendos reutilizar partes del código, enviar variables, e iterar sobre las etiquetas o código HTML que generamos.
+
+Nota: PUGjs antes se llamaba JADE.
+
+Para más info de PUG ir a:
+
+	https://pugjs.org/api/getting-started.html
 
 1) Instalar Node.js
 
-2) Instalar stylus con:
+2) Instalar PUG con:
+
+	npm install pug
+
+O de forma global:
 
 	npm install -g pug
-
-	npm install -g jade
 
 3) Creamos un archivo "index.pug"(index.jade):
 
@@ -47,6 +57,8 @@ O para indicarle en donde sacar el resultado (output):
 _______________________________________________________
 
 Convertir Html a Jade:
+
+	https://html-to-pug.com/
 
 	http://html2jade.org/
 

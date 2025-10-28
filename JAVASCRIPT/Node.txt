@@ -18,6 +18,18 @@ INDICE:
 	[7.2]. Habilitar modulos
 	[7.3]. "Hola mundo!" en "express"
 	[7.4]. "Routing" en "express"
+		[7.4.1]. Métodos HTTP
+		[7.4.2]. Peticiones GET y POST
+	[7.5]. Template engines
+		[7.5.1]. Instalando PUG
+		[7.5.2]. Pasar variables hacia las vistas
+		[7.5.3]. Crear Layout principal
+	[7.6]. Servir archivos estáticos
+	[7.7]. "middleware"
+	[7.8]. "Controllers"
+	[7.9]. ORM's y Bases de Datos
+		[7.9.1]. Sequelize y MySQL
+			[7.9.1.1]. Información de la BD en variables de entorno
 
 _______________________________________________________
 
@@ -307,7 +319,7 @@ _______________________________________________________
 	[7.1]. Archivo base de "express":
 _______________________________________________________
 
-En la raiz del proyecto creamos el archivo "index.js":
+En la raíz del proyecto creamos el archivo "index.js":
 
 	const express = require('express');
 
@@ -370,7 +382,7 @@ Completamos el archivo "index.js":
 		console.log(`Servidor funcionando en el puerto ${port}`);
 	});
 
-Acá usamos la acción "GET", el callback recibe un "req" ("request" o petición) y un res ("response" o respuesta).
+Acá usamos la acción "GET", el callback recibe un "req" ("request" o petición) y un "res" ("response" o respuesta).
 
 "req" --> la petición que se envia al servidor.
 
@@ -395,13 +407,15 @@ _______________________________________________________
 Y responder con el renderizado de una vista:
 
 	app.get("/", (req, res) => {
-		res.render();
+		res.render('nombreVista');
 	});
 
 _______________________________________________________
 
 	[7.4]. "Routing" en "express":
 _______________________________________________________
+
+El "Routing" es por donde van a transitar (los "endpoints", donde se registran, donde llenan el formulario, donde consulatar la información, etc.) los usuarios de nuestro sitio web o aplicación.
 
 1) Podemos definir varias rutas:
 
@@ -469,7 +483,10 @@ Podemos probar las rutas en el navegador, por ejemplo:
 
 	http://localhost:4000/nosotros
 
+_______________________________________________________
 
+	[7.4.1]. Métodos HTTP:
+_______________________________________________________
 
 Los métodos HTTP que usamos son:
 
@@ -477,3 +494,385 @@ Los métodos HTTP que usamos son:
 - POST --> Utilizado para enviar información.
 - PUT / PATCH --> Utilizado para actualizar información.
 - DELETE --> Utilizado para eliminar información.
+_______________________________________________________
+
+	[7.4.2]. Peticiones GET y POST:
+_______________________________________________________
+
+Al crear las rutas, hay que tener en cuenta que una ruta(url) solo puede existir una vez (no se puesde repetir dos veses "/nosotros" por ejemplo), sin embargo, se puede tener la misma ruta con diferente acción:
+
+	router.get("/", (req, res) => {
+		res.send("Hello World!");
+	});
+
+	router.post("/", (req, res) => {
+		res.send("Para recibir datos del formulario");
+	});
+
+Tambien podemos tener el mismo resultado de la siguiente forma:
+
+	router.route('/')
+		.get(function(req, res) => {
+			res.send("Hello World!");
+		})
+		.post(function(req, res) => {
+			res.send("Para recibir datos del formulario");
+		})
+
+_______________________________________________________
+
+	[7.5]. Template engines:
+_______________________________________________________
+
+"Template Engines" o Motores de Plantilla son tecnologías que nos permiten 
+crear el código HTML y mostrar información contenida en variables de una 
+forma más compacta y clara.
+
+Pug, Handlebars, EJS son las opciones más populares para Node.js.
+
+También es posible utilizar React, Angular, Svelte o Vue como tu 
+Template Engine, reemplazando a los "template engines" pero necesitarás crear una API con respuestas JSON. 
+_______________________________________________________
+
+	[7.5.1]. Instalando PUG:
+_______________________________________________________
+
+1) Instalamos PUG como depenedencia:
+
+	npm i pug
+
+2) En nuestro archivo principal "index.js", habilitamos PUG como "template engine":
+
+	// Habilitar PUG
+	app.set("view engine", "pug");
+
+3) Creamos una carpeta llamada "views", y dentro de está un archivo para la vista llamado "nosotros.pug":
+
+	h1 Nosotros
+
+4) En el "router", renderizamos la vista en su respectiva "url", en el archivo "routes\index.js":
+
+	router.get("/nosotros", (req, res) => {
+		res.render('nosotros');
+	});
+_______________________________________________________
+
+	[7.5.2]. Pasar variables hacia las vistas:
+_______________________________________________________
+
+Podemos pasar variables hacia las vistas, por ejemplo desde el router le pasamos un objeto a la vista:
+
+	router.get("/nosotros", (req, res) => {
+		const variable = "Algun valor";
+		res.render('nosotros', { variable });
+	});
+
+Luego en la vista "views\nosotros.pug":
+
+	h1 Nosotros
+	p Aquí muestro los datos #{variable}.
+_______________________________________________________
+
+	[7.5.3]. Crear Layout principal:
+_______________________________________________________
+
+Podemos crear un Layout principal, con el titulo de la página, el llamado a las hojas de estilos, etc, para poder reutilizarlo.
+
+1) Creamos una carpeta llamada "layout" dentro de la carpeta "views".
+
+2) Creamos dentro de la carpeta "layout" un archivo "index.pug":
+
+	doctype html
+	html(lang="es")
+		head
+			meta(charset="utf-8")
+			meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+			title Agencia de Viajes
+		body
+			h1 Agencia de Viajes
+			block contenido
+
+3) Usamos el layout en el archivo "views\nosotros.pug":
+
+	extends layout/index.pug
+
+	block contenido
+		p Nosotros
+
+_______________________________________________________
+
+	[7.6]. Servir archivos estáticos:
+_______________________________________________________
+
+Podemos servir archivos estáticos en "express", como archivos CSS, imagenes, fuentes, etc.
+
+1) Creamos en la raíz del proyecto una carpeta llamada "public".
+
+2) Dentro de la carpeta "public", creamos las carpetas "css", "img", "fonts", etc. con sus respectivos archivos.
+
+3) En el archivo principal "index.js", definimos la carpeta "public":
+
+	// Definir la carpeta publica
+	app.use(express.static("public"));
+
+4) Ya podemos usar archivos estaticos en las vistas:
+
+	doctype html
+	html(lang="es")
+		head
+			meta(charset="utf-8")
+			meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
+			title Agencia de Viajes
+			link(rel='preconnect' href='https://fonts.googleapis.com')
+			link(rel='preconnect' href='https://fonts.gstatic.com' crossorigin='')
+			link(href='https://fonts.googleapis.com/css2?family=Covered+By+Your+Grace&family=Staatliches&display=swap' rel='stylesheet')
+			link(rel="stylesheet", href="/css/bootstrap.css")
+			link(rel="stylesheet", href="/css/style.css")
+		body
+			h1 Agencia de Viajes
+			img(src="/img/cupon.jpg", alt="Cupon Agencia de Viajes")
+			block contenido
+
+_______________________________________________________
+
+	[7.7]. "middleware":
+_______________________________________________________
+
+Un "middleware" actúa como una capa intermedia entre la solicitud del cliente y las rutas finales de la aplicación. Funcionan como un puente entre el servidor y la aplicación, interceptando y manipulando la solicitud antes de que se envíe a su destino final.
+
+En el archivo principal "index.js":
+
+	import express from "express";
+	import router from "./routes/index.js";
+
+	// Crear la app
+	const app = express();
+
+	// Definir puerto
+	const port = process.env.PORT || 4000;
+
+	// Habilitar PUG
+	app.set("view engine", "pug");
+
+	// Definir la carpeta publica
+	app.use(express.static("public"));
+
+	// Routing
+	app.use("/", router);
+
+	// Arrancar la app
+	app.listen(port, () => {
+		console.log(`Servidor funcionando en el puerto ${port}`);
+	});
+
+Cada "app.set", "app.use" y "app.listen" son "middlewares".
+
+Podemos crear un "middleware" propio:
+
+	// Obtener el año actual
+	app.use( (req, res, next) => {
+		const year = new Date();
+		res.locals.actualYear = year.getFullYear();
+		next();
+	});
+
+Vemos que en el callback, además del "req" ("request") y el "res" ("response"), resive un "next", que es con lo que le indicamos que, despues de realizar los calculos o lo que queramos, ya puede pasar al siguiente "middleware".
+
+Nota: si no pasa al siguiente "middleware", podemos forzarlo con:
+
+	return next();
+
+"locals", es un objeto con variables internas de "express", y nos permite pasar valores de un archivo a la vista o de un archivo a otro.
+
+Luego usamos nuestra variable en la vista:
+
+	p.copyright.text-center.text-md-right &copy; Todos los derechos reservados. #{actualYear}
+_______________________________________________________
+
+	[7.8]. "Controllers":
+_______________________________________________________
+
+Los "Controllers" o controladores, son los encargados de solicitar al modelo ("model") los datos, y luego enviarlos a la vista ("view") para que está ultima los muestre.
+
+1) En la raíz de nuestro proyecto creamos la carpeta "controllers".
+
+2) Creamos dentro de la carpeta "controllers", el controlador, en este caso "usuarioController.js":
+
+	const formularioLogin = (req, res) => {
+		res.render("auth/login");
+	};
+
+	export { formularioLogin };
+
+En este caso, le estamos quitando responsabilidades al "router".
+
+Nota 1: el nombre del archivo tambien puede ser:
+
+	"usuario.controller.js"
+
+Esto ya depende de las convenciones que maneje el proyecto.
+
+Nota 2: Si se necesita enviar datos a la vista, se hace ahora en el "controller".
+
+3) En el "router" importamos el controlador:
+
+	import express from "express";
+	import { formularioLogin } from "../controllers/usuarioController.js";
+
+	const router = express.Router();
+
+	router.get("/login", formularioLogin);
+
+	export default router;
+
+_______________________________________________________
+
+	[7.9]. ORM's y Bases de Datos:
+_______________________________________________________
+
+Un ORM (Object Relational Mapping), es una herramienta de programación que actúa como intermediario entre una aplicación y una base de datos relacional, facilitando la interacción con los datos sin necesidad de escribir código SQL directamente.
+
+Convierte los objetos de un lenguaje de programación en el formato adecuado para ser almacenado en la base de datos y, a su vez, traduce los resultados de las consultas de la base de datos en objetos que la aplicación puede usar.
+
+En MVC; un ORM se relaciona bastante con el Modelo
+
+Node.js tiene una gran cantidad de ORM’s que se instalan como librería, algunos de los más populares son:
+
+- Prisma
+- Mongoose
+- Sequelize
+- TypeORM
+- Bookshelf.js
+
+_______________________________________________________
+
+	[7.9.1]. Sequelize y MySQL:
+_______________________________________________________
+
+1) Instalamos el ORM Sequelize y MySQL2 como dependencias:
+
+	npm i sequelize mysql2
+
+Nota: debemos tambien instalar MySQl:
+
+	https://www.mysql.com/downloads/
+
+El "mysql2" que instalamos con Node, es el driver(controlador) para nuestra base de datos.
+
+"Sequelize" tambien acepta otros motores de BD como Postgres, MariaDB, etc.
+
+Nota: para más info de Sequelize, ir a:
+
+	https://sequelize.org/
+
+2) Ingresamos a MySQL en modo terminal:
+
+	mysql -u root -p
+
+3) Crear Base de Datos:
+
+	CREATE DATABASE bienesraices_node_mvc;
+
+4) En la raíz de nuestro proyecto, creamos una carpeta llamada "config", y dentro un archivo "db.js":
+
+	import { Sequelize } from "sequelize";
+
+	const db = new Sequelize('bienesraices_node_mvc', 'root', 'root', {
+		host: 'localhost',
+		port: 3306,
+		dialect: 'mysql',
+		define: {
+			timestamps: true
+		},
+		pool: {
+			max: 5,
+			min: 0,
+			acquire: 30000,
+			idle: 10000
+		},
+	});
+
+	export default db;
+
+Este archivo trae la configuración de conexión a nuestra base de datos. En donde:
+
+	const db = new Sequelize('nombreBaseDatos', 'usuarioBD', 'passwordBD', {objetoConfiguracion});
+
+Acá creamos la instancia de Sequelize. En el Objeto de configuración tenemos:
+
+	"timestamps" --> Hacemos que automáticamente en la tabla se agreguen dos columnas extras, de la fecha de creación del registro, y de la fecha de actualización del registro.
+
+	"pool" --> el conecction pool, en donde:
+
+	"max" --> el número de conexiones máximas por persona.
+
+	"min" --> igualamos a cero(0) para indicar que cuando no haya actividad en el sitio se desconecta para liberar recursos.
+
+	"acquire" --> en milisegundos, en este caso son "30 seg" para intentar crear la conexión antes de generar un error.
+
+	"idle" --> en milisegundos, en este caso "10 seg", si no hay actividad en el sitio en ese tiempo, se finaliza la conexión a la BD.
+
+5) En nuestro archivo principal de "express", "index.js", llamamos la conexión de la BD:
+
+	import express from "express";
+	import usuarioRoutes from "./routes/usuarioRoutes.js";
+	import db from "./config/db.js";
+
+	// Crear la app
+	const app = express();
+
+	// Conectar a la base de datos
+	try {
+		await db.authenticate();
+		console.log('Conectado a la base de datos.');
+	} catch (error) {
+		console.error('No se pudo conectar a la base de datos:', error);
+	}
+
+_______________________________________________________
+
+	[7.9.1.1]. Información de la BD en variables de entorno:
+_______________________________________________________
+
+Para ocultar la información de la base de datos en variables de entorno, primero instalamos "dotenv":
+
+	npm i dotenv
+
+Dotenv es un módulo sin dependencias que carga variables de entorno desde un archivo .env a process.env.
+
+Nota: para más info de Dotenv, ir a:
+
+	https://github.com/motdotla/dotenv#readme
+
+2) En la raíz del proyecto, creamos un archivo ".env" con los datos a proteger:
+
+	BD_NOMBRE=bienesraices_node_mvc
+	BD_USUARIO=root
+	BD_PASSWORD=root
+	BD_HOST=localhost
+	BD_PORT=3306
+
+3) En el archivo de configuración de conexión con la Base de Datos "config\db.js":
+
+	import { Sequelize } from "sequelize";
+	import dotenv from 'dotenv';
+	dotenv.config({ path: './.env' })
+
+	const db = new Sequelize(process.env.BD_NOMBRE, process.env.BD_USUARIO, process.env.BD_PASSWORD, {
+		host: process.env.BD_HOST,
+		port: process.env.BD_PORT,
+		dialect: 'mysql',
+		define: {
+			timestamps: true
+		},
+		pool: {
+			max: 5,
+			min: 0,
+			acquire: 30000,
+			idle: 10000
+		}
+	});
+
+	export default db;
+
+Importamos "dotenv", con "dotenv.config" definimos la ruta al archivo ".env", y con "process.env.", llamamos las variables de entorno definidas.

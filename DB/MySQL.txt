@@ -1,0 +1,135 @@
+	MySQL:
+_______________________________________________________
+
+INDICE:
+
+[1]. Qué es MySQL
+[2]. Instalación
+	[2.1]. Configurando variables de entorno
+[3]. Comandos en modo terminal
+
+_______________________________________________________
+
+	[1]. Qué es MySQL:
+_______________________________________________________
+
+MySQL es un sistema de gestión de bases de datos relacionales (RDBMS) de código abierto, el cual utiliza el lenguaje SQL para almacenar y gestionar datos. Se utiliza en aplicaciones web populares como WordPress y es una parte fundamental de la pila LAMP (Linux-Apache-MySQL-PHP). Su fiabilidad, escalabilidad y facilidad de uso lo convierten en una opción muy popular para sitios web, aplicaciones empresariales y otros sistemas.
+
+Características clave:
+
+- Código abierto: Es de código abierto y se basa en la Licencia Pública General de GNU (GPL), lo que permite su uso y distribución libres, aunque también existen versiones comerciales. 
+
+- Basado en SQL: Utiliza el lenguaje SQL (Structured Query Language) para consultar, manipular, definir y controlar los datos, que se organizan en tablas con filas y columnas. 
+
+- Modelo relacional: Almacena los datos en tablas con relaciones definidas entre ellas, similar a otros sistemas de bases de datos relacionales.
+
+- Arquitectura cliente-servidor: Funciona con un servidor que recibe y procesa solicitudes de múltiples clientes (como aplicaciones web o herramientas de administración) a través de una red. 
+
+- Versatilidad: Es compatible con una amplia gama de aplicaciones, desde pequeños proyectos personales hasta sistemas empresariales de alto tráfico, y es compatible con prácticamente todas las plataformas. 
+
+- Popularidad: Es una de las bases de datos relacionales más utilizadas en el mundo, presente en sitios como Facebook, Netflix, Uber y otras plataformas de alto tráfico. 
+_______________________________________________________
+
+	[2]. Instalación:
+_______________________________________________________
+
+1) Vamos a la siguiente url:
+
+	https://www.mysql.com/downloads/
+
+2) Allí buscamos y hacemios clic en:
+
+	MySQL Community (GPL) Downloads
+
+3) Buscamos el instalador:
+
+	MySQL Installer for Windows
+
+Al hacer click, escogemos el instalador y la versión más reciente.
+
+4) Una vez ejecutado el instalador, escogemos una isntalación "Custom", para seleccionar los componentes que necesitamos.
+
+5) Desplegamos:
+
+	- "MySQL Servers" --> 
+		"MySQL Server" --> 
+			"MySQL Server 8.0" --> 
+				"MySQL Server 8.0.44 - X64"  
+	- "Applications" -->
+		"MySQL Workbench" -->
+			"MySQL Workbench 8.0" -->
+				"MySQL Workbench 8.0.44 - X64"
+
+los pasamos a mano derecha para instalarlos.
+
+El server es el motor de la BD. Y el Workbench es el entorno grafico para administrarlo.
+
+6) Click en "Next" y luego en "Execute".
+
+7) En "Config Type", indicamos que es para desarrollo con "Development Computer".
+
+El puerto por defecto es el 3306.
+
+8) Escogemos el metodo de autenticación:
+	
+	"Use Strong Password"
+
+9) Para las credenciales de acceso:
+
+	MySQL Root Password: root
+
+Seguimos con la instalación dejando el resto por defecto y haciendo click en "Next".
+
+Nota: para más info de la instalación ir a:
+
+	https://www.youtube.com/watch?v=OFDxIjhCtEA
+
+_______________________________________________________
+
+	[2.1]. Configurando variables de entorno:
+_______________________________________________________
+
+1) Buscamos la ruta donde se instalo MySQL:
+
+	C:\Program Files\MySQL\MySQL Server 8.0\bin
+
+2) Ahora en el explorador de archivos buscamos "Este equipo", click derecho "Propiedades".
+
+Buscamos "Configuración Avanzada del Sistema".
+
+3) Click en "Variables de Entorno".
+
+4) Buscamos si existe "Path", si existe, la seleccionamos y le damos click en "Editar", si no existe se crea.
+
+5) Click en "Nuevo" y pegamos la ruta del primer paso:
+
+	C:\Program Files\MySQL\MySQL Server 8.0\bin
+
+Hacemos click en "Aceptar" hasta salir.
+
+6) Abrimos una terminal y probamos:
+
+	mysql --version
+
+Ahora en cualquier ubicación de nuestro equipo reconoce los comandos para mysql.
+
+_______________________________________________________
+
+	[3]. Comandos en modo terminal:
+_______________________________________________________
+
+Para ingresar a MySQL en modo terminal:
+
+	mysql -u root -p
+
+Allí nos pide el password del usuario "root".
+_______________________________________________________
+
+Para ver las bases de datos ya creadas:
+
+	show databases;
+_______________________________________________________
+
+Crear Base de Datos:
+
+	CREATE DATABASE nombre_base-datos;
