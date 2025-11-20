@@ -30,6 +30,13 @@ INDICE:
 	[7.9]. ORM's y Bases de Datos
 		[7.9.1]. Sequelize y MySQL
 			[7.9.1.1]. Información de la BD en variables de entorno
+			[7.9.1.2]. Modelo
+			[7.9.1.3]. Comunicar vista con routing y controller
+			[7.9.1.4]. Leer datos de un formulario
+			[7.9.1.5]. Consultar la BD
+				[7.9.1.5.1]. Limitar datos consulta
+				[7.9.1.5.2]. Consultar la BD según URL
+				[7.9.1.5.3]. Múltiples consultas
 
 _______________________________________________________
 
@@ -196,7 +203,8 @@ Luego ejecutamos en consola:
 Para usar "nodemon", agregamos un nuevo script al archivo "package.json":
 
 	"scripts": {
-		"dev": "nodemon index.js"
+		"dev": "nodemon index.js",
+		"start": "node index.js"
 	},
 
 Luego en la consola corremos el script con:
@@ -876,3 +884,326 @@ Nota: para más info de Dotenv, ir a:
 	export default db;
 
 Importamos "dotenv", con "dotenv.config" definimos la ruta al archivo ".env", y con "process.env.", llamamos las variables de entorno definidas.
+_______________________________________________________
+
+	[7.9.1.2]. Modelo:
+_______________________________________________________
+
+El modelo ("model"), es le encargado de solicitar datos a la BD y de la lógica para mostrar esos datos.
+
+Para crear un modelo:
+
+1) Creamos en la raíz del proyecto una carpeta llamada "models".
+
+2) Dentro de la carpeta "models", creamos el modelo, por convención se pone la primera letra en mayuscula, como si fuera una clase.
+
+Ejemplo: archivo "Usuario.js":
+
+	import { DataTypes } from "sequelize";
+	import db from "../config/db.js";
+
+	const Usuario = db.define("usuarios", {
+		nombre: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		email: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		password: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		},
+		token: DataTypes.STRING,
+		confirmado: DataTypes.BOOLEAN,
+	});
+
+	export default Usuario;
+
+Aca definimos el nombre de la tabla "usuarios", los campos que va a tener (nombre, email, password, etc.) y el tipo de datos del campo. Con "allowNull" indicamos que ese campo no debe estar vacio.
+
+Nota 1: el "id" no es necesario especificarlo porque ya Sequelize asume que existe en la BD.
+
+Nota 2: para más info de todos los tipos de datos disponibles, ir a:
+
+	https://sequelize.org/docs/v6/core-concepts/model-basics/#data-types
+_______________________________________________________
+
+	[7.9.1.3]. Comunicar vista con routing y controller:
+_______________________________________________________
+
+1) Creamos la función en el controlador "controllers\usuarioController.js" y la exportamos:
+
+	const registrar = (req, res) => {
+		console.log('Registrando usuario...');
+	};
+
+	export { formularioLogin, formularioRegistro, registrar, formularioOlvidoPassword };
+
+2) En el router "routes\usuarioRoutes.js", creamos la ruta, importamos y llamamos la función: 
+
+	import { formularioLogin, formularioRegistro, registrar, formularioOlvidoPassword } from "../controllers/usuarioController.js";
+
+	router.get("/registro", formularioRegistro);
+	router.post("/registro", registrar);
+
+En este caso recibe datos via POST de un formulario de registro de usuarios.
+
+3) En la vista "views\auth\registro.pug", agregamos el método, y la acción en el formulario de registro:
+
+	form.space-y-5(method="POST", action="/auth/registro")
+
+_______________________________________________________
+
+	[7.9.1.4]. Leer datos de un formulario:
+_______________________________________________________
+
+1) En nuestro archivo principal "index.js" habilitamos la lectura de los datos del formulario:
+
+	// Habilitar lectura de datos de formularios
+	app.use(express.urlencoded({ extended: true }));
+
+Nota: está es la nueva forma de habilitar la lectura de datos del formulario, ya que antes "Express" no venia con esta funcionalidad y teniamos que usar otras librerias como "body-parser":
+
+	let bodyParser = require("body-parser");
+	
+	// Middlewares
+	// usar el body-parser
+	app.use(bodyParser.urlencoded({extended:false}));
+	app.use(bodyParser.json());
+
+2) En el controlador "controllers\usuarioController.js", leemos los datos enviados por el formulario:
+
+	const registrar = (req, res) => {
+		console.log('Registrando usuario...', req.body);
+	};
+
+En consola podremos ver:
+
+	Rergistrando usuario... {
+		nombre: 'Ricardo',
+		email: 'correo@correo.com',
+		password: '123456',
+		repetir_password: '123456'
+	}
+
+La "key" de los campos (nombre, email, password) corresponde al "name" de los campos en el formulario.
+
+3) En el controlador es necesario validar los campos (que no esten vacios, etc.), antes de almacenar los datos en la BD.
+
+Ejemplo:
+
+	import { Testimonial } from "../models/Testimonial.js";
+
+	const guardarTestimonial = async (req, res) => {
+		const { nombre, correo, mensaje } = req.body;
+
+		//Validar que los campos no esten vacios
+		const errores = [];
+		if (nombre.trim() === "") {
+			errores.push({ mensaje: "El nombre esta vacio" });
+		}
+		if (correo.trim() === "") {
+			errores.push({ mensaje: "El correo esta vacio" });
+		}
+		if (mensaje.trim() === "") {
+			errores.push({ mensaje: "El mensaje esta vacio" });
+		}
+
+		if (errores.length > 0) {
+			//Mostrar los errores en la vista
+			res.render("testimoniales", {
+				pagina: "Testimoniales",
+				errores,
+				nombre,
+				correo,
+				mensaje,
+			});
+		} else {
+			//Almacenar el testimonial en la BD
+			try {
+				await Testimonial.create({
+					nombre,
+					correo,
+					mensaje,
+				});
+				res.redirect("/testimoniales");
+			} catch (error) {
+				console.log(error);
+			}
+		}
+	};
+
+	export { guardarTestimonial };
+
+_______________________________________________________
+
+	[7.9.1.5]. Consultar la BD:
+_______________________________________________________
+
+Para consultar los datos de una BD, se hace directamente desde el controlador.
+
+1) En el controlador "controllers\paginasController.js":
+
+	import { Viaje } from "../models/Viaje.js";
+
+	const paginaViajes = async (req, res) => {
+		// Consultar BD
+		const viajes = await Viaje.findAll();
+
+		res.render("viajes", {
+			pagina: "Viajes",
+			viajes
+		});
+	};
+
+Primero importamos el modelo, luego la función correspondiente del controlador la volvemos asincrona ("async").
+
+Consultamos todos los registros de la tabla "viajes", con el modelo, y el metodo de "Sequelize" ".findAll()".
+
+Luego le pasamos el array de "viajes" a la vista.
+
+Nota: para más info de las consultas en Sequelize, ir a:
+
+	https://sequelize.org/docs/v6/core-concepts/model-querying-basics/
+
+2) En la vista "views\viajes.pug", iteramos por cada elemento del array:
+
+	each viaje in viajes
+		.col-md-6.col-lg-4.mb-4
+			.card
+				img.card-img-top(src=`/img/destinos_${viaje.imagen}.jpg` alt=`Imagen del viaje a ${viaje.titulo}`)
+				.card-body
+					h2.card-title #{viaje.titulo}
+					p
+						| #{viaje.fecha_ida} - #{viaje.fecha_vuelta}
+					p
+						| #{viaje.disponibles} Disponibles
+					p.card-text #{viaje.descripcion.substr(0, 100)}...
+					p.precio $#{viaje.precio}
+					a.btn.btn-success.btn-block(href=`/viajes/${viaje.slug}`) Más información
+_______________________________________________________
+
+	[7.9.1.5.1]. Limitar datos consulta:
+_______________________________________________________
+
+Podemos limitar el número de resultados obtenidos de la BD:
+
+	const paginaInicio = async (req, res) => {
+		// Consultar 3 viajes del modelo Viaje
+		try {
+			const viajes = await Viaje.findAll({ limit: 3 });
+			
+			res.render("inicio", {
+				pagina: "Inicio",
+				clase: "home",
+				viajes,
+			});
+		} catch (error) {
+			console.log("Error al obtener los viajes: ", error);
+		}
+	};
+
+En este caso al método "findAll()", le pasamos un objeto con "limit: 3", para limitar a solo tres resultados.
+_______________________________________________________
+
+	[7.9.1.5.2]. Consultar la BD según URL:
+_______________________________________________________
+
+Podemos consultar el detalle de un elemento visitando una url en especifico, por ejemplo:
+
+	http://localhost:4000/viajes/viaje-italia
+
+Para poder hacerlo:
+
+1) En el router, creamos la nueva ruta:
+
+	import { paginaInicio, paginaNosotros, paginaViajes, paginaDetalleViaje, paginaTestimoniales } from "../controllers/paginasController.js";
+
+	router.get("/viajes/:slug", paginaDetalleViaje);
+
+En este caso, la URL, recibe un parámetro "slug", el  es requerido.
+
+2) En el controlador "controllers\paginasController.js":
+
+	// Muestra un viaje por su slug
+	const paginaDetalleViaje = async (req, res) => {
+		const { slug } = req.params;
+
+		console.log("Detalle viaje: ", slug);
+
+		try {
+			const viaje = await Viaje.findOne({ where: { slug } });
+			res.render("viaje", {
+				pagina: "Información Viaje",
+				viaje,
+			});
+		} catch (error) {
+			console.log("Error al obtener el viaje: ", error);
+		}
+	};
+
+Con "req.params", obtenemos los parámetros que se envian por URL, en este caso desestructuramos "slug", que es el nombre que definimos en el router para ese parámetro.
+
+Con ".findOne({ where: { slug } })" buscamos en la BD un viaje cuyo slug sea igual al indicado, es lo mismo que tener:
+
+	.findOne({ where: { slug: slug } })
+
+Pero como el nombre del parámetro es igual a la variable, se simplifica.
+
+Nota: para más info de este método de Sequelize, ir a:
+
+	https://sequelize.org/docs/v6/core-concepts/model-querying-finders/#findone
+
+Luego de obtener de la BD el resultado, renderizamos la vista del detalle, pasandole los datos correspondientes.
+
+En el catch, tambien podemos renderizar una página de 404.
+
+3) Renderizamos la vista del detalle "views\viaje.pug":
+
+	extends layout/index.pug
+
+	block contenido
+		main.container.mt-5
+			.row
+				.col-md-5
+					img.img-fluid(src=`/img/destinos_${viaje.imagen}_ln.jpg`, alt=`imagen viaje a ${viaje.titulo}`)
+				.col-md-7
+					h1 #{viaje.titulo}
+					p
+						|	#{viaje.fecha_ida} - #{viaje.fecha_vuelta}
+					p.precio
+						|	$#{viaje.precio} USD
+					p
+						|	#{viaje.disponibles} Disponibles
+					p.card-text #{viaje.descripcion}
+_______________________________________________________
+
+	[7.9.1.5.3]. Múltiples consultas:
+_______________________________________________________
+
+Para hacer múltiples consultas al mismo tiempo a la BD, usamos promesas:
+
+	const paginaInicio = async (req, res) => {
+		// Consultar 3 viajes del modelo Viaje
+		const promiseDB = [];
+
+		promiseDB.push( Viaje.findAll({ limit: 3 }) );
+		promiseDB.push( Testimonial.findAll({ limit: 3 }) );
+
+		try {
+			const resultado = await Promise.all( promiseDB );
+
+			res.render("inicio", {
+				pagina: "Inicio",
+				clase: "home",
+				viajes: resultado[0],
+				testimoniales: resultado[1],
+			});
+		} catch (error) {
+			console.log("Error al obtener los viajes: ", error);
+		}
+	};
+
+Se crea un arreglo con las consultas a la BD, y con "Promise.all()", ejecutamos las promesas, la respuesta de estas, quedan en otro array llamado "resultado".

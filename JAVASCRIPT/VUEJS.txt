@@ -1,0 +1,703 @@
+
+	VUEJS:
+_______________________________________________________
+
+INDICE:
+
+[1]. Qué es Vue.js
+[2]. Instalación
+	[2.1]. Extensiones
+[3]. Scaffolding
+[4]. Single File Components
+[5]. Componentes
+	[5.1]. Estilos de API
+		[5.1.1]. Cuando utilizar Options o Composition API
+[6]. Eventos en Vue
+[7]. State
+	[7.1]. Modificar "state" de "ref"
+	[7.2]. Modificar "state" de "reactive"
+	[7.3]. Imprimir "state" en la pantalla
+		[7.3.1]. Atributos dinámicos
+	[7.4]. Directiva v-model
+	[7.5]. Computed Properties
+	[7.6]. Watchers
+[8]. Pasar Props
+	[8.1]. Eventos personalizados
+		[8.1.1]. Enviar parámetros al componente padre
+[9]. Template condicional
+
+_______________________________________________________
+
+	[1]. Qué es Vue.js:
+_______________________________________________________
+
+Vue.js es un framework de JavaScript para creación de interfaces de usuario. Vue (pronunciado «viú») viene del francés y significa «view» (vista).
+
+Construido con y sobre HTML, CSS y JavaScript, tiene una sintaxis basada en componentes que permite desarrollar de forma eficiente interfaces de usuario simples o complejas.
+
+_______________________________________________________
+
+	[2]. Instalación:
+_______________________________________________________
+
+Existen diferentes formas de instalar Vue.js, pero una dde las más faciles es con Vite.
+
+	pnpm create vite@latest
+
+Escribimos el nombre del proyecto, seleccionamos Vue, y JavaScript.
+
+_______________________________________________________
+
+	[2.1]. Extensiones:
+_______________________________________________________
+
+- En Visual Studio Code podemos instalas la extensión "Vue":
+
+	https://marketplace.visualstudio.com/items?itemName=Vue.volar
+
+Con esto se colorea mejor la sintaxis y el autocompletado.
+_______________________________________________________
+
+- En Chrome, podemos instalar la extensión:
+
+	Vue.js devtools
+
+Con esto al inspeccionar en el navegador, podemos ir al tab "Vue", y ver los componentes y sus "states".
+_______________________________________________________
+
+	[3]. Scaffolding:
+_______________________________________________________
+
+En la raísz del proyecto tenemos el archivo "index.html", en donde, de forma muy similar a ReactJs, tenemos un div, con el id "app", en donde se renderizaran nuestros componentes.
+
+Desde allí llamamos al archivo "src\main.js":
+
+	import { createApp } from 'vue'
+	import './style.css'
+	import App from './App.vue'
+
+	createApp(App).mount('#app')
+
+En este archivo importamos los estilos, y el componente principal "App.vue".
+
+La mayoria de nuestro código estara en la carpeta "src", donde se encuentra la carpeta "components", y la carpeta "assets".
+
+_______________________________________________________
+
+	[4]. Single File Components:
+_______________________________________________________
+
+Los Single File Components (SFC) es una convención en la cual cada componente tiene tres partes:
+
+- <script> --> se coloca toda la lógica de JavaScript de ese componente.
+
+- <style> --> se coloca todo el código CSS de ese componente, si tiene el atributo "scoped", es el estilo de solo ese componente (<style scoped>).
+
+- <template> --> se coloca todo el código HTML de ese componente.
+
+Nota: no es obligatorio que un componente tenga las tres partes, puede tener solo una.
+
+_______________________________________________________
+
+	[5]. Componentes:
+_______________________________________________________
+
+Los componentes nos prmiten dividir el código en partes reutilizables. Utilizan la extensión ".vue" y se importan con un "import" de JavaScript.
+
+Con "<script setup>" cualquier componente que es importado se hace disponible para ser usado en el "<template>".
+
+Se puede pasar información de un componente a otro usando "Props".
+
+Ejemplo: 
+
+1) Creamos dentro de la carpeta "components", el archivo de componente llamado "Header.vue":
+
+	<template>
+		<h1 class="text-4xl font-extrabold text-gray-500 text-center">
+			¿Cuánto <span class="text-indigo-600">dinero</span> necesitas?
+		</h1>
+	</template>
+
+En este caso el componente solo tiene la parte del "<template>".
+
+2) En el archivo "src\App.vue":
+
+	<script setup>
+		import Header from './components/Header.vue'
+	</script>
+
+	<template>
+		<div class="my-20 max-w-lg mx-auto bg-white p-10 shadow">
+			<Header />
+		</div>
+	</template>
+
+Acá eliminamos la parte de los estilos(porque estamos usando Tailwind), e importamos el componente creado, el cual lo usamos en la parte del "<template>"
+
+_______________________________________________________
+
+	[5.1]. Estilos de API:
+_______________________________________________________
+
+En Vue existen dos estilos de API para escribir componentes.
+
+- Options API --> utiliza una sintaxis tipo objetos.
+
+- Composition API --> se definen los componentes utilizando "imports" y escribiendo las funciones directamente en el componente.
+
+Ejemplos:
+
+- Composition API:
+
+	<script setup>
+		import Header from './components/Header.vue'
+	</script>
+
+	<template>
+		<div class="my-20 max-w-lg mx-auto bg-white p-10 shadow">
+			<Header />
+		</div>
+	</template>
+_______________________________________________________
+
+- Options API:
+
+	<script>
+		import Header from './components/Header.vue'
+
+		export default {
+			components: {
+				Header
+			}
+		};
+	</script>
+
+	<template>
+		<div class="my-20 max-w-lg mx-auto bg-white p-10 shadow">
+			<Header />
+		</div>
+	</template>
+
+Nota: en la Options API, el "<script>" no lleva la palabra "setup".
+
+_______________________________________________________
+
+	[5.1.1]. Cuando utilizar Options o Composition API:
+_______________________________________________________
+
+- Options API --> es un poco más amigable para personas que van comenzando, tambien es la opción recomendada para personas que tienen más experiencia conlenguajes orientados a objetos.
+
+Recomendado si el proyecto utilizará pequeñas piezas de Vue o escenarios no tan complejos.
+
+- Composition API --> recomendado si todo el proyecto será hecho con Vue.js.
+
+_______________________________________________________
+
+	[6]. Eventos en Vue:
+_______________________________________________________
+
+Los eventos en Vue.js se agregan con la directiva:
+
+	v-on:nombreEvento
+
+Pero se recomienda la sintaxis corta:
+
+	@nombreEvento
+
+Ejemplo: Creamos un "input" de tipo "range", y escuchamos el evento "input":
+
+	<script setup>
+		import Header from './components/Header.vue'
+
+		function handleChange(e) {
+			console.log(e.target.value)
+		}
+	</script>
+
+	<template>
+		<div class="my-20 max-w-lg mx-auto bg-white p-10 shadow">
+			<Header />
+
+			<input
+				type="range"
+				class="w-full h-6 bg-gray-200 accent-lime-500 hover:accent-lime-600"
+				v-on:input="handleChange"
+			/>
+		</div>
+	</template>
+
+Nota: escuchamos el evento "input", para que sea más dinámico o reactivo, ya que con el evento "change", solo se imprime el valor hasta que soltamos con el "mouse" el "range".
+
+Podemos usar la sintaxis corta recomendada:
+
+	...
+
+	<input
+		type="range"
+		class="w-full h-6 bg-gray-200 accent-lime-500 hover:accent-lime-600"
+		@input="handleChange"
+	/>
+_______________________________________________________
+
+	[7]. State:
+_______________________________________________________
+
+El "State" o estado es cualquier información en tu interfaz de usuario que cambia con el tiempo, generalmente activado por la interacción del usuario.
+
+Para administar o manejar el "state" en Vue.js existen dos formas, con "ref" y "reactive", ambos se importan desde Vue.
+
+"ref" --> toma valores primitivos.
+
+"reactive" --> toma objetos.
+
+En un equipo de trabajo o un proyecto grande se recomienda administrar el "state" con otra herramienta llamada "Pinia" (sustituto de VueX) (equivalente a Redux en React).
+
+Ejemplo:
+
+	<script setup>
+		import { ref, reactive } from "vue";
+
+		const cantidad = ref(0);
+
+		console.log("Con ref: ", cantidad.value);
+
+		const state = reactive({
+			cantidad: 0
+		});
+
+		console.log("Con reactive: ", state.cantidad);
+	</script>
+
+_______________________________________________________
+
+	[7.1]. Modificar "state" de "ref":
+_______________________________________________________
+
+Para modificar el "state" con "ref":
+
+	<script setup>
+
+		const cantidad = ref(0);
+
+		function handleChange(e) {
+			cantidad.value = Number(e.target.value);
+			console.log("Con ref: ", cantidad.value);
+		}
+
+	</script>
+
+Si queremos imprimir el valor de la variable en el template, usamos doble llave:
+
+	<template>
+		<input
+			type="range"
+			class="w-full h-6 bg-gray-200 accent-lime-500 hover:accent-lime-600"
+			@input="handleChange"
+		/>
+
+		{{ cantidad }}
+	</template>
+
+Nota: cuando estamos en el "<script>", accedemos al valor del "state" con " cantidad.value", mientras que en el "<template>" imprimimos el valor con "{{ cantidad }}".
+_______________________________________________________
+
+	[7.2]. Modificar "state" de "reactive":
+_______________________________________________________
+
+Para modificar el "state" con "reactive":
+
+	<script setup>
+		const state = reactive({
+			cantidad: 0
+		});
+
+		function handleChange(e) {
+			state.cantidad = Number(e.target.value);
+			console.log("Con reactive: ", state.cantidad);
+		}
+	</script>
+
+Si queremos imprimir el valor de la variable en el template, usamos doble llave:
+
+	<template>
+		<input
+			type="range"
+			class="w-full h-6 bg-gray-200 accent-lime-500 hover:accent-lime-600"
+			@input="handleChange"
+		/>
+
+		{{ state.cantidad }}
+	</template>
+_______________________________________________________
+
+	[7.3]. Imprimir "state" en la pantalla:
+_______________________________________________________
+
+Una de las formas de imprimir el valor de una variable en el template es con doble llave:
+
+	<template>
+		<p> {{ cantidad }} </p>
+	</template>
+
+Otra forma de hacerlo es con una directiva de Vue, que lo que hace es inyectar el contenido a la etiqueta:
+
+	<template>
+		<p v-text="cantidad"></p>
+	</template>
+
+Sin embargo, si queremos incluir por ejemplo un signo de pesos antes del valor, tenemos que escapar los caracteres, y se vuleve un código un poco confuso:
+
+	<template>
+		<p v-text="`$ ${cantidad}`"></p>
+	</template>
+
+Al volverse un poco confuso, es más facil usar la primera forma con doble llave.
+_______________________________________________________
+
+	[7.3.1]. Atributos dinámicos:
+_______________________________________________________
+
+Para imprimir atributos dinámicos (variables o states), usamos antes del nombre de los atributos dos puntos (:):
+
+	<script setup>
+		import { ref } from "vue";
+
+		const cantidad = ref(10000);
+
+		const MIN = 0;
+		const MAX = 20000;
+		const STEP = 100;
+
+		function handleChange(e) {
+			cantidad.value = Number(e.target.value);
+			console.log("Con ref: ", cantidad.value);
+		}
+	</script>
+
+	<template>
+		<input
+		type="range"
+		class="w-full h-6 bg-gray-200 accent-lime-500 hover:accent-lime-600"
+		@input="handleChange"
+		:min="MIN"
+		:max="MAX"
+		:step="STEP"
+		:value="cantidad"
+		/>
+	</template>
+_______________________________________________________
+
+	[7.4]. Directiva v-model:
+_______________________________________________________
+
+Podemos simplificar el código que usamos para leer el valor de un input y modificar el "state" relacionado a este con una directiva "v-model":
+
+	<script setup>
+		import { ref } from "vue";
+		import Header from "./components/Header.vue";
+
+		const cantidad = ref(10000);
+
+		const MIN = 0;
+		const MAX = 20000;
+		const STEP = 100;
+
+		// Este método ya no es necesario al usar v-model
+		// function handleChange(e) {
+		//   cantidad.value = Number(e.target.value);
+		//   console.log("Con ref: ", cantidad.value);
+		// }
+	</script>
+
+	<template>
+		<div class="my-20 max-w-lg mx-auto bg-white p-10 shadow">
+			<Header />
+
+			<input
+				type="range"
+				class="w-full h-6 bg-gray-200 accent-lime-500 hover:accent-lime-600"
+				@input="handleChange"
+				:min="MIN"
+				:max="MAX"
+				:step="STEP"
+				v-model="cantidad"
+			/>
+
+			Con ref: {{ cantidad }}
+			<p v-text="`$ ${cantidad}`"></p>
+		</div>
+	</template>
+
+Esto actualiza el "state" "cantidad", pero en forma de "string", para cambiarlo a número, Vue.js tambien maneja modificadores:
+
+	<input
+      type="range"
+      class="w-full h-6 bg-gray-200 accent-lime-500 hover:accent-lime-600"
+      @input="handleChange"
+      :min="MIN"
+      :max="MAX"
+      :step="STEP"
+      v-model.number="cantidad"
+    />
+_______________________________________________________
+
+	[7.5]. Computed Properties:
+_______________________________________________________
+
+Una "Computed Property" es una función que esta al pendiente de los cambios del "state", y realiza los cambios necesarios cuando este cambia.
+
+Si necesitamos modificar el valor de un "state" para imprimirlo en el "temmplate", como por ejemplo formatear un número como moneda, usamos las "Computed Properties".
+
+1) Para esto importamos "computed" desde "Vue":
+
+	import { ref, computed } from "vue";
+
+2) Al método "computed", le pasamos la función que va a hacer los calculos o a modificar el "state":
+
+	const formatearDinero = computed(() => {
+		const formatter = new Intl.NumberFormat("en-US", {
+			style: "currency",
+			currency: "USD",
+			maximumFractionDigits: 0,
+		});
+		return formatter.format(cantidad.value);
+	});
+
+3) En el template, en vez de llamar al "state", llamamos nuestra "Computed Property":
+
+	<p class="text-center my-10 text-5xl font-extrabold text-indigo-600">
+      {{ formatearDinero }}
+    </p>
+
+Nota: una "Computed Property" no puede recibir parámetros, si necesitamos que sea una función reutilizable, entonces la dejamos sin el "computed()".
+
+Ejemplo:
+
+	const formatearDinero = (valor) => {
+		const formatter = new Intl.NumberFormat("en-US", {
+			style: "currency",
+			currency: "USD",
+			maximumFractionDigits: 0,
+		});
+		return formatter.format(valor);
+	};
+
+Yn en el "<template>":
+
+	<p class="text-center my-10 text-5xl font-extrabold text-indigo-600">
+      {{ formatearDinero(cantidad) }}
+    </p>
+
+	<p class="text-xl text-gray-500 text-center font-bold">
+        Total a pagar {{ formatearDinero(total) }}
+    </p>
+
+_______________________________________________________
+
+	[7.6]. Watchers:
+_______________________________________________________
+
+Con los "Computed Properties" podemos revisar los valores derivados de una función, pero algunas veces queremos modificar algo extra cuando algún "state" cambia, con composition API podemos utilizar la función "watch" para lograrlo.
+
+Un "watch" toma una o múltiples dependencias y cuando estas cambien, entonces podremos llamar otra función o hacer una validación.
+
+	watch(dependencia, funcionCallback);
+
+O para múltiples dependencias:
+
+	watch([dependencia1, dependencia2], funcionCallback);
+
+Nota: Un "watch", es similar a un "useEffect" en React.
+
+Ejemplo: Para usar "watch", lo importamos de "vue":
+
+	<script setup>
+		import { ref, computed, watch } from "vue";
+		const total = ref( calcularTotalPagar(cantidad.value, plazo.value) );
+
+		watch([cantidad, plazo], () => {
+			total.value = calcularTotalPagar(cantidad.value, plazo.value);
+		});
+
+	</script>
+
+En este caso el watch actualiza el valor de "total", cada vez que cambian la "cantidad" o el "plazo".
+
+De esta forma, podemos tambien inicializar el "state" de "total" en cero:
+
+	const total = ref(0);
+
+Pero si queremos que apenas se inicialice la aplkicación se actulize este valor, en el "watch" le indicamos el siguiente objeto con "immediate: true":
+
+	watch([cantidad, plazo], () => {
+		total.value = calcularTotalPagar(cantidad.value, plazo.value);
+	}, { immediate: true });
+
+_______________________________________________________
+
+	[8]. Pasar Props:
+_______________________________________________________
+
+Para pasar "props" a un componente lo hacemos de forma similar a pasar atributos dinámicos.
+
+1) En el componente padre, le pasamos las "props" al componente hijo:
+
+	<script setup>
+		import Button from "./components/Button.vue";
+	</script>
+
+	<template>
+		<div className="flex justify-between mb-6">
+			<Button 
+				:operador="'-'"
+				:fn="handleClickDecremento" 
+			></Button>
+			<Button 
+				:operador="'+'"
+				:fn="handleClickIncremento"
+			></Button>
+			</div>
+	</template>
+
+En este caso pasamos dos props, una es el "operador", y otra es la función "fn".
+
+Nota: los operadores, en este caso como son simbolos matematicos, es necesario escaparlos con las comillas siples(''), o sino marca error.
+
+2) Luego leemos esas "props" en el componente con el método "defineProps()":
+
+	<script setup>
+		const props = defineProps({
+			operador: String,
+			fn: Function
+		});
+	</script>
+
+	<template>
+		<button
+			type="button"
+			class="h-10 w-10 flex items-center justify-center font-bold text-2xl bg-lime-500 text-white rounded-full hover:outline-none hover:ring-2 hover:ring-lime-500 hover:ring-offset-2"
+			@click="fn"
+		>
+			{{ operador }}
+		</button>
+	</template>
+
+Nota: aunque la función para manejar el click, se esta pasando como "props", Vue.js recomienda manejarlo con un evento personalizado y un emisor de eventos.
+_______________________________________________________
+
+	[8.1]. Eventos personalizados:
+_______________________________________________________
+
+Podemos pasar funciones a un componente, que se ejecuten cuando suceda un evento personalizado.
+
+1) En el componente padre, cambiamos la forma de pasar las "props":
+
+	<div className="flex justify-between mb-6">
+      <Button 
+        :operador="'-'"
+        @fn="handleClickDecremento" 
+      ></Button>
+      <Button 
+        :operador="'+'"
+        @fn="handleClickIncremento"
+      ></Button>
+    </div>
+
+Al colocar la arroba(@)  en vez de los dos puntos(:) indicamos que es un evento.
+
+2) En el componente hijo:
+
+	<script setup>
+		const props = defineProps({
+			operador: String
+		});
+	</script>
+
+	<template>
+		<button
+			type="button"
+			class="h-10 w-10 flex items-center justify-center font-bold text-2xl bg-lime-500 text-white rounded-full hover:outline-none hover:ring-2 hover:ring-lime-500 hover:ring-offset-2"
+			@click="$emit('fn')"
+		>
+			{{ operador }}
+		</button>
+	</template>
+
+Ya no tenemos la función "fn" dentro de las "props". Y usamos "$emit('fn')", para emitir ese evento.
+_______________________________________________________
+
+	[8.1.1]. Enviar parámetros al componente padre:
+_______________________________________________________
+
+Al emitir un evento, podemos pasar parámetros a la función del componente padre:
+
+1) En el componente hijo, al usar "$emit('fn')", le pasamos la variable "hola" a la función del componente padre:
+
+	<script setup>
+		const props = defineProps({
+			operador: String
+		});
+
+		const hola = "hola";
+	</script>
+
+	<template>
+		<button
+			type="button"
+			class="h-10 w-10 flex items-center justify-center font-bold text-2xl bg-lime-500 text-white rounded-full hover:outline-none hover:ring-2 hover:ring-lime-500 hover:ring-offset-2"
+			@click="$emit('fn', hola)"
+		>
+			{{ operador }}
+		</button>
+	</template>
+
+2) En las funciones para manejar el "custom event", recibimos la variable "hola":
+
+	<script setup>
+		const handleClickDecremento = (hola) => {
+			const valor = cantidad.value - STEP;
+			if (valor < MIN) return;
+			cantidad.value = valor;
+			console.log(hola);
+		};
+
+		const handleClickIncremento = (hola) => {
+			const valor = cantidad.value + STEP;
+			if (valor > MAX) return;
+			cantidad.value = valor;
+			console.log(hola);
+		};
+	</script>
+
+_______________________________________________________
+
+	[9]. Template condicional:
+_______________________________________________________
+
+Podemos hacer que en el "<template>" se muestren o no algunas etiquetas HTML, con las directivas "v-if" y "v-else":
+
+	<div v-if="total > 0" class="my-5 space-y-3 bg-gray-50 p-5">
+      <h2 class="text-2xl font-extrabold text-gray-500 text-center">
+        Resumen <span class="text-indigo-600">de pagos </span>
+      </h2>
+
+      <p class="text-xl text-gray-500 text-center font-bold">
+        {{plazo}} Meses
+      </p>
+
+      <p class="text-xl text-gray-500 text-center font-bold">
+        Total a pagar {{ formatearDinero(total) }}
+      </p>
+
+      <p class="text-xl text-gray-500 text-center font-bold">
+        Mensuales
+      </p>
+    </div>
+
+    <p v-else class="text-center my-5">
+      Elige un plazo y una cantidad para pagar
+    </p>
+
+En este caso el "div" de resumen de pagos se muestra solo si el "state" de "total" es mayor a cero.
+
+Si no, se muestra el parrafo indicando que se debe escoger un plazo y una cantidad.

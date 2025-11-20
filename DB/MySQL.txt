@@ -133,3 +133,27 @@ _______________________________________________________
 Crear Base de Datos:
 
 	CREATE DATABASE nombre_base-datos;
+_______________________________________________________
+
+Hacer Backup de una BD:
+
+	mysqldump -u usuario -p password nombreDB > nombreArchivo.sql
+
+Ejemplo:
+
+	mysqldump -u root -p root agenciaviajes > agenciaviajes.sql
+
+_______________________________________________________
+
+	[4]. MySQL Workbench:
+_______________________________________________________
+
+En el programa, para ver las Bases de datos crreadas, vamos a:
+
+	"Schemas"
+
+Para importar BD desde archivo Dump:
+
+Ir a: "Server" --> "Data Import"
+
+	https://www.youtube.com/watch?v=q0EBUXTQQRY
