@@ -37,6 +37,20 @@ INDICE:
 				[7.9.1.5.1]. Limitar datos consulta
 				[7.9.1.5.2]. Consultar la BD según URL
 				[7.9.1.5.3]. Múltiples consultas
+		[7.9.2]. Mongoose y MongoDB
+			[7.9.2.1]. Información de la BD en variables de entorno
+			[7.9.2.2]. Modelo
+				[7.9.2.2.1]. Modelo con llave foránea
+			[7.9.2.3]. Almacenar registros en la BD
+				[7.9.2.3.1]. Validacion confirmar cuenta
+				[7.9.2.3.2]. Hashear passwords de usuarios
+					[7.9.2.3.2.1]. Hashear passwords con argon2
+					[7.9.2.3.2.2]. Hashear passwords con bcrypt
+			[7.9.2.4]. Consultar la BD
+	[7.10]. JSON Web Token (JWT)
+		[7.10.1]. Ejemplo JWT
+		[7.10.2]. Bearer token
+			[7.10.2.1]. Crear rutas protegidas - Middleware
 
 _______________________________________________________
 
@@ -211,7 +225,7 @@ Luego en la consola corremos el script con:
 
 	npm dev
 
-De esta forma, al hacer cambios en "index.js" (que se creara más adelante), se recarga automaticamente el script en ejecución, sin necesidad de pausarlo (ctrl + C) y volverlo a correr.
+De esta forma, al hacer cambios en "index.js" (que se creara más adelante), se recarga automáticamente el script en ejecución, sin necesidad de pausarlo (ctrl + C) y volverlo a correr.
 _______________________________________________________
 
 	[5.1.2]. "pm2":
@@ -335,11 +349,11 @@ En la raíz del proyecto creamos el archivo "index.js":
 	const app = express();
 
 	// Definir puerto
-	const port = process.env.PORT || 4000;
+	const PORT = process.env.PORT || 4000;
 
 	// Arrancar la app
-	app.listen(port, () => {
-		console.log(`Servidor funcionando en el puerto ${port}`);
+	app.listen(PORT, () => {
+		console.log(`Servidor funcionando en el puerto ${PORT}`);
 	});
 
 Este archivo usa la sintaxis "CommonJs", que es con la que empezo Node y muchas de sus librerias.
@@ -379,15 +393,15 @@ Completamos el archivo "index.js":
 	const app = express();
 
 	// Definir puerto
-	const port = process.env.PORT || 4000;
+	const PORT = process.env.PORT || 4000;
 
 	// Routing
 	app.get("/", (req, res) => {
 		res.send("Hello World!");
 	});
 
-	app.listen(port, () => {
-		console.log(`Servidor funcionando en el puerto ${port}`);
+	app.listen(PORT, () => {
+		console.log(`Servidor funcionando en el puerto ${PORT}`);
 	});
 
 Acá usamos la acción "GET", el callback recibe un "req" ("request" o petición) y un "res" ("response" o respuesta).
@@ -473,14 +487,14 @@ Nota: el archivo "index.js" lo podemos nombrar como queramos, por ejemplo "usuar
 	const app = express();
 
 	// Definir puerto
-	const port = process.env.PORT || 4000;
+	const PORT = process.env.PORT || 4000;
 
 	// Routing
 	app.use("/", router);
 
 	// Arrancar la app
-	app.listen(port, () => {
-		console.log(`Servidor funcionando en el puerto ${port}`);
+	app.listen(PORT, () => {
+		console.log(`Servidor funcionando en el puerto ${PORT}`);
 	});
 
 Aca el método "use", soporta todos los verbos o acciones HTTP(GET, POST, etc.), resuelve cualquier petición a "/", buscando en el archivo de "routing".
@@ -657,7 +671,7 @@ En el archivo principal "index.js":
 	const app = express();
 
 	// Definir puerto
-	const port = process.env.PORT || 4000;
+	const PORT = process.env.PORT || 4000;
 
 	// Habilitar PUG
 	app.set("view engine", "pug");
@@ -669,8 +683,8 @@ En el archivo principal "index.js":
 	app.use("/", router);
 
 	// Arrancar la app
-	app.listen(port, () => {
-		console.log(`Servidor funcionando en el puerto ${port}`);
+	app.listen(PORT, () => {
+		console.log(`Servidor funcionando en el puerto ${PORT}`);
 	});
 
 Cada "app.set", "app.use" y "app.listen" son "middlewares".
@@ -842,7 +856,7 @@ _______________________________________________________
 	[7.9.1.1]. Información de la BD en variables de entorno:
 _______________________________________________________
 
-Para ocultar la información de la base de datos en variables de entorno, primero instalamos "dotenv":
+1) Para ocultar la información de la base de datos en variables de entorno, primero instalamos "dotenv":
 
 	npm i dotenv
 
@@ -1207,3 +1221,816 @@ Para hacer múltiples consultas al mismo tiempo a la BD, usamos promesas:
 	};
 
 Se crea un arreglo con las consultas a la BD, y con "Promise.all()", ejecutamos las promesas, la respuesta de estas, quedan en otro array llamado "resultado".
+
+_______________________________________________________
+
+	[7.9.2]. Mongoose y MongoDB:
+_______________________________________________________
+
+1) Instalamos el ORM Mongoose como dependencia:
+
+	pnpm i mongoose
+
+2) Para MongoDB, vamos a usar la versión gratuita en la nube, para usarla creamos cuenta:
+
+	https://www.mongodb.com/
+
+Es el mismo "MongoDB Atlas", luego ingresamos, y creamos un cluster. 
+
+3) Al crear el cluster, en la opción "Connect", nos pide:
+
+- "Add a connection IP address" --> Aca escogemos la ip de nuestro equipo para conectar con la BD, para el ejemplo escogemos "Allow Access from Anywhere", pero es una conexión NO SEGURA.
+
+Esto lo podemos editar en: el panel lateral izquierdo, buscamos "Security" --> "Database & Network Access" --> "Network Access" --> "IP Access List".
+
+- Creamos un usuario y contraseña de BD.
+
+Esto lo podemos editar en: el panel lateral izquierdo, buscamos "Security" --> "Database & Network Access" --> "Database Access" --> "Database Users".
+
+4) Escogemos el método de conexión.
+
+A) En la opción "Access your data through tools", podemos escoger "Compass" que es el entorno gráfico de escritorio para gestionar la BD.
+
+Copiamos el "connection string".
+
+B) En la opción "Connect to your application", escogemos "Drivers", que es para conectar la aplicación backend que estamos desarrollando con Node.
+
+Copiamos el "connection string".
+
+5) "Compass": 
+
+Una vez instalada la aplicación de escritorio, la abrimos y hacemos click en "+ Add new connection".
+
+- En "URI", pegamos el "connection string", cambiando "<password>" por el correspondiente.
+
+- En "Name", podemos darle un nombre a la conexión. Ejemplo: MongoDB Atlas
+
+- En "Color", podemos escoger un color de la conexión.
+
+- Podemos marcar el checkbox "Favorite this connection", para guardar la conexión si nos vamos a conectar seguido.
+
+6) Al escoger nuestra conexión, damos click en "+ Create database":
+
+- En "Database name": el nombre de nuestra base de datos. Ejemplo: "apv" (Administrador de Pacientes de Veterinaria).
+
+- En "Collection Name": el nombre de la tabla, Ejemplo: "pacientes".
+
+7) Aplicación Node:
+
+En la raíz de nuestro proyecto, creamos una carpeta llamada "config", y dentro un archivo "db.js":
+
+	import mongoose from "mongoose";
+
+	const conectarDB = async () => {
+		try {
+			const db = await mongoose.connect(
+				"mongodb+srv://usuario_db_root:<db_password>@cluster.algo.mongodb.net/?appName=Cluster"
+			);
+			const url = `${db.connection.host}:${db.connection.port}`;
+			console.log(`MongoDB conectado en: ${url}`);
+		} catch (error) {
+			console.log(`Error: ${error.message}`);
+			process.exit(1);
+		}
+	};
+
+	export default conectarDB;
+
+Este archivo trae la configuración de conexión a nuestra base de datos.
+
+El método " mongoose.connect()" recibe por dentro el "connection string" de MongoDB Atlas.
+
+Nota: no olvidar cambiar en el "connection string", "usuario_db_root" y "<db_password>" por los correspondientes.
+
+8) En nuestro archivo principal de "express", "index.js", llamamos la conexión de la BD:
+
+	import express from "express";
+	import conectarDB from "./config/db.js";
+
+	const app = express();
+
+	// Definir puerto
+	const PORT = process.env.PORT || 4000;
+
+	// Conectar a la base de datos
+	conectarDB();
+
+	// Routing
+	app.get("/", (req, res) => {
+		res.send("Hello World!");
+	});
+
+	app.listen(PORT, () => {
+		console.log(`Servidor funcionando en el puerto ${PORT}`);
+	});
+_______________________________________________________
+
+	[7.9.2.1]. Información de la BD en variables de entorno:
+_______________________________________________________
+
+1) Para ocultar la información de la base de datos en variables de entorno, primero instalamos "dotenv":
+
+	npm i dotenv
+
+Dotenv es un módulo sin dependencias que carga variables de entorno desde un archivo .env a process.env.
+
+Nota: para más info de Dotenv, ir a:
+
+	https://github.com/motdotla/dotenv#readme
+
+2) En la raíz del proyecto, creamos un archivo ".env" con los datos a proteger:
+
+	MONGO_URI=mongodb+srv://usuario_db_root:<db_password>@cluster.algo.mongodb.net/nombreBaseDatos?appName=Cluster
+
+Nota 1: Actualmente no se indica un nombre de la base de datos, sino un cluster. Para añadir una BD especifica:
+
+	MONGO_URI=mongodb+srv://usuario_db_root:<db_password>@cluster.algo.mongodb.net/?appName=Cluster
+
+Nota 2: Un cluster es un conjunto de servidores MongoDB distribuidos y conectados entre sí que trabajan juntos como una sola unidad.
+
+3) En el archivo de configuración de conexión con la Base de Datos "config\db.js":
+
+	import mongoose from "mongoose";
+	import dotenv from 'dotenv';
+	dotenv.config({ path: './.env' });
+
+	const conectarDB = async () => {
+		try {
+			const db = await mongoose.connect(
+			process.env.MONGO_URI
+			);
+			const url = `${db.connection.host}:${db.connection.port}`;
+			console.log(`MongoDB conectado en: ${url}`);
+		} catch (error) {
+			console.log(`Error: ${error.message}`);
+			process.exit(1);
+		}
+	};
+
+	export default conectarDB;
+
+Importamos "dotenv", con "dotenv.config" definimos la ruta al archivo ".env", y con "process.env.", llamamos las variables de entorno definidas.
+
+_______________________________________________________
+
+	[7.9.2.2]. Modelo:
+_______________________________________________________
+
+El modelo ("model"), es le encargado de solicitar datos a la BD y de la lógica para mostrar esos datos.
+
+Para crear un modelo:
+
+1) Creamos en la raíz del proyecto una carpeta llamada "models".
+
+2) Dentro de la carpeta "models", creamos el modelo, por convención se pone la primera letra en mayuscula, como si fuera una clase.
+
+Ejemplo: archivo "Veterinario.js":
+
+	import mongoose from "mongoose";
+
+	// Definimos el esquema
+	const veterinarioSchema = mongoose.Schema({
+		nombre: {
+			type: String,
+			required: true,
+			trim: true,
+		},
+		password: {
+			type: String,
+			required: true,
+			trim: true,
+		},
+		email: {
+			type: String,
+			required: true,
+			trim: true,
+			unique: true,
+		},
+		telefono: {
+			type: String,
+			trim: true,
+			default: null,
+		},
+		web: {
+			type: String,
+			trim: true,
+			default: null,
+		},
+		token: {
+			type: String,
+		},
+		confirmado: {
+			type: Boolean,
+			default: false,
+		}
+	});
+
+	// Definimos el modelo
+	const Veterinario = mongoose.model('Veterinario', veterinarioSchema);
+
+	export default Veterinario;
+
+Aca definimos la estructura o esquema, es decir, los campos que va a tener (nombre, email, password, etc.) y el tipo de datos del campo. 
+
+Con "required: true" indicamos que ese campo no debe estar vacio y que es requerido.
+
+Con "default: null", indicamos que el valor por defecto es vacio, osea que no es requerido.\
+
+Con "mongoose.model('Veterinario', veterinarioSchema)" definimos el modelo con nombre "Veterinario".
+
+Nota 1: el "id" no es necesario especificarlo porque ya Mongoose asume que existe, y lo crea en la BD.
+
+Nota 2: para más info de todos los tipos de datos disponibles, ir a:
+
+	https://mongoosejs.com/docs/schematypes.html
+
+_______________________________________________________
+
+	[7.9.2.2.1]. Modelo con llave foránea:
+_______________________________________________________
+
+En el ejemplo que se esta desarrollando, cada veterinario registra un paciente, por lo que en los campos del paciente se debe guardar una referencia al "id" del veterinario (similar a una llave foránea lógica).
+
+Ejemplo: creamos el modelo "backend\models\Paciente.js":
+
+	import mongoose from "mongoose";
+
+	const pacienteSchema = mongoose.Schema({
+		nombre: {
+			type: String,
+			required: true,
+			trim: true,
+		},
+		propietario: {
+			type: String,
+			required: true,
+			trim: true,
+		},
+		email: {
+			type: String,
+			required: true,
+			trim: true,
+		},
+		fechaAlta: {
+			type: Date,
+			required: true,
+		},
+		sintomas: {
+			type: String,
+			required: true,
+		},
+		veterinario: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "Veterinario",
+			required: true,
+		},
+	}, {
+		timestamps: true,
+	});
+
+	const Paciente = mongoose.model("Paciente", pacienteSchema);
+
+	export default Paciente;
+
+En el campo "veterinario", indicamos con "type: mongoose.Schema.Types.ObjectId" el tipo de dato, y con "ref: "Veterinario"" hacemos referencia al modelo.
+
+Adicional pasamos otro objeto con "timestamps: true", que crea automáticamente campos adicionales de "createdAt" y "updatedAt".
+
+_______________________________________________________
+
+	[7.9.2.3]. Almacenar registros en la BD:
+_______________________________________________________
+
+1) En nuestro archivo principal "backend\index.js", habilitamos que el servidor pueda enviar respuestas con JSON:
+
+	app.use(express.json());
+
+2) En el controlador "backend\controllers\veterinarioController.js" usamos el modelo, creamos una nueva instancia y luego la almacenamos en la BD:
+
+	import Veterinario from "../models/Veterinario.js";
+
+	const registrar = async (req, res) => {
+		console.log("Registrando veterinario...", req.body);
+		try {
+			// Crear nuevo veterinario
+			const veterinario = new Veterinario(req.body);
+			const veterinarioGuardado = await veterinario.save();
+			res.json(veterinarioGuardado);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const perfil = (req, res) => {
+		res.json({
+			msg: "Ver perfil veterinario...",
+		});
+	};
+
+	export { registrar, perfil };
+
+Con "new Veterinario(req.body)" creamos una instancia de "Veterinario", con los datos que nos envie el cliente (frontend ó Postman).
+
+".save()" es un método de Mongoose que nos permite guardar en la BD.
+
+Nota: aún faltan realizar más validaciones para verificar que no se repita el correo del usuario, que se hashee el password para que no sea visible, y generar un token único para enviar un email y confirmar la cuenta.
+_______________________________________________________
+
+	[7.9.2.3.1]. Validacion confirmar cuenta:
+_______________________________________________________
+
+Para confirmar la cuenta del usuario, en el modelo ya se creo un campo "token", falta generar un "token" único, para enviar un enlace con ese "token" al correo del usuario, y que al hacer click, se confirme su cuenta.
+
+1) Creamos en la raíz del proyecto una carpeta llamada "helpers", y dentro de está un archivo "backend\helpers\generarId.js" encargado de generar el "token" único:
+
+	const generartId = () => {
+		return Date.now().toString(32) + Math.random().toString(32).substring(2);
+	};
+
+	export default generartId;
+
+Nota: si hacemos más "helpers" o funciones de utilidad en nuestra aplicación, se recomienda un archivo para cada funcionalidad, con eso al momento de exportarla, solo lee la función que se necesita y no todo el archivo con X líneas de código.
+
+2) En el modelo "backend/models/Veterinario.js", importamos y usamos nuestro generador de "tokens":
+
+	import mongoose from "mongoose";
+	import generarId from "../helpers/generarId.js";
+
+	// Definimos el esquema de Veterinario
+	const veterinarioSchema = mongoose.Schema({
+		nombre: {
+			type: String,
+			required: true,
+			trim: true,
+		},
+
+		// ...existing code...
+
+		token: {
+			type: String,
+			default: generarId,
+		},
+		confirmado: {
+			type: Boolean,
+			default: false,
+		}
+	});
+
+	// Definimos el modelo
+	const Veterinario = mongoose.model('Veterinario', veterinarioSchema);
+
+	export default Veterinario;
+
+3) En el controlador "", creamos la función encargada de confirmar la cuenta:
+
+	import Veterinario from "../models/Veterinario.js";
+
+	const confirmar = async (req, res) => {
+		const { token } = req.params;
+
+		const usuarioConfirmar = await Veterinario.findOne({ token });
+
+		if (!usuarioConfirmar) {
+			const error = new Error("Token no válido");
+			return res.status(404).json({ msg: error.message });
+		}
+
+		try {
+			usuarioConfirmar.token = null;
+			usuarioConfirmar.confirmado = true;
+
+			await usuarioConfirmar.save();
+			res.json({
+				msg: "Usuario confirmado correctamente",
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	export { registrar, perfil, confirmar };
+
+Acá, con "req.params", recuperamos de la url(método GET) el "token".
+
+Con "Veterinario.findOne({ token })" buscamos en la BD el usuario que tenga ese "token".
+
+Si no encontramos el usuario, enviamos el error "Token no válido".
+
+Si encuentra el usuario, queda almacenado como objeto en la constante "usuarioConfirmar". Luego en el "try/catch", tomamos el objeto, y al "token" lo dejamos vacio, y en "confirmado" igual a "true".
+
+Despues tomamos el objeto ya modificado y lo guardamos en la BD con "save()" de Mongoose.
+
+4) Importamos la función para confirmar en el router "backend\routes\veterinarioRoutes.js":
+
+	import express from "express";
+	import { registrar, perfil, confirmar } from "../controllers/veterinarioController.js";
+
+	const router = express.Router();
+
+	router.post("/", registrar);
+
+	router.get("/perfil", perfil);
+
+	router.get("/confirmar/:token", confirmar);
+
+	export default router;
+
+Acá tambien creamos la ruta que recibira por get el token de usuario para confirmar.
+
+Nota: queda pendiente el envio del correo con el link de confirmación al usuario.
+_______________________________________________________
+
+	[7.9.2.3.2]. Hashear passwords de usuarios:
+_______________________________________________________
+
+Por seguridad es necesario al momento de guardar los password en la BD, encriptarlos o hashearlos, esto con el fin de tener mayor seguridad y que no se pueda leer el password del usuario en ningún momento.
+
+Conceptos de hasheo:
+
+Función hash: Un algoritmo que toma datos de longitud variable y los convierte en una cadena de texto de longitud fija, conocida como hash. 
+
+Propiedades:
+
+- Unidireccional: Es muy difícil revertir el hash para obtener los datos originales. 
+- Determinista: La misma entrada siempre produce el mismo hash. 
+- Sensible a los cambios: Un cambio mínimo en la entrada produce un hash completamente diferente.
+
+Aplicaciones:
+
+- Seguridad: Proteger contraseñas y verificar la integridad de archivos y mensajes. 
+- Blockchain: Asegurar la integridad de los bloques, verificar transacciones y crear direcciones de criptomonedas.
+
+Un "salt" es un valor aleatorio único por contraseña que se añade antes de hashear. Previene ataques con tablas precalculadas (rainbow tables) y hace que dos usuarios con la misma contraseña tengan hashes distintos.
+
+Para hacer hash en NodeJs, existen diferentes librerias:
+
+- bcrypt
+- bcryptjs
+- argon2
+_______________________________________________________
+
+	[7.9.2.3.2.1]. Hashear passwords con argon2:
+_______________________________________________________
+
+Ejemplo con argon2:
+
+1) Instalamos la libreria argon2:
+
+	pnpm install argon2
+
+2) En el modelo "backend\models\Veterinario.js", importamos la libreria y hasheamos el pasword del usuario antes de guardarlo en la BD:
+
+	import mongoose from "mongoose";
+	import argon2 from "argon2";
+	import generarId from "../helpers/generarId.js";
+
+	// Definimos el esquema de Veterinario
+	const veterinarioSchema = mongoose.Schema({
+		// ...existing code...
+	});
+
+	// Hashear contraseña antes de guardar
+	veterinarioSchema.pre("save", async function () {
+		if (!this.isModified("password")) return;
+		this.password = await argon2.hash(this.password);
+	});
+
+	// Método para comprobar contraseña
+	veterinarioSchema.methods.comprobarPassword = async function(passwordFormulario) {
+		return await argon2.verify(this.password, passwordFormulario);
+	};
+
+	// Definimos el modelo
+	const Veterinario = mongoose.model("Veterinario", veterinarioSchema);
+
+	export default Veterinario;
+
+Usamos un hook de Mongoose llamado "pre", el cual nos permite hacer algo antes de alguna otra acción, en este caso antes de guardar. La función callback que enviamos como parámetro, tiene que estar definida con "function", no puede ser función flecha, ya que por dentro usamos "this", que en el contexto de "function" se refiere al esquema, y en un arrow function seria un contexto global.
+
+Con "!this.isModified("password")", comprobamos si el campo de contraseña (password) no ha sido modificado. Si la contraseña no ha sido modificada, significa que otros campos en el documento se están actualizando, pero no la contraseña en sí. 
+
+Por otro lado, si la contraseña ha sido modificada, la validación "this.isModified("password")" devolverá "true", lo que significa que la contraseña ha sido modificada y se debe realizar alguna acción adicional, como encriptarla antes de guardarla en la base de datos.
+
+Esta comprobación la hacemos para no hashear dos veces la contraseña del usuario, ya que si lo hacemos, el usuario no podria ingresar porque el password no seria el mismo.
+
+Luego hasheamos la contraseña con el método de argon2 "argon2.hash()".
+
+Nota: argon2 genera un salt aleatorio por defecto y lo incluye dentro del string del hash. No hay que guardarlo aparte: guarda el string que devuelve argon2.hash. Se puede ajustar la longitud del salt (p. ej. 16 bytes) vía opciones, pero consume más recusros del servidor.
+
+_______________________________________________________
+
+	[7.9.2.3.2.2]. Hashear passwords con bcrypt:
+_______________________________________________________
+
+1) Instalamos la libreria:
+
+	pnpm i bcrypt
+
+2) En el modelo "backend\models\Veterinario.js", importamos la libreria y hasheamos el pasword del usuario antes de guardarlo en la BD:
+
+	import mongoose from "mongoose";
+	import bcrypt from "bcrypt";
+	import generarId from "../helpers/generarId.js";
+
+	// Definimos el esquema de Veterinario
+	const veterinarioSchema = mongoose.Schema({
+		// ...existing code...
+	});
+
+	// Hashear contraseña antes de guardar
+	veterinarioSchema.pre("save", async function () {
+		if (!this.isModified("password")) return;
+		const salt = await bcrypt.genSalt(10);
+		this.password = await bcrypt.hash(this.password, salt);
+	});
+
+	// Método para comprobar contraseña
+	veterinarioSchema.methods.comprobarPassword = async function(passwordFormulario) {
+		return await bcrypt.compare(this.password, passwordFormulario);
+	};
+
+	// Definimos el modelo
+	const Veterinario = mongoose.model("Veterinario", veterinarioSchema);
+
+	export default Veterinario;
+
+_______________________________________________________
+
+	[7.9.2.4]. Consultar la BD:
+_______________________________________________________
+
+Para buscar un registro en la BD, por alguno de sus campos, tambien usamos el modelo.
+
+Ejemplo: En el controlador "backend\controllers\veterinarioController.js", buscamos por "email" si el usuario ya existe:
+
+	import Veterinario from "../models/Veterinario.js";
+
+	const registrar = async (req, res) => {
+		// console.log("Registrando veterinario...", req.body);
+		
+		const { email } = req.body;
+		// Prevenir registros duplicados
+		const existeVeterinario = await Veterinario.findOne({ email });
+
+		if (existeVeterinario) {
+			const error = new Error("Usuario ya registrado");
+			return res.status(400).json({ msg: error.message });
+		}
+
+		try {
+			// Crear nuevo veterinario
+			const veterinario = new Veterinario(req.body);
+			const veterinarioGuardado = await veterinario.save();
+			res.json(veterinarioGuardado);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+Con el método de Mongoose ".findOne({nombreCampo})" buscamos un registro que coincida con el campo.
+
+Nota: Gracias a las nuevas caracteristicas de JavaScript, se reduce el código de:
+
+	const existeVeterinario = await Veterinario.findOne({ email: email });
+
+A:
+
+	const existeVeterinario = await Veterinario.findOne({ email });
+
+Esto es gracias a que llave y valor se llaman iguales.
+
+_______________________________________________________
+
+	[7.10]. JSON Web Token (JWT):
+_______________________________________________________
+
+Una vez que un usuario se autentica, inicia una sesión en el servidor, con esa sesión, verificamos que a que rutas tiene acceso el usuario y a cuales no, y tambien almacenamos cierta información del usuario.
+
+JWT, o token web de JSON, es un estándar abierto que transmite información de forma segura entre partes a través de un objeto JSON. Es compacto y autocontenido, ya que su carga útil incluye toda la información necesaria, evitando así consultas innecesarias a la base de datos. Su principal uso es la autenticación y autorización de usuarios en aplicaciones web, APIs y servicios de inicio de sesión único (SSO).
+
+Estructura de un JWT:
+
+Un JWT está compuesto por tres partes separadas por puntos: 
+
+- Encabezado (Header): Contiene información sobre el tipo de token y el algoritmo de firma utilizado.
+
+- Carga útil (Payload): Almacena la información del usuario y sus reclamaciones o "claims" (como su identidad o permisos) en un objeto JSON.
+
+- Firma (Signature): Se genera a partir del encabezado y la carga útil codificados, y una clave secreta. Esta firma garantiza la integridad del token, asegurando que no ha sido modificado.
+
+Cómo funciona:
+
+1) El usuario inicia sesión con sus credenciales. 
+2) El servidor autentica al usuario y genera un JWT con la información del usuario. 
+3) El JWT se envía al cliente. 
+4) El cliente incluye este token en la cabecera Authorization de cada solicitud posterior. 
+5) El servidor verifica la firma del token para autenticar la solicitud y conceder acceso a los recursos protegidos.
+
+Ventajas:
+
+- Seguridad: La firma digital verifica la autenticidad e integridad de los datos. 
+Eficiencia: Al ser autocontenido, reduce la necesidad de consultar la base de datos en cada solicitud.
+
+- Flexibilidad: Puede usarse en diferentes plataformas y es ideal para arquitecturas de microservicios.
+_______________________________________________________
+
+	[7.10.1]. Ejemplo JWT:
+_______________________________________________________
+
+1) Instalamos la dependencia "jsonwebtoken":
+
+	pnpm i jsonwebtoken
+
+2) En el archivo ".env" creamos la siguiente variable de entorno:
+
+	JWT_SECRET=palabrasupersecreta456
+
+Esta variable de entorno nos sirve para codificar y decodificar el JWT.
+
+3) Dentro de la carpeta "helpers", creamos un archivo llamado "generarJWT.js":
+
+	import jwt from "jsonwebtoken";
+
+	const generarJWT = (id) => {
+		return jwt.sign({ id }, process.env.JWT_SECRET, {
+			expiresIn: "30d",
+		});
+	};
+
+	export default generarJWT;
+
+"generarJWT" recibe como parametro el "id" de usuario. El método "jwt.sign()" recibe tres parámetros, primero un objeto de lo que va a codificar, luego la variable de entorno con la palabra secreta para la codificación, y por ultimo un objeto donde indicamos cuando vence la sesión del usuario, en este caso 30 dias.
+
+Nota 1: el objeto "{ id }" es lo mismo que tener "{ id: id }", pero tambien podemos pasarle otros campos, por ejemplo:
+
+	{ 
+		id,
+		nombre: "Ricardo"
+	}
+
+No debemos pasar datos sencibles como contraseñas, números de tarjeta de credito, etc, ya que estos datos se pueden decodificar facilmente, una herramienta online para decodificar:
+
+	https://www.jwt.io/
+
+Nota 2: Si la aplicación que estamos desarrollando es por ejemplo para un banco, no conviene dejarle al JWT tanto tiempo para que expire, con algunos minutos es suficiente para que no quede abierta la sesión del usuario.
+
+4) En el controlador encargado de la autenticación del usuario "backend\controllers\veterinarioController.js", importamos y generamos el JWT:
+
+	import Veterinario from "../models/Veterinario.js";
+	import generarJWT from "../helpers/generarJWT.js";
+
+	// ...existing code...
+
+	const autenticar = async (req, res) => {
+		console.log(req.body);
+		const { email, password } = req.body;
+
+		// Comprobar si el usuario existe
+		const usuario = await Veterinario.findOne({ email });
+		if (!usuario) {
+			const error = new Error("El usuario no existe");
+			return res.status(404).json({ msg: error.message });
+		}
+
+		// Comprobar si el usuario está confirmado
+		if (!usuario.confirmado) {
+			const error = new Error("Tu cuenta no ha sido confirmada");
+			return res.status(403).json({ msg: error.message });
+		}
+
+		// Comprobar su password
+		if (await usuario.comprobarPassword(password)) {
+			// Autenticar el usuario
+
+			res.json({
+				token: generarJWT(usuario._id),
+			});
+		} else {
+			const error = new Error("La contraseña es incorrecta");
+			return res.status(403).json({ msg: error.message });
+		}
+	};
+
+	export { registrar, perfil, confirmar, autenticar };
+
+En este caso al autenticar el usuario, el servidor le responde al cliente con el token.
+_______________________________________________________
+
+	[7.10.2]. Bearer token:
+_______________________________________________________
+
+Un "bearer token" o token de portador es un tipo de token de seguridad que autoriza el acceso a un recurso protegido; simplemente, "quien lo tiene, accede". Se utiliza en un encabezado Authorization de las solicitudes HTTP, típicamente en el formato Authorization: Bearer <token>, para que el servidor verifique que el portador del token tiene permiso para acceder a los datos solicitados.
+
+Características clave:
+
+- Acceso sin identificación adicional: El nombre "portador" (bearer) significa que quien presente el token tiene permiso para acceder al recurso sin necesidad de demostrar su identidad de otra forma.
+
+- Uso común: Son un componente fundamental de protocolos como OAuth 2.0 y se usan con JWT (JSON Web Tokens).
+
+- Encabezado HTTP: La forma estándar de enviarlo es en el encabezado Authorization de una solicitud HTTP.
+
+- Seguridad: Son más seguros que métodos como la autenticación básica, ya que envían un token de acceso en lugar de credenciales de usuario en cada solicitud. Se recomienda usarlos solo con conexiones HTTPS.
+
+- Obtención: Se generan después de que un cliente se autentica con éxito ante el servidor y se envían en solicitudes posteriores para acceder a recursos protegidos. 
+_______________________________________________________
+
+	[7.10.2.1]. Crear rutas protegidas - Middleware:
+_______________________________________________________
+
+Podemos crear rutas que solo un usuario ya autenticado tenga acceso:
+
+1) Creamos una carpeta llamada "middleware".
+
+2) Dentro de la carpeta "middleware" creamos un archivo llamado "authMiddleware.js":
+
+	import jwt from "jsonwebtoken";
+	import Veterinario from "../models/Veterinario.js";
+
+	const checkAuth = async (req, res, next) => {
+		let token;
+		if (
+			req.headers.authorization &&
+			req.headers.authorization.startsWith("Bearer ")
+		) {
+			try {
+				console.log("Aca el token: ",req.headers.authorization);
+				token = req.headers.authorization.split(" ")[1];
+				const decoded = jwt.verify(token, process.env.JWT_SECRET);
+				console.log("Token decoded: ", decoded);
+
+				// Agregar el veterinario a la request
+				req.veterinario = await Veterinario.findById(decoded.id).select(
+					"-password -token -confirmado -createdAt -updatedAt -__v"
+				);
+				return next();
+			} catch (error) {
+				const error1 = new Error("Token no válido");
+				return res.status(403).json({ msg: error1.message });
+			}
+		}
+
+		if (!token) {
+			const error = new Error("Token no válido o inexistente");
+			return res.status(403).json({ msg: error.message });
+		}
+		next();
+	};
+
+	export default checkAuth;
+
+Primero importamos el JWT para validar y autenticar el usuario. Tambien importamos el modelo.
+
+En la función "checkAuth", verificamos que en los "headers" de la petición venga la "authorization", y que esta empiece con "Bearer ".
+
+Si es así, con el metodo "split", dividimos donde hay un espacio, y nos quedamos solo con el token, ya que en la petición del cliente (o de Postman), viene así:
+
+	Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MmExN2RjNjc0OGI2ZDNjNDZmZjNhMCIsImlhdCI6MTc2NDY5NDg1MSwiZXhwIjoxNzY3Mjg2ODUxfQ.eBCpjhfim3o3Q2CVt9FU_EaP_CbLEdSJH5MkZRZP5BE
+
+Luego con "jwt.verify()", le pasamos el "token" y la variable de entorno con la palabra secreta, para decodificar el "token". El "token" decodificado es algo así:
+
+	{ id: '692a17dc6748b6d3c46ff3a0', iat: 1764694851, exp: 1767286851 }
+
+Con el método de Mongoose "findById()", buscamos en la BD el usuario con ese "id", y con el método "select()", le pasamos los campos que queremos que excluya de la consulta, anteponiendo el signo menos(-) antes de cada campo. En este caso no nos interesa obtener datos sensibles como el password del usuario, y tampoco saber si esta confirmado o no, etc.
+
+En vez de crear una constante "veterinario", y guardar los campos obtenidos de la base de datos, lo guardamos en la petición "req.veterinario", con eso creamos la sesión del usuario.
+
+Con "return next();", pasamos al siguiente "middleware" (en este caso se va para la función "perfil" del controlador, que seria encargada de mostrarnos la vista del perfil del usuario).
+
+Si dentro del "try/catch", al intentar verificar el "token", da con un token no valido, salta al "catch" y muestra el "error1".
+
+Y en caso de que no exista "token", muestra el error "Token no válido o inexistente".
+
+3) En el router "backend\routes\veterinarioRoutes.js", importamos y usamos nuestro middleware:
+
+	import express from "express";
+	import {
+		registrar,
+		perfil,
+		confirmar,
+		autenticar,
+	} from "../controllers/veterinarioController.js";
+	import checkAuth from "../middleware/authMiddleware.js";
+
+	const router = express.Router();
+
+	router.post("/", registrar);
+	router.get("/confirmar/:token", confirmar);
+	router.post("/login", autenticar);
+
+	// Ruta protegida
+	router.get("/perfil", checkAuth, perfil);
+
+	export default router;
+
+En este caso el middleware se ejecuta antes de la función "perfil" del controlador. Y solo entraria a esa función si el "token" que envia el cliente es valido.
+
+4) En  el controlador "backend\controllers\veterinarioController.js":
+
+	const perfil = (req, res) => {
+		const { veterinario } = req;
+		res.json({
+			perfil: veterinario,
+		});
+	};
+
+Aca obtenemos los datos del usuario desde la petición ("req").
