@@ -35,8 +35,13 @@ INDICE:
         [1.11.4]. Navegación entre Rutas con Link
         [1.11.5]. Navegación entre Rutas con "useNavigate"
         [1.11.6]. Rutas Anidadas
-    [1.12]. fetch
+    [1.12]. Comunicación con el Backend
+        [1.12.1]. fetch
+        [1.12.2]. Axios
+            [1.12.2.1]. Petición Post
+            [1.12.2.2]. Crear URLBAse en Axios
     [1.13]. State Management
+        [1.13.1]. Context
 [2]. Proyecto
     [2.0]. Instalación con Vite
         [2.0.1]. Extensión Navegador
@@ -863,7 +868,9 @@ Nota 2: en modo desarrollo los "useEffect" se ejecutan 2 veses, pero solo es en 
 
 Nota 3: la función callback de "useEffect" no puede ser asincrona, por dentro de la función flecha si puede llamar una función asincrona, pero esa función flecha no puede ser asincrona.
 
-Nota 4: para más info ir a:
+Nota 4: Si dejamos el aray de dependencias vacio, el "useEffect" se ejecuta una sola vez cuando el componente este listo.
+
+Nota 5: para más info ir a:
 
     https://es.react.dev/reference/react/useEffect
 
@@ -888,7 +895,7 @@ Para crear un Hook:
 
 Nota: la extensión del archivo es ".js" y no ".jsx", ya que no retorna un componente sino información.
 
-3) El código del hook es una simple función modulo que puede retornar un objeto, un array o un valor. Por ejemplo:
+3) El código del hook es una simple función módulo que puede retornar un objeto, un array o un valor. Por ejemplo:
 
     import pokemonsJSON from '../ruta/pokemons.json';
 
@@ -1528,10 +1535,18 @@ De esta forma, quedamos con 3 rutas:
     /profile/my-info --> muestra el componente "Profile" y "MyInfo"
 
     /profile/liked-events --> muestra el componente "Profile" y  "LikedEvents"
-
 _______________________________________________________
 
-	[1.12]. fetch:
+	[1.12]. Comunicación con el Backend:
+_______________________________________________________
+
+Sin importar la tecnologia usada en el Backend, podemos comunicar el Frontend a través de:
+
+- fetch --> API nativa del navegador.
+- Axios --> libreria externa.
+_______________________________________________________
+
+	[1.12.1]. fetch:
 _______________________________________________________
 
 Para hacer consultas a la API, vamos a usar "fetch", pero se puede usar alguna libreria de terceros como Axios.
@@ -1550,6 +1565,171 @@ Nota: para más info de "fetch" ir a:
 
 _______________________________________________________
 
+	[1.12.2]. Axios:
+_______________________________________________________
+
+1) Para usar Axios, primero lo instalamos como dependencia:
+
+    pnpm i axios
+
+2) En el componente donde se va a hacer la petición, importamos y usamos la libreria:
+
+    import axios from "axios";
+
+    // Hacer una petición para un usuario con ID especifico
+    axios.get('/user?ID=12345')
+        .then(function (response) {
+            // manejar respuesta exitosa
+            console.log(response);
+        })
+        .catch(function (error) {
+            // manejar error
+            console.log(error);
+        })
+        .finally(function () {
+            // siempre sera executado
+        });
+
+Opcionalmente, la solicitud anterior también se puede realizar como:
+
+    axios.get('/user', {
+            params: {
+            ID: 12345
+            }
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+        .finally(function () {
+            // siempre sera ejecutado
+        });
+
+Para usar "async/await" Añade la palabra reservada "async" a tu función/método externo:
+
+    async function getUser() {
+        try {
+            const response = await axios.get('/user?ID=12345');
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+Nota 1: para más info de Axios:
+
+    https://axios-http.com/es/docs/intro
+
+Nota 2: por defecto la petición es de tipo GET, por lo que tambien podemos hacer la petición sin indicar el método:
+
+    async function getUser() {
+        try {
+            const response = await axios('/user?ID=12345');
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+_______________________________________________________
+
+	[1.12.2.1]. Petición Post:
+_______________________________________________________
+
+Ejecutando una peticion POST: 
+
+    import axios from "axios";
+
+    axios.post('/user', {
+            firstName: 'Fred',
+            lastName: 'Flintstone'
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+
+Ejecutando múltiples peticiones concurrentes:
+
+    function getUserAccount() {
+        return axios.get('/user/12345');
+    }
+
+    function getUserPermissions() {
+        return axios.get('/user/12345/permissions');
+    }
+
+    Promise.all([getUserAccount(), getUserPermissions()])
+        .then(function (results) {
+            const acct = results[0];
+            const perm = results[1];
+        });
+
+Ejemplo con "async/await":
+
+    const handleSubmitForm = async (e) => {
+        e.preventDefault();
+        try {
+            const url = `${import.meta.env.VITE_BACKEND_URL}/api/veterinarios`;
+            const respuesta = await axios.post(url, { nombre, email, password });
+            console.log("Respuesta crear usuario: ", respuesta);
+        } catch (error) {
+            console.log(error.response.data.msg);
+        }
+    };
+
+Nota: acá se estan usando variables de entorno, del archivo ".env" en VITE.
+_______________________________________________________
+
+	[1.12.2.2]. Crear URLBAse en Axios:
+_______________________________________________________
+
+Podemos simplificar un poco el código, creando un cliente Axios (instancia), que tendra la URLBase de petición hacia nuestra API:
+
+1) Dentro de la carpeta "src", creamos otra carpeta llamada "config".
+
+2) Dentro de la carpeta "config", creamos el archivo "axios.jsx":
+
+    import axios from "axios";
+
+    const clienteAxios = axios.create({
+        baseURL: `${import.meta.env.VITE_BACKEND_URL}/api`
+    });
+
+    export default clienteAxios;
+
+3) Ahora en el componente donde antes importabamos "axios", usamos nuestro "cliente axios":
+
+    // import axios from "axios"; --> este ya no va
+    import clienteAxios from "../config/axios";
+
+    const handleSubmitForm = async (e) => {
+        e.preventDefault();
+
+        try {
+            // Cambiamos este código:
+            // const url = `${import.meta.env.VITE_BACKEND_URL}/api/veterinarios`;
+            // const respuesta = await axios.post(url, { nombre, email, password });
+
+            // Por el siguiente:
+            const url = `/veterinarios`;
+            const respuesta = await clienteAxios.post(url, { nombre, email, password });
+
+            console.log("Respuesta crear usuario: ", respuesta);
+        } catch (error) {
+            console.log(error.response.data.msg);
+        }
+    };
+
+Nota: para más info ir a:
+
+    https://axios-http.com/es/docs/instance
+_______________________________________________________
+
 	[1.13]. State Management:
 _______________________________________________________
 
@@ -1565,6 +1745,191 @@ Los manejadores de estado más usados en React son:
 - Zustand
 - Mobx
 - Recoil
+
+_______________________________________________________
+
+	[1.13.1]. Context:
+_______________________________________________________
+
+Otra forma de manejar estados globales y que esten disponibles para toda la aplicación, es creando un "Context", el cual tambien manejara un "Provider" (proveedor de datos u origen de los datos).
+
+Ejemplo: Se va a crear un "Context" de autenticación:
+
+1) Creamos dentro de la carpeta "src" una carpeta llamada "context".
+
+2) Creamos dentro de la carpeta "context" el archivo "AuthProvider.jsx":
+
+    import { useState, useEffect, createContext } from 'react';
+    import clienteAxios from "../config/axios";
+
+    const AuthContext = createContext();
+
+    const AuthProvider = ({ children }) => {
+
+        const [auth, setAuth] = useState({});
+
+        useEffect(() => {
+            const autenticarUsuario = async () => {
+                const token = localStorage.getItem("token");
+
+                if (!token) {
+                    setAuth({});
+                    return;
+                }
+
+                const config = {
+                    headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token}`,
+                    }
+                };
+
+                try {
+                    const { data } = await clienteAxios.get("/veterinarios/perfil", config);
+
+                    setAuth(data);
+                } catch (error) {
+                    console.log(error.response.data.msg);
+                    setAuth({});
+                }
+            };
+            autenticarUsuario();
+        }, []);
+
+        return (
+            <AuthContext.Provider 
+                value={{
+                    auth,
+                    setAuth
+                }}
+		    >
+                {children}
+            </AuthContext.Provider>
+        )
+
+    };
+
+    export { AuthProvider };
+
+    export default AuthContext;
+
+En este ejemplo el estado "auth" y "setAuth", son el estado global que compartirá con toda la aplicación, para lograr esto, recibe las rutas de toda la app, en la "prop" de "children".
+
+El "AuthContext.Provider" tiene un argumento "value" sonde pasamos un objeto con lo que queremos que este disponible globalmente, en este caso "auth" y "setAuth". Tambien si tenemos una función y queremos que esté disponible para los componentes hijos, la podemos pasar en este objeto.
+
+Usamos "useEffect" sin dependencias para que se ejecute una sola vez, la función "autenticarUsuario", verifica que en "localStorage" exista el "token" (Bearer token que se obtiene del backend una vez el usuario se loguee correctamenmte con usuario y contraseña).
+
+Si el "token" no existe, el estado global "auth", se setea como un objeto vacio, retorna y no continua.
+
+Si el "token" existe, se crea un objeto de configuración, donde definimos los headers para la comunicación con el backend. En estos headers enviamos el "Bearer token".
+
+Luego con el cliente axios, intentamos establecer comunicación con el backend, la data obtenida, la almacenamos en el estado global (setAuth(data);), en este caso en elk estado "auth" quedaria la data del usuario logueado. Si al comunicarnos con el backend falla, imprimimos el mensaje de error en consola, y seteamos el estado global "auth", como un objeto vacio.
+
+3) Para este ejemplo, todas nuestras rutas se encuentran en el archivo "frontend\src\App.jsx":
+
+    import { BrowserRouter, Routes, Route } from "react-router-dom";
+    import AuthLayout from "./layout/AuthLayout";
+    import Login from "./paginas/Login";
+    import Registrar from "./paginas/Registrar";
+    import OlvidePassword from "./paginas/OlvidePassword";
+    import Confirmar from "./paginas/Confirmar";
+    import NuevoPassword from "./paginas/NuevoPassword";
+    import { AuthProvider } from "./context/AuthProvider";
+
+    function App() {
+        return (
+            <BrowserRouter>
+                <AuthProvider>
+                    <Routes>
+                        <Route path="/" element={<AuthLayout />}>
+                            <Route index element={<Login />} />
+                            <Route path="registrar" element={<Registrar />} />
+                            <Route path="olvide-password" element={<OlvidePassword />} />
+                            <Route path="olvide-password/:token" element={<NuevoPassword />} />
+                            <Route path="confirmar/:id" element={<Confirmar />} />
+                        </Route>
+                    </Routes>
+                </AuthProvider>
+            </BrowserRouter>
+        );
+    }
+
+    export default App;
+
+Acá, tenemos definidas las rutas de la app como componentes, importamos el "AuthProvider" y envolvemos nuestras rutas con él, esto hace que todas esas rutas pasen a ser la "prop" "children", dentro del "AuthProvider", y ademas, que los estados definidos en él, esten disponibles para todas las rutas hijas.
+
+4) Para poder obtener esos valores globales en los componentes, es necesario crear un custom hook, creamos la carpeta "hooks" y dentro el archivo "useAuth.jsx":
+
+    import { useContext } from "react";
+    import AuthContext from "../context/AuthProvider";
+
+    const useAuth = () => {
+        return useContext(AuthContext);
+    };
+
+    export default useAuth;
+
+El método "useContext()", nos sirve para acceder a los valores de un "context".
+
+5) En el componente que queramos obtener los valores del estado global, importamos y usamos el custom hook, en este ejemplo lo usamos en el archivo del componente de login "frontend\src\paginas\Login.jsx":
+
+    import { useState } from "react";
+    import { Link, useNavigate } from "react-router-dom";
+    import useAuth from "../hooks/useAuth";
+    import Alerta from "../components/Alerta";
+    import clienteAxios from "../config/axios";
+
+    const Login = () => {
+
+        const [email, setEmail] = useState("");
+        const [password, setPassword] = useState("");
+        const [alerta, setAlerta] = useState({});
+
+        const navigate = useNavigate();
+
+        const handleSubmit = async(e) => {
+            e.preventDefault();
+
+            // Validar que no haya campos vacíos
+            if ([email, password].includes("")) {
+                setAlerta({ msg: "Todos los campos son obligatorios", error: true });
+                return;
+            }
+
+            try {
+                const { data } = await clienteAxios.post("/veterinarios/login", { email, password });
+                // Almacenar el token en localStorage
+                localStorage.setItem("token", data.token);
+                // Redireccionar al admin
+                navigate("/admin");
+            } catch (error) {
+                setAlerta({ msg: error.response.data.msg, error: true });
+            }
+        };
+
+        // Aca usamos el estado global "auth" y su "setter" solo para el ejemplo, el componente no lo necesita
+        const { auth, setAuth } = useAuth();
+        // console.log("Auth: ", auth);
+
+        const { msg } = alerta;
+
+        return (
+            // ...existing code...
+        );
+    };
+
+    export default Login;
+
+En este componente de login, tenemos un formulario donde el usuario se loguea en nuestra app, ingresandom usuario y contraseña, la función "handleSubmit" se encarga del evento del "submit" del formulario. Verifica que no hayan campos vacios, y con el cliente axios, establece comunicación con el backend, si el usuario se loguea correectamente el backend nos retorna el "bearer token" que almacenamos en "localStorage". Y luego redireccionamos a las rutas protegidas para solo usuarios logueados (en este caso "/admin").
+
+Nota: recordar que para usar en cualquier otro componente, el estado global que creamos, solo necesitamos importar y usar nuestro custom hook:
+
+    import useAuth from "../hooks/useAuth";
+
+    // ...existing code...
+
+    const { auth, setAuth } = useAuth();
+    console.log("Auth: ", auth);
 
 _______________________________________________________
 

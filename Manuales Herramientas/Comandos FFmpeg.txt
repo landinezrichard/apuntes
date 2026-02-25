@@ -1,0 +1,462 @@
+
+	CheatSheet de FFmpeg
+_______________________________________________________
+
+ÍNDICE:
+
+[1]. Qué es FFmpeg
+[2]. Para obtener información
+	[2.1]. Obtener información del sistema
+	[2.2]. Obtener información de un vídeo
+	[2.3]. Obtener información sin banner de derechos de autor
+	[2.4]. Guardar información a un fichero json
+[3]. Para convertir vídeos
+	[3.1]. Convertir entre formatos de video
+	[3.2]. Recomprimir video
+	[3.3]. Concatenar varios videos
+	[3.4]. Extraer fragmento de video
+	[3.5]. Cambiar velocidad de video
+[4]. Para transformar videos
+	[4.1]. Escalar video
+	[4.2]. Escalar video proporcional
+	[4.3]. Rotar video
+	[4.4]. Voltear video
+	[4.5]. Cortar video
+	[4.6]. Poner marca de agua
+[5]. Para gestionar audio
+	[5.1]. Subir volumen de audio
+	[5.2]. Silenciar video
+	[5.3]. Extraer audio de un vídeo
+	[5.4]. Añadir pista de audio
+	[5.5]. Convertir entre formatos de audio
+	[5.6]. Recortar audio
+	[5.7]. Recomprimir audio
+	[5.8]. Remuestrear audio
+	[5.9]. Combinar audio y video
+[6]. Relacionados con imágenes
+	[6.1]. Extraer fotogramas de un vídeo
+	[6.2]. Extraer imágenes cada 15 segundos (fps 1/15)
+	[6.3]. Extraer un gif desde un vídeo
+	[6.4]. Combinar imágenes en un vídeo
+	[6.5]. Crear un video con imagen estática y audio
+	[6.6]. Concatenar imágenes en vídeo
+_______________________________________________________
+
+	[1]. Qué es FFmpeg:
+_______________________________________________________
+
+FFmpeg es una potente y extensible herramienta de software libre diseñada para el procesamiento de audio y video. Nos permite manipular, convertir, transformar, aplicar filtros, entre una gran cantidad de formatos multimedia de manera eficiente y precisa.
+
+FFmpeg proporciona una interfaz de línea de comandos para realizar tareas complejas de manera programática. Y existen muchas muchas muchas (muchas!) combinaciones posibles.
+
+Nota: info y comandos sacados de: 
+
+	https://www.luisllamas.es/listado-comandos-ffmpeg/
+
+_______________________________________________________
+
+	[2]. Para obtener información:
+_______________________________________________________
+
+Existen diferentes comandos para obtener información de los vídeos.
+_______________________________________________________
+
+	[2.1]. Obtener información del sistema:
+_______________________________________________________
+
+Obtener los códecs disponibles en FFmpeg.
+
+	ffmpeg -codecs
+
+	ffmpeg -formats
+
+_______________________________________________________
+
+	[2.2]. Obtener información de un vídeo:
+_______________________________________________________
+
+Muestra información detallada sobre un archivo de vídeo, como duración, resolución, códecs de audio y video.
+
+	ffmpeg -i video.mp4
+
+_______________________________________________________
+
+	[2.3]. Obtener información sin banner de derechos de autor:
+_______________________________________________________
+
+Muestra información de un archivo de vídeo sin mostrar el banner de derechos de autor.
+
+	ffmpeg -i video.flv -hide_banner
+
+_______________________________________________________
+
+	[2.4]. Guardar información a un fichero json:
+_______________________________________________________
+
+Guarda información detallada de un archivo de vídeo en formato JSON.
+
+	ffprobe -i video.flv -print_format json -hide_banner
+
+_______________________________________________________
+
+	[3]. Para convertir vídeos:
+_______________________________________________________
+
+Existen diferentes comandos para convertir vídeos de un formato a otro.
+
+_______________________________________________________
+
+	[3.1]. Convertir entre formatos de video:
+_______________________________________________________
+
+Convierte un archivo de video de un formato a otro.
+
+	ffmpeg -i video_original.avi output.mp4
+
+	ffmpeg -i entrada.avi salida.mp4
+_______________________________________________________
+
+	[3.2]. Recomprimir video:
+_______________________________________________________
+
+Recomprime un video utilizando el códec libx264 para mejorar la calidad y reducir el tamaño del archivo.
+
+	ffmpeg -i youtube.flv -c:v libx264 filename.mp4
+
+_______________________________________________________
+
+	[3.3]. Concatenar varios videos:
+_______________________________________________________
+
+Une varios archivos de vídeo en uno solo sin necesidad de volver a codificarlos.
+
+	ffmpeg -i "concat:video1.mp4|video2.mp4|video3.mp4" -c copy output.mp4
+
+
+Para unir (concatenar) videos en FFmpeg existen dos métodos principales. La elección depende de si tus videos tienen las mismas características (resolución, códec, fps) o son distintos.
+
+Método 1: El más rápido (Sin pérdida de calidad):
+
+Usa este método si ambos videos son idénticos en formato y resolución. Es instantáneo porque no procesa el video, solo los "pega".
+
+1) Crea un archivo de texto llamado lista.txt con este contenido:
+
+	file 'video1.mp4'
+	file 'video2.mp4'
+
+2) Ejecuta este comando en la terminal:
+
+	ffmpeg -f concat -safe 0 -i lista.txt -c copy salida_final.mp4
+
+-c copy: Mantiene la calidad original y termina en segundos.
+-safe 0: Permite usar rutas de archivo relativas.
+
+Método 2: El más compatible (Re-codificando):
+
+Usa este método si los videos tienen distinto tamaño (ej. uno es 720p y otro 1080p) o distintos códecs. FFmpeg los procesará para que encajen perfectamente.
+
+	ffmpeg -i video1.mp4 -i video2.mp4 -filter_complex "[0:v][0:a][1:v][1:a]concat=n=2:v=1:a=1[v][a]" -map "[v]" -map "[a]" salida_final.mp4
+
+Desglose del comando:
+
+[0:v][0:a][1:v][1:a]: Selecciona el video y audio del primer archivo (0) y del segundo (1).
+
+n=2: Indica que vas a unir 2 archivos.
+
+v=1:a=1: Indica que el resultado tendrá 1 pista de video y 1 de audio.
+
+Tip para evitar errores de "aspect ratio":
+
+Como mencionaste antes que estabas escalando a 1080p, si tus videos tienen tamaños distintos, lo ideal es escalarlos mientras los unes para evitar errores:
+
+	ffmpeg -i video1.mp4 -i video2.mp4 -filter_complex "[0:v]scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2[v0];[1:v)scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2[v1];[v0][0:a][v1][1:a]concat=n=2:v=1:a=1[v][a]" -map "[v]" -map "[a]" salida_final.mp4
+
+(Este comando ajusta ambos a 1080p con barras negras si es necesario antes de unirlos).
+
+
+aunque ambos videos son 1920x1080, tienen un SAR (Sample Aspect Ratio) distinto.
+El video 1 tiene SAR 1:1 (píxeles cuadrados).
+El video 2 tiene SAR 3:4 (píxeles rectangulares).
+FFmpeg no puede concatenarlos directamente porque las "formas" de sus píxeles no coinciden. Para solucionarlo, debemos normalizar el SAR de ambos videos al mismo tiempo que los unes.
+Usa este comando exacto (ajustado a tus archivos):
+
+	ffmpeg -i 34.mp4 -i fin-grande.mp4 -filter_complex "[0:v]setsar=1/1[v0];[1:v]setsar=1/1[v1];[v0][0:a][v1][1:a]concat=n=2:v=1:a=1[v][a]" -map "[v]" -map "[a]" -c:v libx264 -preset fast -crf 23 salida_final.mp4
+
+¿Qué corregimos aquí?
+
+1) setsar=1/1: Forzamos a que ambos videos interpreten sus píxeles como cuadrados perfectos. Esto elimina el conflicto de parámetros que viste en el log.
+2) libx264: Al usar filtros complejos, es obligatorio re-codificar para que la unión sea fluida.
+3) Muestreo de audio: Como ambos ya están a 44100 Hz, no añadí filtros de audio para mantener el comando simple.
+
+¿Y si el segundo video se ve "estirado"?
+Si notas que el video de 9 segundos se ve deforme tras la unión, es porque realmente no es 16:9 nativo. En ese caso, usa este comando más avanzado que añade barras negras (padding) para que encaje perfecto:
+
+	ffmpeg -i 34.mp4 -i fin-grande.mp4 -filter_complex "[0:v]scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1/1[v0];[1:v]scale=1920:1080:force_original_aspect_ratio=decrease,pad=1920:1080:(ow-iw)/2:(oh-ih)/2,setsar=1/1[v1];[v0][0:a][v1][1:a]concat=n=2:v=1:a=1[v][a]" -map "[v]" -map "[a]" salida_final.mp4
+
+_______________________________________________________
+
+	[3.4]. Extraer fragmento de video:
+_______________________________________________________
+
+Corta un fragmento específico de un video sin volver a codificar.
+
+	ffmpeg -i video.mp4 -ss 00:01:30 -t 00:00:30 -codec copy output.mp4
+
+	ffmpeg -ss 00:00:10 -to 00:00:30 -i entrada.mp4 -c copy salida.mp4
+
+Usar -c copy es instantáneo porque no procesa los datos, solo los mueve de contenedor. Indica que copie los códecs de video y audio tal cual están, sin procesarlos de nuevo.
+
+Recortar (Trim): Corta un fragmento por tiempo.
+
+	ffmpeg -ss 00:00:10 -i entrada.mp4 -t 00:00:30 -c copy salida.mp4
+
+-ss (Start Time): El punto de inicio. Puedes usar segundos (30) o el formato HH:MM:SS.
+Tip: Ponerlo antes del -i hace que FFmpeg busque el punto de inicio mucho más rápido (fast seek).
+
+-to vs -t: Aquí es donde muchos se confunden:
+	
+	-to: Es el tiempo final absoluto (ej. "corta hasta el minuto 00:30").
+	-t: Es la duración (ej. "corta un clip que dure 30 segundos").
+
+-i entrada.mp4: Tu archivo original.
+
+¿Qué pasa si necesitas precisión quirúrgica?
+
+Si necesitas que el corte sea exacto al fotograma, debes quitar el -c copy. Esto obligará a FFmpeg a re-codificar el video:
+
+	ffmpeg -i entrada.mp4 -ss 00:00:10.500 -t 5 -preset ultrafast salida.mp4
+
+_______________________________________________________
+
+	[3.5]. Cambiar velocidad de video:
+_______________________________________________________
+
+Ajusta la velocidad del video cambiando los fotogramas por segundo.
+
+	ffmpeg -i video.mp4 -filter:v "setpts=0.5*PTS" output.mp4
+_______________________________________________________
+
+	[4]. Para transformar videos:
+_______________________________________________________
+
+Existen diferentes comandos para transformar videos.
+_______________________________________________________
+
+	[4.1]. Escalar video:
+_______________________________________________________
+
+Cambia la resolución de un video manteniendo la proporción.
+
+	ffmpeg -i video.mp4 -vf scale=640:360 output.mp4
+
+_______________________________________________________
+
+Ejemplo: usando el siguiente comando: 
+
+	ffmpeg -i video.mp4 -vf scale=1920:1080 output.mp4 
+	
+Pero obtengo el siguiente error en consola: 
+
+	Assertion pkt failed at D:/code/ffmpeg/src/fftools/ffmpeg_dec.c:710e=3982.1kbits/s speed=1.04x
+
+El mensaje Assertion pkt failed suele indicar que FFmpeg se encontró con un paquete de datos corrupto o mal formado en el archivo de video que no sabe cómo procesar durante el escalado.
+
+Solución de "Limpieza de Flujo" (Recomendada):
+
+A veces el contenedor (MP4) tiene errores de sincronización que confunden al escalador. Vamos a reescribir los metadatos sin tocar el video antes de escalar:
+
+	ffmpeg -i video.mp4 -c copy -map 0 reparado.mp4
+
+_______________________________________________________
+
+	[4.2]. Escalar video proporcional:
+_______________________________________________________
+
+Ajusta la altura de un video manteniendo la proporción original.
+
+	ffmpeg -i video.mp4 -vf scale=320:-1 output.mp
+_______________________________________________________
+
+	[4.3]. Rotar video:
+_______________________________________________________
+
+Rota un video en sentido horario.
+
+	ffmpeg -i video.mp4 -vf transpose=clock output.mp4
+
+_______________________________________________________
+
+	[4.4]. Voltear video:
+_______________________________________________________
+
+Voltea horizontal o verticalmente un video.
+
+	ffmpeg -i video.mp4 -vf hflip output.mp4
+	ffmpeg -i video.mp4 -vf hflip output.mp4
+
+_______________________________________________________
+
+	[4.5]. Cortar video:
+_______________________________________________________
+
+Recorta un video a la resolución y posición específicas.
+
+	ffmpeg -i video.mp4 -filter:v "crop=640:480:200:150" output.mp4
+
+Siendo:
+
+- 640:400, ancho y alto
+- 200:150, coordenadas X, Y del crop
+
+_______________________________________________________
+
+	[4.6]. Poner marca de agua:
+_______________________________________________________
+
+Añade un logo como marca de agua en un video.
+
+	ffmpeg -i video.mp4 -i logo.png -filter_complex overlay=10:10 output.mp4
+
+_______________________________________________________
+
+	[5]. Para gestionar audio:
+_______________________________________________________
+
+Existen diferentes comandos para gestionar audio.
+_______________________________________________________
+
+	[5.1]. Subir volumen de audio:
+_______________________________________________________
+
+Aumenta el volumen de un video.
+
+	ffmpeg -i video.mp4 -af 'volume=0.5' output.mp4
+
+Aumenta o disminuye la intensidad de un audio.
+
+	ffmpeg -i audio.mp3 -af "volume=1.5" salida.mp3 (sube al 150%) 
+_______________________________________________________
+
+	[5.2]. Silenciar video:
+_______________________________________________________
+
+Elimina la pista de audio de un video.
+
+	ffmpeg -i video.mp4 -an output.mp4
+
+_______________________________________________________
+
+	[5.3]. Extraer audio de un vídeo:
+_______________________________________________________
+
+Extrae la pista de audio de un archivo de video.
+
+	ffmpeg -i video.mp4 -vn output.mp3
+
+Obtiene el sonido sin el video.
+
+	ffmpeg -i video.mp4 -vn -acodec copy audio.mp3
+
+_______________________________________________________
+
+	[5.4]. Añadir pista de audio:
+_______________________________________________________
+
+Añade una pista de audio a un video existente.
+
+	ffmpeg -i video.mp4 -i audio.mp3 -map 0:v -map 0:a -map 1:a -vcodec copy output.mp4
+_______________________________________________________
+
+	[5.5]. Convertir entre formatos de audio:
+_______________________________________________________
+
+Convierte un archivo de audio de un formato a otro.
+
+	ffmpeg -i audio.mp3 -acodec pcm_s16le output.wav
+_______________________________________________________
+
+	[5.6]. Recortar audio:
+_______________________________________________________
+
+Recorta un fragmento de audio sin volver a codificar.
+
+	ffmpeg -i audio.mp3 -ss 00:01:30 -t 30 -acodec copy output.mp3
+_______________________________________________________
+
+	[5.7]. Recomprimir audio:
+_______________________________________________________
+
+Recomprime un archivo de audio con una tasa de bits de 128.
+
+	ffmpeg -i audio.mp3 -ab 128 output.mp3
+_______________________________________________________
+
+	[5.8]. Remuestrear audio:
+_______________________________________________________
+
+Cambia la frecuencia de muestreo de un archivo de audio.
+
+	ffmpeg -i audio.mp3 -ar 16000 output.mp3
+
+_______________________________________________________
+
+	[5.9]. Combinar audio y video:
+_______________________________________________________
+
+Une un archivo de audio con uno de video.
+
+	ffmpeg -i video.mp4 -i audio.mp3 -c copy -map 0:v:0 -map 1:a:0 salida.mp4
+_______________________________________________________
+
+	[6]. Relacionados con imágenes:
+_______________________________________________________
+
+Existen diferentes comandos relacionados con imagenes.
+_______________________________________________________
+
+	[6.1]. Extraer fotogramas de un vídeo:
+_______________________________________________________
+
+Extrae un fotograma específico de un video.
+
+	ffmpeg -i video.mp4 -ss 00:00:30 -vframes 1 output.png
+_______________________________________________________
+
+	[6.2]. Extraer imágenes cada 15 segundos (fps 1/15):
+_______________________________________________________
+
+Extrae imágenes de un video a intervalos específicos.
+
+	ffmpeg -i video.mp4 -vf "fps=1/15,select='not(mod(n,1))'" output_%d.png
+_______________________________________________________
+
+	[6.3]. Extraer un gif desde un vídeo:
+_______________________________________________________
+
+Convierte un video en un GIF animado.
+
+	ffmpeg -i video.mp4 -vf scale=300:-1 -t 10 -r 10 output.gif
+_______________________________________________________
+
+	[6.4]. Combinar imágenes en un vídeo:
+_______________________________________________________
+
+Combina imágenes estáticas en un video. Crear video desde imágenes.
+
+	ffmpeg -i video.mp4 -r 0.25 output_%04d.png
+_______________________________________________________
+
+	[6.5]. Crear un video con imagen estática y audio:
+_______________________________________________________
+
+Crea un video con una imagen estática y un archivo de audio.
+
+	ffmpeg -loop 1 -y -i imagen.png -i audio.mp3 -shortest output.mp4
+_______________________________________________________
+
+	[6.6]. Concatenar imágenes en vídeo:
+_______________________________________________________
+
+Combina imágenes en formato JPG en un video.
+
+	cat *.JPG | ffmpeg -f image2pipe -r 0.3 -vcodec mjpeg -i – -vcodec libx264 output.mp4

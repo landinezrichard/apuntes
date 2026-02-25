@@ -47,10 +47,15 @@ INDICE:
 					[7.9.2.3.2.1]. Hashear passwords con argon2
 					[7.9.2.3.2.2]. Hashear passwords con bcrypt
 			[7.9.2.4]. Consultar la BD
+				[7.9.2.4.1]. Obtener todos los registros que cumplan una condición
+			[7.9.2.5]. Actualizar un registro
+			[7.9.2.6]. Eliminar un registro
 	[7.10]. JSON Web Token (JWT)
 		[7.10.1]. Ejemplo JWT
 		[7.10.2]. Bearer token
 			[7.10.2.1]. Crear rutas protegidas - Middleware
+	[7.11]. CORS
+	[7.12]. Envio de Emails
 
 _______________________________________________________
 
@@ -1471,9 +1476,10 @@ Ejemplo: creamos el modelo "backend\models\Paciente.js":
 			required: true,
 			trim: true,
 		},
-		fechaAlta: {
+		fecha: {
 			type: Date,
 			required: true,
+			default: Date.now(),
 		},
 		sintomas: {
 			type: String,
@@ -1801,6 +1807,239 @@ Esto es gracias a que llave y valor se llaman iguales.
 
 _______________________________________________________
 
+	[7.9.2.4.1]. Obtener todos los registros que cumplan una condición:
+_______________________________________________________
+
+Para traer todos los registros de una colección (tabla), usamos el método de Mongoose ".find()", y con los métodos ".where()" y ".equals()" filtramos los resultados.
+
+Ejemplo: Traemos todos los pacientes cuyo campo "veterinario" sea igual al veterinario de la sesión actual:
+
+1) En el controlador "backend\controllers\pacienteController.js", creamos la función "obtenerPacientes":
+
+	import Paciente from "../models/Paciente.js";
+
+	const obtenerPacientes = async (req, res) => {
+		const pacientes = await Paciente.find()
+			.where("veterinario")
+			.equals(req.veterinario);
+
+		res.json(pacientes);
+	};
+
+	export { obtenerPacientes };
+
+2) En el router "backend\routes\pacienteRoutes.js", usamos la función creada:
+
+	import express from "express";
+	import { obtenerPacientes } from "../controllers/pacienteController.js";
+	import checkAuth from "../middleware/authMiddleware.js";
+
+	const router = express.Router();
+
+	router
+		.route("/")
+		.get(checkAuth, obtenerPacientes);
+
+	export default router;
+
+3) En nuestro archivo principal "backend\index.js" usamos el router creado:
+
+	import express from "express";
+	import conectarDB from "./config/db.js";
+	import veterinarioRoutes from "./routes/veterinarioRoutes.js";
+	import pacienteRoutes from "./routes/pacienteRoutes.js";
+
+	const app = express();
+	app.use(express.json());
+
+	// Definir puerto
+	const PORT = process.env.PORT || 4000;
+
+	// Conectar a la base de datos
+	conectarDB();
+
+	// Routing
+	app.use("/api/veterinarios", veterinarioRoutes);
+	app.use("/api/pacientes", pacienteRoutes);
+
+	app.listen(PORT, () => {
+		console.log(`Servidor funcionando en el puerto ${PORT}`);
+	});
+
+En este caso, al visitar la url "{{API_URL}}/pacientes", enviando el "bearer token" del veterinario autenticado, obtenemos un array con todos los pacientes de ese veterinario.
+
+Nota 1: "{{API_URL}}" en desarrollo local es igual a "http://localhost:4000/api".
+
+Nota 2: El "bearer token" en Postman, lo enviamos en "Authorization" y en "Auth Type" escogemos "Bearer token".
+
+_______________________________________________________
+
+	[7.9.2.5]. Actualizar un registro:
+_______________________________________________________
+
+Para actualizar un registro, usamos el mismo método de Mongoose ".save()".
+
+1) En el controlador "backend\controllers\pacienteController.js", creamos la función para actualizar:
+
+	import Paciente from "../models/Paciente.js";
+
+	// ...existing code...
+
+	const actualizarPaciente = async (req, res) => {
+		const { id } = req.params;
+		const paciente = await Paciente.findById(id);
+
+		// Comprobar si el paciente existe
+		if (!paciente) {
+			const error = new Error("Paciente no encontrado");
+			return res.status(404).json({ msg: error.message });
+		}
+
+		// Verificar que el paciente pertenece al veterinario autenticado
+		if (paciente.veterinario._id.toString() !== req.veterinario._id.toString()) {
+			const error = new Error("Acción no válida");
+			return res.status(401).json({ msg: error.message });
+		}
+
+		// Actualizar los campos del paciente
+		paciente.nombre = req.body.nombre || paciente.nombre;
+		paciente.propietario = req.body.propietario || paciente.propietario;
+		paciente.email = req.body.email || paciente.email;
+		paciente.fecha = req.body.fecha || paciente.fecha;
+		paciente.sintomas = req.body.sintomas || paciente.sintomas;
+
+		try {
+			const pacienteActualizado = await paciente.save();
+			res.json(pacienteActualizado);
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({ msg: error.message });
+		}
+	};
+
+	export {
+		agregarPaciente,
+		obtenerPacientes,
+		obtenerPaciente,
+		actualizarPaciente,
+	};
+
+En este caso, vamos a recibir en la url un "id" del paciente a actualizar, pero antes de actualizarlo es necesario confirmar que el paciente exista, y que la persona que lo va a eliminar sea su creador (el veterinario que debe estar autenticado).
+
+Luego si cumple las condiciones, tomamos el campo que se esta actualizando, o el campo que ya teniamos, y lo reemplazamos en la instancia del paciente (la instancia que se obtiene al buscar si el paciente existe).
+
+2) En el router "backend\routes\pacienteRoutes.js", exportamos la función y creamos la ruta:
+
+	import express from "express";
+	import {
+		agregarPaciente,
+		obtenerPacientes,
+		obtenerPaciente,
+		actualizarPaciente,
+	} from "../controllers/pacienteController.js";
+	import checkAuth from "../middleware/authMiddleware.js";
+
+	const router = express.Router();
+
+	router
+		.route("/")
+		.post(checkAuth, agregarPaciente)
+		.get(checkAuth, obtenerPacientes);
+
+	router
+		.route("/:id")
+		.get(checkAuth, obtenerPaciente)
+		.put(checkAuth, actualizarPaciente);
+
+	export default router;
+
+En este caso, la ruta que recibe el "id" del paciente, tiene varios verbos, "GET" para obtener un registro, "PUT" para actualizar un registro.
+
+_______________________________________________________
+
+	[7.9.2.6]. Eliminar un registro:
+_______________________________________________________
+
+Para eliminar un registro, usamos el método de Mongoose ".deleteOne()":
+
+1) En el controlador "backend\controllers\pacienteController.js", creamos la función para eliminar:
+
+	import Paciente from "../models/Paciente.js";
+
+	// ...existing code...
+
+	const eliminarPaciente = async (req, res) => {
+		const { id } = req.params;
+		const paciente = await Paciente.findById(id);
+
+		// Comprobar si el paciente existe
+		if (!paciente) {
+			const error = new Error("Paciente no encontrado");
+			return res.status(404).json({ msg: error.message });
+		}
+
+		// Verificar que el paciente pertenece al veterinario autenticado
+		if (paciente.veterinario._id.toString() !== req.veterinario._id.toString()) {
+			const error = new Error("Acción no válida");
+			return res.status(401).json({ msg: error.message });
+		}
+
+		try {
+			const pacienteEliminado = await paciente.deleteOne();
+			res.json({ msg: "Paciente eliminado" });
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({ msg: error.message });
+		}
+	};
+
+	export {
+		agregarPaciente,
+		obtenerPacientes,
+		obtenerPaciente,
+		actualizarPaciente,
+		eliminarPaciente,
+	};
+
+En este caso, vamos a recibir en la url un "id" del paciente a eliminar, pero antes de eliminarlo es necesario confirmar que el paciente exista, y que la persona que lo va a eliminar sea su creador (el veterinario que debe estar autenticado).
+
+El método ".deleteOne()" devuelve una consulta (Query), por lo que no se ejecutara a menos que su use con "await", ".then()", ".catch" o ".exec()".
+
+Nota: para mas info del método ".deleteOne()" ir a:
+
+	https://mongoosejs.com/docs/8.x/docs/api/model.html#Model.prototype.deleteOne()
+
+2) En el router "backend\routes\pacienteRoutes.js", exportamos la función y creamos la ruta:
+
+	import express from "express";
+	import {
+		agregarPaciente,
+		obtenerPacientes,
+		obtenerPaciente,
+		actualizarPaciente,
+		eliminarPaciente,
+	} from "../controllers/pacienteController.js";
+	import checkAuth from "../middleware/authMiddleware.js";
+
+	const router = express.Router();
+
+	router
+		.route("/")
+		.post(checkAuth, agregarPaciente)
+		.get(checkAuth, obtenerPacientes);
+
+	router
+		.route("/:id")
+		.get(checkAuth, obtenerPaciente)
+		.put(checkAuth, actualizarPaciente)
+		.delete(checkAuth, eliminarPaciente);
+
+	export default router;
+
+En este caso, la ruta que recibe el "id" del paciente, tiene varios verbos, "GET" para obtener un registro, "PUT" para actualizar un registro, y "DELETE" para eliminarlo.
+
+_______________________________________________________
+
 	[7.10]. JSON Web Token (JWT):
 _______________________________________________________
 
@@ -2034,3 +2273,205 @@ En este caso el middleware se ejecuta antes de la función "perfil" del controla
 	};
 
 Aca obtenemos los datos del usuario desde la petición ("req").
+
+_______________________________________________________
+
+	[7.11]. CORS:
+_______________________________________________________
+
+Para solucionar el error de CORS y permitir peticiones desde el dominio del Frontend, es necesario instalar una libreria.
+
+1) Instalamos la libreria "cors":
+
+	pnpm i cors
+
+2) En nuestro archivo de variables de entorno ".env", definimos la url del frontend:
+
+	FRONTEND_URL=http://localhost:5173
+
+Nota1: OJO con la URL, debe ser exacta, sin "/" al final o puede dar problemas.
+
+	http://localhost:5173/ --> MAL
+
+Nota 2: Si necesitamos definir varias urls, lo podemos definir un Array como Variable de Entorno de la siguiente manera:
+
+- Con separador (ej: coma):
+
+	MI_ARRAY="valor1,valor2,valor3".
+
+Luego en el código (JavaScript/Node.js): 
+
+	const miArray = process.env.MI_ARRAY.split(',');
+
+- Formato JSON:
+
+	MI_ARRAY='["valor1","valor2","valor3"]' (Usa comillas simples para escapar las dobles dentro del archivo de entorno).
+
+Luego en el código (JavaScript/Node.js): 
+
+	const miArray = JSON.parse(process.env.MI_ARRAY);
+
+
+3) En nuestro archivo principal "backend\index.js":
+
+	import cors from "cors";
+
+	// Política CORS
+
+	// Dominios permitidos
+	const whiteList = [process.env.FRONTEND_URL];
+
+	const corsOptions = {
+		origin: function (origin, callback) {
+			if (whiteList.includes(origin)) {
+				// El origen del Request está permitido
+				callback(null, true);
+			} else {
+				// El origin no está permitido
+				callback(new Error("Error de CORS"));
+			}
+		},
+	};
+
+	app.use(cors(corsOptions));
+
+Aca importamos la libreria "cors", obtenemos del archivo ".env" la variable de entorno con la url que vamos a permitir que nos envia peticiones, y creamos un objeto "corsOptions".
+
+Nota: en desarrollo, la validación de "corsOptions" la debemos cambiar a :
+
+	if (whiteList.includes(origin) || !origin)
+
+Para permitir peticiones de Postman, pero solo en desarrollo, no para producción, o tambien podemos en postman añadir el header Origin manualmente en la pestaña Headers:
+
+1) Abre tu petición en Postman
+
+2) Ve a la pestaña Headers
+
+3) Añade una nueva fila:
+
+	Key: Origin
+	Value: http://localhost:3000 (o tu FRONTEND_URL)
+
+4) Envía la petición
+
+_______________________________________________________
+
+	[7.12]. Envio de Emails:
+_______________________________________________________
+
+Para que nuestro servidor pueda enviar correos electrónicos, es necesario instalar una libreria llamada "Nodemailer".
+
+SMTP (Protocolo Simple de Transferencia de Correo) es el protocolo estándar de internet para enviar correos electrónicos entre servidores, funcionando como un cartero electrónico que recoge el mensaje de tu cliente de correo y lo lleva al servidor del destinatario, quien luego lo entrega en su buzón para que pueda leerlo con otros protocolos como POP o IMAP. Define las reglas para la comunicación, la transferencia de datos y la entrega, permitiendo que distintos sistemas de correo se comuniquen entre sí. 
+
+1) Intalamos como dependencia "nodemailer":
+
+	pnpm i nodemailer
+
+2) Usar un servicio online como "Mailtrap", que recibira los correos de prueba de nuestra aplicación.
+
+	https://mailtrap.io/
+
+Para crear un "inbox" o bandeja de entrada en Mailtrap, solo necesitas crear una cuenta en Mailtrap; la plataforma te genera automáticamente un entorno de pruebas (Sandbox) con una bandeja de entrada para que empieces a capturar emails de prueba inmediatamente, solo debes copiar sus credenciales SMTP (Host, Puerto, Usuario, Contraseña) y configurarlas en tu aplicación. 
+
+Pasos para empezar con tu bandeja de entrada de Mailtrap:
+
+(1) Regístrate en Mailtrap: Visita Mailtrap y crea una cuenta gratuita.
+
+(2) Accede a tu Sandbox: Una vez dentro, ve a la sección de "Sandboxes" y selecciona "Mi Sandbox" (o crea uno nuevo).
+
+(3) Obtén las credenciales: Dentro de tu Sandbox, ve a la pestaña de "Integración" para encontrar tus credenciales SMTP (Host, Puerto, Usuario, Contraseña).
+
+(4) Configura tu aplicación: Usa estas credenciales en el archivo de configuración de tu aplicación (por ejemplo, .env en Laravel) para que tus emails de prueba se envíen a Mailtrap en lugar de a destinatarios reales.
+
+(5)Envía tu primer email: Lanza un email desde tu aplicación; aparecerá en tu bandeja de entrada de Mailtrap en segundos, listo para que lo revises (HTML, spam score, etc.).
+
+3) En nuestro archivo ".env", creamos las siguientes variables de entorno:
+
+	EMAIL_HOST=sandbox.smtp.mailtrap.io
+	EMAIL_PORT=587
+	EMAIL_USER=nombreUsuarioMailtrap
+	EMAIL_PASS=passwordMailtrap
+
+4) Creamos un helper, o archivo de utilidad para enviar los emails.
+
+Ejemplo: en este caso creamos el archivo "backend\helpers\emailRegistro.js":
+
+	import nodemailer from "nodemailer";
+
+	const emailRegistro = async(datos) =>{
+		const transporter = nodemailer.createTransport({
+			host: process.env.EMAIL_HOST,
+			port: process.env.EMAIL_PORT,
+			secure: false, // true for 465, false for other ports
+			auth: {
+				user: process.env.EMAIL_USER,
+				pass: process.env.EMAIL_PASS,
+			},
+		});
+
+		// Enviar email
+		const { email, nombre, token } = datos;
+
+		const info = await transporter.sendMail({
+			from: "APV - Administrador de Pacientes de Veterinaria",
+			to: email,
+			subject: "Confirma tu cuenta en APV",
+			text: "Confirma tu cuenta en APV",
+			html: `<p>Hola: ${nombre} Comprueba tu cuenta en APV</p>
+			<p>Tu cuenta ya está casi lista, solo debes comprobarla en el siguiente enlace:
+			<a href="${process.env.FRONTEND_URL}/confirmar/${token}">Comprobar Cuenta</a></p>
+			<p>Si tú no creaste esta cuenta, puedes ignorar este mensaje</p>`
+		});
+
+		console.log("Mensaje enviado: %s", info.messageId);
+
+	};
+
+	export default emailRegistro;
+
+Primero importamos "nodemailer", recibimos los datos a registrar(nombre, email, token). Con el método ".createTransport()" de "nodemailer" creamos un transportador con las credenciales SMTP.
+
+Con el método del transportador ".sendMail()", enviamos el correo.
+
+En este caso, en el cuerpo HTML del mensaje enviamos un enlace con el "token" que se creo al registrar el usuario, de esta forma en el momento en que el usuario haga click, redirige a la url con el "token" y confirma su cuenta.
+
+La variable de entorno "FRONTEND_URL" tambien es usada para la url de nuestro frontend.
+
+5) En  el controlador "backend\controllers\veterinarioController.js", importamos nuestro helper, y lo usamos enviandole los datos requeridos:
+
+	import emailRegistro from "../helpers/emailRegistro.js";
+
+	// ...existing code...
+
+	const registrar = async (req, res) => {
+		// console.log("Registrando veterinario...", req.body);
+		const { email, nombre } = req.body;
+		// Prevenir registros duplicados
+		const existeVeterinario = await Veterinario.findOne({ email });
+		if (existeVeterinario) {
+			const error = new Error("Usuario ya registrado");
+			return res.status(400).json({ msg: error.message });
+		}
+
+		try {
+			// Crear nuevo veterinario
+			const veterinario = new Veterinario(req.body);
+			const veterinarioGuardado = await veterinario.save();
+
+			// Enviar el email de confirmación
+			emailRegistro({
+				email,
+				nombre,
+				token: veterinarioGuardado.token,
+			});
+
+			res.json(veterinarioGuardado);
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({ msg: error.message });
+		}
+	};
+
+Enviamos el correo al momento de registrar el usuario, y justo despues de crearlo en la BD.
+
+Si en el frontend llenamos el formulario de registro y enviamos la petición al servidor, este último registrará el usuario en la BD y envirá el correo. En la aplicación web de Mailtrap podremos ver el correo enviado.
