@@ -1189,7 +1189,7 @@ _______________________________________________________
 
 Estos módulos CSS tienen la ventaja que las clases generan un hash, para que el nombre de la clase no colisione con la clase de otro componente, quedando más encapsulados los estilos.
 
-1) En la carpeta del componente, creamos un archivo con el mismo nombre del compoente:
+1) En la carpeta del componente, creamos un archivo con el mismo nombre del componente:
 
     NombreComponente.module.css
 
@@ -1753,6 +1753,10 @@ _______________________________________________________
 
 Otra forma de manejar estados globales y que esten disponibles para toda la aplicación, es creando un "Context", el cual tambien manejara un "Provider" (proveedor de datos u origen de los datos).
 
+Nota: para más info de que es un "context":
+
+    https://es.react.dev/learn/passing-data-deeply-with-context
+
 Ejemplo: Se va a crear un "Context" de autenticación:
 
 1) Creamos dentro de la carpeta "src" una carpeta llamada "context".
@@ -1887,6 +1891,10 @@ El método "useContext()", nos sirve para acceder a los valores de un "context".
 
         const navigate = useNavigate();
 
+        // Aca usamos el estado global "auth" y su "setter"
+        const { auth, setAuth } = useAuth();
+        // console.log("Auth: ", auth);
+
         const handleSubmit = async(e) => {
             e.preventDefault();
 
@@ -1900,16 +1908,14 @@ El método "useContext()", nos sirve para acceder a los valores de un "context".
                 const { data } = await clienteAxios.post("/veterinarios/login", { email, password });
                 // Almacenar el token en localStorage
                 localStorage.setItem("token", data.token);
+                // Actualizar el state de auth
+                setAuth(data);
                 // Redireccionar al admin
                 navigate("/admin");
             } catch (error) {
                 setAlerta({ msg: error.response.data.msg, error: true });
             }
-        };
-
-        // Aca usamos el estado global "auth" y su "setter" solo para el ejemplo, el componente no lo necesita
-        const { auth, setAuth } = useAuth();
-        // console.log("Auth: ", auth);
+        };        
 
         const { msg } = alerta;
 
@@ -1922,7 +1928,7 @@ El método "useContext()", nos sirve para acceder a los valores de un "context".
 
 En este componente de login, tenemos un formulario donde el usuario se loguea en nuestra app, ingresandom usuario y contraseña, la función "handleSubmit" se encarga del evento del "submit" del formulario. Verifica que no hayan campos vacios, y con el cliente axios, establece comunicación con el backend, si el usuario se loguea correectamente el backend nos retorna el "bearer token" que almacenamos en "localStorage". Y luego redireccionamos a las rutas protegidas para solo usuarios logueados (en este caso "/admin").
 
-Nota: recordar que para usar en cualquier otro componente, el estado global que creamos, solo necesitamos importar y usar nuestro custom hook:
+Nota 1: recordar que para usar en cualquier otro componente, el estado global que creamos, solo necesitamos importar y usar nuestro custom hook:
 
     import useAuth from "../hooks/useAuth";
 
@@ -1930,6 +1936,8 @@ Nota: recordar que para usar en cualquier otro componente, el estado global que 
 
     const { auth, setAuth } = useAuth();
     console.log("Auth: ", auth);
+
+Nota 2: En producción, en vez de almacenar el token en "localStorage", se recomienda utilizar cookies seguras y con HttpOnly activado para el almacenamiento de tokens de autenticación. Además, es importante tener en cuenta los riesgos de seguridad asociados con el almacenamiento de tokens de autenticación en el lado del cliente y tomar medidas para mitigarlos, como expiración de tokens, renovación de tokens y revocación de tokens en caso de que se detecten actividades sospechosas.
 
 _______________________________________________________
 

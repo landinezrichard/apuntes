@@ -12,12 +12,15 @@ INDICE:
 	[4.2]. Operador ternario
 	[4.3]. Switch
 	[4.4]. Optional chaining
+	[4.5]. Nullish coalescing operator
+	[4.6]. Evaluación de corto circuito
 [5]. Arrays
 	[5.1]. Acceso a los Elementos del Array
 	[5.2]. Recorrido Arrays
 		[5.2.1]. Recorrido con "forEach"
 		[5.2.2]. Recorrido con ".map"
 		[5.2.3]. Recorrido con ciclo "For In"
+	[5.3]. Destructuring de arrays
 [6]. Funciones
 	[6.0.1]. Parametros por default
 	[6.1]. Funciones Anónimas
@@ -461,6 +464,42 @@ Ahora tenemos otro objeto, pero si no hacemos una comprobación de si la propied
 
 	//console.log(pokemon2.movements.mov4); // undefined
 	console.log(pokemon2.movements?.mov4); // tambien undefined, pero no generaria error en caso de querer accceder a la propiedad que no existe
+_______________________________________________________
+
+	[4.5]. Nullish coalescing operator:
+_______________________________________________________
+
+Este operador logico retorna el operando del lado derecho, cuando el del lado izquierdo es "null" o "undefined":
+
+	const pagina = null ?? 1;
+
+En este caso "pagina" toma el valor de "1".
+
+Este operador permite asignar el valor de la derecha, en caso de que el de la izquierda sea "null" o "undefined"; si los valores de la izquierda son "0" ó "", los toma como correctos y los asigna a la variable.
+_______________________________________________________
+
+	[4.6]. Evaluación de corto circuito:
+_______________________________________________________
+
+La Evaluación de corto circuito o Funcionamiento por Operador, permite evaluar valores verdaderos y asignar valores o ejecutar código.
+
+- OR (||): Si el primer valor es verdadero (truthy), el motor de JavaScript devuelve ese valor inmediatamente y no evalúa el resto de la expresión.
+
+	const nombre = usuario.nombre || "Invitado";
+
+Si no existe "usuario.nombre", le asigna "Invitado".
+
+- AND (&&): Si el primer valor es falso (falsy), el resultado final será falso sin importar lo que siga, por lo que JavaScript detiene la evaluación y devuelve el primer valor.
+
+Este operador "&&" funciona como un condicional "if" sin su "else", evalua un valor verdadero, y en caso de serlo, ejecuta el codigo indicado despues del operador "&&".
+
+	const auth = true;
+
+	auth && console.log("Usuario Autenticado");
+
+Otro ejemplo:
+
+	logeado && mostrarPerfil();
 
 _______________________________________________________
 
@@ -591,6 +630,26 @@ Ejemplo:
 	for (i in dias){
 		alert(dias[i]);
 	}
+_______________________________________________________
+
+	[5.3]. Destructuring de arrays:
+_______________________________________________________
+
+El destructuring de arrays, se basa en su posición:
+
+	const tecnologias = ['HTML', 'CSS', 'JavaScript', 'React.js', 'Node.js'];
+
+	// Necesitamos extraer la tercera posición del array
+	// Sintaxis corta:
+
+	const react = tecnologias[3];
+
+	// Destructuring de arrays
+	const [ , , , reactjs] = tecnologgias;
+
+	console.log(reactjs);
+
+En este caso, como solo se requeria extraer la tercera posición, no se ponen nombres de las variables de las posiciones anteriores, pero es necesario dejar la coma(,) para indicar que se salta la posición.
 _______________________________________________________
 
 	[6]. Funciones:
@@ -2879,7 +2938,7 @@ Nota: Existen librerias que nos permiten formatear y trabajar con fechas de una 
 	- Luxon: https://moment.github.io/luxon/#/
 	- Day.js: https://day.js.org/
 
-Para vero otras librerias:
+Para ver otras librerias:
 
 	https://lenguajejs.com/javascript/fechas/date-fechas-nativas/#librer%C3%ADas-para-fechas
 
