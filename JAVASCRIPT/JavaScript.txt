@@ -933,6 +933,10 @@ _______________________________________________________
 	[6.7]. Funciones para Arrays:
 _______________________________________________________
 
+Algunas de estas funciones modifican(mutan) el array original, para ver que funciones mutan el array original ir a:
+
+	https://doesitmutate.xyz/
+
 ".length" --> indica la cantidad de elementos.
 
 ".concat()" --> concatena elementos de varios arrays.

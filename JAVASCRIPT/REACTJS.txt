@@ -70,6 +70,10 @@ INDICE:
     [2.14]. Memoization
         [2.14.1]. Recreación de funciones
         [2.14.2]. useMemo
+    [2.15]. Deps arguments en useEffect
+    [2.16]. React Concurrente
+        [2.16.1]. ErrorBoundary
+        [2.16.2]. Suspense
 
 _______________________________________________________
 
@@ -213,7 +217,6 @@ Nota 2: un archivo de JSX solo puede exportar una función.
             </>
         );
     }
-
 _______________________________________________________
 
 	[1.3]. State:
@@ -255,7 +258,11 @@ _______________________________________________________
 	[1.4]. Props:
 _______________________________________________________
 
-Los componentes de React, pueden tener propiedades, similares a los atributos HTML en una etiqueta, pero en React se llaman "props".
+Los componentes de React, pueden tener propiedades, para comunicarse entre ellos. Se le puede pasar información de un componente padre al hijo por medio de estos "props".
+
+Las "props" son similares a los atributos HTML en una etiqueta, pero se le pueden pasar arrays, objetos o funciones.
+
+Las "props" se pasan del padre al hijo, nunca se pueden pasar del hijo al padre.
 
 1) En el componente principal enviamos las props al componente hijo:
 
@@ -432,6 +439,42 @@ Podemos usar un ciclo "for" de siempre para generar la lista de ítems, pero lo 
 Nota: para más info del renderizado de listas ir a:
 
     https://es.react.dev/learn/rendering-lists
+
+- En resumen un componente de React tiene lo siguiente:
+
+    import modulos.
+
+    const NombreComponente = (props) => {
+
+        definición de Hooks
+
+        definición de statements
+
+        return (
+            elemento a renderizar
+            expressions de javascript
+        );
+    };
+
+    export default NombreComponente;
+
+Una app de JS es una serie de "statements", cada "statement" es una instrucción para hacer algo.
+
+Algunos "statements" son:
+
+ - Creación de variables.
+ - Código condicionales con "if".
+ - Lanzar errores con "throw New Error()"
+ - Iterar con "while" o "for".
+
+ En JavaScript una "expression" es algo que produce algún valor.
+
+ Algunas "expressions" son:
+
+ - Ternarios.
+ - Utilizar un array method que genere un nuevo array.
+ - ".map" que genera un nuevo array a diferencia de "forEach".
+
 
 _______________________________________________________
 
@@ -847,6 +890,7 @@ Nota: para más info ir a:
 
     https://es.legacy.reactjs.org/docs/hooks-rules.html
 
+Los hooks no se deben colocar dentro de condicionales, tampoco después de un "return".
 _______________________________________________________
 
 	[1.9.2]. Hook useEffect:
