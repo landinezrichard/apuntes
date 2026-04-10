@@ -23,6 +23,11 @@ INDICE:
             [1.9.4.1]. Manipulando el DOM con "useRef"
             [1.9.4.2]. Manipulando el DOM Custom Components
             [1.9.4.3]. Exponiendo metodos Custom Components
+        [1.9.5]. Hook useMemo
+        [1.9.6]. Hook useReducer
+            [1.9.6.1]. ¿Qué es un Reducer?
+            [1.9.6.2]. Cómo crear un Reducer
+            [1.9.6.3]. ¿Cuándo usar useReducer en lugar de useState?
     [1.10]. Estilos
         [1.10.1]. Estilos en Línea
         [1.10.2]. Hoja de estilos por componente
@@ -954,6 +959,18 @@ Nota: la extensión del archivo es ".js" y no ".jsx", ya que no retorna un compo
 
     export default usePokemonsData;
 
+4) Para usar el custom hook, se importa en el componente:
+
+    import { usePokemonsData } from "./hooks/usePokemonsData"
+
+    //... existing code
+
+    const { pokemons } = usePokemonsData();
+
+Nota: Cada vez que importamos y usamos el custom hook creado, se crea una nueva instancia de él, por lo que si necesitamos datos consistentes en varios componentes, lo mejor es hacer algunas de las siguientes opciones:
+
+    - usar el custom hook en un componente padre y pasar datos via "props" al componente hijo.
+    - usar alguna forma de tener estado global (redux, zustand, context, etc.).
 _______________________________________________________
 
 	[1.9.4]. Hooks "useRef":
@@ -1148,6 +1165,352 @@ Si puedes expresar algo como una prop, no deberias usar una ref. Por ejemplo, en
 Nota 2: para mas info del hook "useImperativeHandle" ir a:
 
     https://es.react.dev/reference/react/useImperativeHandle
+
+_______________________________________________________
+
+	[1.9.5]. Hook useMemo:
+_______________________________________________________
+
+El hook "useMemo" sirve para guardar en cache algunos valores o calculos realizados. Es un hook enfocado al performance de nuestra aplicación.
+
+    useMemo(() => valor, [dependencia]);
+
+"useMemo" solo recalcula o ejecuta la función que devielve "valor", en caso que el valor de lguna de sus dependencias(array) cambie.
+
+Ejemplo:
+
+    import { useMemo } from "react";
+
+    const isEmpty = useMemo(() => cart.length === 0, [cart]);
+    const cartTotal = useMemo(
+        () => cart.reduce((total, item) => total + item.price * item.quantity, 0),
+        [cart],
+    );
+
+En el primer ejemplo, comprobamos la longitud de "cart"(carrito), en este caso solo devuelve true o false, y la dependencia es el carrito indicado en el array "cart", hace que si el carrito cambia, se recalcule ese valor booleano.
+
+En el segundo ejemplo, utilizamos una función ".reduce", para calcular el total a pagar del carrito, nuevamente la dependencia es el carrito "cart", si cambia, se vuleve a recalcular el valor del total.
+
+_______________________________________________________
+
+	[1.9.6]. Hook useReducer:
+_______________________________________________________
+
+Es un hook para manejar el "state", es una alternativa a "useState" que se utiliza para manejar estados más complejos y transiciones de estado que involucran una lógica más complicada.
+
+"useReducer" es adecuado en situaciones donde el nuevo estado depende del estado anterior o cuando hay múltiples sub-valores o lógica condicional a considerar.
+
+    const [state, dispatch] = useReducer(reducer, initialState);
+
+Toma dos argumentos:
+
+ - "reducer" --> una función que toma el estado actual y una acción, y devuelve un nuevo estado.
+
+ - "initialState" --> el estado inicial del reducer, es similar a los valores de inicio de "useState". 
+
+Otros términos cuando se trabaja con "useReducer":
+
+ - "state" --> es el valor de estado cuya lógica se maneja dentro del reducer.
+
+ - "Actions" --> las acciones son las funciones que manejan toda la lógica para modificar el "state".
+
+ - "Payload" --> es la información que modifica el "state".
+
+ - "Dispatch" --> es la función que manda llamar la acción con el "payload".
+_______________________________________________________
+
+	[1.9.6.1]. ¿Qué es un Reducer?:
+_______________________________________________________
+
+Un Reducer es como pasar de manejar las cosas manualmente a tener un "centro de mando" organizado.
+
+Imagina que eres un chef. En lugar de que cada mesero entre a la cocina y mueva las ollas como quiera (eso sería el useState), tú pones una pizarra de pedidos. Los meseros solo pueden escribir "Hacer Pizza" o "Servir Pasta". Tú miras la pizarra y, según lo que dice, decides qué ingrediente añadir.
+
+En React:
+
+ - State: La situación actual (ej. cantidad: 0).
+
+ - Action: Un objeto que dice qué quieres hacer (ej. { type: 'INCREMENTAR' }).
+
+ - Reducer: La función "cerebro" que recibe el estado actual + la acción y devuelve el nuevo estado.
+_______________________________________________________
+
+	[1.9.6.2]. Cómo crear un Reducer:
+_______________________________________________________
+
+Para crear nuestro reducer, creamos en la carpeta "/src" la carpeta "reducers", y dentro de está el archivo del reducer "algo-reducer.ts".
+
+Primero definimos la función lógica (fuera del componente) y luego lo conectamos con el hook useReducer.
+
+Paso A: La función Reducer:
+
+Esta función siempre recibe dos cosas: el state actual y la action.
+
+    const miReducer = (state, action) => {
+        switch (action.type) {
+            case 'INCREMENTAR':
+                return { contador: state.contador + 1 };
+            case 'DECREMENTAR':
+                return { contador: state.contador - 1 };
+            case 'RESETEAR':
+                return { contador: 0 };
+            default:
+                return state; // Si no reconoce la acción, deja todo igual
+        }
+    };
+
+Paso B: Usar useReducer en tu componente:
+
+El hook useReducer te devuelve dos cosas: el estado y una función llamada "dispatch" (que es la que usas para enviar las órdenes).
+
+    import React, { useReducer } from 'react';
+
+    // Estado inicial
+    const valorInicial = { contador: 0 };
+
+    function Contador() {
+        // Conectamos el reducer
+        const [state, dispatch] = useReducer(miReducer, valorInicial);
+
+        return (
+            <div>
+                <h1>Cuenta: {state.contador}</h1>
+                
+                {/* "Despachamos" la orden al reducer */}
+                <button onClick={() => dispatch({ type: 'INCREMENTAR' })}>Sumar</button>
+                <button onClick={() => dispatch({ type: 'DECREMENTAR' })}>Restar</button>
+                <button onClick={() => dispatch({ type: 'RESETEAR' })}>Limpiar</button>
+            </div>
+        );
+    }
+
+Resumen:
+
+1) Define el estado inicial (un objeto).
+
+2) Crea el Reducer: Una función con un switch que decide qué pasa según el action.type.
+
+3) Usa dispatch: En tus botones o funciones, no cambias el estado directamente, sino que haces dispatch({ type: 'NOMBRE_ACCION' }).
+
+Es como un sistema de correos: tú (el componente) mandas una carta (la acción), el cartero (dispatch) la entrega, y la oficina central (reducer) actualiza los registros (estado).
+_______________________________________________________
+
+	[1.9.6.3]. ¿Cuándo usar useReducer en lugar de useState?:
+_______________________________________________________
+
+- Complejidad:
+
+    useState --> Ideal para datos simples (un string, un número).
+
+    useReducer --> Ideal para objetos complejos o muchos estados relacionados.
+
+- Lógica:
+
+    useState --> La lógica de cambio está en el evento (botón).
+
+    useReducer --> La lógica está centralizada en una sola función (el reducer).
+
+- Legibilidad:
+
+    useState --> Se ensucia si hay muchas funciones para cambiar el estado.
+
+    useReducer --> Muy limpio: solo envías una "orden" (dispatch).
+_______________________________________________________
+
+	[1.9.6.4]. Ejemplo "useReducer":
+_______________________________________________________
+
+En este ejemplo tenemos una app de calculadora de calorias, con un formulario donde ingresamos que atividad se realiza y cuantas calorias suman o disminuyen según la categoria de la actividad(comida o ejercicio).
+
+Usaremos el reducer para guardar el estado (array de actividades).
+
+1) Creamos en la carpeta "/src" la carpeta "reducers", y dentro de está el archivo del reducer "activity-reducer.ts":
+
+    import type { Activity } from "../types";
+
+    // Definición de los tipos de acciones para el reducer de actividades
+    export type ActivityActions = {
+        type: "save-activity";
+        payload: { newActivity: Activity };
+    };
+
+    // El tipo del estado inicial
+    type ActivityState = {
+        activities: Activity[];
+    };
+
+    // Estado inicial para el reducer de actividades
+    export const initialState: ActivityState = {
+        activities: [],
+    };
+
+    // Reducer para manejar las acciones relacionadas con las actividades
+    export const activityReducer = (
+        state: ActivityState = initialState,
+        action: ActivityActions,
+    ) => {
+        // Este código emaneja la lógica para actualizar el estado de las actividades según la acción recibida.
+        switch (action.type) {
+            case "save-activity":
+                return {
+                    ...state,
+                    activities: [...state.activities, action.payload.newActivity],
+                };
+        }
+    };
+
+Nota 1: acá definimos el tipo del estado inicial y de la actividad, ya que estamos usando TypeScript, lo que aumenta la complejidad del reducer.
+
+Nota 2: El tipo de la actividad que importamos al inicio (definido en "src\types\index.ts") es:
+
+    export type Activity = {
+        category: number;
+        name: string;
+        calories: number;
+    };
+
+2) En nuestro componente principal "App.tsx":
+
+    import { useReducer } from "react";
+
+    function App() {
+
+        const [state, dispatch] = useReducer(activityReducer, initialState);
+
+        return (
+            <>
+                <header className="bg-lime-600 py-3">
+                    <div className="max-w-4xl mx-auto flex justify-between">
+                    <h1 className="text-center text-white text-lg font-bold uppercase">Contador de Calorias</h1>
+                    </div>
+                </header>
+
+                <section className="bg-lime-500 py-20 px-5">
+                    <div className="max-w-4xl mx-auto">
+                    <Form 
+                        dispatch={dispatch}
+                    />
+                    </div>
+                </section>
+            </>
+        )
+    }
+
+    export default App
+
+Acá importamos "useReducer", conectamos el reducer, y mandamos por "props" el "dispatch" al componente hijo "Form".
+
+3) En el componente hijo "src\components\Form.tsx":
+
+    import { useState } from "react";
+    import type { ChangeEvent, SubmitEvent, Dispatch } from "react";
+    import { categories } from "../data/categories";
+    import type { Activity } from "../types";
+    import type { ActivityActions } from "../reducers/activity-reducer";
+
+    type FormProps = {
+        dispatch: Dispatch<ActivityActions>
+    }
+
+    export default function Form({ dispatch }: FormProps) {
+
+        const initialState = {
+            category: 1,
+            name: "",
+            calories: 0,
+        };
+
+        const [activity, setActivity] = useState<Activity>(initialState);
+
+        const handleChange = (
+            e: ChangeEvent<HTMLSelectElement | HTMLInputElement>,
+        ) => {
+            const isNumberField = ["category", "calories"].includes(e.target.id);
+            // console.log("isNumberField: ", isNumberField);
+            setActivity({
+                ...activity,
+                [e.target.id]: isNumberField ? Number(e.target.value) : e.target.value,
+            });
+        };
+
+        const isValidActivity = () => {
+            const { name, calories } = activity;
+            return name.trim() !== "" && calories > 0;
+        };
+
+        const handleSubmit = (e: SubmitEvent<HTMLFormElement>) => {
+            e.preventDefault();
+
+            dispatch({ type: "save-activity", payload: { newActivity: activity } });
+
+            // Reset form
+            setActivity(initialState);
+        };
+
+        return (
+            <form
+                className="space-y-5 bg-white shadow p-10 rounded-lg"
+                onSubmit={handleSubmit}
+            >
+                <div className="grid grid-cols-1 gap-3">
+                    <label className="font-bold" htmlFor="category">
+                        Categoria:
+                    </label>
+                    <select
+                        className="border border-slate-300 p-2 rounded-lg w-full bg-white"
+                        id="category"
+                        value={activity.category}
+                        onChange={handleChange}
+                    >
+                        {categories.map((category) => (
+                            <option key={category.id} value={category.id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+
+                <div className="grid grid-cols-1 gap-3">
+                    <label className="font-bold" htmlFor="name">
+                        Actividad:
+                    </label>
+                    <input
+                        className="border border-slate-300 p-2 rounded-lg w-full"
+                        type="text"
+                        id="name"
+                        placeholder="Ej. Comida, Jugo de NAranja, Ensalada, Ejercicio, Pesas, Bicicleta"
+                        value={activity.name}
+                        onChange={handleChange}
+                    />
+                </div>
+
+                <div className="grid grid-cols-1 gap-3">
+                    <label className="font-bold" htmlFor="calories">
+                        Calorias:
+                    </label>
+                    <input
+                        className="border border-slate-300 p-2 rounded-lg w-full"
+                        type="number"
+                        id="calories"
+                        placeholder="Calorias consumidas o quemadas. ej. 300 o 500"
+                        value={activity.calories}
+                        onChange={handleChange}
+                    />
+                </div>
+
+                <div className="text-center">
+                    <input
+                        className="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg cursor-pointer uppercase disabled:opacity-50 disabled:cursor-not-allowed"
+                        type="submit"
+                        value={
+                            activity.category === 1 ? "Guardar Comida" : "Guardar Ejercicio"
+                        }
+                        disabled={!isValidActivity()}
+                    />
+                </div>
+            </form>
+        );
+    }
 
 _______________________________________________________
 
