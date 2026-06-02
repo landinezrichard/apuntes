@@ -320,11 +320,11 @@ _______________________________________________________
 
 Podemos fusionar o absorber los cambios de una rama experimental, en nuestra rama principal "master". Un "merge" o fusion, lo que hace es crear un nuevo commit.
 
-1) Para hecer esto, primero nos ubicamos en la rama que va a absorber los cambios de la otra rama:
+1) Para hacer esto, primero nos ubicamos en la rama que va a absorber los cambios de la otra rama:
 
 	git checkout master
 
-2) Luego hacemos la fusión de la rama que vamos a absorver con:
+2) Luego hacemos la fusión de la rama que vamos a absorber con:
 
 	git merge nombreRama
 _______________________________________________________

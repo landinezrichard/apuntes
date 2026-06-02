@@ -28,6 +28,7 @@ INDICE:
             [1.9.6.1]. ¿Qué es un Reducer?
             [1.9.6.2]. Cómo crear un Reducer
             [1.9.6.3]. ¿Cuándo usar useReducer en lugar de useState?
+            [1.9.6.4]. Ejemplo "useReducer"
     [1.10]. Estilos
         [1.10.1]. Estilos en Línea
         [1.10.2]. Hoja de estilos por componente
@@ -1361,6 +1362,8 @@ Usaremos el reducer para guardar el estado (array de actividades).
 
 Nota 1: acá definimos el tipo del estado inicial y de la actividad, ya que estamos usando TypeScript, lo que aumenta la complejidad del reducer.
 
+En el tipo "ActivityActions", definimos el nombre de la acción("save-activity") similar al nombre de una función, y el "payload" es como definir los parámetros que reciben esa función, en este caso recibe una nueva actividad ("newActivity") de tipo "Activity".
+
 Nota 2: El tipo de la actividad que importamos al inicio (definido en "src\types\index.ts") es:
 
     export type Activity = {
@@ -1369,9 +1372,66 @@ Nota 2: El tipo de la actividad que importamos al inicio (definido en "src\types
         calories: number;
     };
 
+Nota 3: podemos definir más acciones en el reducer e indicar el tipo, con un solo caracter de OR(|):
+
+    export type ActivityActions =
+        | {
+            type: "save-activity";
+            payload: { newActivity: Activity };
+            }
+        | { type: "set-activeId"; payload: { activeId: Activity["id"] } }
+        | { type: "delete-activity"; payload: { activeId: Activity["id"] } }
+        | { type: "restart-app"; };
+
+    // ...existing code...
+
+    // Este código emaneja la lógica para actualizar el estado de las actividades según la acción recibida.
+    switch (action.type) {
+        case "save-activity":
+            let updatedActivities: Activity[] = [];
+            if (state.activeId) {
+                // Si hay un activeId, actualizamos la actividad existente en lugar de agregar una nueva
+                updatedActivities = state.activities.map((activity) =>
+                activity.id === state.activeId
+                    ? action.payload.newActivity
+                    : activity,
+                );
+            } else {
+                updatedActivities = [...state.activities, action.payload.newActivity];
+            }
+            return {
+                ...state,
+                activities: updatedActivities,
+                activeId: "",
+            };
+        case "set-activeId":
+            return {
+                ...state,
+                activeId: action.payload.activeId,
+            };
+        case "delete-activity":
+            return {
+                ...state,
+                activities: state.activities.filter(
+                (activity) => activity.id !== action.payload.activeId,
+                ),
+                activeId: "",
+            };
+        case "restart-app":
+            return {
+                activities: [],
+                activeId: "",
+            };
+        default:
+            return state;
+    }
+
+Como vemos al definir el tipo de las acciones, al igual que las funciones que no reciben parametros("restart-app"), no es necesario que tengan un "payload".
+
 2) En nuestro componente principal "App.tsx":
 
     import { useReducer } from "react";
+    import { activityReducer, initialState } from "./reducers/activity-reducer";
 
     function App() {
 
