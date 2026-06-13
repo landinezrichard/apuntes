@@ -440,6 +440,8 @@ Ese comando significa:
 
 	git push -u [alias] [rama]
 
+Nota: "-u" es la version corta de "--set-upstream"
+
 "origin" es el nombre predeterminado que recibe el repositorio remoto principal(el de Github) contra el que trabajamos. Cuando clonamos un repositorio por primera vez desde GitHub o cualquier otro sistema remoto, el nombre que se le da a ese repositorio "maestro" es precisamente "origin".
 
 De todos modos ese nombre se puede cambiar, y se pueden crear más remotos contra los que hacer "push".

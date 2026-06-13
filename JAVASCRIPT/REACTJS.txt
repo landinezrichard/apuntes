@@ -2329,7 +2329,7 @@ Luego con el cliente axios, intentamos establecer comunicación con el backend, 
 
 Acá, tenemos definidas las rutas de la app como componentes, importamos el "AuthProvider" y envolvemos nuestras rutas con él, esto hace que todas esas rutas pasen a ser la "prop" "children", dentro del "AuthProvider", y ademas, que los estados definidos en él, esten disponibles para todas las rutas hijas.
 
-4) Para poder obtener esos valores globales en los componentes, es necesario crear un custom hook, creamos la carpeta "hooks" y dentro el archivo "useAuth.jsx":
+4) Para poder obtener esos valores globales en los componentes, es necesario crear un custom hook, creamos la carpeta "hooks" y dentro el archivo "useAuth.js":
 
     import { useContext } from "react";
     import AuthContext from "../context/AuthProvider";
@@ -2393,7 +2393,7 @@ El método "useContext()", nos sirve para acceder a los valores de un "context".
 
     export default Login;
 
-En este componente de login, tenemos un formulario donde el usuario se loguea en nuestra app, ingresandom usuario y contraseña, la función "handleSubmit" se encarga del evento del "submit" del formulario. Verifica que no hayan campos vacios, y con el cliente axios, establece comunicación con el backend, si el usuario se loguea correectamente el backend nos retorna el "bearer token" que almacenamos en "localStorage". Y luego redireccionamos a las rutas protegidas para solo usuarios logueados (en este caso "/admin").
+En este componente de login, tenemos un formulario donde el usuario se loguea en nuestra app, ingresandom usuario y contraseña, la función "handleSubmit" se encarga del evento del "submit" del formulario. Verifica que no hayan campos vacios, y con el cliente axios, establece comunicación con el backend, si el usuario se loguea correctamente el backend nos retorna el "bearer token" que almacenamos en "localStorage". Y luego redireccionamos a las rutas protegidas para solo usuarios logueados (en este caso "/admin").
 
 Nota 1: recordar que para usar en cualquier otro componente, el estado global que creamos, solo necesitamos importar y usar nuestro custom hook:
 
