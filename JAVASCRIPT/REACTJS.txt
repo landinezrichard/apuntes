@@ -47,7 +47,8 @@ INDICE:
             [1.12.2.1]. Petición Post
             [1.12.2.2]. Crear URLBAse en Axios
     [1.13]. State Management
-        [1.13.1]. Context
+        [1.13.1]. Context API
+        [1.13.2]. Zustand
 [2]. Proyecto
     [2.0]. Instalación con Vite
         [2.0.1]. Extensión Navegador
@@ -2215,7 +2216,7 @@ Los manejadores de estado más usados en React son:
 
 _______________________________________________________
 
-	[1.13.1]. Context:
+	[1.13.1]. Context API:
 _______________________________________________________
 
 Otra forma de manejar estados globales y que esten disponibles para toda la aplicación, es creando un "Context", el cual tambien manejara un "Provider" (proveedor de datos u origen de los datos).
@@ -2405,6 +2406,150 @@ Nota 1: recordar que para usar en cualquier otro componente, el estado global qu
     console.log("Auth: ", auth);
 
 Nota 2: En producción, en vez de almacenar el token en "localStorage", se recomienda utilizar cookies seguras y con HttpOnly activado para el almacenamiento de tokens de autenticación. Además, es importante tener en cuenta los riesgos de seguridad asociados con el almacenamiento de tokens de autenticación en el lado del cliente y tomar medidas para mitigarlos, como expiración de tokens, renovación de tokens y revocación de tokens en caso de que se detecten actividades sospechosas.
+
+Nota 3: La "Context API" se usa junto a los "Reducer" y los "Custom hooks" para manejar el estado global de una forma más simple.
+
+_______________________________________________________
+
+	[1.13.2]. Zustand:
+_______________________________________________________
+
+Zustand es una dependencia para manejar un estado global. Su API es muy sencilla y se puede utilizar con JS y TS.
+
+Para más info ir a:
+
+    https://www.npmjs.com/package/zustand
+
+    https://github.com/pmndrs/zustand
+
+1) Instalamos "Zustand":
+
+    pnpm i zustand
+
+2) Se puede guardar el "store" en la carpeta "src", o dentro de esta crear otra carpeta llamada "store".
+_______________________________________________________
+
+	Creando el Store de Zustand:
+_______________________________________________________
+
+3) Creamos el archivo "store.ts":
+
+    import { create } from "zustand";
+    import type { Patient } from "./types";
+
+    type PatientState = {
+        patients: Patient[];
+    };
+
+    export const usePatientStore = create<PatientState>(() => ({
+        patients: [],
+    }));
+
+En este caso el "type Patient" que importamos, es porque se esta usando "TypeScript", de la misma forma se define el tipo "PatientState" y se pasa como "generic" en la función "create" de Zustand.
+
+"create" recibe como parametro una función flecha y retorna un objeto con toda la información y/o funciones que vamos a usar en los componentes.
+
+Nota: en la función flecha de "create", primero vienen los parentesis y luego las llaves: 
+
+    ({})
+
+Los paréntesis () le dicen a JavaScript: "esto NO es un bloque de código, es una expresión que quiero retornar". Es return implícito sin escribir la palabra return.
+
+En si, esto es una convención del lenguaje (JS).
+
+({}) es más corto y directo que return {} es decir proporciona legibilidad.
+
+También es el patrón estándar en React/Next.js moderno para retornar JSX u objetos.
+
+_______________________________________________________
+
+	Definiendo acciones en el Store de Zustand:
+_______________________________________________________
+
+Al igual que se hacia con el hook "useReducer", podemos definir acciones(funciones) en Zustand:
+
+    import { create } from "zustand";
+    import type { DraftPatient, Patient } from "./types";
+
+    type PatientState = {
+        patients: Patient[];
+        addPatient: (data: DraftPatient) => void;
+    };
+
+    export const usePatientStore = create<PatientState>(() => ({
+        patients: [],
+        addPatient: (data: DraftPatient) => {
+            console.log(data);
+        },
+    }));
+
+En este caso definimos la acción "addPatient", que recibe como parametro "data", que es de tipo "DraftPatient" (igual que "Patient" pero sin "id"), y no retorna nada ("void").
+
+De momento "addPatient" solo imprime en consola la "data" del paciente.
+
+4) Ahora importamos y usamos nuestro "store" en el componente que se requiera:
+
+    import { usePatientStore } from "../store";
+
+    export default function PatientForm() {
+        const { addPatient } = usePatientStore();
+
+        const {
+            register,
+            handleSubmit,
+            formState: { errors },
+        } = useForm<DraftPatient>();
+
+        const registerPatient = (data: DraftPatient) => {
+            // console.log("Data formulario paciente: ", data);
+            addPatient(data);
+        };
+
+        // ...existing code...
+    }
+
+Nota: acá usamos destructuring para la acción "addPatient", otra forma de hacer lo mismo es la siguiente:
+
+    const addPatient = usePatientStore(state => state.addPatient);
+
+Si en vez de usar la acción, queremos obtener el estado "patients"(array):
+
+    const patients = usePatientStore(state => state.patients);
+_______________________________________________________
+
+	Escribiendo en el estado de Zustand:
+_______________________________________________________
+
+Para poder escribir en el estado de Zustand, es necesario que la función "create" reciba como parámetro "set".
+
+    import { create } from "zustand";
+    import { v4 as uuidv4 } from "uuid";
+    import type { DraftPatient, Patient } from "./types";
+
+    type PatientState = {
+        patients: Patient[];
+        addPatient: (data: DraftPatient) => void;
+    };
+
+    const createPatient = (patient: DraftPatient): Patient => {
+        return { ...patient, id: uuidv4() };
+    };
+
+    export const usePatientStore = create<PatientState>((set) => ({
+        patients: [],
+        addPatient: (data: DraftPatient) => {
+            const newPatient = createPatient(data);
+            set((state) => ({
+                patients: [...state.patients, newPatient],
+            }));
+        },
+    }));
+
+La función "set", recibe una función flecha que retorna los objetos con las variables a setear, en este caso hace una copia de lo que ya tenga el array de "patients" en el estado, y le agrega el nuevo paciente, despues de asignarle un "id".
+
+Nota: en la función flecha de "set", primero vienen los parentesis y luego las llaves, ya que es return implícito: 
+
+    ({})
 
 _______________________________________________________
 
@@ -2872,7 +3017,7 @@ Como la función manejadora del padre recibe como parámetro el "id", donde asig
 
     export default EventItem;
 
-En este caso creamos la función "handleSeeMoreClick", que recibe el paramentro "event", para evitar el "event bubbling", y no se haga click tambien en el padre.
+En este caso creamos la función "handleSeeMoreClick", que recibe el parametro "event", para evitar el "event bubbling", y no se haga click tambien en el padre.
 
 _______________________________________________________
 
@@ -3721,7 +3866,7 @@ Vamos a implementar Zustand como "State Management", a diferencia de Redux, que 
     export default useEventsResults;
 
 
-La forma en como definmimos el store de Zustand es como un hook, igual que el que ya se habia definido "useEventsData", pero a diferencia de ese, no gurda la data a nivel local(componente) sino global (toda la app).
+La forma en como definimos el store de Zustand es como un hook, igual que el que ya se habia definido "useEventsData", pero a diferencia de ese, no guarda la data a nivel local(componente) sino global (toda la app).
 
 "create" recibe como parametro una función flecha que recibe "set" y retorna un objeto con toda la información y/o funciones que vamos a usar en los componentes.
 
