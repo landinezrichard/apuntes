@@ -49,6 +49,8 @@ INDICE:
     [1.13]. State Management
         [1.13.1]. Context API
         [1.13.2]. Zustand
+            [1.13.2.1]. Inspeccionar el "store" en Zustand
+            [1.13.2.2]. Guardar "store" en Zustand
 [2]. Proyecto
     [2.0]. Instalación con Vite
         [2.0.1]. Extensión Navegador
@@ -2550,6 +2552,71 @@ La función "set", recibe una función flecha que retorna los objetos con las va
 Nota: en la función flecha de "set", primero vienen los parentesis y luego las llaves, ya que es return implícito: 
 
     ({})
+
+_______________________________________________________
+
+	[1.13.2.1]. Inspeccionar el "store" en Zustand:
+_______________________________________________________
+
+1) Para inspeccionar en el navegador el "store" en Zustand, buscamos e instalamos una extensión llamada:
+
+    Redux DevTools
+
+2) En nuestro archivo "store.ts", importamos y usamos los "devtools":
+
+    import { devtools } from "zustand/middleware";
+
+    //...existing code...
+
+    export const usePatientStore = create<PatientState>()(
+        devtools((set) => ({
+            patients: [],
+            activeId: "",
+            addPatient: (data) => {
+            const newPatient = createPatient(data);
+                set((state) => ({
+                    patients: [...state.patients, newPatient],
+                }));
+            },
+            deletePatient: (id) => {
+                set((state) => ({
+                    patients: state.patients.filter((patient) => patient.id !== id),
+                }));
+            },
+            getPatientById: (id) => {
+                set(() => ({
+                    activeId: id,
+                }));
+            },
+        })),
+    );
+
+Nota: lo que se añadio al momento de crear el "store" es ()(devtools())
+
+3) En el navegador, abrimos el inspector de elementos y buscamos otra opción (como consola, red, aplicación, etc.) llamada "Redux".
+
+_______________________________________________________
+
+	[1.13.2.2]. Guardar "store" en Zustand:
+_______________________________________________________
+
+Para que el estado persista, podemos guardarlo en "localStorage" o "sessionStorage" con el middleware "persist":
+
+    import { persist } from "zustand/middleware";
+
+    const nextStateCreatorFn = persist(stateCreatorFn, persistOptions)
+
+En donde:
+
+- "stateCreatorFn" --> Una función que toma como argumentos la función "set", la función "get" y el "store" como argumentos. Normalmente, devolverá un objeto con los métodos que desea exponer. 
+
+- "persistOptions" --> Un objeto para definir opciones de almacenamiento.
+
+Zustand ya se encarga de cargar el "store" almacenado en "localStorage" o "sessionStorage", por lo que es muy facil usarlo.
+
+Para más info ir a:
+
+    https://zustand.docs.pmnd.rs/reference/middlewares/persist#persist
 
 _______________________________________________________
 
