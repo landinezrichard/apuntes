@@ -106,6 +106,7 @@ INDICE:
 		[9.2.4].transition-delay
 	[9.3]. Animaciones Avanzadas
 [10]. Responsive Web Design
+	[10.1]. Media Queries en Sintaxis de Rangos
 [11]. Función calc()
 
 _______________________________________________________
@@ -3292,6 +3293,20 @@ Nota: Los puntos de corte para poner media queries que yo uso son:
 	1280px
 	1440px
 	1600px
+_______________________________________________________
+
+	[10.1]. Media Queries en Sintaxis de Rangos:
+_______________________________________________________
+
+La sintaxis de rangos reemplaza "min-width" y "max-width" por operadores de comparación estándar.
+
+Antes:
+
+	@media (min-width: 600px) and (max-width: 1200px) { /* Estilos */ }
+
+Ahora:
+
+	@media (width >= 600px) and (width <= 1200px) { /* Estilos */ }
 _______________________________________________________
 
 	[11]. Función calc():
