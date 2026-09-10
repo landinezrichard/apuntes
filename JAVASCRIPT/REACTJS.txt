@@ -52,6 +52,12 @@ INDICE:
         [1.13.2]. Zustand
             [1.13.2.1]. Inspeccionar el "store" en Zustand
             [1.13.2.2]. Guardar "store" en Zustand
+    [1.14]. React con TypeScript
+        [1.14.1]. Tipar Resultados API
+            [1.14.1.1]. Castear el resultado
+            [1.14.1.2]. Type Guard o Assertion
+            [1.14.1.3]. Libreria ZOD
+            [1.14.1.4]. Libreria Valibot
 [2]. Proyecto
     [2.0]. Instalación con Vite
         [2.0.1]. Extensión Navegador
@@ -2660,6 +2666,228 @@ Para más info ir a:
 
 _______________________________________________________
 
+	[1.14]. React con TypeScript:
+_______________________________________________________
+
+_______________________________________________________
+
+	[1.14.1]. Tipar Resultados API:
+_______________________________________________________
+
+Muchas veces cuando hacemos el llamado a una API, esta nos retorna datos, los cuales si no tipamos, serian de tipo "any", para que esto no suceda, existen las siguientes opciones:
+
+- Castear el resultado.
+- Usar "Type Guards".
+- Validar con libreria ZOD.
+- Validar con libreria Valibot.
+_______________________________________________________
+
+	[1.14.1.1]. Castear el resultado:
+_______________________________________________________
+
+1) Para Castear el resultado, en el archivo de tipos "/types/index.ts", definimos el tipo según el resultado que nos devuelva la API:
+
+    export type Weather = {
+        name: string;
+        main: {
+            temp: number;
+            temp_min: number;
+            temp_max: number;
+        };
+    };
+
+En este caso, los tipos los definimos nosotros, dependiendo de los datos que se quieran usar y según lo que nos devuelva la API:
+
+    {
+        "coord": {
+            "lon": -115.1484,
+            "lat": 36.1673
+        },
+        "weather": [
+            {
+                "id": 802,
+                "main": "Clouds",
+                "description": "scattered clouds",
+                "icon": "03d"
+            }
+        ],
+        "base": "stations",
+        "main": {
+            "temp": 310.1,
+            "feels_like": 309.07,
+            "temp_min": 309.01,
+            "temp_max": 311.29,
+            "pressure": 1012,
+            "humidity": 23,
+            "sea_level": 1012,
+            "grnd_level": 941
+        },
+        "visibility": 10000,
+        "wind": {
+            "speed": 3.09,
+            "deg": 30
+        },
+        "clouds": {
+            "all": 42
+        },
+        "dt": 1788912161,
+        "sys": {
+            "type": 1,
+            "id": 6171,
+            "country": "US",
+            "sunrise": 1788873470,
+            "sunset": 1788919141
+        },
+        "timezone": -25200,
+        "id": 5506956,
+        "name": "Las Vegas",
+        "cod": 200
+    }
+
+2) Luego donde estemos haciendo el llamado a la API (en este caso el hook "/hooks/useWeather.ts"), asignamos el tipo a la respuesta via "generic":
+
+    import type { SearchType, Weather } from "../types";
+
+    //...existing code...
+
+    const { data: weatherData } = await axios<Weather>(weatherUrl);
+    console.log(weatherData.main.temp);
+
+Nota: al castear la respuesta de la API, estamos forzando a que tenga el tipo de datos que definimos.
+
+_______________________________________________________
+
+	[1.14.1.2]. Type Guard o Assertion:
+_______________________________________________________
+
+Este método es muy parecido al cateo, sin embargo este comprueba el tipo de datos de la respuesta de la API.
+
+1) repetimos el paso #1 del "Casteo".
+
+2) Donde estemos haciendo el llamado a la API (en este caso el hook "/hooks/useWeather.ts"), importamos el tipo definido, y creamos una función, encargada de verificar los tipos de la respuesta de la API:
+
+    import type { SearchType, Weather } from "../types";
+
+    function isWeatherResponse(weather: unknown): weather is Weather {
+        return (
+            Boolean(weather) &&
+            typeof weather === "object" &&
+            typeof (weather as Weather).name === "string" &&
+            typeof (weather as Weather).main.temp === "number" &&
+            typeof (weather as Weather).main.temp_min === "number" &&
+            typeof (weather as Weather).main.temp_max === "number"
+        )
+    }
+
+    //...existing code...
+
+    const { data: weatherData } = await axios(weatherUrl);
+    const result = isWeatherResponse(weatherData);
+    if(result) {
+        console.log(weatherData.name);
+    } else {
+        console.log('Respuesta mal formada de la API');
+    }
+
+Nota: lo malo de usar "Type Guard", es que el código se vuelve muy dificil de mantener entre más datos obtengamos de la API.
+_______________________________________________________
+
+	[1.14.1.3]. Libreria ZOD:
+_______________________________________________________
+
+ZOD es una libreria para la validación de esquemas(schemas) basada en TypeScript con inferencia de tipos estática.
+
+1) Instalamos la libreria "zod":
+
+    pnpm i zod
+
+2) Donde estemos haciendo el llamado a la API (en este caso el hook "/hooks/useWeather.ts"), importamos la libreria "zod", y definimos el "schema":
+
+    import { z } from "zod";
+
+    // Schema ZOD
+    const Weather = z.object({
+        name: z.string(),
+        main: z.object({
+            temp: z.number(),
+            temp_min: z.number(),
+            temp_max: z.number(),
+        }),
+    });
+
+    type Weather = z.infer<typeof Weather>;
+
+    //...existing code...
+
+    const { data: weatherData } = await axios(weatherUrl);
+      
+    const result = Weather.safeParse(weatherData);
+    if(result.success) {
+        console.log(result.data.name);
+        console.log(result.data.main.temp);
+    } else {
+        console.log('Respuesta mal formada de la API');
+    }
+
+Al usar ZOD, ya no es necesario definir el tipo de datos en el archivo "/types/index.ts", en vez de eso, definimos el "schema" con los metodos de la librería.
+
+Con:
+
+    type Weather = z.infer<typeof Weather>;
+
+Inferimos el tipo de datos de nuestro "schema".
+
+Y con:
+
+    Weather.safeParse(weatherData)
+
+Verificamos los tipos de datos que nos devuelve la API, que es lo mismo que haciemos en la función "isWeatherResponse()" de los "Type Guards".
+
+_______________________________________________________
+
+	[1.14.1.4]. Libreria Valibot:
+_______________________________________________________
+
+Valibot es una libreria de esquemas (schemas) modular y con seguridad de tipos para validar datos estructurales. A diferencia de ZOD, que puede llegar a ser un poco pesada, Valibot es mas liviana.
+
+1) Instalamos "valibot":
+
+    pnpm i valibot
+
+2) Donde estemos haciendo el llamado a la API (en este caso el hook "/hooks/useWeather.ts"), importamos los modulos que necesitemos de "valibot":
+
+    import { object, string, number, type InferOutput, parse } from "valibot";
+
+    // Schema Valibot
+    const WeatherSchema = object({
+        name: string(),
+        main: object({
+            temp: number(),
+            temp_min: number(),
+            temp_max: number(),
+        }),
+    });
+
+    type Weather = InferOutput<typeof WeatherSchema>;
+
+    //...existing code...
+
+    const { data: weatherData } = await axios(weatherUrl);
+      
+    const result = parse(WeatherSchema, weatherData);
+    if(result) {
+        console.log(result.name);
+        console.log(result.main.temp);
+    }
+
+Acá, solo importamos los tipos y funciones que necesitemos. Para inferir los tipod dde datos del "schema" usamos el tipo "InferOutput", y para verificar el tipo de datos que nos retorna la API usamos la función "parse(schema, dataAPI)".
+
+Es muy similar a ZOD, pero modular.
+
+Nota: en el "if(result)", no tenemos un else, ya que "valibot" genera un error(throw new Error() ).
+
+_______________________________________________________
+
 	[2]. Proyecto:
 _______________________________________________________
 
@@ -3919,7 +4147,13 @@ Para no exponer datos sensibles como la "apikey", vamos a crear y usar variables
 
     VITE_TICKETMASTER_API_KEY=TUAPIKEY
 
-Nota: es necesario el prefijo "VITE", para que "Vite" nos permita leer la variable de entorno y no nos aparezca un error de cors en consola.
+Nota 1: es necesario el prefijo "VITE", para que "Vite" nos permita leer la variable de entorno y no nos aparezca un error de cors en consola.
+
+Nota 2: si queremos que el archivo ".env" sea ignorado por Git, podemos nombrarlo ".env.local"
+
+Para más info de la variables de entorno en VITE:
+
+    https://vite.dev/guide/env-and-mode
 
 2) En los hooks o componentes donde usemos la "apikey", obtenemos y usamos la variable de entorno creada:
 
