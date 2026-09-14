@@ -36,6 +36,8 @@ INDICE:
         [1.10.3]. Módulos CSS
     [1.11]. Routing
         [1.11.1]. Configurando Routing
+            [1.11.1.1]. Modo Declarativo
+            [1.11.1.2]. Modo Data
         [1.11.2]. Rutas Inexistentes
         [1.11.3]. Parámetros en las Rutas
             [1.11.3.1]. Obtener valor parámetros URL
@@ -1766,24 +1768,88 @@ La forma en como funcionan las rutas, podemos imaginarlas como una pila de libro
 
 Tambien lo podemos ver como un array, en donde vamos haciendo push(añadir a la pila), y si le damos "atras" en el navegador, hariamos pop del array (eliminar el ultimo elemento).
 
-Para el Routing, usaremos la libreria "React Router":
+Para el Routing, usaremos la libreria "React Router Dom":
 
-    https://reactrouter.com/en/main
+    https://reactrouter.com/
 
 Esto usa Client Side Routing, que hace que en vez de recargar toda la pagina, permite que la aplicación actualice la URL a partir de un clic en un enlace sin realizar otra solicitud de otro documento desde el servidor. En cambio, la aplicación puede representar inmediatamente una nueva interfaz de usuario y realizar solicitudes de datos con "fetch" para actualizar la página con nueva información.
+
+1) Instalamos la dependencia con el comando:
+
+    npm install react-router-dom
 
 _______________________________________________________
 
 	[1.11.1]. Configurando Routing:
 _______________________________________________________
 
-1) Instalamos la dependencia con el comando:
+Nota: Existen 3 formas o modos diferentes de usar "React Router Dom":
 
-    npm install react-router-dom
+- Declarativa: permite funciones básicas de enrutamiento, como la coincidencia de URL con componentes, la navegación por la aplicación y la provisión de estados activos con API como <Link>, useNavigate y useLocation.
 
-2) Dentro de "/src", creamos la carpeta "routes".
+- Data: Al trasladar la configuración de rutas fuera del renderizado de React, Data Mode añade carga de datos, acciones, estados pendientes y más con API como loader, action y useFetcher.
 
-3) Dentro de "/routes" creamos el archivo "index.jsx":
+- Framework: Framework Mode envuelve Data Mode con un plugin de Vite para añadir la experiencia completa de React Router con: href con tipado seguro, API de módulo de ruta con tipado seguro, división de código inteligente, estrategias de SPA, SSR y renderizado estático, y mucho más.
+
+_______________________________________________________
+
+	[1.11.1.1]. Modo Declarativo:
+_______________________________________________________
+
+1) Dentro de "/src", creamos una carpeta llamada "views" o "pages".
+
+2) Dentro de "/views", creamos un archivo de componente por cada ruta que se quiera.
+
+Por ejemplo, creamos in archivo para el inicio, y otro para la página de favoritos:
+
+ - IndexPage.jsx
+ - FavoritesPage.jsx
+
+Ejemplo código "IndexPage.jsx":
+
+    export default function IndexPage() {
+        return (
+            <div>IndexPage</div>
+        )
+    }
+
+3) Dentro de "/src", creamos un archivo llamado "router.jsx", o puede ser dentro del mismo "App.jsx":
+
+    import { BrowserRouter, Routes, Route } from "react-router-dom";
+    import IndexPage from "./views/IndexPage";
+    import FavoritesPage from "./views/FavoritesPage";
+
+    export default function AppRouter() {
+        return (
+            <BrowserRouter>
+            <Routes>
+                <Route path="/" element={<IndexPage />} />
+                <Route path="/favoritos" element={<FavoritesPage />} />
+            </Routes>
+            </BrowserRouter>
+        )
+    }
+
+Nota; si se borro el archivo "App.jsx" y se creo el archivo "router.jsx", es necesario importar este ultimo en el archivo principal "main.jsx":
+
+    import RouterApp from "./router.jsx";
+
+    createRoot(document.getElementById("root")!).render(
+        <StrictMode>
+            <RouterApp />
+        </StrictMode>,
+    );
+
+4) Probamos las rutas creadas en el navegador.
+
+_______________________________________________________
+
+	[1.11.1.2]. Modo Data:
+_______________________________________________________
+
+1) Dentro de "/src", creamos la carpeta "routes".
+
+2) Dentro de "/routes" creamos el archivo "index.jsx":
 
     import {
         createBrowserRouter,
@@ -1817,9 +1883,9 @@ Cada objeto de la ruta, tiene dos llaves: el "path", con la ruta y el "element" 
 
 Tenemos "MyRoutes", que tiene el código base de cualquier modulo o componente. en este caso retorna el componente "RouterProvider", al que le pasamos como atributo la constante "router".
 
-4) Lo ideal es que en la key "element" de cada objeto de la ruta le pasemos el componente de la vista o página a renderizar. Para esto creamos dentro de "/src" una carpeta llamada "views" o "pages" (a elección del desarrollador).
+3) Lo ideal es que en la key "element" de cada objeto de la ruta le pasemos el componente de la vista o página a renderizar. Para esto creamos dentro de "/src" una carpeta llamada "views" o "pages" (a elección del desarrollador).
 
-5) En la carpeta "/views", creamos las carpetas "Home" y "Detail" con sus respectivos archivos "index.jsx" para sus componentes:
+4) En la carpeta "/views", creamos las carpetas "Home" y "Detail" con sus respectivos archivos "index.jsx" para sus componentes:
 
     - En "src\views\Home\index.jsx":
 
@@ -1841,7 +1907,7 @@ Tenemos "MyRoutes", que tiene el código base de cualquier modulo o componente. 
 
         export default Detail;
 
-6) Importamos y usamos los componentes en el router:
+5) Importamos y usamos los componentes en el router:
 
     import Home from "../views/Home";
     import Detail from "../views/Detail";
@@ -1857,7 +1923,7 @@ Tenemos "MyRoutes", que tiene el código base de cualquier modulo o componente. 
         },
     ]);
 
-7) Importamos en el archivo "src\App.jsx" nuestro componente router:
+6) Importamos en el archivo "src\App.jsx" nuestro componente router:
 
     import Routes from './routes';
 
@@ -1867,7 +1933,7 @@ Tenemos "MyRoutes", que tiene el código base de cualquier modulo o componente. 
 
     export default App
 
-8) Probamos las rutas creadas en el navegador.
+7) Probamos las rutas creadas en el navegador.
 
 _______________________________________________________
 
