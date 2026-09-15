@@ -38,12 +38,13 @@ INDICE:
         [1.11.1]. Configurando Routing
             [1.11.1.1]. Modo Declarativo
             [1.11.1.2]. Modo Data
-        [1.11.2]. Rutas Inexistentes
-        [1.11.3]. Parámetros en las Rutas
-            [1.11.3.1]. Obtener valor parámetros URL
-        [1.11.4]. Navegación entre Rutas con Link
-        [1.11.5]. Navegación entre Rutas con "useNavigate"
-        [1.11.6]. Rutas Anidadas
+        [1.11.2]. Layouts
+        [1.11.3]. Rutas Inexistentes
+        [1.11.4]. Parámetros en las Rutas
+            [1.11.4.1]. Obtener valor parámetros URL
+        [1.11.5]. Navegación entre Rutas con Link
+        [1.11.6]. Navegación entre Rutas con "useNavigate"
+        [1.11.7]. Rutas Anidadas
     [1.12]. Comunicación con el Backend
         [1.12.1]. fetch
         [1.12.2]. Axios
@@ -1937,7 +1938,56 @@ Tenemos "MyRoutes", que tiene el código base de cualquier modulo o componente. 
 
 _______________________________________________________
 
-	[1.11.2]. Rutas Inexistentes:
+	[1.11.2]. Layouts:
+_______________________________________________________
+
+Podemos tener "Layouts" (contenido de plantilla que se reutiliza en diferentes rutas).
+
+1) Dentro de "/src", creamos la carpeta "layouts".
+
+2) Dentro de la carpeta "/layouts", creamos el archivo "Layout.jsx":
+
+    import { Outlet } from "react-router-dom";
+    import Header from "../components/Header";
+
+    export default function Layout() {
+        return (
+            <>
+                <Header />
+
+                <main className="container mx-auto py-16">
+                    <Outlet />
+                </main>
+            </>
+        );
+    }
+
+En esta plantilla, que tiene la misma estructura de un componente, importamos y usamos todos los componentes que se van a reutilizar en las diferentes rutas o páginas, en este caso reutilizaremos el "Header",
+
+El contenido de cada ruta o página, aparece en donde coloquemos el componente "Outlet", que en este caso esta encerrado en una etiqueta "main".
+
+3) En nuestro archivo de rutas "router.jsx", importamos y usamos nuestro componente "Layout", en un componente de "Route", que no se autocierra, sino que tiene etiqueta de cierre aparte, y rodea los otros componentes de "Route" que van a usar la plantilla o el layout: 
+
+    import Layout from "./layouts/Layout";
+
+    export default function AppRouter() {
+        return (
+            <BrowserRouter>
+                <Routes>
+                    <Route element={<Layout />}>
+                        <Route path="/" element={<IndexPage />} />
+                        <Route path="/favoritos" element={<FavoritesPage />} />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
+        );
+    }
+
+Nota: esta forma de ver "Route" como componente, es sí estamos usando la forma declarativa de configurar el router.
+
+_______________________________________________________
+
+	[1.11.3]. Rutas Inexistentes:
 _______________________________________________________
 
 Podemos configurar una ruta para errores 404.
@@ -1985,7 +2035,7 @@ Para probar nuestra ruta 404, en el navegador escribimos:
 
 _______________________________________________________
 
-	[1.11.3]. Parámetros en las Rutas:
+	[1.11.4]. Parámetros en las Rutas:
 _______________________________________________________
 
 Para poder recibir en la ruta parametros de forma dinamica, definimos el "path" de la ruta de la siguiente manera:
@@ -2006,7 +2056,7 @@ Ahora si accedemos a "/detail", nos renderiza el componente de Error404. Ahora e
 
 _______________________________________________________
 
-	[1.11.3.1]. Obtener valor parámetros URL:
+	[1.11.4.1]. Obtener valor parámetros URL:
 _______________________________________________________
 
 Para obtener los valores de los parámetros enviados por la URL, en el componente que renderiza la ruta con el parametro, usamos el hook "useParams":
@@ -2028,7 +2078,7 @@ Para obtener los valores de los parámetros enviados por la URL, en el component
 Nota: acá desestructuramos "eventId", que debe coincidir con el parametro definido en el router.
 _______________________________________________________
 
-	[1.11.4]. Navegación entre Rutas con Link:
+	[1.11.5]. Navegación entre Rutas con Link:
 _______________________________________________________
 
 Para crear links que nos sirvan para navegar entre las rutas que creamos, importamos y usamos el componente "Link" de nuestra libreria de router:
@@ -2047,7 +2097,7 @@ Nota: En este caso la variable "id", la concatenamos a "/detail/", para navegar 
 
 _______________________________________________________
 
-	[1.11.5]. Navegación entre Rutas con "useNavigate":
+	[1.11.6]. Navegación entre Rutas con "useNavigate":
 _______________________________________________________
 
 Si no queremos crear una etiqueta de ancla "a" para navegar, podemos usar el hook "useNavigate":
@@ -2062,7 +2112,7 @@ Si no queremos crear una etiqueta de ancla "a" para navegar, podemos usar el hoo
 
 _______________________________________________________
 
-	[1.11.6]. Rutas Anidadas:
+	[1.11.7]. Rutas Anidadas:
 _______________________________________________________
 
 Hay rutas que podemos crear para que se muestren dentro de otro componente, como por ejemplo tabs o pestañas, estas rutas son rutas hijas de otro, o rutas anidadas.
