@@ -42,9 +42,12 @@ INDICE:
         [1.11.3]. Rutas Inexistentes
         [1.11.4]. Parámetros en las Rutas
             [1.11.4.1]. Obtener valor parámetros URL
-        [1.11.5]. Navegación entre Rutas con Link
-        [1.11.6]. Navegación entre Rutas con "useNavigate"
-        [1.11.7]. Rutas Anidadas
+        [1.11.5]. Navegación entre Rutas
+            [1.11.5.1]. Navegación entre Rutas con Link
+            [1.11.5.2]. Navegación entre Rutas con NavLink
+            [1.11.5.3]. Navegación entre Rutas con "useNavigate"
+        [1.11.6]. Rutas Anidadas
+        [1.11.7]. Hook "useLocation"
     [1.12]. Comunicación con el Backend
         [1.12.1]. fetch
         [1.12.2]. Axios
@@ -1824,7 +1827,7 @@ Ejemplo código "IndexPage.jsx":
         return (
             <BrowserRouter>
             <Routes>
-                <Route path="/" element={<IndexPage />} />
+                <Route path="/" element={<IndexPage />} index />
                 <Route path="/favoritos" element={<FavoritesPage />} />
             </Routes>
             </BrowserRouter>
@@ -1975,7 +1978,7 @@ El contenido de cada ruta o página, aparece en donde coloquemos el componente "
             <BrowserRouter>
                 <Routes>
                     <Route element={<Layout />}>
-                        <Route path="/" element={<IndexPage />} />
+                        <Route path="/" element={<IndexPage />} index />
                         <Route path="/favoritos" element={<FavoritesPage />} />
                     </Route>
                 </Routes>
@@ -2078,7 +2081,14 @@ Para obtener los valores de los parámetros enviados por la URL, en el component
 Nota: acá desestructuramos "eventId", que debe coincidir con el parametro definido en el router.
 _______________________________________________________
 
-	[1.11.5]. Navegación entre Rutas con Link:
+	[1.11.5]. Navegación entre Rutas:
+_______________________________________________________
+
+Para navegar entre diferentes rutas(páginas), en vez de usar la etiqueta "a", importamos y usamos diferentes componentes de "ract-router-dom", no se usa la etiqueta "a", ya que está hace que se recargue toda la página y no aprovecha las caracteristicas de React.
+
+_______________________________________________________
+
+	[1.11.5.1]. Navegación entre Rutas con Link:
 _______________________________________________________
 
 Para crear links que nos sirvan para navegar entre las rutas que creamos, importamos y usamos el componente "Link" de nuestra libreria de router:
@@ -2097,7 +2107,41 @@ Nota: En este caso la variable "id", la concatenamos a "/detail/", para navegar 
 
 _______________________________________________________
 
-	[1.11.6]. Navegación entre Rutas con "useNavigate":
+	[1.11.5.2]. Navegación entre Rutas con NavLink:
+_______________________________________________________
+
+Funciona similar a "Link", pero tiene acceso a un callback que nos permite saber cual es la ruta(página) activa:
+
+    import { NavLink } from "react-router-dom";
+
+    return(
+        <nav className="flex gap-4">
+            <NavLink
+              to="/"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-orange-500 uppercase font-bold"
+                  : "text-white uppercase font-bold"
+              }
+            >
+                Inicio
+            </NavLink>
+            <NavLink
+              to="/favoritos"
+              className={({ isActive }) =>
+                isActive
+                  ? "text-orange-500 uppercase font-bold"
+                  : "text-white uppercase font-bold"
+              }
+            >
+                Favoritos
+            </NavLink>
+        </nav>
+    );
+
+_______________________________________________________
+
+	[1.11.5.3]. Navegación entre Rutas con "useNavigate":
 _______________________________________________________
 
 Si no queremos crear una etiqueta de ancla "a" para navegar, podemos usar el hook "useNavigate":
@@ -2112,7 +2156,7 @@ Si no queremos crear una etiqueta de ancla "a" para navegar, podemos usar el hoo
 
 _______________________________________________________
 
-	[1.11.7]. Rutas Anidadas:
+	[1.11.6]. Rutas Anidadas:
 _______________________________________________________
 
 Hay rutas que podemos crear para que se muestren dentro de otro componente, como por ejemplo tabs o pestañas, estas rutas son rutas hijas de otro, o rutas anidadas.
@@ -2167,6 +2211,30 @@ De esta forma, quedamos con 3 rutas:
     /profile/my-info --> muestra el componente "Profile" y "MyInfo"
 
     /profile/liked-events --> muestra el componente "Profile" y  "LikedEvents"
+
+_______________________________________________________
+
+	[1.11.7]. Hook "useLocation":
+_______________________________________________________
+
+"React-touter-dom" nos provee con el hook "useLocation", el cual nos sirve para obtener información de la ruta actual.
+
+Ejemplo:
+
+    import { useLocation } from "react-router-dom";
+
+    const location = useLocation();
+
+    console.log("Location: ", location);
+
+En "location" obtenemos la siguienmte información:
+
+    - "hash" --> cuando en la url tenemos un ancla interna(#) como por ejemplo: "http://localhost:5173/#nosotros", en el hash aparece "#nosotros".
+
+    - "pathname" --> la ubicación, por ejemplo: "http://localhost:5173/favoritos", en el pathname aparece "/favoritos".
+
+    - "search" --> cuando se tiene un query string, por ejemplo: "http://localhost:5173/favoritos?q=hola", en search aparece "?q=hola".
+
 _______________________________________________________
 
 	[1.12]. Comunicación con el Backend:
