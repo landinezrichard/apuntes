@@ -58,6 +58,7 @@ INDICE:
         [1.13.2]. Zustand
             [1.13.2.1]. Inspeccionar el "store" en Zustand
             [1.13.2.2]. Guardar "store" en Zustand
+            [1.13.2.3]. Múltiples Stores
     [1.14]. React con TypeScript
         [1.14.1]. Tipar Resultados API
             [1.14.1.1]. Castear el resultado
@@ -2333,6 +2334,14 @@ Nota 2: por defecto la petición es de tipo GET, por lo que tambien podemos hace
         }
     }
 
+Nota 3: normalmente "axios" nos va a devolver la data de nuestra API en:
+
+    response.data
+
+Por lo que podemos desestructurar "data" de una vez:
+
+    const { data } = await axios('/user?ID=12345');
+
 _______________________________________________________
 
 	[1.12.2.1]. Petición Post:
@@ -2850,6 +2859,22 @@ Para más info ir a:
 
 _______________________________________________________
 
+	[1.13.2.3]. Múltiples Stores:
+_______________________________________________________
+
+Cuando la aplicación es muy grande o compleja, podemos manejar múltiples stores.
+
+Existen dos opciones para manejar múltiples stores:
+
+- Crear diferentes store.
+- Dividir los store utilizando el "Slice Pattern".
+
+"Slice Pattern" es algo que también encuentras en Redux Toolkit y es una forma de dividir tus stores en pequeñas piezas y unirlas en un store principal.
+
+1) dentro de la carpeta "/src" creamos una carpeta llamada "stores".
+
+_______________________________________________________
+
 	[1.14]. React con TypeScript:
 _______________________________________________________
 
@@ -3026,6 +3051,10 @@ Y con:
     Weather.safeParse(weatherData)
 
 Verificamos los tipos de datos que nos devuelve la API, que es lo mismo que haciemos en la función "isWeatherResponse()" de los "Type Guards".
+
+Nota: Si nos cuesta definir el "schema" de la respuesta de la API, podemos usar herramientas online como:
+
+    https://quicktype.io/
 
 _______________________________________________________
 
