@@ -2871,7 +2871,92 @@ Existen dos opciones para manejar múltiples stores:
 
 "Slice Pattern" es algo que también encuentras en Redux Toolkit y es una forma de dividir tus stores en pequeñas piezas y unirlas en un store principal.
 
-1) dentro de la carpeta "/src" creamos una carpeta llamada "stores".
+1) Dentro de la carpeta "/src" creamos una carpeta llamada "stores".
+
+2) Dentro de la carpeta "stores", creamos los archivos "Slice" (rebanada), osea los "mini stores" que manejara nuestra aplicación.
+
+Ejemplo: En una App de busqueda de recetas de bebidas alcoholicas, se crean dos "mini stores", uno para que maneje "recetas buscadas y categorias" y otro que maneje los "favoritos".
+
+- Creamos el "mini store" llamado "recipeSlice.ts":
+
+    import { type StateCreator } from "zustand";
+    import type { Category } from "../types";
+
+    export type RecipesSliceType = {
+        categories: Category[];
+    };
+
+    export const createRecipesSlice: StateCreator<RecipesSliceType> = (set) => ({
+       categories: [],
+    });
+
+Acá, primero importamos el tipo "StateCreator" de "zustand", para poder conectar nuestro "mini store" con un "store" global que crearemos más adelante (ver paso #3 ).
+
+En este caso, nuestro estado global va a tener un array de "categorias" (Category[]), y como estamos usando TypeScript, importamos el tipo de su correspondiente archivo ("../types/index.ts").
+
+Por ultimo, definimos "createRecipesSlice", que usa "StateCreator", con el tipo "RecipesSliceType", para crear el estado, que en este caso tendra como estado inicial un array vacio (categories: []).
+
+Nota: donde recibe "set", en realidad recibe 3 parámetros: "set", "get" y "api", pero solo definimos el que necesitemos.
+
+- Creamos el "mini store" llamado "favoritesSlice.ts":
+
+    import { type StateCreator } from "zustand";
+    import type { Recipe } from "../types";
+
+    export type FavoritesSliceType = {
+        favorites: Recipe[];
+    };
+
+    export const createFavoritesSlice: StateCreator<FavoritesSliceType> = () => ({
+        favorites: [],
+    });
+
+Acá vemos que los pasos para crear un "slice" o "mini store" se repiten:
+
+(A) Importar el tipo "StateCreator".
+
+(B) Definir y exportar el tipo "AlgoSliceType", en donde definimos el nombre del estado a crear(en este caso "favorites"), junto con su tipo (Usando Typescript, y las importaciones de tipo necesarias del archivo "../types/index.ts").
+
+(C) Crear y exportar la función "createAlgoSlice", que usa "StateCreator", con el "generic" (<>) del tipo previamente definido "AlgoSliceType", y definimos el estado inicial de la variable creada (en este caso "favorites" como array vacio).
+
+3)  Dentro de la carpeta "stores", creamos el archivo de "store" principal o global, llamado "useAppStore.ts":
+
+    import { create } from "zustand";
+    import { devtools } from "zustand/middleware";
+    import { type RecipesSliceType, createRecipesSlice } from "./recipeSlice";
+    import {
+        type FavoritesSliceType,
+        createFavoritesSlice,
+    } from "./favoritesSlice";
+
+    export const useAppStore = create<RecipesSliceType & FavoritesSliceType>()(
+        devtools((...a) => ({
+            ...createRecipesSlice(...a),
+            ...createFavoritesSlice(...a),
+        })),
+    );
+
+Este archivo en realidad es el encargado de crear nuestro "store" o estado global, usando los archivos de "slice" o "mini stores", que creamos aparte para tener mejor orden, reutilización y mantenibilidad en nuestro código.
+
+Primero importamos la función "create" de "zustand", para crear nuestro estado global.
+
+Opcional, importamos "devtools" para inspeccionar eln el navegador el estado en nuestra etapa de desarrollo.
+
+Importamos los tipos y las funciones de creación de nuestros "slice" o "mini stores".
+
+Exportamos la función "useAppStore", donde creamos el estado global, pasandole como "generics" los tipos de nuestros "slices".
+
+Con "(...a)" indicamos que se pasen los argumentos "set", "get" y "api" para que nuestros "slices" puedan setear y obtener los estados.
+
+4) En el componente principal, importamos y usamos nuestro "store" global. Ejemplo archivo "IndexPage.tsx":
+
+    import { useAppStore } from "../stores/useAppStore";
+
+    export default function IndexPage() {
+        const drinks = useAppStore((state) => state.categories);
+
+        //...existing code...
+    }
 
 _______________________________________________________
 
