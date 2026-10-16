@@ -48,6 +48,7 @@ INDICE:
             [1.11.5.3]. Navegación entre Rutas con "useNavigate"
         [1.11.6]. Rutas Anidadas
         [1.11.7]. Hook "useLocation"
+        [1.11.8]. Performance
     [1.12]. Comunicación con el Backend
         [1.12.1]. fetch
         [1.12.2]. Axios
@@ -2235,6 +2236,69 @@ En "location" obtenemos la siguienmte información:
     - "pathname" --> la ubicación, por ejemplo: "http://localhost:5173/favoritos", en el pathname aparece "/favoritos".
 
     - "search" --> cuando se tiene un query string, por ejemplo: "http://localhost:5173/favoritos?q=hola", en search aparece "?q=hola".
+_______________________________________________________
+
+	[1.11.8]. Performance:
+_______________________________________________________
+
+Al generar el "build" de nuestro proyecto para subir a producción 
+(pnpm run build), se genera un unico archivo JavaScript, con el código de toda la página, si tenemos varias rutas, por ejemplo "el home" y "favoritos", aunque estemos en el home, carga tambien código inecesario para el momento, de la página favoritos.
+
+Para solucionar esto, lo hacemos con "lazy" y "Suspense" en nuestro "router.tsx":
+
+    import { lazy, Suspense } from "react";
+    import { BrowserRouter, Routes, Route } from "react-router-dom";
+    import Layout from "./layouts/Layout";
+    const IndexPage = lazy(() => import("./views/IndexPage"));
+    const FavoritesPage = lazy(() => import("./views/FavoritesPage"));
+
+    export default function AppRouter() {
+        return (
+            <BrowserRouter>
+                <Routes>
+                    <Route element={<Layout />}>
+                        <Route
+                            path="/"
+                            element={
+                                <Suspense fallback={<div>Cargando...</div>}>
+                                    <IndexPage />
+                                </Suspense>
+                            }
+                            index
+                        />
+                        <Route
+                            path="/favoritos"
+                            element={
+                                <Suspense fallback={<div>Cargando...</div>}>
+                                    <FavoritesPage />
+                                </Suspense>
+                            }
+                        />
+                        </Route>
+                </Routes>
+            </BrowserRouter>
+        );
+    }
+
+Aahora al utilizar "lazy', en el "index", carga su script, y solo cuando se va a "favoritos", carga el script de favoritos, al retornar al "index", ya no carga los scripts, porque ya estan en memoria.
+
+Para probarlo en el navegador, primero generamos el "build":
+
+    pnpm run build
+
+Y luego, para cargar ese "build" generado en el navegador, corremos:
+
+    pnpm run preview
+
+Ahora en el inspector de elementos, vamos al tab "Red", seleccionamos "JS", y podremos ver como carga los scripts:
+
+    IndexPage-YTqK0Cyh.js
+
+Y al ir a "favoritos", carga el script:
+
+    FavoritesPage-C2GbCi5n.js
+
+Con "Suspense", podemos cargar otro componente como un "loader" o "spinner".
 
 _______________________________________________________
 
@@ -2936,11 +3000,11 @@ Acá vemos que los pasos para crear un "slice" o "mini store" se repiten:
         })),
     );
 
-Este archivo en realidad es el encargado de crear nuestro "store" o estado global, usando los archivos de "slice" o "mini stores", que creamos aparte para tener mejor orden, reutilización y mantenibilidad en nuestro código.
+Este archivo en realidad es el encargado de crear nuestro "store" o estado global, usando los archivos de "slice" o "mini stores", que creamos aparte, para tener mejor orden, reutilización y mantenibilidad en nuestro código.
 
 Primero importamos la función "create" de "zustand", para crear nuestro estado global.
 
-Opcional, importamos "devtools" para inspeccionar eln el navegador el estado en nuestra etapa de desarrollo.
+Opcional, importamos "devtools" para inspeccionar el estado, en el navegador, en nuestra etapa de desarrollo.
 
 Importamos los tipos y las funciones de creación de nuestros "slice" o "mini stores".
 
